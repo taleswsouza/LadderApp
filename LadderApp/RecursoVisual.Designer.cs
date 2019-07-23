@@ -61,16 +61,6 @@ namespace LadderApp {
         }
         
         /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Grava {
-            get {
-                object obj = ResourceManager.GetObject("Grava", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a LadderMic.
         /// </summary>
         internal static string STR_NOME_ARQUIVO_NOVO {
