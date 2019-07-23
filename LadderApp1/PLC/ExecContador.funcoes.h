@@ -1,0 +1,1 @@
+void ExecContador(TContador *Contador);

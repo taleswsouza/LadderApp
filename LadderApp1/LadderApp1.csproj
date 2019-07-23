@@ -1,0 +1,329 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FCBA0075-C9DB-49C9-AC1E-4E7AC7197B94}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LadderApp1</RootNamespace>
+    <AssemblyName>LadderApp1</AssemblyName>
+    <StartupObject>LadderApp1.Program</StartupObject>
+    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CodigoInterpretavel\CodigoInterpretavel.cs" />
+    <Compile Include="CodigoInterpretavel\Txt2CodigosInterpretaveis.cs" />
+    <Compile Include="Controles\ControleLivre.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controles\ControleLivre.Designer.cs">
+      <DependentUpon>ControleLivre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Excecoes\CouldNotInitializeTIUSBException.cs" />
+    <Compile Include="Excecoes\NaoECodigoInterpretavelException.cs" />
+    <Compile Include="Excecoes\NaoESimboloBasicoException.cs" />
+    <Compile Include="Formularios\frmAlteraComentario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\frmAlteraComentario.Designer.cs">
+      <DependentUpon>frmAlteraComentario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\frmMovimentaParalelo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\frmMovimentaParalelo.Designer.cs">
+      <DependentUpon>frmMovimentaParalelo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\frmSenha.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\frmSenha.Designer.cs">
+      <DependentUpon>frmSenha.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\frmSobre.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\frmSobre.Designer.cs">
+      <DependentUpon>frmSobre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\AlteraTemporizadorContador.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\AlteraTemporizadorContador.Designer.cs">
+      <DependentUpon>AlteraTemporizadorContador.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\DiagramaLadder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\DiagramaLadder.Designer.cs">
+      <DependentUpon>DiagramaLadder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DispositivoLadder.cs" />
+    <Compile Include="Formularios\EditorLadder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\EditorLadder.Designer.cs">
+      <DependentUpon>EditorLadder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EnderecamentoLadder.cs" />
+    <Compile Include="EnderecamentoPrograma.cs" />
+    <Compile Include="Formularios\frmDispositivo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\frmDispositivo.Designer.cs">
+      <DependentUpon>frmDispositivo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Memoria.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Memoria.Designer.cs">
+      <DependentUpon>Memoria.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IOperando.cs" />
+    <Compile Include="ISimbolo.cs" />
+    <Compile Include="ISimboloLivre.cs" />
+    <Compile Include="LinhaCompleta.cs" />
+    <Compile Include="ListaSimbolo.cs" />
+    <Compile Include="ManipulaLinha.cs" />
+    <Compile Include="PinosDispositivo.cs" />
+    <Compile Include="LinhaCompletaVisual.cs">
+    </Compile>
+    <Compile Include="LinhaCompletaVisual.Designer.cs">
+      <DependentUpon>LinhaCompletaVisual.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Parametros.cs" />
+    <Compile Include="ModuloIntegracaoMSP430.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ProgramaBasico.cs" />
+    <Compile Include="ProgramaVisual.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controles\ControleBasico.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ControleBasico.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controles\ControleLivre.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ControleLivre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\frmAlteraComentario.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmAlteraComentario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\frmMovimentaParalelo.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmMovimentaParalelo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\frmSenha.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmSenha.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\frmSobre.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmSobre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\AlteraTemporizadorContador.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AlteraTemporizadorContador.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\DiagramaLadder.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DiagramaLadder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\EditorLadder.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>EditorLadder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\frmDispositivo.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmDispositivo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Memoria.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Memoria.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LinhaCompletaVisual.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>LinhaCompletaVisual.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\ProjetoLadder.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ProjetoLadder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RecursoVisual.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RecursoVisual.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ArquivosFontesC.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ArquivosFontesC.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Formularios\ProjetoLadder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\ProjetoLadder.Designer.cs">
+      <DependentUpon>ProjetoLadder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\ControleBasico.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RecursoVisual.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RecursoVisual.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ArquivosFontesC.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ArquivosFontesC.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RotinaLadder.cs" />
+    <Compile Include="SimboloBasico.cs" />
+    <Compile Include="SimulaContador.cs" />
+    <Compile Include="SimulaTemporizador.cs" />
+    <Compile Include="SuporteParalelo.cs" />
+    <Compile Include="TipoEnderecamentoDispositivo.cs" />
+    <Compile Include="TiposPinosDispositivo.cs" />
+    <Compile Include="CodigoInterpretavel\CodigosInterpretaveis2Txt.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\usuario.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\SetupHardware.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\Usuario.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\definicao.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\enderecos.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\funcoes.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\SetupHardware.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\funcoes.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\interrupcao.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\ExecContador.funcoes.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\ExecTemporizadores.usuario.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PLC\ExecContador.funcoes.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="PLC\ExecTemporizadores.usuario.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CONTADOR.ico" />
+    <Content Include="Grava.ico" />
+    <Content Include="Help\InstrucoesLadder.htm" />
+    <None Include="PLC\ExecContador_Tipo0.funcoes.c" />
+    <None Include="PLC\ExecContador_Tipo1.funcoes.c" />
+    <None Include="PLC\ExecTemporizador.funcoes.c" />
+    <None Include="PLC\ExecTemporizador.funcoes.h" />
+    <None Include="PLC\ExecTemporizador_Tipo0.funcoes.c" />
+    <None Include="PLC\ExecTemporizador_Tipo1.funcoes.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

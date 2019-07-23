@@ -1,0 +1,1 @@
+void ExecTemporizador(TTemporizador *Temporizador);
