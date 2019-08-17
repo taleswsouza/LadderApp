@@ -14,7 +14,6 @@ namespace LadderApp
         void setOperando(int iNumOperando, Object valor);
         void setOperando(Object[] operandos);
 
-        //int RealocaOperandos();
         Size tamanhoXY
         {
             get;

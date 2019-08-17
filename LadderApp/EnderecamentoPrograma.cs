@@ -60,8 +60,7 @@ namespace LadderApp
             foreach (EnderecamentoLadder _endCada in _lstGenerica)
             {
                 if (_endCada.TpEnderecamento == tpEnderecamento &&
-                    _endCada.Indice == indice)// &&
-                    //_endCada.Nome == _end.Nome)
+                    _endCada.Indice == indice)
                 {
                     return _endCada;
                 }
@@ -85,7 +84,6 @@ namespace LadderApp
                     tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA);
                     tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR);
                     tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR);
-                    //tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_SAIDA);
                     break;
                 case CodigosInterpretaveis.TEMPORIZADOR:
                     tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR);
@@ -243,27 +241,8 @@ namespace LadderApp
         /// <param name="qtdEnd">Quantidade do tipo desejada</param>
         public int AlocaEnderecamentoMemoria(DispositivoLadder dispositivo, List<EnderecamentoLadder> _lstE, TipoEnderecamentoDispositivo tp, int qtdEnd)
         {
-            /// Atalho para o No de enderecamento
-            //TreeNode _NoEnderecamento = ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
-            //String _txtNoEndereco = "";
-
             int _qtdAtual = 1;
-            //switch (tp)
-            //{
-            //    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
-            //        _txtNoEndereco = "NoMemoria";
-            //        break;
-            //    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
-            //        _txtNoEndereco = "NoContadores";
-            //        break;
-            //    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
-            //        _txtNoEndereco = "NoTemporizadores";
-            //        break;
-            //}
 
-            //IndicaEnderecoEmUso(this.programa, tp);
-
-            //_NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Clear();
             _qtdAtual = _lstE.Count;
             if ((_qtdAtual == 0) || (_qtdAtual < qtdEnd))
             {
@@ -284,12 +263,6 @@ namespace LadderApp
                         break;
                 }
             }
-
-            //foreach (EnderecamentoLadder el in _lstE)
-            //{
-            //    _NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Add(el.Nome, el.Nome);
-            //    _NoEnderecamento.Nodes[_txtNoEndereco].Nodes[el.Nome].Tag = el;
-            //}
 
             return 0;
         }

@@ -67,8 +67,6 @@ namespace LadderApp
             {
                 if (ValidaEndereco(iNumOperando, valor))
                     Operandos[iNumOperando] = valor;
-                //else
-                    // gerar excecao
             }
         }
 
@@ -107,9 +105,6 @@ namespace LadderApp
                 case CodigosInterpretaveis.CONTADOR:
                     iNumOperandos = 4;
 
-                    //((EnderecamentoLadder)getOperandos(0)).Contador.Tipo = 0;
-                    //((EnderecamentoLadder)getOperandos(0)).Contador.Preset = 0;
-                    //((EnderecamentoLadder)getOperandos(0)).Contador.Acumulado = 0;
                     setOperando(1, (Int32)0); // tipo
                     setOperando(2, (Int32)0); // preset
                     setOperando(3, (Int32)0); // acum
@@ -118,10 +113,6 @@ namespace LadderApp
                 case CodigosInterpretaveis.TEMPORIZADOR:
                     iNumOperandos = 5;
 
-                    //((EnderecamentoLadder)getOperandos(0)).Temporizador.Tipo = 0;
-                    //((EnderecamentoLadder)getOperandos(0)).Temporizador.Preset = 0;
-                    //((EnderecamentoLadder)getOperandos(0)).Temporizador.Acumulado = 0;
-                    //((EnderecamentoLadder)getOperandos(0)).Temporizador.BaseTempo = 0;
                     setOperando(1, (Int32)0); // tipo
                     setOperando(2, (Int32)0); // preset
                     setOperando(3, (Int32)0); // acum
@@ -148,7 +139,6 @@ namespace LadderApp
             set { PosicaoXY = new Point(0, 0); }
         }
 
-        //private Point xyConexao;
         [XmlIgnore]
         public Point XYConexao
         {
@@ -346,8 +336,6 @@ namespace LadderApp
                         }
                     }
             }
-            //else
-            //    _bValido = true;
 
             return _bValido;
         }

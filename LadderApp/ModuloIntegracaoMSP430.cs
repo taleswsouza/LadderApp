@@ -13,7 +13,6 @@ namespace LadderApp
     {
         private Process p = new Process();
         private ProcessStartInfo startInfo = new ProcessStartInfo();
-        //private string outputMessage = "";
         private List<string> lstNomesArquivosCompilados = new List<string>();
         private List<string> lstNomesArquivosCriados = new List<string>();
         private bool bHabilitaDeletarArqIntermediarios = false;
@@ -23,7 +22,6 @@ namespace LadderApp
 
         private String strStandardOutput = "";
         private String strStandardError = "";
-        //private String strStandardInput = "";
 
         private string RetornaArquivosCompilados()
         {
@@ -309,11 +307,6 @@ namespace LadderApp
             startInfo.RedirectStandardInput = true;
         }
 
-        //private bool VerificaOutput()
-        //{
-        //    return ShowStandardStrings("LadderMic");
-        //}
-
         private bool RecuperaStandardStrings()
         {
             strStandardOutput = p.StandardOutput.ReadToEnd();
@@ -324,8 +317,6 @@ namespace LadderApp
 
         private bool ShowStandardStrings(String strNomeArquivo)
         {
-            //strStandardOutput = p.StandardOutput.ReadToEnd();
-            //strStandardError = p.StandardError.ReadToEnd();
             if (strStandardError != "")
             {
                 if (strStandardError.StartsWith(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_INI) && strStandardError.EndsWith(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_FIM))

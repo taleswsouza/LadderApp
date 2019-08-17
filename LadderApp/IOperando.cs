@@ -8,6 +8,5 @@ namespace LadderApp
     public interface IOperando
     {
         event MudouOperandoEventHandler MudouOperando;
-        //Object RetornaOperando();
     }
 }

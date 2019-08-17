@@ -86,16 +86,6 @@ namespace LadderApp
                 foreach (SimboloBasico _cadaSB in _lstSB)
                 {
                     this.Add(_cadaSB);
-                    //if (_cadaSB.codigoInterpretavel == CodigosInterpretaveis.TEMPORIZADOR)
-                    //{
-                    //    if (_cadaSB.getOperandos(0) != null)
-                    //        this.lstTemporizadoresUtilizados.Add((EnderecamentoLadder)_cadaSB.getOperandos(0));
-                    //}
-                    //else if (_cadaSB.codigoInterpretavel == CodigosInterpretaveis.CONTADOR)
-                    //{
-                    //    if (_cadaSB.getOperandos(0) != null)
-                    //        this.lstContadoresUtilizados.Add((EnderecamentoLadder)_cadaSB.getOperandos(0));
-                    //}
                 }
 
             return this;
@@ -124,9 +114,6 @@ namespace LadderApp
 
         public void InsereParaleloProximo()//bool _bAposPrimeiro)
         {
-            //int _inicio = 0;
-            //if (_bAposPrimeiro)
-            //    _inicio = 
             for(int i = (this.Count - 1); i >= 0; i--)
             {
                 this.Insert(i, new SimboloBasico(CodigosInterpretaveis.PARALELO_PROXIMO));

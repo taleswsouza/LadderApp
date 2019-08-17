@@ -242,7 +242,6 @@ namespace LadderApp
 	            case 0: // Contador Crescente
                     if (_endContador.Contador.Reset == true)
 		            {
-                        //_sb.setOperando(3, (Int32)0);
                         _endContador.Valor = false;
                         _endContador.Contador.Acumulado = 0;
                         _endContador.Contador.Reset = false;
@@ -900,9 +899,7 @@ namespace LadderApp
                 {
                     txtCodigoInterpretavel.FinalizaCabecalho();
                     DadosCodigosInterpretaveis = "const unsigned char codigosInterpretaveis[" + txtCodigoInterpretavel.Length.ToString().Trim() + "] = {" + txtCodigoInterpretavel.ToString() + "};";
-                    //DadosCodigosInterpretaveis += Environment.NewLine + "codigosInterpretaveis[" + (txtCodigoInterpretavel.Length - 1).ToString().Trim() + "] = (char)0;";
                     DadosArquivoMainC = DadosArquivoMainC.Replace("#CODIGOSINTERPRETAVEIS#", DadosCodigosInterpretaveis);
-                    //DadosArquivo = DadosArquivo.Replace("#CODIGOSINTERPRETAVEIS#", "");
                 }
                 else
                     DadosArquivoMainC = DadosArquivoMainC.Replace("#CODIGOSINTERPRETAVEIS#", "");
@@ -1006,16 +1003,11 @@ namespace LadderApp
                     _bResult = false;
             }
 
-            /// verifica todo o programa de forma interdependente
-
             return _bResult;
         }
 
         private bool VerificaLinha(LinhaCompleta _linha)
         {
-            /// Verifica se a linha solicitada e valida
-            //if (iLinha > 0 && iLinha < this.linhas.Count)
-            //    return false;
             ListaSimbolo _lst = new ListaSimbolo();
 
             _lst.InsertAllWithClearBefore(_linha.saida);

@@ -99,23 +99,6 @@ namespace LadderApp
             set { yTotalVertical = value-10; }
         }
 
-        //public LinhaCompletaLivre(int xTotalHorizontal, int yTotalVertical)
-        //{
-        //    this.xTotal = xTotalHorizontal;
-        //    this.yTotal = yTotalVertical;
-
-        //    InicializaSimbolosFixosDaLinha();
-        //}
-
-        //public LinhaCompletaLivre(int posY, int tamX, int tamY)
-        //{
-        //    //InitializeComponent();
-
-        //    this.posY = posY;
-        //    this.tamX = tamX;
-        //    this.tamY = tamY;
-        //}
-
         public void AjustaPosicionamento()
         {
             ControleLivre _ctrlLivreAux = null;
@@ -152,12 +135,6 @@ namespace LadderApp
 
             _acumTamX += this.tamX;
 
-            //int indiceInsereSaida = 0;
-            //if(saida.Count > 0)
-            //{
-            //    indiceInsereSaida = simbolos.Count;
-            //    simbolos.AddRange(saida);
-            //}
             simbolos.AddRange(saida);
 
             foreach (ControleLivre simbAux in simbolos)
@@ -202,9 +179,6 @@ namespace LadderApp
                         _tamY = _par.ultimoVPI.posicaoXY.Y - _par.par.posicaoXY.Y + _par.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
                         _posY = _par.par.posicaoXY.Y;
 
-                        /// indica quem 'e o ultimo VPI
-                        //_par.ultimoVPI.UltimoVPI = true;
-
                         if (_maiorX > _par.maiorX)
                             _par.maiorX = _maiorX;
 
@@ -224,11 +198,6 @@ namespace LadderApp
                         _par.ultimoVPI.Aponta2proxPP = simbAux;
 
                         _par.ultimoVPI.UltimoVPI = true;
-                        //foreach (ControleLivre _cL in _par.lstVPI)
-                        //{
-                        //    _cL.Aponta2PI = _par.par;
-                        //    _cL.Aponta2PF = simbAux;
-                        //}
 
                         _par = null;
                         _lst_par.RemoveAt(_lst_par.Count - 1);
@@ -552,7 +521,6 @@ namespace LadderApp
         private ControleLivre Insere2Simbolo(bool _bApos, ControleLivre _controle, ListaSimbolo _lstSB)
         {
             int _indiceSimbolo = 0;
-            //int _subt2posicionaSimboloInserido = 0;
 
             _indiceSimbolo = VerificaPosicaoDeInserirSimbolo(_bApos, _controle, this.simbolos);
 

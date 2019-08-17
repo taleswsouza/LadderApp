@@ -21,13 +21,6 @@ namespace LadderApp.CodigoInterpretavel
         {
             get
             {
-                if (ExisteCodigoInterpretavel())
-                {
-                    //if (posAtualLeitura <= 0)
-                    //    posAtualLeitura = PosInicial;
-                    //else
-                    //    posAtualLeitura++;
-                }
                 return posAtualLeitura;
             }
         }
@@ -106,7 +99,6 @@ namespace LadderApp.CodigoInterpretavel
 
         public CodigosInterpretaveis LeCodigoInterpretavel(Int32 _pos)
         {
-            //if (ExisteCodigoInterpretavel())
             {
                 try
                 {
@@ -117,8 +109,6 @@ namespace LadderApp.CodigoInterpretavel
                     throw new NaoECodigoInterpretavelException();
                 }
             }
-
-            //return CodigosInterpretaveis.NENHUM;
         }
 
         public TipoEnderecamentoDispositivo LeTipoEnderecamento(Int32 _pos)
@@ -176,15 +166,6 @@ namespace LadderApp.CodigoInterpretavel
                     _iIndiceEndLido = LeInteiro(_pos); _pos++;
 
                     _endLido = enderecamento.Find(_tpEndLido, _iIndiceEndLido);
-
-                    //if (_endLido == null)
-                    //{
-                    //    programa.dispositivo.lstBitPorta[_iIndiceEndLido - 1].TipoDefinido = _tpEndLido;
-                    //    programa.dispositivo.RealocaEnderecoDispositivo();
-                    //    programa.endereco.AlocaEnderecamentoIO(programa.dispositivo);
-                    //    _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
-                    //}
-                    //_sb.setOperando(0, _endLido);
                     break;
                 case CodigosInterpretaveis.BOBINA_SAIDA:
                 case CodigosInterpretaveis.RESET:
@@ -249,18 +230,10 @@ namespace LadderApp.CodigoInterpretavel
             {
                 Int32 intContaFim = 0;
                 Int32 intIndiceLinha = 0;
-                Int32 iNumOperandos = 0;
                 EnderecamentoLadder _endLido;
                 TipoEnderecamentoDispositivo _tpEndLido;
                 Int32 _iIndiceEndLido = 0;
 
-
-                //if (ExisteCabecalho())
-                //{
-                //    /// trata informações do cabecalho
-                //    if (bSolicitarSenha)
-
-                //}
 
                 /// Cria um programa novo vazio
                 ProgramaBasico programa = new ProgramaBasico();
@@ -275,30 +248,23 @@ namespace LadderApp.CodigoInterpretavel
 
                 for (int i = this.PosInicial; i < DadosConvertidosChar.Length; i++)
                 {
-                    //guarda = (CodigosInterpretaveis)Convert.ToChar(DadosConvertidosChar.Substring(i, 1));
                     guarda = LeCodigoInterpretavel(i); i++;
 
                     switch (guarda)
                     {
                         case CodigosInterpretaveis.NENHUM:
                             intContaFim++;
-                            iNumOperandos = 0;
                             break;
                         case CodigosInterpretaveis.FIM_DA_LINHA:
                             intContaFim++;
-                            iNumOperandos = 0;
                             if (LeCodigoInterpretavel(i + 1) != CodigosInterpretaveis.NENHUM)
                                 intIndiceLinha = programa.InsereLinhaNoFinal(new LinhaCompleta());
                             break;
-                        //case CodigosInterpretaveis.INICIO_DA_LINHA:
                         case CodigosInterpretaveis.CONTATO_NA:
                         case CodigosInterpretaveis.CONTATO_NF:
                             intContaFim = 0;
-                            iNumOperandos = 2;
                             {
                                 SimboloBasico _sb = new SimboloBasico((CodigosInterpretaveis)guarda);
-                                //_sb.setOperando(0, programa.endereco.Find((TipoEnderecamentoDispositivo)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1)), (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1))));
-
                                 _tpEndLido = LeTipoEnderecamento(i); i++;
                                 _iIndiceEndLido = LeInteiro(i); i++;
                                 _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
@@ -318,7 +284,6 @@ namespace LadderApp.CodigoInterpretavel
                         case CodigosInterpretaveis.BOBINA_SAIDA:
                         case CodigosInterpretaveis.RESET:
                             intContaFim = 0;
-                            iNumOperandos = 2;
                             {
                                 ListaSimbolo _lstSB = new ListaSimbolo();
                                 _lstSB.Add(new SimboloBasico((CodigosInterpretaveis)guarda));
@@ -342,12 +307,10 @@ namespace LadderApp.CodigoInterpretavel
                         case CodigosInterpretaveis.PARALELO_FINAL:
                         case CodigosInterpretaveis.PARALELO_PROXIMO:
                             intContaFim = 0;
-                            iNumOperandos = 0;
                             programa.linhas[intIndiceLinha].simbolos.Add(new SimboloBasico((CodigosInterpretaveis)guarda));
                             break;
                         case CodigosInterpretaveis.CONTADOR:
                             intContaFim = 0;
-                            iNumOperandos = 3;
                             {
                                 ListaSimbolo _lstSB = new ListaSimbolo();
                                 _lstSB.Add(new SimboloBasico((CodigosInterpretaveis)guarda));
@@ -364,7 +327,6 @@ namespace LadderApp.CodigoInterpretavel
                             break;
                         case CodigosInterpretaveis.TEMPORIZADOR:
                             intContaFim = 0;
-                            iNumOperandos = 4;
                             {
                                 ListaSimbolo _lstSB = new ListaSimbolo();
                                 _lstSB.Add(new SimboloBasico((CodigosInterpretaveis)guarda));
@@ -395,16 +357,9 @@ namespace LadderApp.CodigoInterpretavel
                         i = DadosConvertidosChar.Length;
                     }
                 }
-
-                //frmProj = new ProjetoLadder(programa);
-                //frmProj.MdiParent = this;
-                //frmProj.Show();
-                //frmProj.SetText();
                 return programa;
 
             }
-            //else
-            //    MessageBox.Show("O arquivo não foi reconhecido pelo sistema!", "Abrir Arquivos ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return null;
         }
     

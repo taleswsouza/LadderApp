@@ -9,7 +9,7 @@ namespace LadderApp
         public ControleLivre par = null;
         public ControleLivre ultimoVPI = null;
         public List<ControleLivre> lstVPI = new List<ControleLivre>();
-        //public List<ControleLivre> lstSimbolosFinais2PF = new List<ControleLivre>();
+
         public int maiorY = 0;
         public int maiorX = 0;
         public int numVPITratados = 0;

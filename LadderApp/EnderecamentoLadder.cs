@@ -38,31 +38,16 @@ namespace LadderApp
                     switch (value)
                     {
                         case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
-                            //Nome = "E" + indice.ToString();
-                            //Parametro = "P" + ((indice / dispositivo.QtdPinosPorta) + 1) + "_DIR.Bit" + (indice - (Int16)(indice / dispositivo.QtdPinosPorta) * dispositivo.QtdPinosPorta) + " = 0";
-                            //Acesso = "P" + ((indice / dispositivo.QtdPinosPorta) + 1) + "_IN.Bit" + (indice - (Int16)(indice / dispositivo.QtdPinosPorta) * dispositivo.QtdPinosPorta);
-                            //EnderecoRaiz = "P" + ((indice / dispositivo.QtdPinosPorta) + 1);
-                            break;
+                           break;
                         case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
-                            //Nome = "S" + indice.ToString();
-                            //Parametro = "P" + ((indice / dispositivo.QtdPinosPorta) + 1) + "_DIR.Bit" + (indice - (Int16)(indice / dispositivo.QtdPinosPorta) * dispositivo.QtdPinosPorta) + " = 1";
-                            //Acesso = "P" + ((indice / dispositivo.QtdPinosPorta) + 1) + "_OUT.Bit" + (indice - (Int16)(indice / dispositivo.QtdPinosPorta) * dispositivo.QtdPinosPorta);
-                            //EnderecoRaiz = "P" + ((indice / dispositivo.QtdPinosPorta) + 1);
                             break;
                         case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
-                            //Nome = "M" + indice.ToString();
-                            //Acesso = "M" + ((indice / BitsPorta) + 1) + ".Bit" + (indice - (Int16)(indice / BitsPorta) * BitsPorta);
-                            //enderecoRaiz = "M" + ((indice / BitsPorta) + 1);
                             break;
                         case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
-                            //Nome = "T" + indice.ToString();
-                            //Acesso = "T" + indice.ToString() + ".DN";
                             Acesso2 = "T" + indice.ToString() + ".EN";
                             temporizador = new SimulaTemporizador();
                             break;
                         case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
-                            //Nome = "C" + indice.ToString();
-                            //Acesso = "C" + indice.ToString() + ".DN";
                             Acesso2 = "C" + indice.ToString() + ".EN";
                             contador = new SimulaContador();
                             break;

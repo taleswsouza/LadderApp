@@ -37,8 +37,6 @@ namespace LadderApp
 
             _acumTamX += lc.tamX;
 
-            //maiorY = posY;
-
             foreach (ControleLivre simbAux in lc.simbolos)
             {
                 // caso todos os paralelos abertos tenham sido
@@ -104,8 +102,6 @@ namespace LadderApp
                             if (_ultTamY2ParaleloFinal > _par.maiorY)
                                 _par.maiorY = _ultTamY2ParaleloFinal;
 
-                        //_ultTamY2ParaleloFinal = 0;
-
                         _acumTamX = _posX + _tamX;
                         break;
                     case CodigosInterpretaveis.PARALELO_PROXIMO:
@@ -164,8 +160,6 @@ namespace LadderApp
             //--Inicio da linha
             lc.simboloInicioLinha.posicaoXY = new Point(lc.posX, lc.posY);
             lc.simboloInicioLinha.tamanhoXY = new Size(lc.tamX, _tamY2DesenhoFundo);
-            //lc.simboloInicioLinha.Location = new Point(lc.posX, lc.posY);
-            //lc.simboloInicioLinha.Size = new Size(lc.tamX, _tamY2DesenhoFundo);
 
             //--Fim da linha
             DiagramaLadder dlFormAux = null;
@@ -175,14 +169,10 @@ namespace LadderApp
 
             lc.simboloFimLinha.posicaoXY = new Point(_acumTamX, lc.posY);
             lc.simboloFimLinha.tamanhoXY = new Size(lc.tamX, _tamY2DesenhoFundo);
-            //lc.simboloFimLinha.Location = new Point(_acumTamX, lc.posY);
-            //lc.simboloFimLinha.Size = new Size(lc.tamX, _tamY2DesenhoFundo);
 
             //--Desenho de fundo
             lc.simboloFimLinha.posicaoXY = new Point(lc.posX, lc.posY);
             lc.simboloFimLinha.tamanhoXY = new Size(_acumTamX, _tamY2DesenhoFundo);
-            //lc.simboloDesenhoFundo.Location = new Point(lc.posX, lc.posY);
-            //lc.simboloDesenhoFundo.Size = new Size(_acumTamX, _tamY2DesenhoFundo);
 
             RedimensionaSimbolos(lc);
 
@@ -201,13 +191,6 @@ namespace LadderApp
                 _simbAux.TabIndex = iTabStop;
                 _simbAux.TabStop = true;
 
-                //_simbAux.yTamSimboloPadrao = _simbAux.yTamSimboloPadrao - 8;
-
-                //if (_simbAux.getCI() != CodigosInterpretaveis.PARALELO_INICIAL &&
-                //    _simbAux.getCI() != CodigosInterpretaveis.PARALELO_PROXIMO &&
-                //    _simbAux.getCI() != CodigosInterpretaveis.PARALELO_FINAL)
-                //    _simbAux.Size = new Size(Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * percReducaoSimbolo), _simbAux.tamanhoXY.Height);
-                //else
                 _simbAux.Size = new Size(Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * lc.percReducaoSimbolo), _simbAux.tamanhoXY.Height);
 
                 _simbAux.Location = new Point(_simbAux.posicaoXY.X + (_simbAux.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * lc.percReducaoSimbolo))) / 2, _simbAux.posicaoXY.Y);
