@@ -102,9 +102,9 @@ namespace LadderApp
 
                 //Apenas para criar alternancia dos tipos de pino
                 if ((i <= 8) || (i >= 15 && i <= 16) )
-                    _pinoAux.TipoPino = TiposPinosDispositivo.IO_DIGITAL_ENTRADA_OU_SAIDA;//  (_tpPino == TiposPinosDispositivo.IO_DIGITAL_ENTRADA ? TiposPinosDispositivo.IO_DIGITAL_SAIDA : (_tpPino == TiposPinosDispositivo.IO_DIGITAL_SAIDA ? TiposPinosDispositivo.IO_DIGITAL_ENTRADA_OU_SAIDA : TiposPinosDispositivo.IO_DIGITAL_ENTRADA));
+                    _pinoAux.TipoPino = TiposPinosDispositivo.IO_DIGITAL_ENTRADA_OU_SAIDA;
                 else
-                    _pinoAux.TipoPino = TiposPinosDispositivo.NENHUM;//  (_tpPino == TiposPinosDispositivo.IO_DIGITAL_ENTRADA ? TiposPinosDispositivo.IO_DIGITAL_SAIDA : (_tpPino == TiposPinosDispositivo.IO_DIGITAL_SAIDA ? TiposPinosDispositivo.IO_DIGITAL_ENTRADA_OU_SAIDA : TiposPinosDispositivo.IO_DIGITAL_ENTRADA));
+                    _pinoAux.TipoPino = TiposPinosDispositivo.NENHUM;
 
                 _tpPino = _pinoAux.TipoPino;
 

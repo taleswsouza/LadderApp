@@ -25,7 +25,6 @@ namespace LadderApp
         List<System.Windows.Forms.Panel> listaIndicadores = new List<System.Windows.Forms.Panel>();
         System.Windows.Forms.Panel indicadorInsercao = null;
         
-        // Pena
         private Color corPena = Color.Blue;
         private Pen penaLinha = new Pen(Color.Blue, 1);
         private Pen penaTexto = new Pen(Color.Blue, 1);
@@ -35,7 +34,6 @@ namespace LadderApp
 
         private SolidBrush brushEnergizado = new SolidBrush(Color.FromArgb(0, 255, 0));
         private SolidBrush brushComentario = new SolidBrush(Color.Yellow);
-        //private SolidBrush brushEnergizado = new SolidBrush(Color.Green);
         private SolidBrush brushSelecao = new SolidBrush(Color.Red);
         private SolidBrush brushTextoEndereco = new SolidBrush(Color.Black);
         private SolidBrush brushTextoSimbolo = new SolidBrush(Color.Blue);
@@ -96,16 +94,11 @@ namespace LadderApp
         int xInicioHSimboloBobina = 0;
         int xFimHSimboloBobina = 0;
 
-        //int yInicioVSimboloBobina = 0;
-        //int yFimVSimboloBobina = 0;
-
-        
         int yTercoVertical = 0;
         int yQuartoVertical = 0;
         int yQuintoVertical = 0;
         int ySextoVertical = 0;
 
-        //int xTercoHorizontal = 0;
         int xQuintoHorizontal = 0;
         int xSextoHorizontal = 0;
         int xDecimoHorizontal = 0;
@@ -216,9 +209,6 @@ namespace LadderApp
         ///</sumary>
         private void AtualizaVariaveisDesenho()
         {
-            //X - Width - Horizontal
-            //Y - Height - Vertical
-
             xTotalHorizontal = this.Size.Width;
             yTotalVertical = this.Size.Height;
 
@@ -228,8 +218,6 @@ namespace LadderApp
             xQuintoHorizontal = xTotalHorizontal / 5;
             xSextoHorizontal = xTotalHorizontal / 6;
 
-            //xInicioHSimbolo = xTotalHorizontal / 3;
-            //xFimHSimbolo = 2 * (xInicioHSimbolo);
             xInicioHSimbolo = xQuintoHorizontal * 2;
             xFimHSimbolo = 3 * xQuintoHorizontal;
 
@@ -243,8 +231,6 @@ namespace LadderApp
 
             xInicioHSimboloBobina = xSextoHorizontal * 2;
             xFimHSimboloBobina = 4 * xSextoHorizontal;
-            //yInicioVSimboloBobina = yTercoVertical;
-            //yFimVSimboloBobina = 2 * yTercoVertical;
 
             xDecimoHorizontal = xTotalHorizontal / 10;
 
@@ -285,7 +271,6 @@ namespace LadderApp
                     break;
                 case CodigosInterpretaveis.PARALELO_FINAL:
                     rectSelecao = new Rectangle(1, (linhaAtual.tamY / 4) + 3, xTotalHorizontal - 3, yTotalVertical - (linhaAtual.tamY / 2) - 3);
-                    //rectSelecao = new Rectangle(1, (linhaAtual.tamY / 4) + 3, xTotalHorizontal - 3, (linhaAtual.tamY / 2) - 3);
                     xyConexao = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
                     break;
                 case CodigosInterpretaveis.PARALELO_PROXIMO:
@@ -450,34 +435,6 @@ namespace LadderApp
             e.DrawString(Texto, fonteTexto, brushTextoSimbolo, xy1.X, xy1.Y);
         }
 
-        //private void DesenhaLinhaHorizontal()
-        //{
-        //    // Linha horizontal
-        //    xy1 = new Point(0, yMeioVertical);
-        //    xy2 = new Point(xTotalHorizontal, yMeioVertical);
-        //    e.DrawLine(penaLinha, xy1, xy2);
-        //}
-
-        //private void DesenhaLinhaVertical()
-        //{
-        //    // Linha vertical
-        //    xy1 = new Point(xMeioHorizontal, 0);
-        //    xy2 = new Point(xMeioHorizontal, yTotalVertical);
-        //    e.DrawLine(penaLinha, xy1, xy2);
-        //}
-
-        //private void DesenhaT()
-        //{
-        //    // Linha horizontal 1
-        //    xy1 = new Point(0, (linhaAtual.tamY / 2));
-        //    xy2 = new Point(xTotalHorizontal, (linhaAtual.tamY / 2));
-        //    e.DrawLine(penaLinha, xy1, xy2);
-
-        //    // Linha T
-        //    xy1 = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
-        //    xy2 = new Point(xMeioHorizontal, (yTotalVertical-(linhaAtual.tamY / 2)));
-        //    e.DrawLine(penaLinha, xy1, xy2);       
-        //}
 
         private void DesenhaParaleloInicial()
         {
@@ -509,7 +466,6 @@ namespace LadderApp
             xy2 = new Point(xMeioHorizontal, (yTotalVertical - (linhaAtual.tamY / 2)));
             e.DrawLine(penaLinha, xy1, xy2);
 
-            ///////////////
             if (lstVPI != null)
             {
                 foreach (ControleLivre _simbAux in lstVPI)
@@ -522,21 +478,7 @@ namespace LadderApp
                     e.DrawLine(penaLinha, xy1, xy2);
                 }
             }
-            ///////////////
         }
-
-        //private void DesenhaL()
-        //{
-        //    // Linha | do L
-        //    xy1 = new Point(xMeioHorizontal, 0);
-        //    xy2 = new Point(xMeioHorizontal, yMeioVertical);
-        //    e.DrawLine(penaLinha, xy1, xy2);
-
-        //    // Linha _ do L
-        //    xy1 = new Point(xMeioHorizontal, yMeioVertical);
-        //    xy2 = new Point(xTotalHorizontal, yMeioVertical);
-        //    e.DrawLine(penaLinha, xy1, xy2);
-        //}
 
         private void DesenhaParaleloProximo()
         {
@@ -566,55 +508,6 @@ namespace LadderApp
                 e.DrawLine(penaLinha, xy1, xy2);
             }
         }
-
-        //private void DesenhaLInvertido()
-        //{
-        //    // Linha | do L Invertido
-        //    xy1 = new Point(xMeioHorizontal, 0);
-        //    xy2 = new Point(xMeioHorizontal, yMeioVertical);
-        //    e.DrawLine(penaLinha, xy1, xy2);
-
-        //    // Linha _ do _| (L Invertido)
-        //    xy1 = new Point(0, yMeioVertical);
-        //    xy2 = new Point(xMeioHorizontal, yMeioVertical);
-        //    e.DrawLine(penaLinha, xy1, xy2);
-        //}
-        
-        //private void DesenhaTInvertido()
-        //{
-        //    DesenhaLinhaHorizontal();
-
-        //    // Linha T
-        //    xy1 = new Point(xMeioHorizontal, 0);
-        //    xy2 = new Point(xMeioHorizontal, yMeioVertical);
-        //    e.DrawLine(penaLinha, xy1, xy2);
-        //}
-
-        //private void DesenhaT2Direita()
-        //{
-        //    DesenhaLinhaVertical();
-
-        //    // Linha T
-        //    xy1 = new Point(xMeioHorizontal, yMeioVertical);
-        //    xy2 = new Point(xTotalHorizontal, yMeioVertical);
-        //    e.DrawLine(penaLinha, xy1, xy2);
-        //}
-
-        //private void DesenhaT2Esquerda()
-        //{
-        //    DesenhaLinhaVertical();
-
-        //    // Linha T
-        //    xy1 = new Point(0, yMeioVertical);
-        //    xy2 = new Point(xMeioHorizontal, yMeioVertical);
-        //    e.DrawLine(penaLinha, xy1, xy2);
-        //}
-
-        //private void DesenhaCruz()
-        //{
-        //    DesenhaLinhaHorizontal();
-        //    DesenhaLinhaVertical();
-        //}
 
         private void DesenhaInicioLinha()
         {
@@ -680,7 +573,6 @@ namespace LadderApp
             switch(this.getCI())
             {
                 case CodigosInterpretaveis.TEMPORIZADOR:
-                    //setOperando(1, (Int32)((EnderecamentoLadder)getOperandos(0)).Temporizador.Tipo);
                     _txtTitulo = "T";
                     if (getOperandos(0) != null)
                         switch ((Int32)((EnderecamentoLadder)getOperandos(0)).Temporizador.Tipo)
@@ -702,7 +594,6 @@ namespace LadderApp
                     DesenhaBaseTempo();
                     break;
                 case CodigosInterpretaveis.CONTADOR:
-                    //setOperando(1, (Int32)((EnderecamentoLadder)getOperandos(0)).Temporizador.Tipo);
                     _txtTitulo = "C";
                     if (getOperandos(0) != null)
                         switch ((Int32)((EnderecamentoLadder)getOperandos(0)).Contador.Tipo)
@@ -884,13 +775,11 @@ namespace LadderApp
                     switch (this.getCI())
                     {
                         default:
-                            //_recTxtEnd = new RectangleF((float)(xMeioHorizontal / 2), (float)this.yQuintoVertical, (float)xMeioHorizontal, (float)fonteTexto.GetHeight());
                             break;
                     }
 
                     Size _propostoSize;
                     _propostoSize = TextRenderer.MeasureText(_txtComent, fonteTexto);
-                    //float fltNovoY = (float)_propostoSize.Height;
                     _recTxtComent = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(yFimVSimbolo + 2)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)_propostoSize.Height));
 
                     StringFormat _stringFormat = new StringFormat();
@@ -915,7 +804,6 @@ namespace LadderApp
                                 if (_propostoSize.Width > (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
                                 {
                                     strSegundaLinha = strSegundaLinha.Substring(0, _txtComent.Length - 3) + " ...";
-                                    //strSegundaLinha = strSegundaLinha.Substring(0, strSegundaLinha.Length - 3) + " ***";
                                 }
                             }
                         }
@@ -946,13 +834,10 @@ namespace LadderApp
             {
                 case CodigosInterpretaveis.TEMPORIZADOR:
                 case CodigosInterpretaveis.CONTADOR:
-//                    _recTxtEnd = new Rectangle(xMeioHorizontal / 2, this.yQuintoVertical, xMeioHorizontal, (int)txtEndereco.Font.GetHeight());
                     _recTxtEnd = new RectangleF((float)(xMeioHorizontal / 2), (float)this.yQuintoVertical, (float)xMeioHorizontal, (float)fonteTexto.GetHeight());
                     break;
                 default:
                     _recTxtEnd = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(3)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)fonteTexto.GetHeight()));
-//                    _recTxtEnd = new RectangleF((float)(xMeioHorizontal / 2), 3, xMeioHorizontal, (float)fonteTexto.GetHeight());
-                    //_recTxtEnd = new RectangleF((float)(xMeioHorizontal / 2), (float)this.yQuintoVertical, (float)xMeioHorizontal, (float)fonteTexto.GetHeight());
                     break;
             }
 
@@ -971,7 +856,6 @@ namespace LadderApp
 
 
             e.DrawString(_txtEndereco, fonteTexto, brushTextoSimbolo, _recTxtEnd, _stringFormat);
-            //txtEndereco.Bounds = _recTxtEnd;
 
         }
 
@@ -999,7 +883,6 @@ namespace LadderApp
             }
 
             // Endereco
-            //RectangleF _recTxtPreset = new RectangleF(1F, 1F, (float)xTotalHorizontal, (float)(fonteTexto.Height));
             StringFormat _stringFormat = new StringFormat();
             _stringFormat.Alignment = StringAlignment.Center;
             _stringFormat.LineAlignment = StringAlignment.Center;
@@ -1013,7 +896,6 @@ namespace LadderApp
                 _txtPreset = "PR: ?";
 
             e.DrawString(_txtPreset, fonteTexto, brushTextoSimbolo, _recTxtPreset, _stringFormat);
-            //txtPreset.Bounds = _recTxtPreset;
 
         }
         
@@ -1027,8 +909,6 @@ namespace LadderApp
             {
                 case CodigosInterpretaveis.CONTADOR:
                     return;
-                    //_recTxtBaseTempo = new RectangleF((float)(xMeioHorizontal / 2), (float)(2 * this.yQuintoVertical + 2), xMeioHorizontal, (float)(fonteTexto.Height));
-                    //break;
                 case CodigosInterpretaveis.TEMPORIZADOR:
                     if (getOperandos(0) != null)
                         _intBaseTempo = (Int32)((EnderecamentoLadder)getOperandos(0)).Temporizador.BaseTempo;
@@ -1040,7 +920,6 @@ namespace LadderApp
             }
 
             // Endereco
-            //RectangleF _recTxtPreset = new RectangleF(1F, 1F, (float)xTotalHorizontal, (float)(fonteTexto.Height));
             StringFormat _stringFormat = new StringFormat();
             _stringFormat.Alignment = StringAlignment.Center;
             _stringFormat.LineAlignment = StringAlignment.Center;
@@ -1067,7 +946,6 @@ namespace LadderApp
                         break;
                 }
 
-                //_txtBaseTempo = "BT: " + ((Int32)getOperandos(4)).ToString();
             }
             else
                 _txtBaseTempo = "BT: ?";
@@ -1105,7 +983,6 @@ namespace LadderApp
             }
 
             // Endereco
-            //RectangleF _recTxtPreset = new RectangleF(1F, 1F, (float)xTotalHorizontal, (float)(fonteTexto.Height));
             StringFormat _stringFormat = new StringFormat();
             _stringFormat.Alignment = StringAlignment.Center;
             _stringFormat.LineAlignment = StringAlignment.Center;
@@ -1119,7 +996,6 @@ namespace LadderApp
                 _txtAcum = "AC: ?";
 
             e.DrawString(_txtAcum, fonteTexto, brushTextoSimbolo, _recTxtAcum, _stringFormat);
-            //txtPreset.Bounds = _recTxtPreset;
 
         }
 
@@ -1267,11 +1143,6 @@ namespace LadderApp
             if (getCI() != CodigosInterpretaveis.LINHA_DE_FUNDO &&
                 getCI() != CodigosInterpretaveis.FIM_DA_LINHA)
             {
-                //this.selecionado = false;
-
-                //if (ControleSelecionado != null)
-                //    ControleSelecionado(null, null);
-
                 this.Refresh();
             }
         }
@@ -1368,59 +1239,6 @@ namespace LadderApp
 
         private void ApresentaCamposTxt()
         {
-            //txtEndereco.Enabled = false;
-            //txtEndereco.Visible = false;
-
-            //txtAcum.Enabled = false;
-            //txtAcum.Visible = false;
-
-            //txtPreset.Enabled = false;
-            //txtPreset.Visible = false;
-
-            //txtInvisivel.Enabled = true;
-            //txtInvisivel.Visible = true;
-
-            
-            //switch (this.getCI())
-            //{
-            //    case CodigosInterpretaveis.PARALELO_INICIAL:
-            //    case CodigosInterpretaveis.PARALELO_FINAL:
-            //    case CodigosInterpretaveis.PARALELO_PROXIMO:
-            //    case CodigosInterpretaveis.INICIO_DA_LINHA:
-            //    case CodigosInterpretaveis.FIM_DA_LINHA:
-            //    case CodigosInterpretaveis.LINHA_DE_FUNDO:
-            //    case CodigosInterpretaveis.NENHUM:
-            //        break;
-            //    case CodigosInterpretaveis.CONTADOR:
-            //    case CodigosInterpretaveis.TEMPORIZADOR:
-            //        txtEndereco.Enabled = true;
-            //        txtEndereco.Visible = true;
-
-            //        txtAcum.Enabled = true;
-            //        txtAcum.Visible = true;
-
-            //        txtPreset.Enabled = true;
-            //        txtPreset.Visible = true;
-            //        break;
-            //    default:
-            //        txtEndereco.Enabled = true;
-            //        txtEndereco.Visible = true;
-            //        break;
-            //}
-
-            //txtEndereco.Text = "";
-            //txtEndereco.BackColor = Color.Transparent;
-
-            //txtAcum.Text = "";
-            //txtAcum.BackColor = Color.Transparent;
-
-            //txtPreset.Text = "";
-            //txtPreset.BackColor = Color.Transparent;
-
-            //txtInvisivel.Text = "";
-            //txtInvisivel.BackColor = Color.Transparent;
-
-            //usoTxtIndicado = true;
         }
 
         private void txtGeral_Enter(object sender, EventArgs e)
@@ -1471,7 +1289,6 @@ namespace LadderApp
 //                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
                     break;
                 case CodigosInterpretaveis.BOBINA_SAIDA:
-//                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
                     break;
                 case CodigosInterpretaveis.TEMPORIZADOR:
                 case CodigosInterpretaveis.CONTADOR:

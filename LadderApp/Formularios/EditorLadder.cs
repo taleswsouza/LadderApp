@@ -19,7 +19,7 @@ namespace LadderApp
 {
     public partial class EditorLadder : Form
     {
-        private Thread newThread;// = new Thread(new ParameterizedThreadStart(ProgramaBasico.ExecutaSimuladoTemporizadores));
+        private Thread newThread;
 
         private ProjetoLadder frmProj = null;
 
@@ -47,7 +47,6 @@ namespace LadderApp
 
         private void ShowNewForm(object sender, EventArgs e)
         {
-            // Create a new instance of the child form.
             if (this.MdiChildren.Length == 0)
             {
                 frmProj = new ProjetoLadder();
@@ -83,7 +82,6 @@ namespace LadderApp
             {
                 string FileName = "";
                 FileName = openFileDialog.FileName;
-                // TODO: Add code here to open the file.
 
                 switch (FileName.Substring(FileName.Length - 4, 4).ToLower())
                 {
@@ -166,9 +164,7 @@ namespace LadderApp
 
         private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO: Use System.Windows.Forms.Clipboard to insert the selected text or images into the clipboard
             List<SimboloBasico> _lstSB = null;
-            //SimboloBasico _sB = null;
             if (IsDiagramaAberto())
             {
                 if (frmProj.frmDiagLadder.ControleSelecionado != null)
@@ -215,7 +211,6 @@ namespace LadderApp
 
         private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO: Use System.Windows.Forms.Clipboard.GetText() or System.Windows.Forms.GetData to retrieve information from the clipboard.
             if (IsDiagramaAberto())
             {
                 if (frmProj.frmDiagLadder.ControleSelecionado != null)
@@ -370,7 +365,6 @@ namespace LadderApp
             if (IsDiagramaAberto())
             {
                 frmProj.frmDiagLadder.InsereLinha();
-                //frmProj.frmDiagLadder.ReorganizandoLinhas();
             }
         }
 
@@ -587,7 +581,6 @@ namespace LadderApp
 
         private void btnSimular_CheckStateChanged(object sender, EventArgs e)
         {
-            //btnSimular.BackColor = btnSimular.Checked == true ? Color.Green : Form.DefaultBackColor;
         }
 
         public void InvalidaFormulario(bool bstate)
@@ -678,7 +671,6 @@ namespace LadderApp
                             iNumOperandos = 2;
                             {
                                 SimboloBasico _sb = new SimboloBasico((CodigosInterpretaveis)guarda);
-                                //_sb.setOperando(0, programa.endereco.Find((TipoEnderecamentoDispositivo)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1)), (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1))));
 
                                 _tpEndLido =(TipoEnderecamentoDispositivo)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
@@ -1021,7 +1013,6 @@ namespace LadderApp
                             {
                                 _frmSenha.txtSenha.Text = "";
                                 _frmSenha.Text = "Digite a senha (1/2):";
-                                //return;
                             }
                             else
                             {

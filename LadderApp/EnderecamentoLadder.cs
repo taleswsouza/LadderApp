@@ -75,11 +75,9 @@ namespace LadderApp
                 switch (this.tpEnderecamento)
                 {
                     case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
-                        //NomeStr = "E" + indice.ToString();
                         NomeStr = "E" + indice.ToString() + "(P" + (((indice - 1) / dispositivo.QtdBitsPorta) + 1) + "." + ((indice - 1) - ((Int16)((indice - 1) / dispositivo.QtdBitsPorta) * dispositivo.QtdBitsPorta)) + ")";
                         break;
                     case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
-                        //NomeStr = "S" + indice.ToString();
                         NomeStr = "S" + indice.ToString() + "(P" + (((indice - 1) / dispositivo.QtdBitsPorta) + 1) + "." + ((indice - 1) - ((Int16)((indice - 1) / dispositivo.QtdBitsPorta) * dispositivo.QtdBitsPorta)) + ")";
                         break;
                     case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
@@ -140,7 +138,6 @@ namespace LadderApp
                         return "ERROR";
                 }
             }
-//            set { enderecoRaiz = value; }
         }
 
         /// <summary>

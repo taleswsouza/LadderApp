@@ -39,7 +39,6 @@ namespace LadderApp
 
         public bool ExisteTemporizadorDuplicado(List<EnderecamentoLadder> lstTemporizadoresUtilizados)
         {
-            //lstTemporizadoresUtilizados.Clear();
             foreach (SimboloBasico _sb in this)
             {
                 if (_sb.getCI() == CodigosInterpretaveis.TEMPORIZADOR)
@@ -55,7 +54,6 @@ namespace LadderApp
 
         public bool ExisteContadorDuplicado(List<EnderecamentoLadder> lstContadoresUtilizados)
         {
-            //lstContadoresUtilizados.Clear();
             foreach (SimboloBasico _sb in this)
             {
                 if (_sb.getCI() == CodigosInterpretaveis.CONTADOR)

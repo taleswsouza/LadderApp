@@ -651,10 +651,8 @@ namespace LadderApp
 
                         /// insere PP antes do objeto atual na linha
                         this.saida.Insert(0, new SimboloBasico(CodigosInterpretaveis.PARALELO_PROXIMO));
-                        //InsereSimboloUnicoVisual(0, this.saida, new SimboloBasico(CodigosInterpretaveis.PARALELO_PROXIMO));
                         /// insere PF depois do objeto atual da linha
                         this.saida.Insert(this.saida.Count, new SimboloBasico(CodigosInterpretaveis.PARALELO_FINAL));
-                        //InsereSimboloUnicoVisual(this.saida.Count, this.saida, new SimboloBasico(CodigosInterpretaveis.PARALELO_FINAL));
                     }
                     else
                     {
@@ -662,7 +660,6 @@ namespace LadderApp
                         _subt2posicionaSimboloInserido = -1;
 
                         this.saida.Insert(0, new SimboloBasico(CodigosInterpretaveis.PARALELO_INICIAL));
-                        //InsereSimboloUnicoVisual(0, this.saida, new SimboloBasico(CodigosInterpretaveis.PARALELO_INICIAL));
                         _indiceSimbolo++;
                     }
 
@@ -674,7 +671,6 @@ namespace LadderApp
                             _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                             this.saida[0].setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
-                            //this.saida[0].setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
                             break;
                         case CodigosInterpretaveis.PARALELO_PROXIMO:
                             _lstSB.InsereParaleloProximo();
@@ -693,7 +689,6 @@ namespace LadderApp
             foreach (SimboloBasico _sb in _lstSB)
             {
                 this.saida.Insert(_indiceSimbolo, _sb);
-                //InsereSimboloUnicoVisual(_indiceSimbolo, this.saida, _sb);
                 _indiceSimbolo++;
             }
 

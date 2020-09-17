@@ -10,7 +10,6 @@ namespace LadderApp.Exceções
         {
             get
             {
-                //return base.Message;
                 return "Não é um CodigosInterpretaveis";
             }
         }

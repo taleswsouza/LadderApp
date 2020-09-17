@@ -175,7 +175,6 @@ namespace LadderApp
                         break;
                     case CodigosInterpretaveis.PARALELO_FINAL:
                         _tamX = this.tamX / 3;
-                        //                        _tamY = _par.ultimoVPI.Location.Y - _par.par.Location.Y + _par.ultimoVPI.Size.Height; // _ultTamY2ParaleloFinal;
                         _tamY = _par.ultimoVPI.posicaoXY.Y - _par.par.posicaoXY.Y + _par.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
                         _posY = _par.par.posicaoXY.Y;
 
@@ -264,9 +263,6 @@ namespace LadderApp
                 simbAux.posicaoXY = new Point(_posX, _posY);
                 simbAux.tamanhoXY = new Size(_tamX, _tamY);
 
-                //simbAux.Location = new Point(_posX, _posY);
-                //simbAux.Size = new Size(_tamX, _tamY);
-
                 if ((saida.Count > 0) && (_contaNumSimbolos >= (simbolos.Count - saida.Count)))
                 {
                     if (_contaNumSimbolos == (simbolos.Count - saida.Count))
@@ -277,7 +273,6 @@ namespace LadderApp
                 }
             }
 
-            //_guardaTamSaida = _guardaAcumXnoPrimeiroSimbSaida;
             _guardaTamSaida = (_guardaAcumXnoMaiorSimbSaida - _guardaAcumXnoPrimeiroSimbSaida);// -this.tamX;
             if (_guardaTamSaida == 0)
                 _guardaTamSaida = tamX;
@@ -325,7 +320,6 @@ namespace LadderApp
         {
 
             //--Inicio da linha
-            //iTabStop = 0;
             iTabStop++;
             simboloInicioLinha.TabIndex = iTabStop;
             simboloInicioLinha.TabStop = true;
@@ -447,7 +441,6 @@ namespace LadderApp
 
         private void AtribuiFuncoesAosControles()
         {
-            //DiagramaLadder _frmDiagrama = (DiagramaLadder)this.frmDiag;
             simboloInicioLinha.ControleSelecionado += new ControleSelecionadoEventHandler(frmDiag.Simbolo_ControleSelecionado);
             simboloInicioLinha.MouseClick += new MouseEventHandler(simboloInicioLinha_Click);
             simboloInicioLinha.DeletaLinha += new DeletaLinhaEventHandler(frmDiag.DeletaLinha);

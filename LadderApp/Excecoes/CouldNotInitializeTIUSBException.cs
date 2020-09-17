@@ -10,8 +10,6 @@ namespace LadderApp.Exceções
         {
             get
             {
-                //return base.Message;
-                //return "Could not initialize the library (port: TIUSB)";
                 return "Porta TIUSB não encontrou o microcontrolador.";
             }
         }
