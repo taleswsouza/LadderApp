@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("LadderApp")]
-[assembly: AssemblyDescription("Ladder languagem for microcontrollers based on IEC 61131-3")]
+[assembly: AssemblyDescription("Ladder for programming microcontrollers based on IEC 61131-3")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("tales.wallace@gmail.com")]
 [assembly: AssemblyProduct("LadderApp")]

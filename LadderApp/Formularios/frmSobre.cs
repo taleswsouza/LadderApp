@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Web.Configuration;
 
 namespace LadderApp.Formularios
 {
@@ -111,5 +112,15 @@ namespace LadderApp.Formularios
             }
         }
         #endregion
+
+        private void frmSobre_Load(object sender, EventArgs e)
+        {
+            this.Text = String.Format("About {0}", AssemblyTitle);
+            this.labelProductName.Text = String.Format("Product Name: {0}", AssemblyProduct);
+            this.labelVersion.Text = String.Format("Version: {0}", AssemblyVersion);
+            this.labelCopyright.Text = AssemblyCopyright;
+            this.labelCompanyName.Text = "Company Name: " + AssemblyCompany;
+            this.textBoxDescription.Text = "Description: " + Environment.NewLine + AssemblyDescription;
+        }
     }
 }
