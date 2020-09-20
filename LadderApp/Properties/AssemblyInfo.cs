@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("LadderApp")]
-[assembly: AssemblyDescription("Software de programação visual para microcontroladores MSP430 - utilizando a linguagem ladder baseado no padrão IEC 61131-3")]
+[assembly: AssemblyDescription("Ladder languagem for microcontrollers based on IEC 61131-3")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("tales.wallace@gmail.com")]
-[assembly: AssemblyProduct("SPVMSP430")]
-[assembly: AssemblyCopyright("Copyright © tales.wallace@gmail.com 2010")]
+[assembly: AssemblyProduct("LadderApp")]
+[assembly: AssemblyCopyright("Copyright © tales.wallace@gmail.com 2010-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -30,7 +30,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.0.0.1")]
-[assembly: AssemblyFileVersion("0.0.0.1")]
-[assembly: NeutralResourcesLanguage("pt-BR")]
+[assembly: AssemblyVersion("0.1.0")]
+[assembly: AssemblyFileVersion("0.1.0")]
+[assembly: NeutralResourcesLanguage("en-US")]
 
