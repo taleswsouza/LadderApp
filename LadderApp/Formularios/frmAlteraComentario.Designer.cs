@@ -47,9 +47,9 @@ namespace LadderApp.Formularios
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(223, 13);
+            this.label1.Size = new System.Drawing.Size(221, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Digite aqui o comentário: (máx. 30 caracteres)";
+            this.label1.Text = "Type the comment here: (max. 30 characters)";
             // 
             // btnOK
             // 
@@ -85,7 +85,7 @@ namespace LadderApp.Formularios
             this.Controls.Add(this.txtComentario);
             this.Name = "frmAlteraComentario";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Comentário: #ENDERECO#";
+            this.Text = "Comment: #ENDERECO#";
             this.ResumeLayout(false);
             this.PerformLayout();
 
