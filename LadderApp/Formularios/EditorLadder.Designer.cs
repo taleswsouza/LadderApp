@@ -520,7 +520,7 @@ namespace LadderApp
             this.mnuGravarLadderNoExecutavel,
             this.mnuSolicitarSenhaParaLerLadder});
             this.ladderToolStripMenuItem1.Name = "ladderToolStripMenuItem1";
-            this.ladderToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
+            this.ladderToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.ladderToolStripMenuItem1.Text = "&Ladder";
             // 
             // mnuGravarLadderNoExecutavel
@@ -537,8 +537,8 @@ namespace LadderApp
             // 
             this.mnuSolicitarSenhaParaLerLadder.CheckOnClick = true;
             this.mnuSolicitarSenhaParaLerLadder.Name = "mnuSolicitarSenhaParaLerLadder";
-            this.mnuSolicitarSenhaParaLerLadder.Size = new System.Drawing.Size(192, 22);
-            this.mnuSolicitarSenhaParaLerLadder.Text = "Solicitar senha para ler";
+            this.mnuSolicitarSenhaParaLerLadder.Size = new System.Drawing.Size(186, 22);
+            this.mnuSolicitarSenhaParaLerLadder.Text = "Ask &password to read";
             // 
             // gravToolStripMenuItem
             // 
