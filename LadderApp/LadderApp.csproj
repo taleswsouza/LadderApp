@@ -72,7 +72,6 @@
     </Compile>
     <Compile Include="Excecoes\CouldNotInitializeTIUSBException.cs" />
     <Compile Include="Excecoes\NaoECodigoInterpretavelException.cs" />
-    <Compile Include="Excecoes\NaoESimboloBasicoException.cs" />
     <Compile Include="Formularios\frmAlteraComentario.cs">
       <SubType>Form</SubType>
     </Compile>
