@@ -83,7 +83,7 @@ namespace LadderApp
 
         private void ProjetoLadder_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult _result = MessageBox.Show("Deseja salvar o projeto " + this.Text + " ?", "EditorLadder", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            DialogResult _result = MessageBox.Show(String.Format("Do you want to save the project {0}?", Text), "LadderApp", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
             switch (_result)
             {
