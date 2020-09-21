@@ -65,7 +65,7 @@ namespace LadderApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "CriaArquivo: " + strNomeArquivo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "LadderApp" + strNomeArquivo, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -87,7 +87,7 @@ namespace LadderApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "DeletaTodosArquivosIntermediarios", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return true;
@@ -121,7 +121,7 @@ namespace LadderApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "CompilaMSP430gcc - deletando " + strNomeArquivo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "LadderApp" + strNomeArquivo, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             lstNomesArquivosCriados.Remove(strNomeArquivo + ".c");
@@ -180,7 +180,7 @@ namespace LadderApp
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "CompilaA43 - deletando " + fileName.Replace(' ', '_') + ".elf", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(ex.Message, "LadderApp" + fileName.Replace(' ', '_') + ".elf", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
                     try
@@ -321,13 +321,13 @@ namespace LadderApp
             {
                 if (strStandardError.StartsWith(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_INI) && strStandardError.EndsWith(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_FIM))
                 {
-                    MessageBox.Show(strStandardError.Substring(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_INI.Length, strStandardError.IndexOf(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_FIM) - RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_INI.Length) + " bytes gravados.", "Mensagem Erro:" + strNomeArquivo);
+                    MessageBox.Show(strStandardError.Substring(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_INI.Length, strStandardError.IndexOf(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_FIM) - RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_INI.Length) + " recorded bytes.", "Error message:" + strNomeArquivo);
                     return true;
                 }
                 else
                 {
                     CriaArquivo("Erro.txt", strStandardError);
-                    MessageBox.Show(strStandardError, "Mensagem Erro:" + strNomeArquivo);
+                    MessageBox.Show(strStandardError, "Error message:" + strNomeArquivo);
                     strStandardError = "";
                     return false;
                 }
@@ -335,7 +335,7 @@ namespace LadderApp
 
             if (strStandardOutput != "")
             {
-                MessageBox.Show(strStandardOutput, "Mensagem: " + strNomeArquivo);
+                MessageBox.Show(strStandardOutput, "Message: " + strNomeArquivo);
                 strStandardOutput = "";
                 return false;
             }
