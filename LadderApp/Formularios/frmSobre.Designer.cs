@@ -137,7 +137,7 @@ namespace LadderApp.Formularios
             this.textBoxDescription.Size = new System.Drawing.Size(271, 126);
             this.textBoxDescription.TabIndex = 23;
             this.textBoxDescription.TabStop = false;
-            this.textBoxDescription.Text = "Description:\r\nSoftware de edição de programas ladder para microcontroladores.";
+            this.textBoxDescription.Text = "Description:\r\nLadder for microcontrollers.";
             // 
             // okButton
             // 
@@ -165,6 +165,7 @@ namespace LadderApp.Formularios
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Sobre o LadderMic";
+            this.Load += new System.EventHandler(this.frmSobre_Load);
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();

@@ -58,7 +58,7 @@ namespace LadderApp.Formularios
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(53, 73);
+            this.label1.Location = new System.Drawing.Point(54, 75);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(64, 13);
@@ -69,12 +69,12 @@ namespace LadderApp.Formularios
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(32, 104);
+            this.label2.Location = new System.Drawing.Point(24, 105);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(86, 13);
+            this.label2.Size = new System.Drawing.Size(95, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Acumulado (AC):";
+            this.label2.Text = "Accumulated (AC):";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtAcumulado
@@ -106,12 +106,12 @@ namespace LadderApp.Formularios
             // lblBaseTempo
             // 
             this.lblBaseTempo.AutoSize = true;
-            this.lblBaseTempo.Location = new System.Drawing.Point(10, 39);
+            this.lblBaseTempo.Location = new System.Drawing.Point(34, 40);
             this.lblBaseTempo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblBaseTempo.Name = "lblBaseTempo";
-            this.lblBaseTempo.Size = new System.Drawing.Size(108, 13);
+            this.lblBaseTempo.Size = new System.Drawing.Size(82, 13);
             this.lblBaseTempo.TabIndex = 6;
-            this.lblBaseTempo.Text = "Base de Tempo (BT):";
+            this.lblBaseTempo.Text = "Time base (BT):";
             this.lblBaseTempo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // cmbBaseTempo
@@ -149,7 +149,7 @@ namespace LadderApp.Formularios
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 28);
             this.btnCancel.TabIndex = 9;
-            this.btnCancel.Text = "Cancelar";
+            this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -207,7 +207,7 @@ namespace LadderApp.Formularios
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "AlteraTemporizadorContador";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Altera <%>";
+            this.Text = "Change <%>";
             this.Load += new System.EventHandler(this.AlteraTemporizadorContador_Load);
             ((System.ComponentModel.ISupportInitialize)(this.txtAcumulado)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPreset)).EndInit();

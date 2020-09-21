@@ -34,7 +34,7 @@ namespace LadderApp.Formularios
             switch (this.Funcao)
             {
                 case CodigosInterpretaveis.CONTADOR:
-                    this.Text = this.Text.Replace("<%>", "Contador");
+                    this.Text = this.Text.Replace("<%>", "Counter");
                     cmbBaseTempo.Visible = false;
                     lblBaseTempo.Visible = false;
                     cmbTipo.Items.Clear();
@@ -42,7 +42,7 @@ namespace LadderApp.Formularios
                     cmbTipo.Items.Add("CTD");
                     break;
                 case CodigosInterpretaveis.TEMPORIZADOR:
-                    this.Text = this.Text.Replace("<%>", "Temporizador");
+                    this.Text = this.Text.Replace("<%>", "Timer");
                     cmbTipo.Items.Clear();
                     cmbTipo.Items.Add("TON");
                     cmbTipo.Items.Add("TOF");

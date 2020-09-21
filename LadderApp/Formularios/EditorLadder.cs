@@ -52,11 +52,11 @@ namespace LadderApp
                 frmProj = new ProjetoLadder();
                 frmProj.MdiParent = this;
                 frmProj.Show();
-                frmProj.Text = "Sem Nome";
+                frmProj.Text = "No Name";
             }
             else
             {
-                DialogResult _result = MessageBox.Show(RecursoVisual.STR_QUESTIONA_SALVAR_PROJETO.Replace("%%", frmProj.Text.Trim()).Trim(), "EditorLadder",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                DialogResult _result = MessageBox.Show(RecursoVisual.STR_QUESTIONA_SALVAR_PROJETO.Replace("%%", frmProj.Text.Trim()).Trim(), "LadderApp",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
 
                 if (_result == DialogResult.Yes)
                 {
@@ -74,10 +74,10 @@ namespace LadderApp
             }
             catch (SecurityException ex)
             {
-                MessageBox.Show("Erro na segurança. Impossível continuar." + ex.Message + " " + ex.PermissionState);
+                MessageBox.Show(String.Format("Security error. Impossible to continue. {0} {1}", ex.Message, ex.PermissionState));
                 return;
             }
-            openFileDialog.Filter = "Arquivos Ladder (*.xml;*.a43)|*.xml;*.a43|Arquivos XML (*.xml)|*.xml|Executável MSP430 (*.a43)|*.a43";
+            openFileDialog.Filter = "LadderApp files (*.xml;*.a43)|*.xml;*.a43|XML files (*.xml)|*.xml|MSP430 Executable files (*.a43)|*.a43";
             if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 string FileName = "";
@@ -109,7 +109,7 @@ namespace LadderApp
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Erro ao ler o arquivo! " + ex.InnerException.Message, "Abrir arquivos ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Error reading file! " + ex.InnerException.Message, "Open files ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 
                         break;
@@ -125,12 +125,12 @@ namespace LadderApp
                         }
                         catch
                         {
-                            MessageBox.Show("Formato desconhecido!", "Abrir arquivos ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Unknown file format!", "Open files ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 
                         break;
                     default:
-                        MessageBox.Show("Formato desconhecido!", "Abrir arquivos ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Unknown file format!", "Open files ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                 }
 
@@ -232,7 +232,7 @@ namespace LadderApp
                             }
                             catch
                             {
-                                MessageBox.Show("Erro");
+                                MessageBox.Show("Error");
                             }
                         }
 
@@ -377,7 +377,7 @@ namespace LadderApp
                 if (_bResult)
                     MessageBox.Show("OK");
                 else
-                    MessageBox.Show("Erro");
+                    MessageBox.Show("Error");
             }
         }
 
@@ -775,7 +775,7 @@ namespace LadderApp
 
             }
             else
-                MessageBox.Show("O arquivo não foi reconhecido pelo sistema!", "Abrir Arquivos ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Unknown file format!", "Open files ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -848,11 +848,11 @@ namespace LadderApp
             {
                 try
                 {
-                    MessageBox.Show("O arquivo não pode ser salvo! " + ex.InnerException.Message, "Salvar como...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("The file cannot be saved!" + ex.InnerException.Message, "Salve As ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch
                 {
-                    MessageBox.Show("O arquivo não pode ser salvo! " + ex.Message, "Salvar como...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("The file cannot be saved!" + ex.Message, "Salvar As ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -892,7 +892,7 @@ namespace LadderApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Escrever Executável");
+                MessageBox.Show(ex.Message, "Write Executable");
             }
         }
 
@@ -905,7 +905,7 @@ namespace LadderApp
                 if (_bResult)
                     MessageBox.Show("OK");
                 else
-                    MessageBox.Show("Erro");
+                    MessageBox.Show("Error");
             }
         }
 
@@ -959,7 +959,7 @@ namespace LadderApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Gerar Executável");
+                MessageBox.Show(ex.Message, "Write Executable");
             }
         }
 
@@ -971,7 +971,7 @@ namespace LadderApp
                 String strLido = p.LeViaUSB();
 
                 if (VerificaSenha(strLido))
-                    LerExecutavel(strLido, "Sem Nome");
+                    LerExecutavel(strLido, "No Name");
             }
             catch (CouldNotInitializeTIUSBException ex)
             {
@@ -1004,7 +1004,7 @@ namespace LadderApp
 
                         if (_result == DialogResult.Cancel)
                         {
-                            MessageBox.Show("Operação cancelada!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return false;
                         }
                         else
@@ -1023,7 +1023,7 @@ namespace LadderApp
                     }
                     if (!_bSenhaOK)
                     {
-                        MessageBox.Show("Operação cancelada!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return false;
                     }
                 }
@@ -1040,7 +1040,7 @@ namespace LadderApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "SPVMSP430");
+                MessageBox.Show(ex.Message, "LadderApp");
             }
         }
     }

@@ -60,7 +60,7 @@ namespace LadderApp.Formularios
             this.lblSenhaAtual.Name = "lblSenhaAtual";
             this.lblSenhaAtual.Size = new System.Drawing.Size(100, 17);
             this.lblSenhaAtual.TabIndex = 2;
-            this.lblSenhaAtual.Text = "Senha:";
+            this.lblSenhaAtual.Text = "Password:";
             this.lblSenhaAtual.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtSenha
@@ -85,7 +85,7 @@ namespace LadderApp.Formularios
             this.Controls.Add(this.btnOK);
             this.Name = "frmSenha";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Digite a senha:";
+            this.Text = "Type the password:";
             this.Load += new System.EventHandler(this.frmSenha_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

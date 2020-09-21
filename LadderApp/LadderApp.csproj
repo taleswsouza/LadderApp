@@ -17,6 +17,7 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -29,7 +30,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -72,18 +72,11 @@
     </Compile>
     <Compile Include="Excecoes\CouldNotInitializeTIUSBException.cs" />
     <Compile Include="Excecoes\NaoECodigoInterpretavelException.cs" />
-    <Compile Include="Excecoes\NaoESimboloBasicoException.cs" />
     <Compile Include="Formularios\frmAlteraComentario.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Formularios\frmAlteraComentario.Designer.cs">
       <DependentUpon>frmAlteraComentario.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Formularios\frmMovimentaParalelo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Formularios\frmMovimentaParalelo.Designer.cs">
-      <DependentUpon>frmMovimentaParalelo.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\frmSenha.cs">
       <SubType>Form</SubType>
@@ -132,7 +125,6 @@
     </Compile>
     <Compile Include="IOperando.cs" />
     <Compile Include="ISimbolo.cs" />
-    <Compile Include="ISimboloLivre.cs" />
     <Compile Include="LinhaCompleta.cs" />
     <Compile Include="ListaSimbolo.cs" />
     <Compile Include="ManipulaLinha.cs" />
@@ -142,7 +134,6 @@
     <Compile Include="LinhaCompletaVisual.Designer.cs">
       <DependentUpon>LinhaCompletaVisual.cs</DependentUpon>
     </Compile>
-    <Compile Include="Parametros.cs" />
     <Compile Include="ModuloIntegracaoMSP430.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramaBasico.cs" />
@@ -159,10 +150,6 @@
     <EmbeddedResource Include="Formularios\frmAlteraComentario.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmAlteraComentario.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\frmMovimentaParalelo.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmMovimentaParalelo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\frmSenha.resx">
       <SubType>Designer</SubType>
@@ -248,7 +235,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ArquivosFontesC.resx</DependentUpon>
     </Compile>
-    <Compile Include="RotinaLadder.cs" />
     <Compile Include="SimboloBasico.cs" />
     <Compile Include="SimulaContador.cs" />
     <Compile Include="SimulaTemporizador.cs" />

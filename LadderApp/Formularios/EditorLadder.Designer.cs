@@ -160,8 +160,8 @@ namespace LadderApp
             this.exitToolStripMenuItem});
             this.fileMenu.ImageTransparentColor = System.Drawing.SystemColors.ActiveBorder;
             this.fileMenu.Name = "fileMenu";
-            this.fileMenu.Size = new System.Drawing.Size(56, 20);
-            this.fileMenu.Text = "&Arquivo";
+            this.fileMenu.Size = new System.Drawing.Size(37, 20);
+            this.fileMenu.Text = "&File";
             // 
             // newToolStripMenuItem
             // 
@@ -169,8 +169,8 @@ namespace LadderApp
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.newToolStripMenuItem.Text = "&Novo";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.ShowNewForm);
             // 
             // openToolStripMenuItem
@@ -179,14 +179,14 @@ namespace LadderApp
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.openToolStripMenuItem.Text = "&Abrir";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenFile);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(150, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(143, 6);
             // 
             // saveToolStripMenuItem
             // 
@@ -194,21 +194,21 @@ namespace LadderApp
             this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.saveToolStripMenuItem.Text = "&Salvar";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SalvarArquivo);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.saveAsToolStripMenuItem.Text = "Salvar &Como";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.saveAsToolStripMenuItem.Text = "Save &As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(150, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(143, 6);
             this.toolStripSeparator4.Visible = false;
             // 
             // printToolStripMenuItem
@@ -217,7 +217,7 @@ namespace LadderApp
             this.printToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
             this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.printToolStripMenuItem.Text = "&Print";
             this.printToolStripMenuItem.Visible = false;
             // 
@@ -226,27 +226,27 @@ namespace LadderApp
             this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
             this.printPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.printPreviewToolStripMenuItem.Text = "Print Pre&view";
             this.printPreviewToolStripMenuItem.Visible = false;
             // 
             // printSetupToolStripMenuItem
             // 
             this.printSetupToolStripMenuItem.Name = "printSetupToolStripMenuItem";
-            this.printSetupToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.printSetupToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.printSetupToolStripMenuItem.Text = "Print Setup";
             this.printSetupToolStripMenuItem.Visible = false;
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(150, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(143, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.exitToolStripMenuItem.Text = "S&air";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolsStripMenuItem_Click);
             // 
             // editMenu
@@ -262,8 +262,8 @@ namespace LadderApp
             this.selectAllToolStripMenuItem,
             this.mnuEditarComentário});
             this.editMenu.Name = "editMenu";
-            this.editMenu.Size = new System.Drawing.Size(47, 20);
-            this.editMenu.Text = "&Editar";
+            this.editMenu.Size = new System.Drawing.Size(39, 20);
+            this.editMenu.Text = "&Edit";
             // 
             // undoToolStripMenuItem
             // 
@@ -271,7 +271,7 @@ namespace LadderApp
             this.undoToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.undoToolStripMenuItem.Text = "&Undo";
             this.undoToolStripMenuItem.Visible = false;
             // 
@@ -281,14 +281,14 @@ namespace LadderApp
             this.redoToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.redoToolStripMenuItem.Text = "&Redo";
             this.redoToolStripMenuItem.Visible = false;
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(185, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(165, 6);
             this.toolStripSeparator6.Visible = false;
             // 
             // cutToolStripMenuItem
@@ -297,7 +297,7 @@ namespace LadderApp
             this.cutToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
             this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.cutToolStripMenuItem.Text = "Cu&t";
             this.cutToolStripMenuItem.Click += new System.EventHandler(this.CutToolStripMenuItem_Click);
             // 
@@ -307,7 +307,7 @@ namespace LadderApp
             this.copyToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.copyToolStripMenuItem.Text = "&Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.CopyToolStripMenuItem_Click);
             // 
@@ -317,20 +317,20 @@ namespace LadderApp
             this.pasteToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
             this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.pasteToolStripMenuItem.Text = "&Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.PasteToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(185, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(165, 6);
             // 
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
             this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.selectAllToolStripMenuItem.Text = "Select &All";
             this.selectAllToolStripMenuItem.Visible = false;
             // 
@@ -338,8 +338,8 @@ namespace LadderApp
             // 
             this.mnuEditarComentário.Name = "mnuEditarComentário";
             this.mnuEditarComentário.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.mnuEditarComentário.Size = new System.Drawing.Size(188, 22);
-            this.mnuEditarComentário.Text = "&Editar comentário";
+            this.mnuEditarComentário.Size = new System.Drawing.Size(168, 22);
+            this.mnuEditarComentário.Text = "&Edit comment";
             this.mnuEditarComentário.Click += new System.EventHandler(this.mnuEditarComentário_Click);
             // 
             // viewMenu
@@ -348,8 +348,8 @@ namespace LadderApp
             this.toolBarToolStripMenuItem,
             this.statusBarToolStripMenuItem});
             this.viewMenu.Name = "viewMenu";
-            this.viewMenu.Size = new System.Drawing.Size(63, 20);
-            this.viewMenu.Text = "&Visualizar";
+            this.viewMenu.Size = new System.Drawing.Size(44, 20);
+            this.viewMenu.Text = "&View";
             // 
             // toolBarToolStripMenuItem
             // 
@@ -357,8 +357,8 @@ namespace LadderApp
             this.toolBarToolStripMenuItem.CheckOnClick = true;
             this.toolBarToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolBarToolStripMenuItem.Name = "toolBarToolStripMenuItem";
-            this.toolBarToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.toolBarToolStripMenuItem.Text = "&Barra de Tarefas";
+            this.toolBarToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.toolBarToolStripMenuItem.Text = "Show &Toolbar";
             this.toolBarToolStripMenuItem.Click += new System.EventHandler(this.ToolBarToolStripMenuItem_Click);
             // 
             // statusBarToolStripMenuItem
@@ -367,8 +367,8 @@ namespace LadderApp
             this.statusBarToolStripMenuItem.CheckOnClick = true;
             this.statusBarToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.statusBarToolStripMenuItem.Name = "statusBarToolStripMenuItem";
-            this.statusBarToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.statusBarToolStripMenuItem.Text = "&Barra de status";
+            this.statusBarToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.statusBarToolStripMenuItem.Text = "Show &Status bar";
             this.statusBarToolStripMenuItem.Click += new System.EventHandler(this.StatusBarToolStripMenuItem_Click);
             // 
             // ladderToolStripMenuItem
@@ -388,93 +388,93 @@ namespace LadderApp
             this.verificarLadderToolStripMenuItem,
             this.simularToolStripMenuItem});
             this.ladderToolStripMenuItem.Name = "ladderToolStripMenuItem";
-            this.ladderToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.ladderToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.ladderToolStripMenuItem.Text = "Ladder";
             // 
             // linhaToolStripMenuItem
             // 
             this.linhaToolStripMenuItem.Name = "linhaToolStripMenuItem";
-            this.linhaToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.linhaToolStripMenuItem.Text = "Linha";
+            this.linhaToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.linhaToolStripMenuItem.Text = "&Line";
             this.linhaToolStripMenuItem.Click += new System.EventHandler(this.btnLinha_Click);
             // 
             // paraleloToolStripMenuItem
             // 
             this.paraleloToolStripMenuItem.Name = "paraleloToolStripMenuItem";
-            this.paraleloToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.paraleloToolStripMenuItem.Text = "Paralelo";
+            this.paraleloToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.paraleloToolStripMenuItem.Text = "Parallel &Branch";
             this.paraleloToolStripMenuItem.Click += new System.EventHandler(this.btnParalelo_Click);
             // 
             // toolStripSeparator13
             // 
             this.toolStripSeparator13.Name = "toolStripSeparator13";
-            this.toolStripSeparator13.Size = new System.Drawing.Size(198, 6);
+            this.toolStripSeparator13.Size = new System.Drawing.Size(200, 6);
             // 
             // contatoNormalAbertoToolStripMenuItem
             // 
             this.contatoNormalAbertoToolStripMenuItem.Name = "contatoNormalAbertoToolStripMenuItem";
-            this.contatoNormalAbertoToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.contatoNormalAbertoToolStripMenuItem.Text = "Contato normal aberto";
+            this.contatoNormalAbertoToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.contatoNormalAbertoToolStripMenuItem.Text = "Normally o&pen contact";
             this.contatoNormalAbertoToolStripMenuItem.Click += new System.EventHandler(this.btnContatoNA_Click);
             // 
             // contatoNormalFechadoToolStripMenuItem
             // 
             this.contatoNormalFechadoToolStripMenuItem.Name = "contatoNormalFechadoToolStripMenuItem";
-            this.contatoNormalFechadoToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.contatoNormalFechadoToolStripMenuItem.Text = "Contato normal fechado";
+            this.contatoNormalFechadoToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.contatoNormalFechadoToolStripMenuItem.Text = "Normally &closed contact";
             this.contatoNormalFechadoToolStripMenuItem.Click += new System.EventHandler(this.btnContatoNF_Click);
             // 
             // toolStripSeparator14
             // 
             this.toolStripSeparator14.Name = "toolStripSeparator14";
-            this.toolStripSeparator14.Size = new System.Drawing.Size(198, 6);
+            this.toolStripSeparator14.Size = new System.Drawing.Size(200, 6);
             // 
             // bobinaSaidaToolStripMenuItem
             // 
             this.bobinaSaidaToolStripMenuItem.Name = "bobinaSaidaToolStripMenuItem";
-            this.bobinaSaidaToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.bobinaSaidaToolStripMenuItem.Text = "Bobina saida";
+            this.bobinaSaidaToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.bobinaSaidaToolStripMenuItem.Text = "&Output coil";
             this.bobinaSaidaToolStripMenuItem.Click += new System.EventHandler(this.btnBobinaSaida_Click);
             // 
             // temporizadorToolStripMenuItem
             // 
             this.temporizadorToolStripMenuItem.Name = "temporizadorToolStripMenuItem";
-            this.temporizadorToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.temporizadorToolStripMenuItem.Text = "Temporizador";
+            this.temporizadorToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.temporizadorToolStripMenuItem.Text = "&Timer";
             this.temporizadorToolStripMenuItem.Click += new System.EventHandler(this.btnTemporizador_Click);
             // 
             // contadorToolStripMenuItem
             // 
             this.contadorToolStripMenuItem.Name = "contadorToolStripMenuItem";
-            this.contadorToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.contadorToolStripMenuItem.Text = "Contador";
+            this.contadorToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.contadorToolStripMenuItem.Text = "&Counter";
             this.contadorToolStripMenuItem.Click += new System.EventHandler(this.btnContador_Click);
             // 
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // toolStripSeparator15
             // 
             this.toolStripSeparator15.Name = "toolStripSeparator15";
-            this.toolStripSeparator15.Size = new System.Drawing.Size(198, 6);
+            this.toolStripSeparator15.Size = new System.Drawing.Size(200, 6);
             // 
             // verificarLadderToolStripMenuItem
             // 
             this.verificarLadderToolStripMenuItem.Name = "verificarLadderToolStripMenuItem";
-            this.verificarLadderToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.verificarLadderToolStripMenuItem.Text = "Verificar ladder";
+            this.verificarLadderToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.verificarLadderToolStripMenuItem.Text = "&Verify ladder";
             this.verificarLadderToolStripMenuItem.Click += new System.EventHandler(this.verificarLadderToolStripMenuItem_Click);
             // 
             // simularToolStripMenuItem
             // 
             this.simularToolStripMenuItem.CheckOnClick = true;
             this.simularToolStripMenuItem.Name = "simularToolStripMenuItem";
-            this.simularToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.simularToolStripMenuItem.Text = "Simular";
+            this.simularToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.simularToolStripMenuItem.Text = "&Simulate";
             this.simularToolStripMenuItem.Click += new System.EventHandler(this.Simulacao);
             // 
             // toolsMenu
@@ -484,8 +484,8 @@ namespace LadderApp
             this.gravToolStripMenuItem,
             this.mnuGerarExecutável});
             this.toolsMenu.Name = "toolsMenu";
-            this.toolsMenu.Size = new System.Drawing.Size(99, 20);
-            this.toolsMenu.Text = "&Microcontrolador";
+            this.toolsMenu.Size = new System.Drawing.Size(101, 20);
+            this.toolsMenu.Text = "&Microcontroller";
             // 
             // opçõesToolStripMenuItem
             // 
@@ -494,8 +494,8 @@ namespace LadderApp
             this.jTAGParaleloToolStripMenuItem,
             this.ladderToolStripMenuItem1});
             this.opçõesToolStripMenuItem.Name = "opçõesToolStripMenuItem";
-            this.opçõesToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.opçõesToolStripMenuItem.Text = "Opções";
+            this.opçõesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.opçõesToolStripMenuItem.Text = "Options";
             this.opçõesToolStripMenuItem.Click += new System.EventHandler(this.opçõesToolStripMenuItem_Click);
             // 
             // jTAGUSBToolStripMenuItem
@@ -503,15 +503,15 @@ namespace LadderApp
             this.jTAGUSBToolStripMenuItem.Checked = true;
             this.jTAGUSBToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.jTAGUSBToolStripMenuItem.Name = "jTAGUSBToolStripMenuItem";
-            this.jTAGUSBToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.jTAGUSBToolStripMenuItem.Text = "JTAG USB";
+            this.jTAGUSBToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.jTAGUSBToolStripMenuItem.Text = "JTAG &USB";
             this.jTAGUSBToolStripMenuItem.Click += new System.EventHandler(this.jTAGUSBToolStripMenuItem_Click);
             // 
             // jTAGParaleloToolStripMenuItem
             // 
             this.jTAGParaleloToolStripMenuItem.Name = "jTAGParaleloToolStripMenuItem";
-            this.jTAGParaleloToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.jTAGParaleloToolStripMenuItem.Text = "JTAG Paralelo";
+            this.jTAGParaleloToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.jTAGParaleloToolStripMenuItem.Text = "JTAG &Parallel Port";
             this.jTAGParaleloToolStripMenuItem.Click += new System.EventHandler(this.jTAGParaleloToolStripMenuItem_Click);
             // 
             // ladderToolStripMenuItem1
@@ -520,8 +520,8 @@ namespace LadderApp
             this.mnuGravarLadderNoExecutavel,
             this.mnuSolicitarSenhaParaLerLadder});
             this.ladderToolStripMenuItem1.Name = "ladderToolStripMenuItem1";
-            this.ladderToolStripMenuItem1.Size = new System.Drawing.Size(151, 22);
-            this.ladderToolStripMenuItem1.Text = "Ladder";
+            this.ladderToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.ladderToolStripMenuItem1.Text = "&Ladder";
             // 
             // mnuGravarLadderNoExecutavel
             // 
@@ -529,16 +529,16 @@ namespace LadderApp
             this.mnuGravarLadderNoExecutavel.CheckOnClick = true;
             this.mnuGravarLadderNoExecutavel.CheckState = System.Windows.Forms.CheckState.Checked;
             this.mnuGravarLadderNoExecutavel.Name = "mnuGravarLadderNoExecutavel";
-            this.mnuGravarLadderNoExecutavel.Size = new System.Drawing.Size(194, 22);
-            this.mnuGravarLadderNoExecutavel.Text = "Gravar no executável";
+            this.mnuGravarLadderNoExecutavel.Size = new System.Drawing.Size(192, 22);
+            this.mnuGravarLadderNoExecutavel.Text = "Save";
             this.mnuGravarLadderNoExecutavel.CheckedChanged += new System.EventHandler(this.mnuGravarLadderNoExecutavel_CheckedChanged);
             // 
             // mnuSolicitarSenhaParaLerLadder
             // 
             this.mnuSolicitarSenhaParaLerLadder.CheckOnClick = true;
             this.mnuSolicitarSenhaParaLerLadder.Name = "mnuSolicitarSenhaParaLerLadder";
-            this.mnuSolicitarSenhaParaLerLadder.Size = new System.Drawing.Size(194, 22);
-            this.mnuSolicitarSenhaParaLerLadder.Text = "Solicitar senha para ler";
+            this.mnuSolicitarSenhaParaLerLadder.Size = new System.Drawing.Size(186, 22);
+            this.mnuSolicitarSenhaParaLerLadder.Text = "Ask &password to read";
             // 
             // gravToolStripMenuItem
             // 
@@ -546,28 +546,28 @@ namespace LadderApp
             this.baixarProgramaToolStripMenuItem,
             this.lerProgramaToolStripMenuItem});
             this.gravToolStripMenuItem.Name = "gravToolStripMenuItem";
-            this.gravToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.gravToolStripMenuItem.Text = "Comunicação";
+            this.gravToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gravToolStripMenuItem.Text = "Communication";
             // 
             // baixarProgramaToolStripMenuItem
             // 
             this.baixarProgramaToolStripMenuItem.Name = "baixarProgramaToolStripMenuItem";
-            this.baixarProgramaToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.baixarProgramaToolStripMenuItem.Text = "Escrever programa";
+            this.baixarProgramaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.baixarProgramaToolStripMenuItem.Text = "&Upload program";
             this.baixarProgramaToolStripMenuItem.Click += new System.EventHandler(this.baixarProgramaToolStripMenuItem_Click);
             // 
             // lerProgramaToolStripMenuItem
             // 
             this.lerProgramaToolStripMenuItem.Name = "lerProgramaToolStripMenuItem";
-            this.lerProgramaToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.lerProgramaToolStripMenuItem.Text = "Ler programa";
+            this.lerProgramaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lerProgramaToolStripMenuItem.Text = "&Download program";
             this.lerProgramaToolStripMenuItem.Click += new System.EventHandler(this.lerProgramaToolStripMenuItem_Click);
             // 
             // mnuGerarExecutável
             // 
             this.mnuGerarExecutável.Name = "mnuGerarExecutável";
-            this.mnuGerarExecutável.Size = new System.Drawing.Size(168, 22);
-            this.mnuGerarExecutável.Text = "Gerar executável";
+            this.mnuGerarExecutável.Size = new System.Drawing.Size(180, 22);
+            this.mnuGerarExecutável.Text = "Build";
             this.mnuGerarExecutável.Click += new System.EventHandler(this.mnuGerarExecutável_Click);
             // 
             // windowsMenu
@@ -581,13 +581,13 @@ namespace LadderApp
             this.closeAllToolStripMenuItem,
             this.arrangeIconsToolStripMenuItem});
             this.windowsMenu.Name = "windowsMenu";
-            this.windowsMenu.Size = new System.Drawing.Size(50, 20);
-            this.windowsMenu.Text = "&Janela";
+            this.windowsMenu.Size = new System.Drawing.Size(63, 20);
+            this.windowsMenu.Text = "&Window";
             // 
             // newWindowToolStripMenuItem
             // 
             this.newWindowToolStripMenuItem.Name = "newWindowToolStripMenuItem";
-            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newWindowToolStripMenuItem.Text = "&New Window";
             this.newWindowToolStripMenuItem.Visible = false;
             this.newWindowToolStripMenuItem.Click += new System.EventHandler(this.ShowNewForm);
@@ -595,7 +595,7 @@ namespace LadderApp
             // cascadeToolStripMenuItem
             // 
             this.cascadeToolStripMenuItem.Name = "cascadeToolStripMenuItem";
-            this.cascadeToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.cascadeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cascadeToolStripMenuItem.Text = "&Cascade";
             this.cascadeToolStripMenuItem.Visible = false;
             this.cascadeToolStripMenuItem.Click += new System.EventHandler(this.CascadeToolStripMenuItem_Click);
@@ -603,7 +603,7 @@ namespace LadderApp
             // tileVerticalToolStripMenuItem
             // 
             this.tileVerticalToolStripMenuItem.Name = "tileVerticalToolStripMenuItem";
-            this.tileVerticalToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.tileVerticalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.tileVerticalToolStripMenuItem.Text = "Tile &Vertical";
             this.tileVerticalToolStripMenuItem.Visible = false;
             this.tileVerticalToolStripMenuItem.Click += new System.EventHandler(this.TileVerticleToolStripMenuItem_Click);
@@ -611,7 +611,7 @@ namespace LadderApp
             // tileHorizontalToolStripMenuItem
             // 
             this.tileHorizontalToolStripMenuItem.Name = "tileHorizontalToolStripMenuItem";
-            this.tileHorizontalToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.tileHorizontalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.tileHorizontalToolStripMenuItem.Text = "Tile &Horizontal";
             this.tileHorizontalToolStripMenuItem.Visible = false;
             this.tileHorizontalToolStripMenuItem.Click += new System.EventHandler(this.TileHorizontalToolStripMenuItem_Click);
@@ -619,14 +619,14 @@ namespace LadderApp
             // ArrangeProjetoToolStripMenuItem
             // 
             this.ArrangeProjetoToolStripMenuItem.Name = "ArrangeProjetoToolStripMenuItem";
-            this.ArrangeProjetoToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.ArrangeProjetoToolStripMenuItem.Text = "Arranjar conforme Projeto";
+            this.ArrangeProjetoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ArrangeProjetoToolStripMenuItem.Text = "&Reset Windows";
             this.ArrangeProjetoToolStripMenuItem.Click += new System.EventHandler(this.ArrangeProjetoToolStripMenuItem_Click);
             // 
             // closeAllToolStripMenuItem
             // 
             this.closeAllToolStripMenuItem.Name = "closeAllToolStripMenuItem";
-            this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.closeAllToolStripMenuItem.Text = "C&lose All";
             this.closeAllToolStripMenuItem.Visible = false;
             this.closeAllToolStripMenuItem.Click += new System.EventHandler(this.CloseAllToolStripMenuItem_Click);
@@ -634,7 +634,7 @@ namespace LadderApp
             // arrangeIconsToolStripMenuItem
             // 
             this.arrangeIconsToolStripMenuItem.Name = "arrangeIconsToolStripMenuItem";
-            this.arrangeIconsToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.arrangeIconsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.arrangeIconsToolStripMenuItem.Text = "&Arrange Icons";
             this.arrangeIconsToolStripMenuItem.Visible = false;
             this.arrangeIconsToolStripMenuItem.Click += new System.EventHandler(this.ArrangeIconsToolStripMenuItem_Click);
@@ -648,15 +648,15 @@ namespace LadderApp
             this.toolStripSeparator8,
             this.aboutToolStripMenuItem});
             this.helpMenu.Name = "helpMenu";
-            this.helpMenu.Size = new System.Drawing.Size(47, 20);
-            this.helpMenu.Text = "&Ajuda";
+            this.helpMenu.Size = new System.Drawing.Size(44, 20);
+            this.helpMenu.Text = "&Help";
             // 
             // contentsToolStripMenuItem
             // 
             this.contentsToolStripMenuItem.Enabled = false;
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.contentsToolStripMenuItem.Text = "&Contents";
             this.contentsToolStripMenuItem.Visible = false;
             this.contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
@@ -666,8 +666,8 @@ namespace LadderApp
             this.indexToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("indexToolStripMenuItem.Image")));
             this.indexToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
-            this.indexToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.indexToolStripMenuItem.Text = "&Conteúdo";
+            this.indexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.indexToolStripMenuItem.Text = "&Content";
             this.indexToolStripMenuItem.Click += new System.EventHandler(this.indexToolStripMenuItem_Click);
             // 
             // searchToolStripMenuItem
@@ -676,20 +676,20 @@ namespace LadderApp
             this.searchToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("searchToolStripMenuItem.Image")));
             this.searchToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            this.searchToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.searchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.searchToolStripMenuItem.Text = "&Search";
             this.searchToolStripMenuItem.Visible = false;
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(170, 6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(177, 6);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.aboutToolStripMenuItem.Text = "&Sobre ...";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Text = "&About ...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // statusStrip
@@ -706,7 +706,7 @@ namespace LadderApp
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(38, 17);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
             // newToolStripButton
@@ -823,7 +823,7 @@ namespace LadderApp
             this.btnLinha.ImageTransparentColor = System.Drawing.Color.White;
             this.btnLinha.Name = "btnLinha";
             this.btnLinha.Size = new System.Drawing.Size(23, 22);
-            this.btnLinha.Text = "Linha";
+            this.btnLinha.Text = "Line";
             this.btnLinha.Click += new System.EventHandler(this.btnLinha_Click);
             // 
             // btnParalelo
@@ -833,7 +833,7 @@ namespace LadderApp
             this.btnParalelo.ImageTransparentColor = System.Drawing.Color.White;
             this.btnParalelo.Name = "btnParalelo";
             this.btnParalelo.Size = new System.Drawing.Size(23, 22);
-            this.btnParalelo.Text = "Paralelo";
+            this.btnParalelo.Text = "Parallel Branch";
             this.btnParalelo.Click += new System.EventHandler(this.btnParalelo_Click);
             // 
             // btnContatoNA
@@ -843,7 +843,7 @@ namespace LadderApp
             this.btnContatoNA.ImageTransparentColor = System.Drawing.Color.White;
             this.btnContatoNA.Name = "btnContatoNA";
             this.btnContatoNA.Size = new System.Drawing.Size(23, 22);
-            this.btnContatoNA.Text = "Contato normal aberto";
+            this.btnContatoNA.Text = "Normally open contact";
             this.btnContatoNA.Click += new System.EventHandler(this.btnContatoNA_Click);
             // 
             // btnContatoNF
@@ -853,7 +853,7 @@ namespace LadderApp
             this.btnContatoNF.ImageTransparentColor = System.Drawing.Color.White;
             this.btnContatoNF.Name = "btnContatoNF";
             this.btnContatoNF.Size = new System.Drawing.Size(23, 22);
-            this.btnContatoNF.Text = "Contato normal fechado";
+            this.btnContatoNF.Text = "Normally closed contact";
             this.btnContatoNF.Click += new System.EventHandler(this.btnContatoNF_Click);
             // 
             // toolStripSeparator11
@@ -868,7 +868,7 @@ namespace LadderApp
             this.btnBobinaSaida.ImageTransparentColor = System.Drawing.Color.White;
             this.btnBobinaSaida.Name = "btnBobinaSaida";
             this.btnBobinaSaida.Size = new System.Drawing.Size(23, 22);
-            this.btnBobinaSaida.Text = "Bobina de saida";
+            this.btnBobinaSaida.Text = "Output coil";
             this.btnBobinaSaida.Click += new System.EventHandler(this.btnBobinaSaida_Click);
             // 
             // btnTemporizador
@@ -878,7 +878,7 @@ namespace LadderApp
             this.btnTemporizador.ImageTransparentColor = System.Drawing.Color.White;
             this.btnTemporizador.Name = "btnTemporizador";
             this.btnTemporizador.Size = new System.Drawing.Size(23, 22);
-            this.btnTemporizador.Text = "Temporizador";
+            this.btnTemporizador.Text = "Timer";
             this.btnTemporizador.Click += new System.EventHandler(this.btnTemporizador_Click);
             // 
             // btnContador
@@ -888,7 +888,7 @@ namespace LadderApp
             this.btnContador.ImageTransparentColor = System.Drawing.Color.White;
             this.btnContador.Name = "btnContador";
             this.btnContador.Size = new System.Drawing.Size(23, 22);
-            this.btnContador.Text = "Contador";
+            this.btnContador.Text = "Counter";
             this.btnContador.Click += new System.EventHandler(this.btnContador_Click);
             // 
             // btnReset
@@ -913,7 +913,7 @@ namespace LadderApp
             this.btnPrint.Image = ((System.Drawing.Image)(resources.GetObject("btnPrint.Image")));
             this.btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(33, 22);
+            this.btnPrint.Size = new System.Drawing.Size(36, 22);
             this.btnPrint.Text = "Print";
             this.btnPrint.Visible = false;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
@@ -925,8 +925,8 @@ namespace LadderApp
             this.btnSimular.Image = ((System.Drawing.Image)(resources.GetObject("btnSimular.Image")));
             this.btnSimular.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSimular.Name = "btnSimular";
-            this.btnSimular.Size = new System.Drawing.Size(45, 22);
-            this.btnSimular.Text = "Simular";
+            this.btnSimular.Size = new System.Drawing.Size(57, 22);
+            this.btnSimular.Text = "Simulate";
             this.btnSimular.Click += new System.EventHandler(this.Simulacao);
             // 
             // PrintPreviewDialog1
@@ -951,7 +951,7 @@ namespace LadderApp
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "EditorLadder";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "Software de programação visual para microcontroladores MSP430";
+            this.Text = "Ladder to microcontrollers";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EditorLadder_FormClosed);
             this.menuStrip.ResumeLayout(false);

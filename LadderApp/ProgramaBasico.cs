@@ -443,8 +443,8 @@ namespace LadderApp
             String _strSenha = "";
             frmSenha _frmSenha = new frmSenha();
 
-            _frmSenha.Text = "Digite a nova senha:";
-            _frmSenha.lblSenhaAtual.Text = "Nova senha:";
+            _frmSenha.Text = "Enter the new password:";
+            _frmSenha.lblSenhaAtual.Text = "New password:";
 
             for (int i = 0; i < 2; i++)
             {
@@ -454,20 +454,20 @@ namespace LadderApp
                 {
                     _strSenha = _frmSenha.txtSenha.Text;
                     _frmSenha.txtSenha.Text = "";
-                    _frmSenha.Text = "Confirme a nova senha:";
-                    _frmSenha.lblSenhaAtual.Text = "Confirme a nova senha:";
+                    _frmSenha.Text = "Confirm the new password:";
+                    _frmSenha.lblSenhaAtual.Text = "Confirm the new password:";
                     _frmSenha.btnOK.DialogResult = DialogResult.Yes;
                 }
                 else if (_result != DialogResult.Yes)
                 {
-                    MessageBox.Show("Operação cancelada!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return false;
                 }
                 else
                 {
                     if (_strSenha != _frmSenha.txtSenha.Text)
                     {
-                        MessageBox.Show("Operação cancelada!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return false;
                     }
                     else
@@ -505,7 +505,7 @@ namespace LadderApp
             /// realiza recuperação da senha
             if (bGravarLadderNoExecutavel && bGravarSenha)
             {
-                _result = MessageBox.Show("Tem certeza que deseja gravar uma senha no executável a ser gerado?", "Solicitar senha:", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                _result = MessageBox.Show("Are you sure you want to write a password to the executable to be generated?", "Request password", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
 
                 if (_result == DialogResult.Yes)
                 {
@@ -661,7 +661,7 @@ namespace LadderApp
 
             txtCodigoInterpretavel.Add(CodigosInterpretaveis.NENHUM);
 
-            _result = MessageBox.Show("Deseja gerar o arquivo .C a abaixo? " + Environment.NewLine + doc, "Gerar Arquivo .c ?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            _result = MessageBox.Show("Do you want to generate the .C file below? " + Environment.NewLine + doc, "Confirmation: Generate .C file?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
             if (_result == DialogResult.OK)
             {
@@ -767,7 +767,7 @@ namespace LadderApp
                 }
                 
                 /// Adiciona os parametros dos endereços usados no programa
-                DadosParametros += "// parametros temporizadores" + Environment.NewLine;
+                DadosParametros += "// timer parameters" + Environment.NewLine;
                 foreach (EnderecamentoLadder _endCada in endereco.lstTemporizador)
                 {
                     if (_endCada.EmUso)
