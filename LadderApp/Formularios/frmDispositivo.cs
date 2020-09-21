@@ -26,11 +26,11 @@ namespace LadderApp
             String _txtPino = "";
             Color _cor = corTextoPadrao;
             InitializeComponent();
-            lblFabricante.Text = "Fabricante: " + dl.Fabricante;
-            lblSerie.Text = "Série: " + dl.Serie;
-            lblModelo.Text = "Modelo: " + dl.Modelo;
-            lblQtdPortas.Text = "Qtd portas: " + dl.QtdPortas.ToString();
-            lblQtdBitsPorta.Text = "Qtd bits por porta: " + dl.QtdBitsPorta.ToString();
+            lblFabricante.Text = "Manufacturer: " + dl.Fabricante;
+            lblSerie.Text = "Series: " + dl.Serie;
+            lblModelo.Text = "Model: " + dl.Modelo;
+            lblQtdPortas.Text = "Number of ports: " + dl.QtdPortas.ToString();
+            lblQtdBitsPorta.Text = "Number of bits per port: " + dl.QtdBitsPorta.ToString();
 
             int i = 1;
             int j = 0;
@@ -43,28 +43,28 @@ namespace LadderApp
                     case TiposPinosDispositivo.IO_DIGITAL_ENTRADA_OU_SAIDA:
                         if (pd.TipoDefinido == TipoEnderecamentoDispositivo.NENHUM)
                         {
-                            _txtPino += "-Não Usado";
+                            _txtPino += "-Not Used";
                             _cor = corPinoIndefinida;
                         }
                         else if (pd.TipoDefinido == TipoEnderecamentoDispositivo.DIGITAL_ENTRADA)
                         {
-                            _txtPino += "-Entrada";
+                            _txtPino += "-Input";
                             _cor = corPinoDefinida;
                         }
                         else if (pd.TipoDefinido == TipoEnderecamentoDispositivo.DIGITAL_SAIDA)
                         {
-                            _txtPino += "-Saida";
+                            _txtPino += "-Output";
                             _cor = corPinoDefinida;
                         }
                         break;
                     case TiposPinosDispositivo.IO_DIGITAL_ENTRADA:
-                        _txtPino += "-Entrada";
+                        _txtPino += "-Input";
                         break;
                     case TiposPinosDispositivo.IO_DIGITAL_SAIDA:
-                        _txtPino += "-Saida";
+                        _txtPino += "-Output";
                         break;
                     default:
-                        _txtPino += "-Indisponível";
+                        _txtPino += "-Unavailable";
                         break;
                 }
                 //if (pd.TipoPino != TiposPinosDispositivo.NENHUM)
@@ -98,7 +98,7 @@ namespace LadderApp
             if (e.Text.StartsWith("(P"))
             {
                 grpConfiguraPino.Visible = true;
-                grpConfiguraPino.Text = "Configuracao Bit: " + e.Text.Substring(1, e.Text.IndexOf(")-")- 1);
+                grpConfiguraPino.Text = "Bit Configuration : " + e.Text.Substring(1, e.Text.IndexOf(")-")- 1);
 
                 rbEntradaOuSaida.Enabled = true;
                 rbEntrada.Enabled = true;
@@ -167,29 +167,29 @@ namespace LadderApp
                         if (rbEntradaOuSaida.Checked == true)
                         {
                             lstEndModificado[ArvorePinos.SelectedNode.Index] = TipoEnderecamentoDispositivo.NENHUM;
-                            _txtPino += "-Não Usado";
+                            _txtPino += "-Not Used";
                             _cor = corPinoIndefinida;
                         }
                         else if (rbEntrada.Checked == true)
                         {
                             lstEndModificado[ArvorePinos.SelectedNode.Index] = TipoEnderecamentoDispositivo.DIGITAL_ENTRADA;
-                            _txtPino += "-Entrada";
+                            _txtPino += "-Input";
                         }
                         else if (rbSaida.Checked == true)
                         {
                             lstEndModificado[ArvorePinos.SelectedNode.Index] = TipoEnderecamentoDispositivo.DIGITAL_SAIDA;
-                            _txtPino += "-Saida";
+                            _txtPino += "-Output";
                         }
                         ///rbEntradaOuSaida.Checked = true;
                         break;
                     case TiposPinosDispositivo.IO_DIGITAL_ENTRADA:
-                        _txtPino += "-Entrada";
+                        _txtPino += "-Input";
                         _cor = corPinoDefinida;
                         lstEndModificado[ArvorePinos.SelectedNode.Index] = TipoEnderecamentoDispositivo.DIGITAL_ENTRADA;
                         //rbEntrada.Checked = true;
                         break;
                     case TiposPinosDispositivo.IO_DIGITAL_SAIDA:
-                        _txtPino += "-Saida";
+                        _txtPino += "-Output";
                         _cor = corPinoDefinida;
                         lstEndModificado[ArvorePinos.SelectedNode.Index] = TipoEnderecamentoDispositivo.DIGITAL_SAIDA;
                         //rbSaida.Checked = true;

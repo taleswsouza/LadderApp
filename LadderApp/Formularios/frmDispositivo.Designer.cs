@@ -28,7 +28,7 @@ namespace LadderApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Bits por Porta");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Bits per port");
             this.lblFabricante = new System.Windows.Forms.Label();
             this.lblSerie = new System.Windows.Forms.Label();
             this.lblModelo = new System.Windows.Forms.Label();
@@ -53,9 +53,9 @@ namespace LadderApp
             this.lblFabricante.Location = new System.Drawing.Point(11, 13);
             this.lblFabricante.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblFabricante.Name = "lblFabricante";
-            this.lblFabricante.Size = new System.Drawing.Size(60, 13);
+            this.lblFabricante.Size = new System.Drawing.Size(73, 13);
             this.lblFabricante.TabIndex = 1;
-            this.lblFabricante.Text = "Fabricante:";
+            this.lblFabricante.Text = "Manufacturer:";
             // 
             // lblSerie
             // 
@@ -63,9 +63,9 @@ namespace LadderApp
             this.lblSerie.Location = new System.Drawing.Point(11, 39);
             this.lblSerie.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSerie.Name = "lblSerie";
-            this.lblSerie.Size = new System.Drawing.Size(34, 13);
+            this.lblSerie.Size = new System.Drawing.Size(39, 13);
             this.lblSerie.TabIndex = 3;
-            this.lblSerie.Text = "Serie:";
+            this.lblSerie.Text = "Series:";
             // 
             // lblModelo
             // 
@@ -74,9 +74,9 @@ namespace LadderApp
             this.lblModelo.Location = new System.Drawing.Point(11, 65);
             this.lblModelo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblModelo.Name = "lblModelo";
-            this.lblModelo.Size = new System.Drawing.Size(45, 13);
+            this.lblModelo.Size = new System.Drawing.Size(39, 13);
             this.lblModelo.TabIndex = 5;
-            this.lblModelo.Text = "Modelo:";
+            this.lblModelo.Text = "Model:";
             // 
             // lblQtdPortas
             // 
@@ -84,9 +84,9 @@ namespace LadderApp
             this.lblQtdPortas.Location = new System.Drawing.Point(11, 91);
             this.lblQtdPortas.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblQtdPortas.Name = "lblQtdPortas";
-            this.lblQtdPortas.Size = new System.Drawing.Size(82, 13);
+            this.lblQtdPortas.Size = new System.Drawing.Size(85, 13);
             this.lblQtdPortas.TabIndex = 7;
-            this.lblQtdPortas.Text = "Qtd. Pinos total:";
+            this.lblQtdPortas.Text = "Number of ports:";
             // 
             // lblBits
             // 
@@ -94,9 +94,9 @@ namespace LadderApp
             this.lblBits.Location = new System.Drawing.Point(194, 8);
             this.lblBits.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblBits.Name = "lblBits";
-            this.lblBits.Size = new System.Drawing.Size(27, 13);
+            this.lblBits.Size = new System.Drawing.Size(94, 13);
             this.lblBits.TabIndex = 8;
-            this.lblBits.Text = "Bits:";
+            this.lblBits.Text = "Pins configuration:";
             // 
             // btnCancelar
             // 
@@ -106,7 +106,7 @@ namespace LadderApp
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(69, 32);
             this.btnCancelar.TabIndex = 11;
-            this.btnCancelar.Text = "Cancelar";
+            this.btnCancelar.Text = "Cancel";
             this.btnCancelar.UseVisualStyleBackColor = true;
             this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
             // 
@@ -115,10 +115,10 @@ namespace LadderApp
             this.ArvorePinos.Location = new System.Drawing.Point(194, 27);
             this.ArvorePinos.Margin = new System.Windows.Forms.Padding(2);
             this.ArvorePinos.Name = "ArvorePinos";
-            treeNode2.Name = "NoPinos";
-            treeNode2.Text = "Bits por Porta";
+            treeNode7.Name = "NoPinos";
+            treeNode7.Text = "Bits per port";
             this.ArvorePinos.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode7});
             this.ArvorePinos.Size = new System.Drawing.Size(221, 243);
             this.ArvorePinos.TabIndex = 12;
             this.ArvorePinos.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ArvorePortas_AfterSelect);
@@ -137,7 +137,7 @@ namespace LadderApp
             this.grpConfiguraPino.Size = new System.Drawing.Size(178, 84);
             this.grpConfiguraPino.TabIndex = 13;
             this.grpConfiguraPino.TabStop = false;
-            this.grpConfiguraPino.Text = "Configuracao Bit x:";
+            this.grpConfiguraPino.Text = "Bit Configuration x:";
             this.grpConfiguraPino.Visible = false;
             // 
             // rbOutro
@@ -146,10 +146,10 @@ namespace LadderApp
             this.rbOutro.Location = new System.Drawing.Point(89, 18);
             this.rbOutro.Margin = new System.Windows.Forms.Padding(2);
             this.rbOutro.Name = "rbOutro";
-            this.rbOutro.Size = new System.Drawing.Size(83, 17);
+            this.rbOutro.Size = new System.Drawing.Size(81, 17);
             this.rbOutro.TabIndex = 3;
             this.rbOutro.TabStop = true;
-            this.rbOutro.Text = "Indisponível";
+            this.rbOutro.Text = "Unavailable";
             this.rbOutro.UseVisualStyleBackColor = true;
             // 
             // rbSaida
@@ -158,10 +158,10 @@ namespace LadderApp
             this.rbSaida.Location = new System.Drawing.Point(5, 61);
             this.rbSaida.Margin = new System.Windows.Forms.Padding(2);
             this.rbSaida.Name = "rbSaida";
-            this.rbSaida.Size = new System.Drawing.Size(52, 17);
+            this.rbSaida.Size = new System.Drawing.Size(57, 17);
             this.rbSaida.TabIndex = 2;
             this.rbSaida.TabStop = true;
-            this.rbSaida.Text = "Saida";
+            this.rbSaida.Text = "Output";
             this.rbSaida.UseVisualStyleBackColor = true;
             // 
             // rbEntrada
@@ -170,10 +170,10 @@ namespace LadderApp
             this.rbEntrada.Location = new System.Drawing.Point(5, 39);
             this.rbEntrada.Margin = new System.Windows.Forms.Padding(2);
             this.rbEntrada.Name = "rbEntrada";
-            this.rbEntrada.Size = new System.Drawing.Size(62, 17);
+            this.rbEntrada.Size = new System.Drawing.Size(49, 17);
             this.rbEntrada.TabIndex = 1;
             this.rbEntrada.TabStop = true;
-            this.rbEntrada.Text = "Entrada";
+            this.rbEntrada.Text = "Input";
             this.rbEntrada.UseVisualStyleBackColor = true;
             // 
             // rbEntradaOuSaida
@@ -182,10 +182,10 @@ namespace LadderApp
             this.rbEntradaOuSaida.Location = new System.Drawing.Point(5, 17);
             this.rbEntradaOuSaida.Margin = new System.Windows.Forms.Padding(2);
             this.rbEntradaOuSaida.Name = "rbEntradaOuSaida";
-            this.rbEntradaOuSaida.Size = new System.Drawing.Size(79, 17);
+            this.rbEntradaOuSaida.Size = new System.Drawing.Size(70, 17);
             this.rbEntradaOuSaida.TabIndex = 0;
             this.rbEntradaOuSaida.TabStop = true;
-            this.rbEntradaOuSaida.Text = "Não Usado";
+            this.rbEntradaOuSaida.Text = "Not Used";
             this.rbEntradaOuSaida.UseVisualStyleBackColor = true;
             // 
             // btnOK
@@ -207,7 +207,7 @@ namespace LadderApp
             this.btnAplicar.Name = "btnAplicar";
             this.btnAplicar.Size = new System.Drawing.Size(69, 32);
             this.btnAplicar.TabIndex = 15;
-            this.btnAplicar.Text = "Aplicar";
+            this.btnAplicar.Text = "Apply";
             this.btnAplicar.UseVisualStyleBackColor = true;
             this.btnAplicar.Click += new System.EventHandler(this.btnAplicar_Click);
             // 
@@ -219,7 +219,7 @@ namespace LadderApp
             this.lblQtdBitsPorta.Name = "lblQtdBitsPorta";
             this.lblQtdBitsPorta.Size = new System.Drawing.Size(117, 13);
             this.lblQtdBitsPorta.TabIndex = 17;
-            this.lblQtdBitsPorta.Text = "Qtd. Pinos por PORTA:";
+            this.lblQtdBitsPorta.Text = "Number of bits per port:";
             // 
             // frmDispositivo
             // 
@@ -242,7 +242,7 @@ namespace LadderApp
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmDispositivo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Dispositivo";
+            this.Text = "Device";
             this.grpConfiguraPino.ResumeLayout(false);
             this.grpConfiguraPino.PerformLayout();
             this.ResumeLayout(false);
