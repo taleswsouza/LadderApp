@@ -442,7 +442,7 @@ namespace LadderApp
 
             if (sender.getOperandos(0) == null)
             {
-                MessageBox.Show("Favor selecionar um endereço primeiro", "Alterar configuração", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please, assign an address first!", "Change configuration", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
