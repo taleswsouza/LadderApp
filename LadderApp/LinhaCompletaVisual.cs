@@ -723,19 +723,19 @@ namespace LadderApp
                             //_mnu = new ToolStripMenuItem(_end.Nome);
                             switch (_NoEnd.Text)
                             {
-                                case "Memoria":
+                                case "Memories":
                                     _mnu = frmDiag.menuMemoria;
                                     break;
-                                case "Temporizadores":
+                                case "Timer":
                                     _mnu = frmDiag.menuTemporizador;
                                     break;
-                                case "Contadores":
+                                case "Counter":
                                     _mnu = frmDiag.menuContador;
                                     break;
-                                case "Entradas":
+                                case "Input":
                                     _mnu = frmDiag.menuEntrada;
                                     break;
-                                case "Saidas":
+                                case "Output":
                                     _mnu = frmDiag.menuSaida;
                                     break;
                             }

@@ -79,7 +79,7 @@ namespace LadderApp
             this.menuToggleBit,
             this.menuToggleBitPulse});
             this.menuControle.Name = "menuControle";
-            this.menuControle.Size = new System.Drawing.Size(205, 136);
+            this.menuControle.Size = new System.Drawing.Size(205, 158);
             this.menuControle.Text = "Menu";
             // 
             // menuEnderecamento
@@ -94,48 +94,48 @@ namespace LadderApp
             this.menuLimparEndereco});
             this.menuEnderecamento.Name = "menuEnderecamento";
             this.menuEnderecamento.Size = new System.Drawing.Size(204, 22);
-            this.menuEnderecamento.Text = "Enderecamento";
+            this.menuEnderecamento.Text = "Addressing";
             // 
             // menuMemoria
             // 
             this.menuMemoria.Name = "menuMemoria";
-            this.menuMemoria.Size = new System.Drawing.Size(146, 22);
-            this.menuMemoria.Text = "Memoria";
+            this.menuMemoria.Size = new System.Drawing.Size(180, 22);
+            this.menuMemoria.Text = "Memory";
             // 
             // menuTemporizador
             // 
             this.menuTemporizador.Name = "menuTemporizador";
-            this.menuTemporizador.Size = new System.Drawing.Size(146, 22);
-            this.menuTemporizador.Text = "Temporizador";
+            this.menuTemporizador.Size = new System.Drawing.Size(180, 22);
+            this.menuTemporizador.Text = "Timer";
             // 
             // menuContador
             // 
             this.menuContador.Name = "menuContador";
-            this.menuContador.Size = new System.Drawing.Size(146, 22);
-            this.menuContador.Text = "Contador";
+            this.menuContador.Size = new System.Drawing.Size(180, 22);
+            this.menuContador.Text = "Counter";
             // 
             // menuEntrada
             // 
             this.menuEntrada.Name = "menuEntrada";
-            this.menuEntrada.Size = new System.Drawing.Size(146, 22);
-            this.menuEntrada.Text = "Entrada";
+            this.menuEntrada.Size = new System.Drawing.Size(180, 22);
+            this.menuEntrada.Text = "Input";
             // 
             // menuSaida
             // 
             this.menuSaida.Name = "menuSaida";
-            this.menuSaida.Size = new System.Drawing.Size(146, 22);
-            this.menuSaida.Text = "Saida";
+            this.menuSaida.Size = new System.Drawing.Size(180, 22);
+            this.menuSaida.Text = "Output";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // menuLimparEndereco
             // 
             this.menuLimparEndereco.Name = "menuLimparEndereco";
-            this.menuLimparEndereco.Size = new System.Drawing.Size(146, 22);
-            this.menuLimparEndereco.Text = "Limpar";
+            this.menuLimparEndereco.Size = new System.Drawing.Size(180, 22);
+            this.menuLimparEndereco.Text = "Clean";
             this.menuLimparEndereco.ToolTipText = "Limpa o endereco do simbolo selecionado.";
             this.menuLimparEndereco.Click += new System.EventHandler(this.menuLimparEndereco_Click);
             // 
@@ -146,34 +146,38 @@ namespace LadderApp
             this.menuInsereLinhaAbaixo});
             this.menuInsereLinha.Name = "menuInsereLinha";
             this.menuInsereLinha.Size = new System.Drawing.Size(204, 22);
-            this.menuInsereLinha.Text = "Insere Linha";
+            this.menuInsereLinha.Text = "Insert Line";
             // 
             // menuInsereLinhaAcima
             // 
             this.menuInsereLinhaAcima.Name = "menuInsereLinhaAcima";
-            this.menuInsereLinhaAcima.Size = new System.Drawing.Size(111, 22);
-            this.menuInsereLinhaAcima.Text = "Acima";
+            this.menuInsereLinhaAcima.Size = new System.Drawing.Size(180, 22);
+            this.menuInsereLinhaAcima.Text = "Above";
             this.menuInsereLinhaAcima.Click += new System.EventHandler(this.menuInsereLinhaAcima_Click);
             // 
             // menuInsereLinhaAbaixo
             // 
             this.menuInsereLinhaAbaixo.Name = "menuInsereLinhaAbaixo";
-            this.menuInsereLinhaAbaixo.Size = new System.Drawing.Size(111, 22);
-            this.menuInsereLinhaAbaixo.Text = "Abaixo";
+            this.menuInsereLinhaAbaixo.Size = new System.Drawing.Size(180, 22);
+            this.menuInsereLinhaAbaixo.Text = "Below";
             this.menuInsereLinhaAbaixo.Click += new System.EventHandler(this.menuInsereLinhaAbaixo_Click);
             // 
             // menuEstenderParaleloAcima
             // 
+            this.menuEstenderParaleloAcima.Enabled = false;
             this.menuEstenderParaleloAcima.Name = "menuEstenderParaleloAcima";
             this.menuEstenderParaleloAcima.Size = new System.Drawing.Size(204, 22);
             this.menuEstenderParaleloAcima.Text = "Estender Paralelo Acima";
+            this.menuEstenderParaleloAcima.Visible = false;
             this.menuEstenderParaleloAcima.Click += new System.EventHandler(this.menuEstenderParaleloAcima_Click);
             // 
             // menuEstenderParaleloAbaixo
             // 
+            this.menuEstenderParaleloAbaixo.Enabled = false;
             this.menuEstenderParaleloAbaixo.Name = "menuEstenderParaleloAbaixo";
             this.menuEstenderParaleloAbaixo.Size = new System.Drawing.Size(204, 22);
             this.menuEstenderParaleloAbaixo.Text = "Estender Paralelo Abaixo";
+            this.menuEstenderParaleloAbaixo.Visible = false;
             // 
             // menuToggleBit
             // 
