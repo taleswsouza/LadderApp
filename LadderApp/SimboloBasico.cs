@@ -9,7 +9,7 @@ namespace LadderApp
     [XmlInclude(typeof(EnderecamentoLadder))]
     [XmlType(TypeName="Simbolo")]
     [Serializable]
-    public class SimboloBasico : ISimbolo
+    public class SimboloBasico : ISymbol
     {
         public SimboloBasico()
         {

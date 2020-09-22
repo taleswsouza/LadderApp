@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace LadderApp
 {
-    public interface ISimbolo
+    public interface ISymbol
     {
         void setCI(CodigosInterpretaveis codigo);
         CodigosInterpretaveis getCI();

@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace LadderApp
 {
-    public class ControleBasico : UserControl, ISimbolo
+    public class ControleBasico : UserControl, ISymbol
     {
         protected SimboloBasico codigoInterpretavel = null;
 
