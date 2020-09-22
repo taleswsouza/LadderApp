@@ -62,8 +62,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OperationCode\CodigoInterpretavel.cs" />
-    <Compile Include="OperationCode\Txt2CodigosInterpretaveis.cs" />
+    <Compile Include="OperationCode\OpCode.cs" />
+    <Compile Include="Services\Text2OpCodeServices.cs" />
     <Compile Include="Resources\MicrocontrollersBaseCodeFilesResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -136,12 +136,9 @@
     <Compile Include="Model\Pin.cs" />
     <Compile Include="VisualComponents\VisualLine.cs">
     </Compile>
-    <Compile Include="VisualComponents\VisualLine.Designer.cs">
-      <DependentUpon>VisualLine.cs</DependentUpon>
-    </Compile>
     <Compile Include="Services\MSP430IntegrationServices.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Model\ProgramaBasico.cs" />
+    <Compile Include="Model\LadderProgram.cs" />
     <Compile Include="VisualComponents\VisualProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="UserControls\BasicUserControl.resx">
@@ -183,10 +180,6 @@
     <EmbeddedResource Include="Forms\AddressingForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AddressingForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="VisualComponents\VisualLine.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>VisualLine.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -241,7 +234,7 @@
     <Compile Include="VisualComponents\VisualParallelBranch.cs" />
     <Compile Include="Model\AddressTypeEnum.cs" />
     <Compile Include="Model\PinTypeEnum.cs" />
-    <Compile Include="OperationCode\CodigosInterpretaveis2Txt.cs" />
+    <Compile Include="Services\OpCode2TextServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\usuario.h" />

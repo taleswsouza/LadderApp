@@ -71,7 +71,7 @@ namespace LadderApp
 
 
         [XmlElement(ElementName = "Bit")]
-        public List<BitPortasDispositivo> lstBitPorta = new List<BitPortasDispositivo>();
+        public List<Pin> lstBitPorta = new List<Pin>();
         [XmlElement(ElementName = "EnderecoPinos")]
         public List<Address> lstEndBitPorta = new List<Address>();
 
@@ -86,7 +86,7 @@ namespace LadderApp
 
         void InicialiazaPadrao()
         {
-            BitPortasDispositivo _pinoAux = null;
+            Pin _pinoAux = null;
             PinTypeEnum _tpPino = PinTypeEnum.IO_DIGITAL_ENTRADA;
 
             dispositivoId = 1;
@@ -98,7 +98,7 @@ namespace LadderApp
 
             for (int i = 1; i <= (dispositivoQtdPortas * dispositivoQtdBitsPorta); i++)
             {
-                _pinoAux = new BitPortasDispositivo(i);
+                _pinoAux = new Pin(i);
 
                 //Apenas para criar alternancia dos tipos de pino
                 if ((i <= 8) || (i >= 15 && i <= 16) )

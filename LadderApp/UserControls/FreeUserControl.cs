@@ -8,11 +8,12 @@ using System.Windows.Forms;
 
 namespace LadderApp
 {
-    public delegate void MudaLinhaEventHandler(ControleLivre sender, System.Windows.Forms.Keys e);
+    public delegate void MudaLinhaEventHandler(FreeUserControl sender, System.Windows.Forms.Keys e);
     public delegate void DeletaLinhaEventHandler(VisualLine sender);
-    public delegate void ControleSelecionadoEventHandler(ControleLivre sender, VisualLine lCL);
-    public delegate void SolicitaMudarEnderecoEventHandler(ControleLivre sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object[] faixa);
-    public partial class ControleLivre : ControleBasico
+    public delegate void ControleSelecionadoEventHandler(FreeUserControl sender, VisualLine lCL);
+    public delegate void SolicitaMudarEnderecoEventHandler(FreeUserControl sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object[] faixa);
+
+    public partial class FreeUserControl : BasicUserControl
 
     {
         public event MudaLinhaEventHandler MudaLinha;
@@ -54,7 +55,7 @@ namespace LadderApp
         // Para desenhar as linhas de fundo
         public VisualLine linhaAtual = null;
 
-        List<ControleLivre> lstVPI = null;
+        List<FreeUserControl> lstVPI = null;
 
         private bool ultimoVPI = false;
         public bool UltimoVPI
@@ -62,7 +63,7 @@ namespace LadderApp
             get { return ultimoVPI; }
             set
             {
-                if (getCI() == CodigosInterpretaveis.PARALELO_PROXIMO)
+                if (getCI() == OpCode.PARALELO_PROXIMO)
                     ultimoVPI = value;
             }
         }
@@ -109,16 +110,16 @@ namespace LadderApp
         Point xy2;
         Point xy3;
 
-        private ControleLivre aponta2PI = null;
-        public ControleLivre Aponta2PI
+        private FreeUserControl aponta2PI = null;
+        public FreeUserControl Aponta2PI
         {
             get
             {
                 switch (getCI())
                 {
-                    case CodigosInterpretaveis.PARALELO_INICIAL:
-                    case CodigosInterpretaveis.PARALELO_PROXIMO:
-                    case CodigosInterpretaveis.PARALELO_FINAL:
+                    case OpCode.PARALELO_INICIAL:
+                    case OpCode.PARALELO_PROXIMO:
+                    case OpCode.PARALELO_FINAL:
                         return aponta2PI;
                     default:
                         return null;
@@ -130,16 +131,16 @@ namespace LadderApp
             }
         }
 
-        private ControleLivre aponta2PF = null;
-        public ControleLivre Aponta2PF
+        private FreeUserControl aponta2PF = null;
+        public FreeUserControl Aponta2PF
         {
             get
             {
                 switch (getCI())
                 {
-                    case CodigosInterpretaveis.PARALELO_INICIAL:
-                    case CodigosInterpretaveis.PARALELO_PROXIMO:
-                    case CodigosInterpretaveis.PARALELO_FINAL:
+                    case OpCode.PARALELO_INICIAL:
+                    case OpCode.PARALELO_PROXIMO:
+                    case OpCode.PARALELO_FINAL:
                         return aponta2PF;
                     default:
                         return null;
@@ -156,16 +157,16 @@ namespace LadderApp
         /// se e PI o proximo e o VPI se e VPI o proximo e
         /// VPI ou PF
         /// </summary>
-        private ControleLivre aponta2proxPP = null;
-        public ControleLivre Aponta2proxPP
+        private FreeUserControl aponta2proxPP = null;
+        public FreeUserControl Aponta2proxPP
         {
             get
             {
                 switch (getCI())
                 {
-                    case CodigosInterpretaveis.PARALELO_INICIAL:
-                    case CodigosInterpretaveis.PARALELO_PROXIMO:
-                    case CodigosInterpretaveis.PARALELO_FINAL:
+                    case OpCode.PARALELO_INICIAL:
+                    case OpCode.PARALELO_PROXIMO:
+                    case OpCode.PARALELO_FINAL:
                         return aponta2proxPP;
                     default:
                         return null;
@@ -177,7 +178,7 @@ namespace LadderApp
             }
         }
 
-        public ControleLivre()
+        public FreeUserControl()
         {
             InitializeComponent();
             codigoInterpretavel = new Symbol();
@@ -185,7 +186,7 @@ namespace LadderApp
             this.BackColor = Color.Transparent;
         }
 
-        public ControleLivre(Symbol _sb)
+        public FreeUserControl(Symbol _sb)
         {
             InitializeComponent();
             codigoInterpretavel = _sb;
@@ -193,7 +194,7 @@ namespace LadderApp
             this.BackColor = Color.Transparent;
         }
 
-        public ControleLivre(CodigosInterpretaveis _ci)
+        public FreeUserControl(OpCode _ci)
         {
             InitializeComponent();
             codigoInterpretavel = new Symbol(_ci);
@@ -241,41 +242,41 @@ namespace LadderApp
 
             switch (getCI())
             {
-                case CodigosInterpretaveis.NENHUM:
+                case OpCode.NENHUM:
                     break;
-                case CodigosInterpretaveis.INICIO_DA_LINHA:
+                case OpCode.INICIO_DA_LINHA:
                     xyConexao = new Point(xDecimoHorizontal * 7, (linhaAtual.tamY / 2));
                     //Selecao
                     rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
-                case CodigosInterpretaveis.FIM_DA_LINHA:
+                case OpCode.FIM_DA_LINHA:
                     xyConexao = new Point(0, (linhaAtual.tamY / 2));
                     break;
-                case CodigosInterpretaveis.CONTATO_NA:
+                case OpCode.CONTATO_NA:
                     //Selecao
                     rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
-                case CodigosInterpretaveis.CONTATO_NF:
+                case OpCode.CONTATO_NF:
                     break;
-                case CodigosInterpretaveis.BOBINA_SAIDA:
+                case OpCode.BOBINA_SAIDA:
                     break;
-                case CodigosInterpretaveis.TEMPORIZADOR:
+                case OpCode.TEMPORIZADOR:
                     rectSimbolo = new Rectangle(2, 2, xTotalHorizontal - 4, yTotalVertical - 4);
                     break;
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.CONTADOR:
                     rectSimbolo = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
-                case CodigosInterpretaveis.PARALELO_INICIAL:
+                case OpCode.PARALELO_INICIAL:
                     // selecao em torno do ponto de conexao
                     rectSelecao = new Rectangle(1, (linhaAtual.tamY / 4) + 3, xTotalHorizontal - 3, (linhaAtual.tamY / 2) - 3);
 
                     xyConexao = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
                     break;
-                case CodigosInterpretaveis.PARALELO_FINAL:
+                case OpCode.PARALELO_FINAL:
                     rectSelecao = new Rectangle(1, (linhaAtual.tamY / 4) + 3, xTotalHorizontal - 3, yTotalVertical - (linhaAtual.tamY / 2) - 3);
                     xyConexao = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
                     break;
-                case CodigosInterpretaveis.PARALELO_PROXIMO:
+                case OpCode.PARALELO_PROXIMO:
                     // selecao em torno do ponto de conexao
                     rectSelecao = new Rectangle(1, (linhaAtual.tamY / 4) + 3, xTotalHorizontal - 3, (linhaAtual.tamY / 2) - 3);
                     if (ultimoVPI)
@@ -283,24 +284,24 @@ namespace LadderApp
                     else
                         xyConexao = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
                     break;
-                case CodigosInterpretaveis.LINHA_DE_FUNDO:
+                case OpCode.LINHA_DE_FUNDO:
                     break;
                 default:
                     break;
             }
         }
 
-        public void SalvaVPI2PF(List<ControleLivre> _lstVPI)
+        public void SalvaVPI2PF(List<FreeUserControl> _lstVPI)
         {
-            if (getCI() == CodigosInterpretaveis.PARALELO_FINAL)
+            if (getCI() == OpCode.PARALELO_FINAL)
             {
                 if (lstVPI == null)
-                    lstVPI = new List<ControleLivre>();
+                    lstVPI = new List<FreeUserControl>();
                 else
                     lstVPI.Clear();
 
 
-                foreach (ControleLivre _simbAux in _lstVPI)
+                foreach (FreeUserControl _simbAux in _lstVPI)
                 {
                     lstVPI.Add(_simbAux);
                 }
@@ -312,7 +313,7 @@ namespace LadderApp
             if (getOperandos(0) != null)
             {
 
-                if (this.getCI() == CodigosInterpretaveis.CONTATO_NA &&
+                if (this.getCI() == OpCode.CONTATO_NA &&
                     ((Address)getOperandos(0)).Valor == true)
                     Energizado();
             }
@@ -368,7 +369,7 @@ namespace LadderApp
         {
             if (getOperandos(0) != null)
             {
-                if (this.getCI() == CodigosInterpretaveis.CONTATO_NF &&
+                if (this.getCI() == OpCode.CONTATO_NF &&
                     ((Address)getOperandos(0)).Valor == false)
                     Energizado();
             }
@@ -390,7 +391,7 @@ namespace LadderApp
             if (getOperandos(0) != null)
             {
 
-                if (this.getCI() == CodigosInterpretaveis.BOBINA_SAIDA &&
+                if (this.getCI() == OpCode.BOBINA_SAIDA &&
                     ((Address)getOperandos(0)).Valor == true)
                     Energizado();
             }
@@ -470,7 +471,7 @@ namespace LadderApp
 
             if (lstVPI != null)
             {
-                foreach (ControleLivre _simbAux in lstVPI)
+                foreach (FreeUserControl _simbAux in lstVPI)
                 {
 
                     //?? talvez passar xy3 para _xyConexao
@@ -574,7 +575,7 @@ namespace LadderApp
 
             switch (this.getCI())
             {
-                case CodigosInterpretaveis.TEMPORIZADOR:
+                case OpCode.TEMPORIZADOR:
                     _txtTitulo = "T";
                     if (getOperandos(0) != null)
                         switch ((Int32)((Address)getOperandos(0)).Temporizador.Tipo)
@@ -595,7 +596,7 @@ namespace LadderApp
 
                     DesenhaBaseTempo();
                     break;
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.CONTADOR:
                     _txtTitulo = "C";
                     if (getOperandos(0) != null)
                         switch ((Int32)((Address)getOperandos(0)).Contador.Tipo)
@@ -651,36 +652,36 @@ namespace LadderApp
             VisualParallelBranch _par = null;
             List<VisualParallelBranch> _lst_par = new List<VisualParallelBranch>();
 
-            ControleLivre _simbAntAux = null;
-            ControleLivre _simbAnt2DesenhoAux = null;
+            FreeUserControl _simbAntAux = null;
+            FreeUserControl _simbAnt2DesenhoAux = null;
 
             _simbAnt2DesenhoAux = linhaAtual.simboloInicioLinha;
 
             e.Clear(Color.White);
             if (linhaAtual.simbolos.Count > 0)
             {
-                foreach (ControleLivre simbAux in linhaAtual.simbolos)
+                foreach (FreeUserControl simbAux in linhaAtual.simbolos)
                 {
 
-                    if (simbAux.getCI() == CodigosInterpretaveis.PARALELO_INICIAL ||
-                        simbAux.getCI() == CodigosInterpretaveis.PARALELO_PROXIMO ||
-                        simbAux.getCI() == CodigosInterpretaveis.PARALELO_FINAL)
+                    if (simbAux.getCI() == OpCode.PARALELO_INICIAL ||
+                        simbAux.getCI() == OpCode.PARALELO_PROXIMO ||
+                        simbAux.getCI() == OpCode.PARALELO_FINAL)
                     {
                         switch (simbAux.getCI())
                         {
-                            case CodigosInterpretaveis.PARALELO_INICIAL:
+                            case OpCode.PARALELO_INICIAL:
                                 _par = new VisualParallelBranch();
                                 _par.par = simbAux;
 
                                 _lst_par.Add(_par);
                                 break;
-                            case CodigosInterpretaveis.PARALELO_FINAL:
+                            case OpCode.PARALELO_FINAL:
 
                                 simbAux.Refresh();
 
                                 _par.lstVPI.Insert(0, _par.par);
 
-                                foreach (ControleLivre _simb2PF in _par.lstVPI)
+                                foreach (FreeUserControl _simb2PF in _par.lstVPI)
                                 {
                                     _posX = _simb2PF.posicaoXY.X + _simb2PF.XYConexao.X;
                                     _posY = _simb2PF.posicaoXY.Y + _simb2PF.XYConexao.Y;
@@ -713,14 +714,14 @@ namespace LadderApp
                                 if (_lst_par.Count > 0)
                                     _par = _lst_par[_lst_par.Count - 1];
                                 break;
-                            case CodigosInterpretaveis.PARALELO_PROXIMO:
+                            case OpCode.PARALELO_PROXIMO:
                                 _par.lstVPI.Add(simbAux);
                                 break;
                             default:
                                 break;
                         }
 
-                        if (simbAux.getCI() != CodigosInterpretaveis.PARALELO_FINAL)
+                        if (simbAux.getCI() != OpCode.PARALELO_FINAL)
                         {
                             _posX = _simbAnt2DesenhoAux.posicaoXY.X + _simbAnt2DesenhoAux.XYConexao.X;
                             _posY = _simbAnt2DesenhoAux.posicaoXY.Y + _simbAnt2DesenhoAux.XYConexao.Y;
@@ -736,7 +737,7 @@ namespace LadderApp
                         }
 
 
-                        if (_lst_par.Count > 0 && simbAux.getCI() == CodigosInterpretaveis.PARALELO_FINAL)
+                        if (_lst_par.Count > 0 && simbAux.getCI() == OpCode.PARALELO_FINAL)
                             if (_par.lstVPI.Count > 0)
                                 _simbAnt2DesenhoAux = _par.lstVPI[_par.lstVPI.Count - 1];
                             else
@@ -834,8 +835,8 @@ namespace LadderApp
 
             switch (this.getCI())
             {
-                case CodigosInterpretaveis.TEMPORIZADOR:
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.TEMPORIZADOR:
+                case OpCode.CONTADOR:
                     _recTxtEnd = new RectangleF((float)(xMeioHorizontal / 2), (float)this.yQuintoVertical, (float)xMeioHorizontal, (float)fonteTexto.GetHeight());
                     break;
                 default:
@@ -869,12 +870,12 @@ namespace LadderApp
 
             switch (this.getCI())
             {
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.CONTADOR:
                     if (getOperandos(0) != null)
                         _intPreset = (Int32)((Address)getOperandos(0)).Contador.Preset;
                     _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
                     break;
-                case CodigosInterpretaveis.TEMPORIZADOR:
+                case OpCode.TEMPORIZADOR:
                     if (getOperandos(0) != null)
                         _intPreset = (Int32)((Address)getOperandos(0)).Temporizador.Preset;
                     _recTxtPreset = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
@@ -909,9 +910,9 @@ namespace LadderApp
 
             switch (this.getCI())
             {
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.CONTADOR:
                     return;
-                case CodigosInterpretaveis.TEMPORIZADOR:
+                case OpCode.TEMPORIZADOR:
                     if (getOperandos(0) != null)
                         _intBaseTempo = (Int32)((Address)getOperandos(0)).Temporizador.BaseTempo;
                     _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
@@ -969,12 +970,12 @@ namespace LadderApp
 
             switch (this.getCI())
             {
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.CONTADOR:
                     if (getOperandos(0) != null)
                         _intAcum = (Int32)((Address)getOperandos(0)).Contador.Acumulado;
                     _recTxtAcum = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
                     break;
-                case CodigosInterpretaveis.TEMPORIZADOR:
+                case OpCode.TEMPORIZADOR:
                     if (getOperandos(0) != null)
                         _intAcum = (Int32)((Address)getOperandos(0)).Temporizador.Acumulado;
                     _recTxtAcum = new RectangleF((float)(0), (float)(4 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
@@ -1050,45 +1051,45 @@ namespace LadderApp
 
                 switch (getCI())
                 {
-                    case CodigosInterpretaveis.NENHUM:
+                    case OpCode.NENHUM:
                         e.Clear(Color.White);
                         break;
-                    case CodigosInterpretaveis.INICIO_DA_LINHA:
+                    case OpCode.INICIO_DA_LINHA:
                         DesenhaInicioLinha();
                         break;
-                    case CodigosInterpretaveis.FIM_DA_LINHA:
+                    case OpCode.FIM_DA_LINHA:
                         DesenhaFimLinha();
                         break;
-                    case CodigosInterpretaveis.CONTATO_NA:
+                    case OpCode.CONTATO_NA:
                         DesenhaContatoNA();
                         break;
-                    case CodigosInterpretaveis.CONTATO_NF:
+                    case OpCode.CONTATO_NF:
                         DesenhaContatoNF();
                         break;
-                    case CodigosInterpretaveis.BOBINA_SAIDA:
+                    case OpCode.BOBINA_SAIDA:
                         DesenhaBobinaSaida();
                         break;
-                    case CodigosInterpretaveis.TEMPORIZADOR:
+                    case OpCode.TEMPORIZADOR:
                         //DesenhaBobinaComString("T");
                         DesenhaQuadroSaida();
                         break;
-                    case CodigosInterpretaveis.CONTADOR:
+                    case OpCode.CONTADOR:
                         //DesenhaBobinaComString("C");
                         DesenhaQuadroSaida();
                         break;
-                    case CodigosInterpretaveis.PARALELO_INICIAL:
+                    case OpCode.PARALELO_INICIAL:
                         DesenhaParaleloInicial();
                         break;
-                    case CodigosInterpretaveis.PARALELO_FINAL:
+                    case OpCode.PARALELO_FINAL:
                         DesenhaParaleloFinal();
                         break;
-                    case CodigosInterpretaveis.PARALELO_PROXIMO:
+                    case OpCode.PARALELO_PROXIMO:
                         DesenhaParaleloProximo();
                         break;
-                    case CodigosInterpretaveis.LINHA_DE_FUNDO:
+                    case OpCode.LINHA_DE_FUNDO:
                         DesenhaFundo();
                         break;
-                    case CodigosInterpretaveis.RESET:
+                    case OpCode.RESET:
                         DesenhaBobinaComString("R");
                         break;
                     default:
@@ -1124,8 +1125,8 @@ namespace LadderApp
 
         private void ControleLivre_Enter(object sender, EventArgs e)
         {
-            if (getCI() != CodigosInterpretaveis.LINHA_DE_FUNDO &&
-                getCI() != CodigosInterpretaveis.FIM_DA_LINHA)
+            if (getCI() != OpCode.LINHA_DE_FUNDO &&
+                getCI() != OpCode.FIM_DA_LINHA)
             {
                 this.selecionado = true;
 
@@ -1142,8 +1143,8 @@ namespace LadderApp
 
         private void ControleLivre_Leave(object sender, EventArgs e)
         {
-            if (getCI() != CodigosInterpretaveis.LINHA_DE_FUNDO &&
-                getCI() != CodigosInterpretaveis.FIM_DA_LINHA)
+            if (getCI() != OpCode.LINHA_DE_FUNDO &&
+                getCI() != OpCode.FIM_DA_LINHA)
             {
                 this.Refresh();
             }
@@ -1151,7 +1152,7 @@ namespace LadderApp
 
         public void NovasInsercoesLinhaHorizontal(bool bHabilita)
         {
-            if (bHabilita == true && getCI() != CodigosInterpretaveis.FIM_DA_LINHA)
+            if (bHabilita == true && getCI() != OpCode.FIM_DA_LINHA)
             {
                 indicadorInsercao = new System.Windows.Forms.Panel();
                 indicadorInsercao.BackColor = Color.Transparent;
@@ -1163,7 +1164,7 @@ namespace LadderApp
 
                 listaIndicadores.Add(indicadorInsercao);
             }
-            else if (getCI() != CodigosInterpretaveis.FIM_DA_LINHA)
+            else if (getCI() != OpCode.FIM_DA_LINHA)
             {
                 foreach (System.Windows.Forms.Panel ii in listaIndicadores)
                 {
@@ -1175,13 +1176,13 @@ namespace LadderApp
 
         private void ControleLivre_MouseEnter(object sender, EventArgs e)
         {
-            if (getCI() != CodigosInterpretaveis.FIM_DA_LINHA)
+            if (getCI() != OpCode.FIM_DA_LINHA)
                 NovasInsercoesLinhaHorizontal(false); // era true
         }
 
         private void ControleLivre_MouseLeave(object sender, EventArgs e)
         {
-            if (getCI() != CodigosInterpretaveis.FIM_DA_LINHA)
+            if (getCI() != OpCode.FIM_DA_LINHA)
                 NovasInsercoesLinhaHorizontal(false);
         }
 
@@ -1209,7 +1210,7 @@ namespace LadderApp
         private void ControleLivre_KeyDown(object sender, KeyEventArgs e)
         {
 
-            if (this.getCI() == CodigosInterpretaveis.INICIO_DA_LINHA)
+            if (this.getCI() == OpCode.INICIO_DA_LINHA)
             {
                 if (MudaLinha != null &&
                     (e.KeyData == Keys.Down || e.KeyData == Keys.Up))
@@ -1233,7 +1234,7 @@ namespace LadderApp
             get { return codigoInterpretavel; }
         }
 
-        public override void setCI(CodigosInterpretaveis codInterpretavelNovo)
+        public override void setCI(OpCode codInterpretavelNovo)
         {
             base.setCI(codInterpretavelNovo);
             ApresentaCamposTxt();
@@ -1263,15 +1264,15 @@ namespace LadderApp
 
             switch (getCI())
             {
-                case CodigosInterpretaveis.CONTATO_NA:
-                case CodigosInterpretaveis.CONTATO_NF:
+                case OpCode.CONTATO_NA:
+                case OpCode.CONTATO_NF:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
-                case CodigosInterpretaveis.BOBINA_SAIDA:
+                case OpCode.BOBINA_SAIDA:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
-                case CodigosInterpretaveis.TEMPORIZADOR:
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.TEMPORIZADOR:
+                case OpCode.CONTADOR:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
             }
@@ -1286,14 +1287,14 @@ namespace LadderApp
         {
             switch (getCI())
             {
-                case CodigosInterpretaveis.CONTATO_NA:
-                case CodigosInterpretaveis.CONTATO_NF:
+                case OpCode.CONTATO_NA:
+                case OpCode.CONTATO_NF:
                     //                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
                     break;
-                case CodigosInterpretaveis.BOBINA_SAIDA:
+                case OpCode.BOBINA_SAIDA:
                     break;
-                case CodigosInterpretaveis.TEMPORIZADOR:
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.TEMPORIZADOR:
+                case OpCode.CONTADOR:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
             }

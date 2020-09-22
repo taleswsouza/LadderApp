@@ -7,8 +7,8 @@ namespace LadderApp
 {
     public interface ISymbol
     {
-        void setCI(CodigosInterpretaveis codigo);
-        CodigosInterpretaveis getCI();
+        void setCI(OpCode codigo);
+        OpCode getCI();
         Object[] getOperandos();
         Object getOperandos(int posicao);
         void setOperando(int iNumOperando, Object valor);

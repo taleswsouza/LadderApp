@@ -6,9 +6,9 @@ namespace LadderApp
 {
     public class VisualParallelBranch
     {
-        public ControleLivre par = null;
-        public ControleLivre ultimoVPI = null;
-        public List<ControleLivre> lstVPI = new List<ControleLivre>();
+        public FreeUserControl par = null;
+        public FreeUserControl ultimoVPI = null;
+        public List<FreeUserControl> lstVPI = new List<FreeUserControl>();
 
         public int maiorY = 0;
         public int maiorX = 0;

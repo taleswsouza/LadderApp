@@ -38,17 +38,17 @@ namespace LadderApp
         /// objetos fixos na linha
         /// </summary>
         [XmlIgnore]
-        public ControleLivre simboloInicioLinha = new ControleLivre(CodigosInterpretaveis.INICIO_DA_LINHA);
+        public FreeUserControl simboloInicioLinha = new FreeUserControl(OpCode.INICIO_DA_LINHA);
         [XmlIgnore]
-        public ControleLivre simboloFimLinha = new ControleLivre(CodigosInterpretaveis.FIM_DA_LINHA);
+        public FreeUserControl simboloFimLinha = new FreeUserControl(OpCode.FIM_DA_LINHA);
         [XmlIgnore]
-        public ControleLivre simboloDesenhoFundo = new ControleLivre(CodigosInterpretaveis.LINHA_DE_FUNDO);
+        public FreeUserControl simboloDesenhoFundo = new FreeUserControl(OpCode.LINHA_DE_FUNDO);
         
         /// <summary>
         /// lista de Objetos dinamicos na linha
         /// </summary>
-        public List<ControleLivre> simbolos = new List<ControleLivre>();
-        public List<ControleLivre> saida = new List<ControleLivre>();
+        public List<FreeUserControl> simbolos = new List<FreeUserControl>();
+        public List<FreeUserControl> saida = new List<FreeUserControl>();
 
         /// <summary>
         /// enum para indicar em qual das listas de objetos dinamicos da linha
@@ -101,7 +101,7 @@ namespace LadderApp
 
         public void AjustaPosicionamento()
         {
-            ControleLivre _ctrlLivreAux = null;
+            FreeUserControl _ctrlLivreAux = null;
 
             int _maiorX = 0;
 
@@ -137,7 +137,7 @@ namespace LadderApp
 
             simbolos.AddRange(saida);
 
-            foreach (ControleLivre simbAux in simbolos)
+            foreach (FreeUserControl simbAux in simbolos)
             {
                 _contaNumSimbolos++;
 
@@ -158,7 +158,7 @@ namespace LadderApp
 
                 switch (simbAux.getCI())
                 {
-                    case CodigosInterpretaveis.PARALELO_INICIAL:
+                    case OpCode.PARALELO_INICIAL:
                         _tamY = tamY; // restaura tamanho Y base
                         _posX = _acumTamX;
                         _tamX = this.tamX / 3;
@@ -173,7 +173,7 @@ namespace LadderApp
 
                         _acumTamX = _posX + _tamX;
                         break;
-                    case CodigosInterpretaveis.PARALELO_FINAL:
+                    case OpCode.PARALELO_FINAL:
                         _tamX = this.tamX / 3;
                         _tamY = _par.ultimoVPI.posicaoXY.Y - _par.par.posicaoXY.Y + _par.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
                         _posY = _par.par.posicaoXY.Y;
@@ -213,7 +213,7 @@ namespace LadderApp
 
                         _acumTamX = _posX + _tamX;
                         break;
-                    case CodigosInterpretaveis.PARALELO_PROXIMO:
+                    case OpCode.PARALELO_PROXIMO:
                         _tamY = tamY; // restaura tamanho Y base
                         _tamX = this.tamX / 3; // tamanho X reduzido
 
@@ -332,7 +332,7 @@ namespace LadderApp
             }
 
             int i = 0;
-            foreach (ControleLivre _simbAux in simbolos)
+            foreach (FreeUserControl _simbAux in simbolos)
             {
                 iTabStop++;
                 _simbAux.TabIndex = iTabStop;
@@ -372,15 +372,15 @@ namespace LadderApp
         private void InicializaSimbolosFixosDaLinha()
         {
             // Inicio de Linha
-            simboloInicioLinha.setCI(CodigosInterpretaveis.INICIO_DA_LINHA);
+            simboloInicioLinha.setCI(OpCode.INICIO_DA_LINHA);
             simboloInicioLinha.TabStop = true;
 
             // Fim de Linha
-            simboloFimLinha.setCI(CodigosInterpretaveis.FIM_DA_LINHA);
+            simboloFimLinha.setCI(OpCode.FIM_DA_LINHA);
             simboloFimLinha.TabStop = false;
 
             // Desenho de fundo da Linha
-            simboloDesenhoFundo.setCI(CodigosInterpretaveis.LINHA_DE_FUNDO);
+            simboloDesenhoFundo.setCI(OpCode.LINHA_DE_FUNDO);
             simboloDesenhoFundo.TabStop = false;
 
 
@@ -420,14 +420,14 @@ namespace LadderApp
         public void ApagaLinha()
         {
             saida.Reverse();
-            foreach (ControleLivre cl in saida)
+            foreach (FreeUserControl cl in saida)
             {
                 cl.Dispose();
             }
             saida.Clear();
 
             simbolos.Reverse();
-            foreach (ControleLivre cl in simbolos)
+            foreach (FreeUserControl cl in simbolos)
             {
                 cl.Dispose();
             }
@@ -453,7 +453,7 @@ namespace LadderApp
             }
 
             // Demais simbolos
-            foreach (ControleLivre simbAux in simbolos)
+            foreach (FreeUserControl simbAux in simbolos)
             {
                 simbAux.ControleSelecionado += new ControleSelecionadoEventHandler(frmDiag.Simbolo_ControleSelecionado);
                 simbAux.MouseClick += new MouseEventHandler(Simbolo_Click);
@@ -465,12 +465,12 @@ namespace LadderApp
 
         }
 
-        public ControleLivre InsereSimbolo(LocalInsereSimbolo _lIS, ControleLivre _controle, params CodigosInterpretaveis[] _arrayCI)
+        public FreeUserControl InsereSimbolo(LocalInsereSimbolo _lIS, FreeUserControl _controle, params OpCode[] _arrayCI)
         {
             return InsereSimbolo(true, _lIS, _controle, _arrayCI);
         }
 
-        public ControleLivre InsereSimbolo(bool _bApos, LocalInsereSimbolo _lIS, ControleLivre _controle, params CodigosInterpretaveis[] _arrayCI)
+        public FreeUserControl InsereSimbolo(bool _bApos, LocalInsereSimbolo _lIS, FreeUserControl _controle, params OpCode[] _arrayCI)
         {
             SymbolList _lstSB = new SymbolList();
 
@@ -493,15 +493,15 @@ namespace LadderApp
         }
 
 
-        public ControleLivre InsereSimboloIndefinido(bool _bApos, ControleLivre _controle, SymbolList _lstSB)
+        public FreeUserControl InsereSimboloIndefinido(bool _bApos, FreeUserControl _controle, SymbolList _lstSB)
         {
 
             _lstSB.ValidaOperandos(this.frmDiag.linkProjeto.programa.endereco);
 
             /// Verifica se a insercao sera no lista simbolos ou saida
-            if (!_lstSB.Contains(CodigosInterpretaveis.BOBINA_SAIDA) &&
-                !_lstSB.Contains(CodigosInterpretaveis.TEMPORIZADOR) &&
-                !_lstSB.Contains(CodigosInterpretaveis.CONTADOR))
+            if (!_lstSB.Contains(OpCode.BOBINA_SAIDA) &&
+                !_lstSB.Contains(OpCode.TEMPORIZADOR) &&
+                !_lstSB.Contains(OpCode.CONTADOR))
             {
                 return Insere2Simbolo(_bApos, _controle, _lstSB);
             }
@@ -511,7 +511,7 @@ namespace LadderApp
             }
         }
 
-        private ControleLivre Insere2Simbolo(bool _bApos, ControleLivre _controle, SymbolList _lstSB)
+        private FreeUserControl Insere2Simbolo(bool _bApos, FreeUserControl _controle, SymbolList _lstSB)
         {
             int _indiceSimbolo = 0;
 
@@ -527,7 +527,7 @@ namespace LadderApp
             return this.simbolos[_indiceSimbolo - 1];
         }
 
-        private ControleLivre Insere2Saida(bool _bApos, ControleLivre _controle, SymbolList _lstSB)
+        private FreeUserControl Insere2Saida(bool _bApos, FreeUserControl _controle, SymbolList _lstSB)
         {
             int _indiceSimbolo = 0;
             int _subt2posicionaSimboloInserido = 0;
@@ -559,19 +559,19 @@ namespace LadderApp
                         _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                         /// insere PP antes do objeto atual na linha
-                        linhaBase.saida.Insert(0, new Symbol(CodigosInterpretaveis.PARALELO_PROXIMO));
-                        InsereSimboloUnicoVisual(0, this.saida, new Symbol(CodigosInterpretaveis.PARALELO_PROXIMO));
+                        linhaBase.saida.Insert(0, new Symbol(OpCode.PARALELO_PROXIMO));
+                        InsereSimboloUnicoVisual(0, this.saida, new Symbol(OpCode.PARALELO_PROXIMO));
                         /// insere PF depois do objeto atual da linha
-                        linhaBase.saida.Insert(this.saida.Count, new Symbol(CodigosInterpretaveis.PARALELO_FINAL));
-                        InsereSimboloUnicoVisual(this.saida.Count, this.saida, new Symbol(CodigosInterpretaveis.PARALELO_FINAL));
+                        linhaBase.saida.Insert(this.saida.Count, new Symbol(OpCode.PARALELO_FINAL));
+                        InsereSimboloUnicoVisual(this.saida.Count, this.saida, new Symbol(OpCode.PARALELO_FINAL));
                     }
                     else
                     {
                         _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_FINALIZADO);
                         _subt2posicionaSimboloInserido = -1;
 
-                        linhaBase.saida.Insert(0, new Symbol(CodigosInterpretaveis.PARALELO_INICIAL));
-                        InsereSimboloUnicoVisual(0, this.saida, new Symbol(CodigosInterpretaveis.PARALELO_INICIAL));
+                        linhaBase.saida.Insert(0, new Symbol(OpCode.PARALELO_INICIAL));
+                        InsereSimboloUnicoVisual(0, this.saida, new Symbol(OpCode.PARALELO_INICIAL));
                         _indiceSimbolo++;
                     }
 
@@ -582,16 +582,16 @@ namespace LadderApp
 
                     switch (this.saida[_indiceSimbolo].getCI())
                     {
-                        case CodigosInterpretaveis.PARALELO_INICIAL:
+                        case OpCode.PARALELO_INICIAL:
                             _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
-                            linhaBase.saida[0].setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
-                            this.saida[0].setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
+                            linhaBase.saida[0].setCI(OpCode.PARALELO_PROXIMO);
+                            this.saida[0].setCI(OpCode.PARALELO_PROXIMO);
                             break;
-                        case CodigosInterpretaveis.PARALELO_PROXIMO:
+                        case OpCode.PARALELO_PROXIMO:
                             _lstSB.InsereParaleloProximo();
                             break;
-                        case CodigosInterpretaveis.PARALELO_FINAL:
+                        case OpCode.PARALELO_FINAL:
                             _lstSB.InsereParaleloProximo();
                             break;
                         default:
@@ -613,7 +613,7 @@ namespace LadderApp
             return this.saida[_indiceSimbolo - 1 + _subt2posicionaSimboloInserido];
         }
 
-        private static int VerificaPosicaoDeInserirSimbolo(bool _bApos, ControleLivre _controle, List<ControleLivre> _lstFinal)
+        private static int VerificaPosicaoDeInserirSimbolo(bool _bApos, FreeUserControl _controle, List<FreeUserControl> _lstFinal)
         {
             int _indiceSimbolo = _lstFinal.IndexOf(_controle);
 
@@ -626,10 +626,10 @@ namespace LadderApp
             return _indiceSimbolo;
         }
 
-        private ControleLivre InsereSimboloUnicoVisual(int _indiceSimbolo, List<ControleLivre> _lstCL, Symbol _sB)
+        private FreeUserControl InsereSimboloUnicoVisual(int _indiceSimbolo, List<FreeUserControl> _lstCL, Symbol _sB)
         {
             /// Visual
-            _lstCL.Insert(_indiceSimbolo, new ControleLivre(_sB));
+            _lstCL.Insert(_indiceSimbolo, new FreeUserControl(_sB));
             _lstCL[_indiceSimbolo].linhaAtual = this;
             _lstCL[_indiceSimbolo].TabStop = true;
             _lstCL[_indiceSimbolo].ControleSelecionado += new ControleSelecionadoEventHandler(frmDiag.Simbolo_ControleSelecionado);
@@ -641,8 +641,8 @@ namespace LadderApp
             _lstCL[_indiceSimbolo].CreateControl();
             _lstCL[_indiceSimbolo].BringToFront();
 
-            if (_sB.getCI() == CodigosInterpretaveis.TEMPORIZADOR ||
-                _sB.getCI() == CodigosInterpretaveis.CONTADOR)
+            if (_sB.getCI() == OpCode.TEMPORIZADOR ||
+                _sB.getCI() == OpCode.CONTADOR)
                 _lstCL[_indiceSimbolo].MouseHover += new EventHandler(frmDiag.SimboloQuadroSaida_MouseHover);
 
             return _lstCL[_indiceSimbolo];
@@ -650,7 +650,7 @@ namespace LadderApp
 
 
 
-        public ControleLivre InsereSimboloDireto(List<ControleLivre> _lstCL, ControleLivre _AposCL, List<Symbol> _lstSB)
+        public FreeUserControl InsereSimboloDireto(List<FreeUserControl> _lstCL, FreeUserControl _AposCL, List<Symbol> _lstSB)
         {
             int _indiceSimbolo = _lstCL.IndexOf(_AposCL);
 
@@ -675,22 +675,22 @@ namespace LadderApp
         
         void Simbolo_Click(object sender, MouseEventArgs e)
         {
-            ControleLivre _cL = (ControleLivre)sender;
-            CodigosInterpretaveis _cI = _cL.getCI();
+            FreeUserControl _cL = (FreeUserControl)sender;
+            OpCode _cI = _cL.getCI();
 
             ProjectForm _frmPL;
             _frmPL = frmDiag.linkProjeto;
 
             if (e.Button == MouseButtons.Right)
             {
-                if (_cI != CodigosInterpretaveis.INICIO_DA_LINHA)
+                if (_cI != OpCode.INICIO_DA_LINHA)
                 {
                     frmDiag.menuInsereLinha.Enabled = false;
 
                     frmDiag.menuToggleBit.Enabled = false;
-                    if (_cI == CodigosInterpretaveis.PARALELO_INICIAL ||
-                        _cI == CodigosInterpretaveis.PARALELO_FINAL ||
-                        _cI == CodigosInterpretaveis.PARALELO_PROXIMO)
+                    if (_cI == OpCode.PARALELO_INICIAL ||
+                        _cI == OpCode.PARALELO_FINAL ||
+                        _cI == OpCode.PARALELO_PROXIMO)
                     {
                         frmDiag.menuEnderecamento.Enabled = false;
                         frmDiag.menuEnderecamento.Visible = false;
@@ -783,14 +783,14 @@ namespace LadderApp
 
         void simboloInicioLinha_Click(object sender, MouseEventArgs e)
         {
-            ControleLivre _cL = (ControleLivre)sender;
-            CodigosInterpretaveis _cI = _cL.getCI();
+            FreeUserControl _cL = (FreeUserControl)sender;
+            OpCode _cI = _cL.getCI();
             LadderForm _frmDL;
             _frmDL = (LadderForm)_cL.Parent;
 
             if (e.Button == MouseButtons.Right)
             {
-                if (_cI == CodigosInterpretaveis.INICIO_DA_LINHA)
+                if (_cI == OpCode.INICIO_DA_LINHA)
                 {
                     _frmDL.menuEnderecamento.Enabled = false;
                     _frmDL.menuInsereLinha.Enabled = true;
@@ -807,15 +807,15 @@ namespace LadderApp
             }
         }
 
-        public bool ApagaSimbolos(ControleLivre _aSerApagado)
+        public bool ApagaSimbolos(FreeUserControl _aSerApagado)
         {
             int _indicePosInicial = 0;
             int _indicePosFinal = 0;
             int _auxSaida = 0;
-            List<ControleLivre> _lstCLDeletar = new List<ControleLivre>();
-            List<ControleLivre> _lstCL = null;
+            List<FreeUserControl> _lstCLDeletar = new List<FreeUserControl>();
+            List<FreeUserControl> _lstCL = null;
             List<Symbol> _lstSB = null;
-            ControleLivre _cLAMudarCI = null;
+            FreeUserControl _cLAMudarCI = null;
 
             if (!simbolos.Contains(_aSerApagado))
             {
@@ -832,9 +832,9 @@ namespace LadderApp
                     /// deleta a linha do paralelo
                     switch (_aSerApagado.getCI())
                     {
-                        case CodigosInterpretaveis.PARALELO_INICIAL:
-                        case CodigosInterpretaveis.PARALELO_FINAL:
-                        case CodigosInterpretaveis.PARALELO_PROXIMO:
+                        case OpCode.PARALELO_INICIAL:
+                        case OpCode.PARALELO_FINAL:
+                        case OpCode.PARALELO_PROXIMO:
                             break;
                         default:
                             if (this.saida.Count > 1)
@@ -854,8 +854,8 @@ namespace LadderApp
 
             switch (_aSerApagado.getCI())
             {
-                case CodigosInterpretaveis.PARALELO_INICIAL:
-                case CodigosInterpretaveis.PARALELO_PROXIMO:
+                case OpCode.PARALELO_INICIAL:
+                case OpCode.PARALELO_PROXIMO:
                     _indicePosInicial = _lstCL.IndexOf(_aSerApagado);
                     _indicePosFinal = _lstCL.IndexOf(_aSerApagado.Aponta2proxPP);
 
@@ -863,7 +863,7 @@ namespace LadderApp
 
                     switch(_aSerApagado.getCI())
                     {
-                        case CodigosInterpretaveis.PARALELO_INICIAL:
+                        case OpCode.PARALELO_INICIAL:
                             if (_aSerApagado.Aponta2proxPP.Aponta2proxPP.Aponta2PI != null)
                             {
                                 _lstCLDeletar.Add(_aSerApagado.Aponta2proxPP.Aponta2proxPP);
@@ -872,7 +872,7 @@ namespace LadderApp
                             else
                                 _cLAMudarCI = _aSerApagado.Aponta2proxPP;
                             break;
-                        case CodigosInterpretaveis.PARALELO_PROXIMO:
+                        case OpCode.PARALELO_PROXIMO:
                             if (_aSerApagado.Aponta2proxPP.Aponta2PI != null)
                             {
                                 if (_aSerApagado.Aponta2proxPP.Aponta2PI.Aponta2proxPP.Equals(_aSerApagado))
@@ -886,7 +886,7 @@ namespace LadderApp
                             break;
                     }
                     break;
-                case CodigosInterpretaveis.PARALELO_FINAL:
+                case OpCode.PARALELO_FINAL:
                     _indicePosFinal = _lstCL.IndexOf(_aSerApagado);
                     _indicePosInicial = _lstCL.IndexOf(_aSerApagado.Aponta2PI);
                     break;
@@ -901,16 +901,16 @@ namespace LadderApp
                 _lstCLDeletar.Add(_lstCL[i]);
 
             /// deleta um a um
-            foreach (ControleLivre _cLADeletar in _lstCLDeletar)
+            foreach (FreeUserControl _cLADeletar in _lstCLDeletar)
                 ApagaSimbolo(_lstCL, _lstSB, _cLADeletar);
 
             if (_cLAMudarCI != null)
-                _cLAMudarCI.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
+                _cLAMudarCI.setCI(OpCode.PARALELO_INICIAL);
 
             return true;
         }
 
-        public bool ApagaSimbolo(List<ControleLivre> _lstCL, List<Symbol> _lstSB, ControleLivre _aSerApagado)
+        public bool ApagaSimbolo(List<FreeUserControl> _lstCL, List<Symbol> _lstSB, FreeUserControl _aSerApagado)
         {
             int _indice = 0;
 

@@ -4,13 +4,13 @@ using System.Text;
 
 namespace LadderApp.Exceções
 {
-    public class NaoECodigoInterpretavelException : Exception
+    public class NotValidOpCodeException : Exception
     {
         public override string Message
         {
             get
             {
-                return "Não é um CodigosInterpretaveis";
+                return "It's not an valid OpCode!";
             }
         }
     }

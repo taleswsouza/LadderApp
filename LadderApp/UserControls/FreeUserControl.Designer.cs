@@ -1,6 +1,6 @@
 namespace LadderApp
 {
-    partial class ControleLivre
+    partial class FreeUserControl
     {
         /// <summary> 
         /// Required designer variable.

@@ -34,7 +34,7 @@ namespace LadderApp
 
             int i = 1;
             int j = 0;
-            foreach(BitPortasDispositivo pd in dl.lstBitPorta)
+            foreach(Pin pd in dl.lstBitPorta)
             {
                 //_txtPino = "Pino " + i.ToString().PadLeft(2,'0');
                 _txtPino = "(P" + (((i - 1) / dl.QtdBitsPorta) + 1) + "." + ((i - 1) - ((Int16)((i - 1) / dl.QtdBitsPorta) * dl.QtdBitsPorta)) + ")";

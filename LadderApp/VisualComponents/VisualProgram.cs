@@ -6,14 +6,14 @@ namespace LadderApp
 {
     public class VisualProgram
     {
-        ProgramaBasico prgBasico = null;
+        LadderProgram prgBasico = null;
         LadderForm frmDiag = null;
 
         /// <summary>
         /// Construtor da classe do programa de linhas da visao (controlelivre)
         /// </summary>
         /// <param name="_prgBasico">link para o programa basico (simbolobasico)</param>
-        public VisualProgram(ProgramaBasico _prgBasico, LadderForm _frmDiag)
+        public VisualProgram(LadderProgram _prgBasico, LadderForm _frmDiag)
         {
             prgBasico = _prgBasico;
             frmDiag = _frmDiag;

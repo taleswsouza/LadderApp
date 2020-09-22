@@ -93,14 +93,14 @@ namespace LadderApp
                            // Using a FileStream, create an XmlTextReader.
                             Stream fs = new FileStream(FileName, FileMode.Open);
                             XmlReader reader = new XmlTextReader(fs);
-                            XmlSerializer serializer = new XmlSerializer(typeof(ProgramaBasico));
+                            XmlSerializer serializer = new XmlSerializer(typeof(LadderProgram));
                             if (serializer.CanDeserialize(reader))
                             {
                                 Object o = serializer.Deserialize(reader);
 
-                                ((ProgramaBasico)o).StsPrograma = ProgramaBasico.StatusPrograma.ABERTO;
+                                ((LadderProgram)o).StsPrograma = LadderProgram.StatusPrograma.ABERTO;
 
-                                frmProj = new ProjectForm((ProgramaBasico)o);
+                                frmProj = new ProjectForm((LadderProgram)o);
                                 frmProj.programa.PathFile = FileName;
                                 frmProj.MdiParent = this;
                                 frmProj.Show();
@@ -171,12 +171,12 @@ namespace LadderApp
                 if (frmProj.frmDiagLadder.ControleSelecionado != null)
                     if (!frmProj.frmDiagLadder.ControleSelecionado.IsDisposed)
                     {
-                        CodigosInterpretaveis _cI = frmProj.frmDiagLadder.ControleSelecionado.getCI();
+                        OpCode _cI = frmProj.frmDiagLadder.ControleSelecionado.getCI();
                         switch (_cI)
                         {
-                            case CodigosInterpretaveis.PARALELO_INICIAL:
-                            case CodigosInterpretaveis.PARALELO_PROXIMO:
-                            case CodigosInterpretaveis.PARALELO_FINAL:
+                            case OpCode.PARALELO_INICIAL:
+                            case OpCode.PARALELO_PROXIMO:
+                            case OpCode.PARALELO_FINAL:
                                 _lstSB = frmProj.frmDiagLadder.VariosSelecionados(frmProj.frmDiagLadder.ControleSelecionado, frmProj.frmDiagLadder.LinhaSelecionada);
                                 break;
                             default:
@@ -241,7 +241,7 @@ namespace LadderApp
 
                         _lstSB2.InsertAllWithClearBefore(_lstSB);
 
-                        ControleLivre _controle = frmProj.frmDiagLadder.LinhaSelecionada.InsereSimboloIndefinido(true, frmProj.frmDiagLadder.ControleSelecionado, _lstSB2);
+                        FreeUserControl _controle = frmProj.frmDiagLadder.LinhaSelecionada.InsereSimboloIndefinido(true, frmProj.frmDiagLadder.ControleSelecionado, _lstSB2);
                         frmProj.frmDiagLadder.ReorganizandoLinhas();
                         _controle.Select();
                     }
@@ -314,7 +314,7 @@ namespace LadderApp
             ArrangeProjeto();
         }
 
-        private void InsereSimbolo(VisualLine.LocalInsereSimbolo _lIS, params CodigosInterpretaveis[] _cI)
+        private void InsereSimbolo(VisualLine.LocalInsereSimbolo _lIS, params OpCode[] _cI)
         {
             if (!IsDiagramaAberto())
                 return;
@@ -329,7 +329,7 @@ namespace LadderApp
                 Thread.Sleep(100);
             }
 
-            ControleLivre _controle = frmProj.frmDiagLadder.ControleSelecionado;
+            FreeUserControl _controle = frmProj.frmDiagLadder.ControleSelecionado;
             VisualLine _linha = frmProj.frmDiagLadder.LinhaSelecionada;
 
             _controle = _linha.InsereSimbolo(_lIS, _controle, _cI);
@@ -343,22 +343,22 @@ namespace LadderApp
 
         private void btnContatoNA_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, CodigosInterpretaveis.CONTATO_NA);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OpCode.CONTATO_NA);
         }
 
         private void btnContatoNF_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, CodigosInterpretaveis.CONTATO_NF);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OpCode.CONTATO_NF);
         }
 
         private void btnBobinaSaida_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, CodigosInterpretaveis.BOBINA_SAIDA);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OpCode.BOBINA_SAIDA);
         }
 
         private void btnParalelo_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, CodigosInterpretaveis.PARALELO_INICIAL, CodigosInterpretaveis.PARALELO_PROXIMO, CodigosInterpretaveis.PARALELO_FINAL);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OpCode.PARALELO_INICIAL, OpCode.PARALELO_PROXIMO, OpCode.PARALELO_FINAL);
         }
 
         private void btnLinha_Click(object sender, EventArgs e)
@@ -414,12 +414,12 @@ namespace LadderApp
 
         private void btnTemporizador_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, CodigosInterpretaveis.TEMPORIZADOR);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OpCode.TEMPORIZADOR);
         }
 
         private void btnContador_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, CodigosInterpretaveis.CONTADOR);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OpCode.CONTADOR);
         }
 
         private void EditorLadder_FormClosed(object sender, FormClosedEventArgs e)
@@ -577,7 +577,7 @@ namespace LadderApp
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, CodigosInterpretaveis.RESET);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OpCode.RESET);
         }
 
         private void btnSimular_CheckStateChanged(object sender, EventArgs e)
@@ -626,7 +626,7 @@ namespace LadderApp
         private void LerExecutavel(String DadosConvertidosChar, String strNomeProjeto)
         {
             List<int> lstCodigosLidos = new List<int>();
-            CodigosInterpretaveis guarda = CodigosInterpretaveis.NENHUM;
+            OpCode guarda = OpCode.NENHUM;
 
             if (DadosConvertidosChar.IndexOf("@laddermic.com") != -1)
             {
@@ -639,8 +639,8 @@ namespace LadderApp
 
 
                 /// Cria um programa novo vazio
-                ProgramaBasico programa = new ProgramaBasico();
-                programa.StsPrograma = ProgramaBasico.StatusPrograma.NOVO;
+                LadderProgram programa = new LadderProgram();
+                programa.StsPrograma = LadderProgram.StatusPrograma.NOVO;
                 programa.Nome = strNomeProjeto;
                 programa.dispositivo = new Device(1);
                 programa.endereco.AlocaEnderecamentoIO(programa.dispositivo);
@@ -651,27 +651,27 @@ namespace LadderApp
 
                 for (int i = DadosConvertidosChar.IndexOf("@laddermic.com") + 15; i < DadosConvertidosChar.Length; i++)
                 {
-                    guarda = (CodigosInterpretaveis)Convert.ToChar(DadosConvertidosChar.Substring(i, 1));
+                    guarda = (OpCode)Convert.ToChar(DadosConvertidosChar.Substring(i, 1));
 
                     switch (guarda)
                     {
-                        case CodigosInterpretaveis.NENHUM:
+                        case OpCode.NENHUM:
                             intContaFim++;
                             iNumOperandos = 0;
                             break;
-                        case CodigosInterpretaveis.FIM_DA_LINHA:
+                        case OpCode.FIM_DA_LINHA:
                             intContaFim++;
                             iNumOperandos = 0;
-                            if ((CodigosInterpretaveis)Convert.ToChar(DadosConvertidosChar.Substring(i+1, 1)) != CodigosInterpretaveis.NENHUM)
+                            if ((OpCode)Convert.ToChar(DadosConvertidosChar.Substring(i+1, 1)) != OpCode.NENHUM)
                             intIndiceLinha = programa.InsereLinhaNoFinal(new Line());
                             break;
                         //case CodigosInterpretaveis.INICIO_DA_LINHA:
-                        case CodigosInterpretaveis.CONTATO_NA:
-                        case CodigosInterpretaveis.CONTATO_NF:
+                        case OpCode.CONTATO_NA:
+                        case OpCode.CONTATO_NF:
                             intContaFim = 0;
                             iNumOperandos = 2;
                             {
-                                Symbol _sb = new Symbol((CodigosInterpretaveis)guarda);
+                                Symbol _sb = new Symbol((OpCode)guarda);
 
                                 _tpEndLido =(AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
@@ -689,13 +689,13 @@ namespace LadderApp
                                 programa.linhas[intIndiceLinha].simbolos.Add(_sb);
                             }
                             break;
-                        case CodigosInterpretaveis.BOBINA_SAIDA:
-                        case CodigosInterpretaveis.RESET:
+                        case OpCode.BOBINA_SAIDA:
+                        case OpCode.RESET:
                             intContaFim = 0;
                             iNumOperandos = 2;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((CodigosInterpretaveis)guarda));
+                                _lstSB.Add(new Symbol((OpCode)guarda));
                                 _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i+1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i+2, 1));
                                 _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
@@ -712,19 +712,19 @@ namespace LadderApp
                                 _lstSB.Clear();
                             }
                             break;
-                        case CodigosInterpretaveis.PARALELO_INICIAL:
-                        case CodigosInterpretaveis.PARALELO_FINAL:
-                        case CodigosInterpretaveis.PARALELO_PROXIMO:
+                        case OpCode.PARALELO_INICIAL:
+                        case OpCode.PARALELO_FINAL:
+                        case OpCode.PARALELO_PROXIMO:
                             intContaFim = 0;
                             iNumOperandos = 0;
-                            programa.linhas[intIndiceLinha].simbolos.Add(new Symbol((CodigosInterpretaveis)guarda));
+                            programa.linhas[intIndiceLinha].simbolos.Add(new Symbol((OpCode)guarda));
                             break;
-                        case CodigosInterpretaveis.CONTADOR:
+                        case OpCode.CONTADOR:
                             intContaFim = 0;
                             iNumOperandos = 3;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((CodigosInterpretaveis)guarda));
+                                _lstSB.Add(new Symbol((OpCode)guarda));
                                 _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
@@ -736,12 +736,12 @@ namespace LadderApp
                                 _lstSB.Clear();
                             }
                             break;
-                        case CodigosInterpretaveis.TEMPORIZADOR:
+                        case OpCode.TEMPORIZADOR:
                             intContaFim = 0;
                             iNumOperandos = 4;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((CodigosInterpretaveis)guarda));
+                                _lstSB.Add(new Symbol((OpCode)guarda));
                                 _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.BaseTempo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
@@ -817,8 +817,8 @@ namespace LadderApp
 
             switch (frmProj.programa.StsPrograma)
             {
-                case ProgramaBasico.StatusPrograma.ABERTO:
-                case ProgramaBasico.StatusPrograma.SALVO:
+                case LadderProgram.StatusPrograma.ABERTO:
+                case LadderProgram.StatusPrograma.SALVO:
                     Salvar(frmProj.programa.PathFile);
                     break;
                 default:
@@ -832,7 +832,7 @@ namespace LadderApp
             try
             {
                 // TODO: Add code here to save the current contents of the form to a file.
-                XmlSerializer mySerializer = new XmlSerializer(typeof(ProgramaBasico));
+                XmlSerializer mySerializer = new XmlSerializer(typeof(LadderProgram));
                 //teste XmlSerializer mySerializer = new XmlSerializer(typeof(DispositivoLadder));
                 //XmlSerializer mySerializer = new XmlSerializer(typeof(DispositivoLadder));
                 // To write to a file, create a StreamWriter object.
@@ -842,7 +842,7 @@ namespace LadderApp
                 //mySerializer.Serialize(myWriter, frmProj.programa.dispositivo);
                 myWriter.Close();
                 frmProj.programa.PathFile = FileName;
-                frmProj.programa.StsPrograma = ProgramaBasico.StatusPrograma.SALVO;
+                frmProj.programa.StsPrograma = LadderProgram.StatusPrograma.SALVO;
                 frmProj.SetText();
             }
             catch (Exception ex)
@@ -982,9 +982,9 @@ namespace LadderApp
 
         private bool VerificaSenha(String strLido)
         {
-            Txt2CodigosInterpretaveis txt2CI = null;
+            Text2OpCodeServices txt2CI = null;
 
-            txt2CI = new Txt2CodigosInterpretaveis(strLido);
+            txt2CI = new Text2OpCodeServices(strLido);
 
             if (txt2CI.ExisteCabecalho())
             {

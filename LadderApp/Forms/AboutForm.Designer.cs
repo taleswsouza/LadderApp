@@ -149,7 +149,7 @@ namespace LadderApp.Formularios
             this.okButton.TabIndex = 24;
             this.okButton.Text = "&OK";
             // 
-            // frmSobre
+            // AboutForm
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -159,7 +159,7 @@ namespace LadderApp.Formularios
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "frmSobre";
+            this.Name = "AboutForm";
             this.Padding = new System.Windows.Forms.Padding(9);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

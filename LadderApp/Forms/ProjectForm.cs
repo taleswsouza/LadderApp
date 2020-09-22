@@ -13,14 +13,14 @@ namespace LadderApp
         public LadderForm frmDiagLadder = null;
 
        // composicao do projeto ladder
-        public ProgramaBasico programa = new ProgramaBasico();
+        public LadderProgram programa = new LadderProgram();
 
         public ProjectForm()
         {
             InitializeComponent();
         }
 
-        public ProjectForm(ProgramaBasico _prgB)
+        public ProjectForm(LadderProgram _prgB)
         {
             InitializeComponent();
             //_prgB.StsPrograma = ProgramaBasico.StatusPrograma.ABERTO;
@@ -43,7 +43,7 @@ namespace LadderApp
             // Expande apenas a arvore projeto
             ArvoreProjeto.Nodes[0].Expand();
 
-            if (programa.StsPrograma == ProgramaBasico.StatusPrograma.NAOINICIADO)
+            if (programa.StsPrograma == LadderProgram.StatusPrograma.NAOINICIADO)
             {
                 programa.dispositivo = new Device(1);
 
@@ -115,7 +115,7 @@ namespace LadderApp
                     if (frmDisp.ShowDialog() == DialogResult.OK)
                     {
                         int i = 0;
-                        foreach (BitPortasDispositivo pd in programa.dispositivo.lstBitPorta)
+                        foreach (Pin pd in programa.dispositivo.lstBitPorta)
                         {
                             pd.TipoDefinido = frmDisp.lstEndModificado[i];
                             i++;
@@ -298,7 +298,7 @@ namespace LadderApp
             return 0;
         }
 
-        private void IndicaEnderecoEmUso(ProgramaBasico _pl, AddressTypeEnum _te)
+        private void IndicaEnderecoEmUso(LadderProgram _pl, AddressTypeEnum _te)
         {
             _pl.endereco.LimpaIndicacaoEmUso();
             foreach(Line _lc in _pl.linhas)
@@ -309,12 +309,12 @@ namespace LadderApp
                     switch (_sb.getCI())
                     {
                             /// pporque disso aqui
-                        case CodigosInterpretaveis.CONTATO_NA:
-                        case CodigosInterpretaveis.CONTATO_NF:
-                        case CodigosInterpretaveis.BOBINA_SAIDA:
-                        case CodigosInterpretaveis.TEMPORIZADOR:
-                        case CodigosInterpretaveis.CONTADOR:
-                        case CodigosInterpretaveis.RESET:
+                        case OpCode.CONTATO_NA:
+                        case OpCode.CONTATO_NF:
+                        case OpCode.BOBINA_SAIDA:
+                        case OpCode.TEMPORIZADOR:
+                        case OpCode.CONTADOR:
+                        case OpCode.RESET:
                             if (_sb.getOperandos(0) != null)
                             {
                                 Address _el = (Address)_sb.getOperandos(0);
@@ -328,7 +328,7 @@ namespace LadderApp
             }
         }
 
-        public void InsereEnderecoNoSimbolo(ControleLivre _cL, Address _end)
+        public void InsereEnderecoNoSimbolo(FreeUserControl _cL, Address _end)
         {
             if (!_cL.IsDisposed)
             {

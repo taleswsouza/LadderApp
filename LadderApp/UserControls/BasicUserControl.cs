@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace LadderApp
 {
-    public class ControleBasico : UserControl, ISymbol
+    public class BasicUserControl : UserControl, ISymbol
     {
         protected Symbol codigoInterpretavel = null;
 
@@ -32,11 +32,11 @@ namespace LadderApp
             set { PosicaoXY = value; }
         }
 
-        public ControleBasico()
+        public BasicUserControl()
         {
         }
 
-        public virtual void setCI(CodigosInterpretaveis codInterpretavelNovo)
+        public virtual void setCI(OpCode codInterpretavelNovo)
         {
                 codigoInterpretavel.setCI(codInterpretavelNovo);
         }
@@ -45,12 +45,12 @@ namespace LadderApp
         {
         }
 
-        public CodigosInterpretaveis getCI()
+        public OpCode getCI()
         {
             if (codigoInterpretavel != null)
                 return codigoInterpretavel.getCI();
             else
-                return CodigosInterpretaveis.NENHUM;
+                return OpCode.NENHUM;
 
         }
 

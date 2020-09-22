@@ -9,7 +9,7 @@ namespace LadderApp
     {
         public static void AjustaPosicionamento(VisualLine lc)
         {
-            ControleLivre _ctrlLivreAux = null;
+            FreeUserControl _ctrlLivreAux = null;
 
             int _maiorX = 0;
 
@@ -33,11 +33,11 @@ namespace LadderApp
             // em que os simbolos sao montados
             int _acumTamY = lc.tamY;  // auxiliar para tamY
 
-            List<ControleLivre> _simbProxLinha = new List<ControleLivre>();
+            List<FreeUserControl> _simbProxLinha = new List<FreeUserControl>();
 
             _acumTamX += lc.tamX;
 
-            foreach (ControleLivre simbAux in lc.simbolos)
+            foreach (FreeUserControl simbAux in lc.simbolos)
             {
                 // caso todos os paralelos abertos tenham sido
                 // tratados forca paralelos tratados = 0
@@ -56,7 +56,7 @@ namespace LadderApp
 
                 switch (simbAux.getCI())
                 {
-                    case CodigosInterpretaveis.PARALELO_INICIAL:
+                    case OpCode.PARALELO_INICIAL:
                         _tamY = lc.tamY; // restaura tamanho Y base
                         _posX = _acumTamX;
                         _tamX = lc.tamX / 3;
@@ -71,7 +71,7 @@ namespace LadderApp
 
                         _acumTamX = _posX + _tamX;
                         break;
-                    case CodigosInterpretaveis.PARALELO_FINAL:
+                    case OpCode.PARALELO_FINAL:
                         _tamX = lc.tamX / 3;
                         //                        _tamY = _par.ultimoVPI.Location.Y - _par.par.Location.Y + _par.ultimoVPI.Size.Height; // _ultTamY2ParaleloFinal;
                         _tamY = _par.ultimoVPI.posicaoXY.Y - _par.par.posicaoXY.Y + _par.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
@@ -104,7 +104,7 @@ namespace LadderApp
 
                         _acumTamX = _posX + _tamX;
                         break;
-                    case CodigosInterpretaveis.PARALELO_PROXIMO:
+                    case OpCode.PARALELO_PROXIMO:
                         _tamY = lc.tamY; // restaura tamanho Y base
                         _tamX = lc.tamX / 3; // tamanho X reduzido
 
@@ -185,7 +185,7 @@ namespace LadderApp
             lc.simboloInicioLinha.TabIndex = iTabStop;
             lc.simboloInicioLinha.TabStop = false;
 
-            foreach (ControleLivre _simbAux in lc.simbolos)
+            foreach (FreeUserControl _simbAux in lc.simbolos)
             {
                 iTabStop++;
                 _simbAux.TabIndex = iTabStop;
@@ -213,7 +213,7 @@ namespace LadderApp
             linhaDestinho.simbolos.Clear();
             foreach(Symbol auxSB in linhaFonte.simbolos)
             {
-                linhaDestinho.simbolos.Add(new ControleLivre());
+                linhaDestinho.simbolos.Add(new FreeUserControl());
                 linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setCI(auxSB.getCI());
                 linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setOperando(auxSB.getOperandos());
 
@@ -223,7 +223,7 @@ namespace LadderApp
             linhaDestinho.saida.Clear();
             foreach (Symbol auxSB in linhaFonte.saida)
             {
-                linhaDestinho.saida.Add(new ControleLivre());
+                linhaDestinho.saida.Add(new FreeUserControl());
                 linhaDestinho.saida[linhaDestinho.saida.Count - 1].setCI(auxSB.getCI());
                 for(int i = 0; i < auxSB.getOperandos().Length; i++)
                     linhaDestinho.saida[linhaDestinho.saida.Count - 1].setOperando(i, auxSB.getOperandos(i));
@@ -235,7 +235,7 @@ namespace LadderApp
         {
             /// transfere os simbolos basicos da linha
             linhaDestinho.simbolos.Clear();
-            foreach (ControleLivre auxSB in linhaFonte.simbolos)
+            foreach (FreeUserControl auxSB in linhaFonte.simbolos)
             {
                 linhaDestinho.simbolos.Add(new Symbol());
                 linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setCI(auxSB.getCI());
@@ -245,7 +245,7 @@ namespace LadderApp
 
             /// transfere os simbolos basicos de saida
             linhaDestinho.saida.Clear();
-            foreach (ControleLivre auxSB in linhaFonte.saida)
+            foreach (FreeUserControl auxSB in linhaFonte.saida)
             {
                 linhaDestinho.saida.Add(new Symbol());
                 linhaDestinho.saida[linhaDestinho.saida.Count - 1].setCI(auxSB.getCI());

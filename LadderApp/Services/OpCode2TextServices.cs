@@ -8,11 +8,11 @@ namespace LadderApp
     /// CodigosInterpretaveis2Txt - permite converter códigos interpretáveis em texto que serão gravados no
     ///     programa ladder
     /// </summary>
-    public class CodigosInterpretaveis2Txt
+    public class OpCode2TextServices
     {
         private String txtInternal = "";
         private String txtInternalWithTypeCast = "";
-        public CodigosInterpretaveis2Txt txtCabecalho = null;
+        public OpCode2TextServices txtCabecalho = null;
         private Int32 posCabecalho2Internal = 0;
         private Int32 posCabecalho2InternalWithTypeCast = 0;
 
@@ -24,7 +24,7 @@ namespace LadderApp
         /// <summary>
         /// CodigosInterpretaveis2Txt() - Construtor padrão
         /// </summary>
-        public CodigosInterpretaveis2Txt()
+        public OpCode2TextServices()
         {
             this.Add(idCodigo);
             posCabecalho2Internal = txtInternal.Length;
@@ -35,7 +35,7 @@ namespace LadderApp
         /// CodigosInterpretaveis2Txt(bool) - Construtor interno somente para o atributo txtCabecalho
         /// </summary>
         /// <param name="bCabecalho">Somente para diferenciar do contrutor padrão</param>
-        internal CodigosInterpretaveis2Txt(bool bCabecalho)
+        internal OpCode2TextServices(bool bCabecalho)
         {
         }
 
@@ -60,7 +60,7 @@ namespace LadderApp
         public void AddCabecalho()
         {
             if (txtCabecalho == null)
-                txtCabecalho = new CodigosInterpretaveis2Txt(true);
+                txtCabecalho = new OpCode2TextServices(true);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace LadderApp
                 if (txtCabecalho.Length > 0)
                 {
                     this.txtCabecalho.Insert(txtCabecalho.Length);
-                    this.txtCabecalho.Insert(CodigosInterpretaveis.CABECALHO_TAMANHO);
+                    this.txtCabecalho.Insert(OpCode.CABECALHO_TAMANHO);
 
                     txtInternalWithTypeCast = txtInternalWithTypeCast.Insert(this.posCabecalho2InternalWithTypeCast, txtCabecalho.ToStringInternalWithTypeCast() + ", ");
                     txtInternal = txtInternal.Insert(this.posCabecalho2Internal, txtCabecalho.ToStringInternal());
@@ -109,12 +109,12 @@ namespace LadderApp
         }
 
 
-        public void Add(CodigosInterpretaveis _ci)
+        public void Add(OpCode _ci)
         {
             Add((Int32)_ci);
         }
 
-        internal void Insert(CodigosInterpretaveis _ci)
+        internal void Insert(OpCode _ci)
         {
             Insert((Int32)_ci);
         }
@@ -131,7 +131,7 @@ namespace LadderApp
 
             switch (_sb.getCI())
             {
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.CONTADOR:
                     if (_sb.iNumOperandos > 0)
                     {
                         if (_sb.getOperandos(0) != null)
@@ -143,7 +143,7 @@ namespace LadderApp
                             }
                     }
                     break;
-                case CodigosInterpretaveis.TEMPORIZADOR:
+                case OpCode.TEMPORIZADOR:
                     if (_sb.iNumOperandos > 0)
                     {
                         if (_sb.getOperandos(0) != null)

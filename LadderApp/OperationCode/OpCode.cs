@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LadderApp
 {
-    public enum CodigosInterpretaveis
+    public enum OpCode
     {
         /// <summary>
         /// Indica que nenhum simbolo esta desenhado

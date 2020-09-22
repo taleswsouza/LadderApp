@@ -15,7 +15,7 @@ namespace LadderApp
         {
         }
 
-        public Symbol(CodigosInterpretaveis _ci)
+        public Symbol(OpCode _ci)
         {
             codigoInterpretavel = _ci;
         }
@@ -27,9 +27,9 @@ namespace LadderApp
         public Object[] Operandos = new Object[5];
 
 
-        private CodigosInterpretaveis codigoInterpretavelAtual = CodigosInterpretaveis.NENHUM;
+        private OpCode codigoInterpretavelAtual = OpCode.NENHUM;
         [XmlElement(Order = 1, ElementName = "Instrucao")]
-        public CodigosInterpretaveis codigoInterpretavel
+        public OpCode codigoInterpretavel
         {
             get { return codigoInterpretavelAtual; }
             set {
@@ -37,13 +37,13 @@ namespace LadderApp
                 RealocaOperandos();
             }
         }
-        public void setCI(CodigosInterpretaveis codigo)
+        public void setCI(OpCode codigo)
         {
             codigoInterpretavel = codigo;
             RealocaOperandos();
         }
 
-        public CodigosInterpretaveis getCI()
+        public OpCode getCI()
         {
             return codigoInterpretavel;
         }
@@ -86,23 +86,23 @@ namespace LadderApp
             /// Aloca espaco para a quantidade de operandos de cada codigo interpretavel
             switch (getCI())
             {
-                case CodigosInterpretaveis.NENHUM:
-                case CodigosInterpretaveis.FIM_DA_LINHA:
+                case OpCode.NENHUM:
+                case OpCode.FIM_DA_LINHA:
                     iNumOperandos = 0;
                     break;
-                case CodigosInterpretaveis.INICIO_DA_LINHA:
-                case CodigosInterpretaveis.CONTATO_NA:
-                case CodigosInterpretaveis.CONTATO_NF:
-                case CodigosInterpretaveis.BOBINA_SAIDA:
-                case CodigosInterpretaveis.RESET:
+                case OpCode.INICIO_DA_LINHA:
+                case OpCode.CONTATO_NA:
+                case OpCode.CONTATO_NF:
+                case OpCode.BOBINA_SAIDA:
+                case OpCode.RESET:
                     iNumOperandos = 1;
                     break;
-                case CodigosInterpretaveis.PARALELO_INICIAL:
-                case CodigosInterpretaveis.PARALELO_FINAL:
-                case CodigosInterpretaveis.PARALELO_PROXIMO:
+                case OpCode.PARALELO_INICIAL:
+                case OpCode.PARALELO_FINAL:
+                case OpCode.PARALELO_PROXIMO:
                     iNumOperandos = 0;
                     break;
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.CONTADOR:
                     iNumOperandos = 4;
 
                     setOperando(1, (Int32)0); // tipo
@@ -110,7 +110,7 @@ namespace LadderApp
                     setOperando(3, (Int32)0); // acum
 
                     break;
-                case CodigosInterpretaveis.TEMPORIZADOR:
+                case OpCode.TEMPORIZADOR:
                     iNumOperandos = 5;
 
                     setOperando(1, (Int32)0); // tipo
@@ -147,7 +147,7 @@ namespace LadderApp
 
         public void Dispose()
         {
-            setCI(CodigosInterpretaveis.NENHUM);
+            setCI(OpCode.NENHUM);
         }
 
         /// <summary>
@@ -179,17 +179,17 @@ namespace LadderApp
 
             switch (getCI())
             {
-                case CodigosInterpretaveis.NENHUM:
-                case CodigosInterpretaveis.FIM_DA_LINHA:
+                case OpCode.NENHUM:
+                case OpCode.FIM_DA_LINHA:
                     _bValido = false;
                     break;
-                case CodigosInterpretaveis.INICIO_DA_LINHA:
+                case OpCode.INICIO_DA_LINHA:
                     if (_novoOperando != null)
                         if (_novoOperando.GetType().ToString() != "System.Int32")
                             _bValido = false;
                     break;
-                case CodigosInterpretaveis.CONTATO_NA:
-                case CodigosInterpretaveis.CONTATO_NF:
+                case OpCode.CONTATO_NA:
+                case OpCode.CONTATO_NF:
                     _bEndereco = true;
                     if (_end != null)
                     {
@@ -210,7 +210,7 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case CodigosInterpretaveis.BOBINA_SAIDA:
+                case OpCode.BOBINA_SAIDA:
                     _bEndereco = true;
                     if (_end != null)
                     {
@@ -228,7 +228,7 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case CodigosInterpretaveis.TEMPORIZADOR:
+                case OpCode.TEMPORIZADOR:
                     if (_end != null && _indice == 0)
                     {
                         _bEndereco = true;
@@ -257,7 +257,7 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case CodigosInterpretaveis.CONTADOR:
+                case OpCode.CONTADOR:
                     if (_end != null && _indice == 0)
                     {
                         _bEndereco = true;
@@ -286,12 +286,12 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case CodigosInterpretaveis.PARALELO_INICIAL:
-                case CodigosInterpretaveis.PARALELO_FINAL:
-                case CodigosInterpretaveis.PARALELO_PROXIMO:
+                case OpCode.PARALELO_INICIAL:
+                case OpCode.PARALELO_FINAL:
+                case OpCode.PARALELO_PROXIMO:
                     _bValido = false;
                     break;
-                case CodigosInterpretaveis.RESET:
+                case OpCode.RESET:
                     _bEndereco = true;
                     if (_end != null)
                     {

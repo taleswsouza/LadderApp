@@ -16,7 +16,7 @@ namespace LadderApp
     [XmlInclude(typeof(Addressing))]
     [Serializable]
 
-    public class ProgramaBasico
+    public class LadderProgram
     {
         public enum StatusPrograma
         {
@@ -58,7 +58,7 @@ namespace LadderApp
             set { stsprg = value; }
         }
 
-        public ProgramaBasico()
+        public LadderProgram()
         {
         }
 
@@ -310,14 +310,14 @@ namespace LadderApp
                 {
                     switch (_sb.getCI())
                     {
-                        case CodigosInterpretaveis.PARALELO_INICIAL:
+                        case OpCode.PARALELO_INICIAL:
                             /// cria o paralelo
                             op.Add(new SuporteConjunto());
                             /// cria o paralelo inicial
                             op.Add(new SuporteConjunto());
 
                             break;
-                        case CodigosInterpretaveis.PARALELO_FINAL:
+                        case OpCode.PARALELO_FINAL:
                             /// Atualiza o paralelo
                             if (op[op.Count - 2].bIniciado)
                                 op[op.Count - 2].valor = op[op.Count - 2].valor || op[op.Count - 1].valor;
@@ -340,7 +340,7 @@ namespace LadderApp
 
 
                             break;
-                        case CodigosInterpretaveis.PARALELO_PROXIMO:
+                        case OpCode.PARALELO_PROXIMO:
                             /// Atualiza o paralelo
                             if (op[op.Count - 2].bIniciado)
                                 op[op.Count - 2].valor = op[op.Count - 2].valor || op[op.Count - 1].valor;
@@ -359,10 +359,10 @@ namespace LadderApp
                         default:
                             switch (_sb.getCI())
                             {
-                                case CodigosInterpretaveis.CONTATO_NA:
+                                case OpCode.CONTATO_NA:
                                     bAuxValor = ((Address)_sb.getOperandos(0)).Valor;
                                     break;
-                                case CodigosInterpretaveis.CONTATO_NF:
+                                case OpCode.CONTATO_NF:
                                     bAuxValor = !((Address)_sb.getOperandos(0)).Valor;
                                     break;
                             }
@@ -382,23 +382,23 @@ namespace LadderApp
                 {
                     switch (_sb.getCI())
                     {
-                        case CodigosInterpretaveis.BOBINA_SAIDA:
-                        case CodigosInterpretaveis.TEMPORIZADOR:
-                        case CodigosInterpretaveis.CONTADOR:
-                        case CodigosInterpretaveis.RESET:
+                        case OpCode.BOBINA_SAIDA:
+                        case OpCode.TEMPORIZADOR:
+                        case OpCode.CONTADOR:
+                        case OpCode.RESET:
 
-                            if (_sb.getCI() == CodigosInterpretaveis.BOBINA_SAIDA)
+                            if (_sb.getCI() == OpCode.BOBINA_SAIDA)
                                 ((Address)_sb.getOperandos(0)).Valor = (bool)op[op.Count - 1].valor;
-                            else if (_sb.getCI() == CodigosInterpretaveis.TEMPORIZADOR)
+                            else if (_sb.getCI() == OpCode.TEMPORIZADOR)
                             {
                                 ((Address)_sb.getOperandos(0)).Temporizador.EN = (bool)op[op.Count - 1].valor;
                             }
-                            else if (_sb.getCI() == CodigosInterpretaveis.CONTADOR)
+                            else if (_sb.getCI() == OpCode.CONTADOR)
                             {
                                 ((Address)_sb.getOperandos(0)).Contador.EN = (bool)op[op.Count - 1].valor;
                                 ExecutaSimuladoContadores(_sb, ((Address)_sb.getOperandos(0)));
                             }
-                            else if (_sb.getCI() == CodigosInterpretaveis.RESET)
+                            else if (_sb.getCI() == OpCode.RESET)
                             {
                                 if ((bool)op[op.Count - 1].valor)
                                 {
@@ -439,7 +439,7 @@ namespace LadderApp
             return true;
         }
 
-        private bool GravaSenhaNoLadder(ref CodigosInterpretaveis2Txt txtCodigoInterpretavel)
+        private bool GravaSenhaNoLadder(ref OpCode2TextServices txtCodigoInterpretavel)
         {
             DialogResult _result;
             String _strSenha = "";
@@ -475,7 +475,7 @@ namespace LadderApp
                     else
                     {
                         txtCodigoInterpretavel.AddCabecalho();
-                        txtCodigoInterpretavel.txtCabecalho.Add(CodigosInterpretaveis.CABECALHO_SENHA_0);
+                        txtCodigoInterpretavel.txtCabecalho.Add(OpCode.CABECALHO_SENHA_0);
                         txtCodigoInterpretavel.txtCabecalho.Add(_strSenha.Length);
                         txtCodigoInterpretavel.txtCabecalho.Add(_strSenha);
                     }
@@ -493,7 +493,7 @@ namespace LadderApp
             List<String> OperandosSELinha = new List<string>();
             String FuncoesAposLinha = "";
             DialogResult _result;
-            CodigosInterpretaveis2Txt txtCodigoInterpretavel = new CodigosInterpretaveis2Txt();
+            OpCode2TextServices txtCodigoInterpretavel = new OpCode2TextServices();
 
             bool bIniciado = false;
 
@@ -501,7 +501,7 @@ namespace LadderApp
                 return false;
 
             //txtCodigoInterpretavel.Add("@laddermic.com");
-            txtCodigoInterpretavel.Add(CodigosInterpretaveis.NENHUM);
+            txtCodigoInterpretavel.Add(OpCode.NENHUM);
 
             /// caso senha para inserir senha
             /// realiza recuperação da senha
@@ -533,17 +533,17 @@ namespace LadderApp
                 {
                     switch (_sb.getCI())
                     {
-                        case CodigosInterpretaveis.PARALELO_INICIAL:
+                        case OpCode.PARALELO_INICIAL:
                             if (bIniciado)
                                 linha += " && ";
 
                             bIniciado = false;
                             linha += "((";
                             break;
-                        case CodigosInterpretaveis.PARALELO_FINAL:
+                        case OpCode.PARALELO_FINAL:
                             linha += "))";
                             break;
-                        case CodigosInterpretaveis.PARALELO_PROXIMO:
+                        case OpCode.PARALELO_PROXIMO:
                             bIniciado = false;
                             linha += ") || (";
                             break;
@@ -552,11 +552,11 @@ namespace LadderApp
                                 linha += " && ";
                             switch(_sb.getCI())
                             {
-                                case CodigosInterpretaveis.CONTATO_NA:
+                                case OpCode.CONTATO_NA:
                                     linha += ((Address)_sb.getOperandos(0)).Acesso;
                                     ((Address)_sb.getOperandos(0)).EmUso = true;
                                     break;
-                                case CodigosInterpretaveis.CONTATO_NF:
+                                case OpCode.CONTATO_NF:
                                     linha += "!" + ((Address)_sb.getOperandos(0)).Acesso;
                                     ((Address)_sb.getOperandos(0)).EmUso = true;
                                     break;
@@ -582,29 +582,29 @@ namespace LadderApp
                 {
                     switch (_sb.getCI())
                     {
-                        case CodigosInterpretaveis.BOBINA_SAIDA:
-                        case CodigosInterpretaveis.TEMPORIZADOR:
-                        case CodigosInterpretaveis.CONTADOR:
-                        case CodigosInterpretaveis.RESET:
+                        case OpCode.BOBINA_SAIDA:
+                        case OpCode.TEMPORIZADOR:
+                        case OpCode.CONTADOR:
+                        case OpCode.RESET:
                             txtCodigoInterpretavel.Add(_sb);
 
-                            if (_sb.getCI() == CodigosInterpretaveis.BOBINA_SAIDA)
+                            if (_sb.getCI() == OpCode.BOBINA_SAIDA)
                             {
                                 OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso);
                                 ((Address)_sb.getOperandos(0)).EmUso = true;
                             }
-                            else if (_sb.getCI() == CodigosInterpretaveis.TEMPORIZADOR)
+                            else if (_sb.getCI() == OpCode.TEMPORIZADOR)
                             {
                                 OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso2);
                                 ((Address)_sb.getOperandos(0)).EmUso = true;
                             }
-                            else if (_sb.getCI() == CodigosInterpretaveis.CONTADOR)
+                            else if (_sb.getCI() == OpCode.CONTADOR)
                             {
                                 OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso2);
                                 FuncoesAposLinha += " ExecContador(&" + ((Address)_sb.getOperandos(0)).Nome + ");";
                                 ((Address)_sb.getOperandos(0)).EmUso = true;
                             }
-                            else if (_sb.getCI() == CodigosInterpretaveis.RESET)
+                            else if (_sb.getCI() == OpCode.RESET)
                             {
                                 OperandosSELinha.Add(((Address)_sb.getOperandos(0)).Nome + ".Reset = 1;");
                                 ((Address)_sb.getOperandos(0)).EmUso = true;
@@ -658,10 +658,10 @@ namespace LadderApp
 
                 doc += Environment.NewLine;
 
-                txtCodigoInterpretavel.Add(CodigosInterpretaveis.FIM_DA_LINHA);
+                txtCodigoInterpretavel.Add(OpCode.FIM_DA_LINHA);
             }
 
-            txtCodigoInterpretavel.Add(CodigosInterpretaveis.NENHUM);
+            txtCodigoInterpretavel.Add(OpCode.NENHUM);
 
             _result = MessageBox.Show("Do you want to generate the .C file below? " + Environment.NewLine + doc, "Confirmation: Generate .C file?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
@@ -1016,10 +1016,10 @@ namespace LadderApp
 
             if (_lst.Count > 0)
             {
-                if (!(_lst.Contains(CodigosInterpretaveis.BOBINA_SAIDA) ||
-                    _lst.Contains(CodigosInterpretaveis.TEMPORIZADOR) ||
-                    _lst.Contains(CodigosInterpretaveis.CONTADOR) ||
-                    _lst.Contains(CodigosInterpretaveis.RESET)))
+                if (!(_lst.Contains(OpCode.BOBINA_SAIDA) ||
+                    _lst.Contains(OpCode.TEMPORIZADOR) ||
+                    _lst.Contains(OpCode.CONTADOR) ||
+                    _lst.Contains(OpCode.RESET)))
                     return false;
             }
             else
@@ -1040,10 +1040,10 @@ namespace LadderApp
 
             /// 1.1 - Verifica se a linha tem simbolos validos
             if (_lst.Count > 0)
-                if (_lst.Contains(CodigosInterpretaveis.BOBINA_SAIDA) ||
-                    _lst.Contains(CodigosInterpretaveis.TEMPORIZADOR) ||
-                    _lst.Contains(CodigosInterpretaveis.CONTADOR) ||
-                    _lst.Contains(CodigosInterpretaveis.RESET))
+                if (_lst.Contains(OpCode.BOBINA_SAIDA) ||
+                    _lst.Contains(OpCode.TEMPORIZADOR) ||
+                    _lst.Contains(OpCode.CONTADOR) ||
+                    _lst.Contains(OpCode.RESET))
                     return false;
 
 
@@ -1063,12 +1063,12 @@ namespace LadderApp
                 {
                     switch (_sb.getCI())
                     {
-                        case CodigosInterpretaveis.NENHUM:
-                        case CodigosInterpretaveis.INICIO_DA_LINHA:
-                        case CodigosInterpretaveis.FIM_DA_LINHA:
-                        case CodigosInterpretaveis.PARALELO_INICIAL:
-                        case CodigosInterpretaveis.PARALELO_FINAL:
-                        case CodigosInterpretaveis.PARALELO_PROXIMO:
+                        case OpCode.NENHUM:
+                        case OpCode.INICIO_DA_LINHA:
+                        case OpCode.FIM_DA_LINHA:
+                        case OpCode.PARALELO_INICIAL:
+                        case OpCode.PARALELO_FINAL:
+                        case OpCode.PARALELO_PROXIMO:
                             break;
                         default:
                             _sb.setOperando(0, endereco.Find((Address)_sb.getOperandos(0)));
@@ -1079,25 +1079,25 @@ namespace LadderApp
                 {
                     switch (_sb.getCI())
                     {
-                        case CodigosInterpretaveis.NENHUM:
-                        case CodigosInterpretaveis.INICIO_DA_LINHA:
-                        case CodigosInterpretaveis.FIM_DA_LINHA:
-                        case CodigosInterpretaveis.PARALELO_INICIAL:
-                        case CodigosInterpretaveis.PARALELO_FINAL:
-                        case CodigosInterpretaveis.PARALELO_PROXIMO:
+                        case OpCode.NENHUM:
+                        case OpCode.INICIO_DA_LINHA:
+                        case OpCode.FIM_DA_LINHA:
+                        case OpCode.PARALELO_INICIAL:
+                        case OpCode.PARALELO_FINAL:
+                        case OpCode.PARALELO_PROXIMO:
                             break;
                         default:
                             _sb.setOperando(0, endereco.Find((Address)_sb.getOperandos(0)));
 
                             if (_sb.getOperandos(0) != null)
                             {
-                                if (_sb.getCI() == CodigosInterpretaveis.CONTADOR)
+                                if (_sb.getCI() == OpCode.CONTADOR)
                                 {
                                     ((Address)_sb.getOperandos(0)).Contador.Tipo = (Int32)_sb.getOperandos(1);
                                     ((Address)_sb.getOperandos(0)).Contador.Preset = (Int32)_sb.getOperandos(2);
                                     ((Address)_sb.getOperandos(0)).Contador.Acumulado = (Int32)_sb.getOperandos(3);
                                 }
-                                else if (_sb.getCI() == CodigosInterpretaveis.TEMPORIZADOR)
+                                else if (_sb.getCI() == OpCode.TEMPORIZADOR)
                                 {
                                     ((Address)_sb.getOperandos(0)).Temporizador.Tipo = (Int32)_sb.getOperandos(1);
                                     ((Address)_sb.getOperandos(0)).Temporizador.Preset = (Int32)_sb.getOperandos(2);

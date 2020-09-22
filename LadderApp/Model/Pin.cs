@@ -5,12 +5,12 @@ using System.Xml.Serialization;
 
 namespace LadderApp
 {
-    public class BitPortasDispositivo
+    public class Pin
     {
-        public BitPortasDispositivo()
+        public Pin()
         {
         }
-        public BitPortasDispositivo(int _indice)
+        public Pin(int _indice)
         {
             this.parametrizacao_C = this.parametrizacao_C.Replace("#", _indice.ToString());
         }

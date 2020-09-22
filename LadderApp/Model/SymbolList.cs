@@ -10,18 +10,18 @@ namespace LadderApp
         /// suporte - utilizado na funcao "ProcuraCodigoInterpretavel()" - carrega
         /// o codigointerpretavel para as iteracoes da funcao
         /// </summary>
-        private CodigosInterpretaveis ciLocal = CodigosInterpretaveis.NENHUM;
+        private OpCode ciLocal = OpCode.NENHUM;
 
         /// <summary>
         /// Verifica se a lista contem o codigointerpretavel do parametro
         /// </summary>
         /// <param name="value">codigo interpretavel a ser verificado na lista</param>
         /// <returns>true - codigo encontrado na lista / false - codigno nao encontrado na lista</returns>
-        public bool Contains(CodigosInterpretaveis value)
+        public bool Contains(OpCode value)
         {
             ciLocal = value;
             bool _bResult = this.Exists(ProcuraCodigoInterpretavel);
-            ciLocal = CodigosInterpretaveis.NENHUM;
+            ciLocal = OpCode.NENHUM;
             return _bResult;
         }
 
@@ -41,7 +41,7 @@ namespace LadderApp
         {
             foreach (Symbol _sb in this)
             {
-                if (_sb.getCI() == CodigosInterpretaveis.TEMPORIZADOR)
+                if (_sb.getCI() == OpCode.TEMPORIZADOR)
                 {
                     if (lstTemporizadoresUtilizados.Contains((Address)_sb.getOperandos(0)))
                         return false;
@@ -56,7 +56,7 @@ namespace LadderApp
         {
             foreach (Symbol _sb in this)
             {
-                if (_sb.getCI() == CodigosInterpretaveis.CONTADOR)
+                if (_sb.getCI() == OpCode.CONTADOR)
                 {
                     if (lstContadoresUtilizados.Contains((Address)_sb.getOperandos(0)))
                         return false;
@@ -98,12 +98,12 @@ namespace LadderApp
         /// <param name="_lstSB">Lista de entrada com os CodigosInterpretaveis que serao
         /// inseridos no objeto</param>
         /// <returns>objeto atual</returns>
-        public SymbolList InsertAllWithClearBefore(CodigosInterpretaveis [] _arrayCI)
+        public SymbolList InsertAllWithClearBefore(OpCode [] _arrayCI)
         {
             this.Clear();
 
             if (_arrayCI.Length > 0)
-                foreach (CodigosInterpretaveis _cadaCI in _arrayCI)
+                foreach (OpCode _cadaCI in _arrayCI)
                     this.Add(new Symbol(_cadaCI));
 
             return this;
@@ -114,7 +114,7 @@ namespace LadderApp
         {
             for(int i = (this.Count - 1); i >= 0; i--)
             {
-                this.Insert(i, new Symbol(CodigosInterpretaveis.PARALELO_PROXIMO));
+                this.Insert(i, new Symbol(OpCode.PARALELO_PROXIMO));
             }
         }
 
@@ -126,14 +126,14 @@ namespace LadderApp
             switch (_tIP)
             {
                 case TipoInsercaoParalelo.PARALELO_INICIADO:
-                    this[0].setCI(CodigosInterpretaveis.PARALELO_INICIAL);
+                    this[0].setCI(OpCode.PARALELO_INICIAL);
                     break;
                 case TipoInsercaoParalelo.PARALELO_FINALIZADO:
-                    this.Add(new Symbol(CodigosInterpretaveis.PARALELO_FINAL));
+                    this.Add(new Symbol(OpCode.PARALELO_FINAL));
                     break;
                 case TipoInsercaoParalelo.PARALELO_COMPLETO:
-                    this[0].setCI(CodigosInterpretaveis.PARALELO_INICIAL);
-                    this.Add(new Symbol(CodigosInterpretaveis.PARALELO_FINAL));
+                    this[0].setCI(OpCode.PARALELO_INICIAL);
+                    this.Add(new Symbol(OpCode.PARALELO_FINAL));
                     break;
             }
         }
