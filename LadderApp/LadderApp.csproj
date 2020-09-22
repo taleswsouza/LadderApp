@@ -62,145 +62,143 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodigoInterpretavel\CodigoInterpretavel.cs" />
-    <Compile Include="CodigoInterpretavel\Txt2CodigosInterpretaveis.cs" />
-    <Compile Include="Controles\ControleLivre.cs">
+    <Compile Include="OperationCode\OpCode.cs" />
+    <Compile Include="Services\Text2OpCodeServices.cs" />
+    <Compile Include="Resources\MicrocontrollersBaseCodeFilesResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MicrocontrollersBaseCodeFilesResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FreeUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controles\ControleLivre.Designer.cs">
-      <DependentUpon>ControleLivre.cs</DependentUpon>
+    <Compile Include="UserControls\FreeUserControl.Designer.cs">
+      <DependentUpon>FreeUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Excecoes\CouldNotInitializeTIUSBException.cs" />
-    <Compile Include="Excecoes\NaoECodigoInterpretavelException.cs" />
-    <Compile Include="Formularios\frmAlteraComentario.cs">
+    <Compile Include="Exceptions\CouldNotInitializeTIUSBException.cs" />
+    <Compile Include="Exceptions\NaoECodigoInterpretavelException.cs" />
+    <Compile Include="Forms\ChangeCommentForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\frmAlteraComentario.Designer.cs">
-      <DependentUpon>frmAlteraComentario.cs</DependentUpon>
+    <Compile Include="Forms\ChangeCommentForm.Designer.cs">
+      <DependentUpon>ChangeCommentForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\frmSenha.cs">
+    <Compile Include="Forms\PasswordForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\frmSenha.Designer.cs">
-      <DependentUpon>frmSenha.cs</DependentUpon>
+    <Compile Include="Forms\PasswordForm.Designer.cs">
+      <DependentUpon>PasswordForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\frmSobre.cs">
+    <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\frmSobre.Designer.cs">
-      <DependentUpon>frmSobre.cs</DependentUpon>
+    <Compile Include="Forms\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\AlteraTemporizadorContador.cs">
+    <Compile Include="Forms\ChangeTimerCounterParametersForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\AlteraTemporizadorContador.Designer.cs">
-      <DependentUpon>AlteraTemporizadorContador.cs</DependentUpon>
+    <Compile Include="Forms\ChangeTimerCounterParametersForm.Designer.cs">
+      <DependentUpon>ChangeTimerCounterParametersForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\DiagramaLadder.cs">
+    <Compile Include="Forms\LadderForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\DiagramaLadder.Designer.cs">
-      <DependentUpon>DiagramaLadder.cs</DependentUpon>
+    <Compile Include="Forms\LadderForm.Designer.cs">
+      <DependentUpon>LadderForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="DispositivoLadder.cs" />
-    <Compile Include="Formularios\EditorLadder.cs">
+    <Compile Include="Model\Device.cs" />
+    <Compile Include="Forms\MainWindowForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\EditorLadder.Designer.cs">
-      <DependentUpon>EditorLadder.cs</DependentUpon>
+    <Compile Include="Forms\MainWindowForm.Designer.cs">
+      <DependentUpon>MainWindowForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EnderecamentoLadder.cs" />
-    <Compile Include="EnderecamentoPrograma.cs" />
-    <Compile Include="Formularios\frmDispositivo.cs">
+    <Compile Include="Model\Address.cs" />
+    <Compile Include="Model\Addressing.cs" />
+    <Compile Include="Forms\DeviceForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\frmDispositivo.Designer.cs">
-      <DependentUpon>frmDispositivo.cs</DependentUpon>
+    <Compile Include="Forms\DeviceForm.Designer.cs">
+      <DependentUpon>DeviceForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\Memoria.cs">
+    <Compile Include="Forms\AddressingForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\Memoria.Designer.cs">
-      <DependentUpon>Memoria.cs</DependentUpon>
+    <Compile Include="Forms\AddressingForm.Designer.cs">
+      <DependentUpon>AddressingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IOperando.cs" />
-    <Compile Include="ISimbolo.cs" />
-    <Compile Include="LinhaCompleta.cs" />
-    <Compile Include="ListaSimbolo.cs" />
-    <Compile Include="ManipulaLinha.cs" />
-    <Compile Include="PinosDispositivo.cs" />
-    <Compile Include="LinhaCompletaVisual.cs">
+    <Compile Include="Model\IOperand.cs" />
+    <Compile Include="Model\ISymbol.cs" />
+    <Compile Include="Model\Line.cs" />
+    <Compile Include="Model\SymbolList.cs" />
+    <Compile Include="Services\ManipulateLineServices.cs" />
+    <Compile Include="Model\Pin.cs" />
+    <Compile Include="VisualComponents\VisualLine.cs">
     </Compile>
-    <Compile Include="LinhaCompletaVisual.Designer.cs">
-      <DependentUpon>LinhaCompletaVisual.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ModuloIntegracaoMSP430.cs" />
+    <Compile Include="Services\MSP430IntegrationServices.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProgramaBasico.cs" />
-    <Compile Include="ProgramaVisual.cs" />
+    <Compile Include="Model\LadderProgram.cs" />
+    <Compile Include="VisualComponents\VisualProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Controles\ControleBasico.resx">
+    <EmbeddedResource Include="UserControls\BasicUserControl.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>ControleBasico.cs</DependentUpon>
+      <DependentUpon>BasicUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controles\ControleLivre.resx">
+    <EmbeddedResource Include="UserControls\FreeUserControl.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>ControleLivre.cs</DependentUpon>
+      <DependentUpon>FreeUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\frmAlteraComentario.resx">
+    <EmbeddedResource Include="Forms\ChangeCommentForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>frmAlteraComentario.cs</DependentUpon>
+      <DependentUpon>ChangeCommentForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\frmSenha.resx">
+    <EmbeddedResource Include="Forms\PasswordForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>frmSenha.cs</DependentUpon>
+      <DependentUpon>PasswordForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\frmSobre.resx">
+    <EmbeddedResource Include="Forms\AboutForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>frmSobre.cs</DependentUpon>
+      <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\AlteraTemporizadorContador.resx">
+    <EmbeddedResource Include="Forms\ChangeTimerCounterParametersForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>AlteraTemporizadorContador.cs</DependentUpon>
+      <DependentUpon>ChangeTimerCounterParametersForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\DiagramaLadder.resx">
+    <EmbeddedResource Include="Forms\LadderForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>DiagramaLadder.cs</DependentUpon>
+      <DependentUpon>LadderForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\EditorLadder.resx">
+    <EmbeddedResource Include="Forms\MainWindowForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>EditorLadder.cs</DependentUpon>
+      <DependentUpon>MainWindowForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\frmDispositivo.resx">
+    <EmbeddedResource Include="Forms\DeviceForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>frmDispositivo.cs</DependentUpon>
+      <DependentUpon>DeviceForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\Memoria.resx">
+    <EmbeddedResource Include="Forms\AddressingForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>Memoria.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LinhaCompletaVisual.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>LinhaCompletaVisual.cs</DependentUpon>
+      <DependentUpon>AddressingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\ProjetoLadder.resx">
+    <EmbeddedResource Include="Forms\ProjectForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>ProjetoLadder.cs</DependentUpon>
+      <DependentUpon>ProjectForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RecursoVisual.resx">
+    <EmbeddedResource Include="Resources\VisualResources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>RecursoVisual.Designer.cs</LastGenOutput>
+      <LastGenOutput>VisualResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArquivosFontesC.resx">
+    <EmbeddedResource Include="Resources\MicrocontrollersBaseCodeFilesResource.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ArquivosFontesC.Designer.cs</LastGenOutput>
+      <LastGenOutput>MicrocontrollersBaseCodeFilesResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -216,32 +214,27 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Formularios\ProjetoLadder.cs">
+    <Compile Include="Forms\ProjectForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\ProjetoLadder.Designer.cs">
-      <DependentUpon>ProjetoLadder.cs</DependentUpon>
+    <Compile Include="Forms\ProjectForm.Designer.cs">
+      <DependentUpon>ProjectForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controles\ControleBasico.cs">
+    <Compile Include="UserControls\BasicUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="RecursoVisual.Designer.cs">
+    <Compile Include="Resources\VisualResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RecursoVisual.resx</DependentUpon>
+      <DependentUpon>VisualResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ArquivosFontesC.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ArquivosFontesC.resx</DependentUpon>
-    </Compile>
-    <Compile Include="SimboloBasico.cs" />
-    <Compile Include="SimulaContador.cs" />
-    <Compile Include="SimulaTemporizador.cs" />
-    <Compile Include="SuporteParalelo.cs" />
-    <Compile Include="TipoEnderecamentoDispositivo.cs" />
-    <Compile Include="TiposPinosDispositivo.cs" />
-    <Compile Include="CodigoInterpretavel\CodigosInterpretaveis2Txt.cs" />
+    <Compile Include="Model\Symbol.cs" />
+    <Compile Include="Model\Counter.cs" />
+    <Compile Include="Model\Timer.cs" />
+    <Compile Include="VisualComponents\VisualParallelBranch.cs" />
+    <Compile Include="Model\AddressTypeEnum.cs" />
+    <Compile Include="Model\PinTypeEnum.cs" />
+    <Compile Include="Services\OpCode2TextServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\usuario.h" />
@@ -302,6 +295,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
