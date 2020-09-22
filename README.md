@@ -41,4 +41,4 @@ I has many ideas for this project, and some of them are:
 - Convert the project to a web SAAS 
 - Intenacionalization
 
-![LadderApp screen with an open program] (images / tela-ladderapp.PNG)
+![LadderApp screen with an open program](images/tela-ladderapp.PNG)
