@@ -119,13 +119,13 @@ namespace LadderApp
             Insert((Int32)_ci);
         }
 
-        private void Add(EnderecamentoLadder _end)
+        private void Add(Address _end)
         {
             Add((int)_end.TpEnderecamento);
             Add((int)_end.Indice);
         }
 
-        public void Add(SimboloBasico _sb)
+        public void Add(Symbol _sb)
         {
             Add(_sb.getCI());
 
@@ -135,11 +135,11 @@ namespace LadderApp
                     if (_sb.iNumOperandos > 0)
                     {
                         if (_sb.getOperandos(0) != null)
-                            if (_sb.getOperandos(0).GetType().Name == EnderecamentoLadder.ClassName())
+                            if (_sb.getOperandos(0).GetType().Name == Address.ClassName())
                             {
-                                Add(((EnderecamentoLadder)_sb.getOperandos(0)).Indice);
-                                Add(((EnderecamentoLadder)_sb.getOperandos(0)).Contador.Tipo);
-                                Add(((EnderecamentoLadder)_sb.getOperandos(0)).Contador.Preset);
+                                Add(((Address)_sb.getOperandos(0)).Indice);
+                                Add(((Address)_sb.getOperandos(0)).Contador.Tipo);
+                                Add(((Address)_sb.getOperandos(0)).Contador.Preset);
                             }
                     }
                     break;
@@ -147,12 +147,12 @@ namespace LadderApp
                     if (_sb.iNumOperandos > 0)
                     {
                         if (_sb.getOperandos(0) != null)
-                            if (_sb.getOperandos(0).GetType().Name == EnderecamentoLadder.ClassName())
+                            if (_sb.getOperandos(0).GetType().Name == Address.ClassName())
                             {
-                                Add(((EnderecamentoLadder)_sb.getOperandos(0)).Indice);
-                                Add(((EnderecamentoLadder)_sb.getOperandos(0)).Temporizador.Tipo);
-                                Add(((EnderecamentoLadder)_sb.getOperandos(0)).Temporizador.BaseTempo);
-                                Add(((EnderecamentoLadder)_sb.getOperandos(0)).Temporizador.Preset);
+                                Add(((Address)_sb.getOperandos(0)).Indice);
+                                Add(((Address)_sb.getOperandos(0)).Temporizador.Tipo);
+                                Add(((Address)_sb.getOperandos(0)).Temporizador.BaseTempo);
+                                Add(((Address)_sb.getOperandos(0)).Temporizador.Preset);
                             }
                     }
                     break;
@@ -162,8 +162,8 @@ namespace LadderApp
                         for (int i = 0; i < _sb.iNumOperandos; i++)
                         {
                             if (_sb.getOperandos(i) != null)
-                                if (_sb.getOperandos(i).GetType().Name == EnderecamentoLadder.ClassName())
-                                    Add((EnderecamentoLadder)_sb.getOperandos(i));
+                                if (_sb.getOperandos(i).GetType().Name == Address.ClassName())
+                                    Add((Address)_sb.getOperandos(i));
                         }
                     }
                     break;

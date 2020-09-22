@@ -8,7 +8,7 @@ namespace LadderApp
 {
     public class ControleBasico : UserControl, ISymbol
     {
-        protected SimboloBasico codigoInterpretavel = null;
+        protected Symbol codigoInterpretavel = null;
 
         public bool selecionado = false;
 

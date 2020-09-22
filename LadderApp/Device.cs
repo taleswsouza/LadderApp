@@ -73,7 +73,7 @@ namespace LadderApp
         [XmlElement(ElementName = "Bit")]
         public List<BitPortasDispositivo> lstBitPorta = new List<BitPortasDispositivo>();
         [XmlElement(ElementName = "EnderecoPinos")]
-        public List<EnderecamentoLadder> lstEndBitPorta = new List<EnderecamentoLadder>();
+        public List<Address> lstEndBitPorta = new List<Address>();
 
         public DispositivoLadder()
         {
@@ -108,7 +108,7 @@ namespace LadderApp
 
                 _tpPino = _pinoAux.TipoPino;
 
-                lstEndBitPorta.Add(new EnderecamentoLadder(_pinoAux.TipoDefinido, i, this));
+                lstEndBitPorta.Add(new Address(_pinoAux.TipoDefinido, i, this));
 
                 lstBitPorta.Add(_pinoAux);
             }

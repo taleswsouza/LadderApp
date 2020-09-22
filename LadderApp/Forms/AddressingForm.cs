@@ -15,7 +15,7 @@ namespace LadderApp
             InitializeComponent();
         }
 
-        public Memoria(EnderecamentoPrograma ep)
+        public Memoria(Addressing ep)
         {
             InitializeComponent();
 

@@ -7,17 +7,17 @@ using System.Xml.Serialization;
 
 namespace LadderApp
 {
-    [XmlInclude(typeof(EnderecamentoLadder))]
+    [XmlInclude(typeof(Address))]
     [Serializable]
-    public class EnderecamentoPrograma
+    public class Addressing
     {
-        public List<EnderecamentoLadder> lstMemoria = new List<EnderecamentoLadder>();
-        public List<EnderecamentoLadder> lstTemporizador = new List<EnderecamentoLadder>();
-        public List<EnderecamentoLadder> lstContador = new List<EnderecamentoLadder>();
-        public List<EnderecamentoLadder> lstIOEntrada = new List<EnderecamentoLadder>();
-        public List<EnderecamentoLadder> lstIOSaida = new List<EnderecamentoLadder>();
+        public List<Address> lstMemoria = new List<Address>();
+        public List<Address> lstTemporizador = new List<Address>();
+        public List<Address> lstContador = new List<Address>();
+        public List<Address> lstIOEntrada = new List<Address>();
+        public List<Address> lstIOSaida = new List<Address>();
 
-        public EnderecamentoPrograma()
+        public Addressing()
         {
         }
 
@@ -28,14 +28,14 @@ namespace LadderApp
         /// <param name="_end">Endereco a ser buscado na lista de enderecos da classe</param>
         /// <returns>Caso encontre o endereco em uma das listas retorna o
         /// endereco das listas encontrado. caso contrario retorna null</returns>
-        public EnderecamentoLadder Find(EnderecamentoLadder _end)
+        public Address Find(Address _end)
         {
             return Find(_end.TpEnderecamento, _end.Indice);
         }
 
-        public EnderecamentoLadder Find(TipoEnderecamentoDispositivo tpEnderecamento, Int32 indice)
+        public Address Find(TipoEnderecamentoDispositivo tpEnderecamento, Int32 indice)
         {
-            List<EnderecamentoLadder> _lstGenerica;
+            List<Address> _lstGenerica;
             switch (tpEnderecamento)
             {
                 case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
@@ -57,7 +57,7 @@ namespace LadderApp
                     return null;
             }
 
-            foreach (EnderecamentoLadder _endCada in _lstGenerica)
+            foreach (Address _endCada in _lstGenerica)
             {
                 if (_endCada.TpEnderecamento == tpEnderecamento &&
                     _endCada.Indice == indice)
@@ -70,11 +70,11 @@ namespace LadderApp
         }
 
 
-        public List<EnderecamentoLadder> ListaNomes(CodigosInterpretaveis _ci)
+        public List<Address> ListaNomes(CodigosInterpretaveis _ci)
         {
-            List<EnderecamentoLadder> _listaEnderecos = new List<EnderecamentoLadder>();
+            List<Address> _listaEnderecos = new List<Address>();
             List<TipoEnderecamentoDispositivo> tiposListados = new List<TipoEnderecamentoDispositivo>();
-            List<EnderecamentoLadder> _lstGenerica;
+            List<Address> _lstGenerica;
 
             switch(_ci)
             {
@@ -120,7 +120,7 @@ namespace LadderApp
                         return null;
                 }
 
-                foreach (EnderecamentoLadder _endCada in _lstGenerica)
+                foreach (Address _endCada in _lstGenerica)
                     _listaEnderecos.Add(_endCada);
             }
 
@@ -129,7 +129,7 @@ namespace LadderApp
 
         public void LimpaIndicacaoEmUso()
         {
-            List<EnderecamentoLadder> _lstGenerica;
+            List<Address> _lstGenerica;
             List<TipoEnderecamentoDispositivo> _lstTpEnd = new List<TipoEnderecamentoDispositivo>();
 
             _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA);
@@ -162,16 +162,16 @@ namespace LadderApp
                         return;
                 }
 
-                foreach (EnderecamentoLadder _endCada in _lstGenerica)
+                foreach (Address _endCada in _lstGenerica)
                     _endCada.EmUso = false;
             }
         }
 
-        public List<EnderecamentoLadder> ListaEnderecamentosEmUso()
+        public List<Address> ListaEnderecamentosEmUso()
         {
-            List<EnderecamentoLadder> _lstGenerica;
+            List<Address> _lstGenerica;
             List<TipoEnderecamentoDispositivo> _lstTpEnd = new List<TipoEnderecamentoDispositivo>();
-            List<EnderecamentoLadder> _lstResult = new List<EnderecamentoLadder>();
+            List<Address> _lstResult = new List<Address>();
 
             _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA);
             _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR);
@@ -203,7 +203,7 @@ namespace LadderApp
                         return _lstResult;
                 }
 
-                foreach (EnderecamentoLadder _endCada in _lstGenerica)
+                foreach (Address _endCada in _lstGenerica)
                     if (_endCada.EmUso == true)
                         _lstResult.Add(_endCada);
             }
@@ -211,12 +211,12 @@ namespace LadderApp
             return _lstResult;
         }
 
-        public void AlocaEnderecamentoIO(DispositivoLadder dispositivo)
+        public void AlocaEnderecamentoIO(Device dispositivo)
         {
             /// Atalho para o No de enderecamento
             this.lstIOEntrada.Clear();
             this.lstIOSaida.Clear();
-            foreach (EnderecamentoLadder el in dispositivo.lstEndBitPorta)
+            foreach (Address el in dispositivo.lstEndBitPorta)
             {
                 el.ApontaDispositivo(dispositivo);
                 switch (el.TpEnderecamento)
@@ -239,7 +239,7 @@ namespace LadderApp
         /// <param name="e">Enderecamento do programa</param>
         /// <param name="tp">tipo de memoria a ser realocada</param>
         /// <param name="qtdEnd">Quantidade do tipo desejada</param>
-        public int AlocaEnderecamentoMemoria(DispositivoLadder dispositivo, List<EnderecamentoLadder> _lstE, TipoEnderecamentoDispositivo tp, int qtdEnd)
+        public int AlocaEnderecamentoMemoria(Device dispositivo, List<Address> _lstE, TipoEnderecamentoDispositivo tp, int qtdEnd)
         {
             int _qtdAtual = 1;
 
@@ -247,7 +247,7 @@ namespace LadderApp
             if ((_qtdAtual == 0) || (_qtdAtual < qtdEnd))
             {
                 for (int i = _qtdAtual + 1; i <= qtdEnd; i++)
-                    _lstE.Add(new EnderecamentoLadder(tp, i, dispositivo));
+                    _lstE.Add(new Address(tp, i, dispositivo));
             }
             else if (_qtdAtual > qtdEnd)
             {

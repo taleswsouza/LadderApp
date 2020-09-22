@@ -11,7 +11,7 @@ using System.ComponentModel;
 using LadderApp.Formularios;
 namespace LadderApp
 {
-    [XmlInclude(typeof(EnderecamentoPrograma))]
+    [XmlInclude(typeof(Addressing))]
     [Serializable]
 
     public class ProgramaBasico
@@ -60,20 +60,20 @@ namespace LadderApp
         {
         }
 
-        public EnderecamentoPrograma endereco = new EnderecamentoPrograma();
+        public Addressing endereco = new Addressing();
 
-        public DispositivoLadder dispositivo = null;
+        public Device dispositivo = null;
 
-        private List<LinhaCompleta> linhasPrograma = new List<LinhaCompleta>();
-        public List<LinhaCompleta> linhas
+        private List<Line> linhasPrograma = new List<Line>();
+        public List<Line> linhas
         {
             get { return linhasPrograma; }
         }
 
         [XmlIgnore]
-        public List<EnderecamentoLadder> lstTemporizadoresUtilizados = new List<EnderecamentoLadder>();
+        public List<Address> lstTemporizadoresUtilizados = new List<Address>();
         [XmlIgnore]
-        public List<EnderecamentoLadder> lstContadoresUtilizados = new List<EnderecamentoLadder>();
+        public List<Address> lstContadoresUtilizados = new List<Address>();
 
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace LadderApp
         /// </summary>
         /// <param name="_lc">nova linha a ser inserida</param>
         /// <returns>indice da linha inserida</returns>
-        public int InsereLinhaNoFinal(LinhaCompleta _lc)
+        public int InsereLinhaNoFinal(Line _lc)
         {
             linhasPrograma.Add(_lc);
             return (linhasPrograma.Count - 1);
@@ -92,12 +92,12 @@ namespace LadderApp
         /// </summary>
         /// <param name="_lc">nova linha a ser inserida</param>
         /// <returns></returns>
-        public int InsereLinhaNoInicio(LinhaCompleta _lc)
+        public int InsereLinhaNoInicio(Line _lc)
         {
             return InsereLinhaNoIndice(0, _lc);
         }
 
-        public int InsereLinhaNoIndice(int linha, LinhaCompleta _lc)
+        public int InsereLinhaNoIndice(int linha, Line _lc)
         {
             if (linha > linhasPrograma.Count)
                 linha = linhasPrograma.Count;
@@ -125,7 +125,7 @@ namespace LadderApp
             Int32 _intPresetParcial = -1;
 
             /// executa a rotina para cada temporizador
-            foreach (EnderecamentoLadder _tmp in endereco.lstTemporizador)
+            foreach (Address _tmp in endereco.lstTemporizador)
             {
                 if (_tmp.Temporizador.Reset == true)
                 {
@@ -231,10 +231,10 @@ namespace LadderApp
         }
 
         [XmlIgnore]
-        public EnderecamentoLadder auxToggleBitPulse = null;
+        public Address auxToggleBitPulse = null;
 
 
-        public void ExecutaSimuladoContadores(SimboloBasico _sb, EnderecamentoLadder _endContador)
+        public void ExecutaSimuladoContadores(Symbol _sb, Address _endContador)
         {
 
             switch (_endContador.Contador.Tipo)
@@ -300,11 +300,11 @@ namespace LadderApp
             Boolean bAuxValor = false;
             List<SuporteConjunto> op = new List<SuporteConjunto>();
 
-            foreach (LinhaCompleta _lc in this.linhasPrograma)
+            foreach (Line _lc in this.linhasPrograma)
             {
                 /// cria a linha
                 op.Add(new SuporteConjunto());
-                foreach (SimboloBasico _sb in _lc.simbolos)
+                foreach (Symbol _sb in _lc.simbolos)
                 {
                     switch (_sb.getCI())
                     {
@@ -358,10 +358,10 @@ namespace LadderApp
                             switch (_sb.getCI())
                             {
                                 case CodigosInterpretaveis.CONTATO_NA:
-                                    bAuxValor = ((EnderecamentoLadder)_sb.getOperandos(0)).Valor;
+                                    bAuxValor = ((Address)_sb.getOperandos(0)).Valor;
                                     break;
                                 case CodigosInterpretaveis.CONTATO_NF:
-                                    bAuxValor = !((EnderecamentoLadder)_sb.getOperandos(0)).Valor;
+                                    bAuxValor = !((Address)_sb.getOperandos(0)).Valor;
                                     break;
                             }
 
@@ -376,7 +376,7 @@ namespace LadderApp
                 }
 
                 /// atribui o resultado final da linha nas saidas
-                foreach (SimboloBasico _sb in _lc.saida)
+                foreach (Symbol _sb in _lc.saida)
                 {
                     switch (_sb.getCI())
                     {
@@ -386,29 +386,29 @@ namespace LadderApp
                         case CodigosInterpretaveis.RESET:
 
                             if (_sb.getCI() == CodigosInterpretaveis.BOBINA_SAIDA)
-                                ((EnderecamentoLadder)_sb.getOperandos(0)).Valor = (bool)op[op.Count - 1].valor;
+                                ((Address)_sb.getOperandos(0)).Valor = (bool)op[op.Count - 1].valor;
                             else if (_sb.getCI() == CodigosInterpretaveis.TEMPORIZADOR)
                             {
-                                ((EnderecamentoLadder)_sb.getOperandos(0)).Temporizador.EN = (bool)op[op.Count - 1].valor;
+                                ((Address)_sb.getOperandos(0)).Temporizador.EN = (bool)op[op.Count - 1].valor;
                             }
                             else if (_sb.getCI() == CodigosInterpretaveis.CONTADOR)
                             {
-                                ((EnderecamentoLadder)_sb.getOperandos(0)).Contador.EN = (bool)op[op.Count - 1].valor;
-                                ExecutaSimuladoContadores(_sb, ((EnderecamentoLadder)_sb.getOperandos(0)));
+                                ((Address)_sb.getOperandos(0)).Contador.EN = (bool)op[op.Count - 1].valor;
+                                ExecutaSimuladoContadores(_sb, ((Address)_sb.getOperandos(0)));
                             }
                             else if (_sb.getCI() == CodigosInterpretaveis.RESET)
                             {
                                 if ((bool)op[op.Count - 1].valor)
                                 {
-                                    switch (((EnderecamentoLadder)_sb.getOperandos(0)).TpEnderecamento)
+                                    switch (((Address)_sb.getOperandos(0)).TpEnderecamento)
                                     {
                                         case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
-                                            ((EnderecamentoLadder)_sb.getOperandos(0)).Contador.Reset = true;
-                                            ExecutaSimuladoContadores(_sb, ((EnderecamentoLadder)_sb.getOperandos(0)));
+                                            ((Address)_sb.getOperandos(0)).Contador.Reset = true;
+                                            ExecutaSimuladoContadores(_sb, ((Address)_sb.getOperandos(0)));
                                             break;
 
                                         case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
-                                            ((EnderecamentoLadder)_sb.getOperandos(0)).Temporizador.Reset = true;
+                                            ((Address)_sb.getOperandos(0)).Temporizador.Reset = true;
                                             break;
 
                                         default:
@@ -524,10 +524,10 @@ namespace LadderApp
             doc += linha;
 
 
-            foreach (LinhaCompleta _lc in this.linhasPrograma)
+            foreach (Line _lc in this.linhasPrograma)
             {
                 linha = "";
-                foreach(SimboloBasico _sb in _lc.simbolos)
+                foreach(Symbol _sb in _lc.simbolos)
                 {
                     switch (_sb.getCI())
                     {
@@ -551,12 +551,12 @@ namespace LadderApp
                             switch(_sb.getCI())
                             {
                                 case CodigosInterpretaveis.CONTATO_NA:
-                                    linha += ((EnderecamentoLadder)_sb.getOperandos(0)).Acesso;
-                                    ((EnderecamentoLadder)_sb.getOperandos(0)).EmUso = true;
+                                    linha += ((Address)_sb.getOperandos(0)).Acesso;
+                                    ((Address)_sb.getOperandos(0)).EmUso = true;
                                     break;
                                 case CodigosInterpretaveis.CONTATO_NF:
-                                    linha += "!" + ((EnderecamentoLadder)_sb.getOperandos(0)).Acesso;
-                                    ((EnderecamentoLadder)_sb.getOperandos(0)).EmUso = true;
+                                    linha += "!" + ((Address)_sb.getOperandos(0)).Acesso;
+                                    ((Address)_sb.getOperandos(0)).EmUso = true;
                                     break;
                             }
                             bIniciado = true;
@@ -576,7 +576,7 @@ namespace LadderApp
 
                 OperandosLinha.Clear();
                 OperandosSELinha.Clear();
-                foreach (SimboloBasico _sb in _lc.saida)
+                foreach (Symbol _sb in _lc.saida)
                 {
                     switch (_sb.getCI())
                     {
@@ -588,29 +588,29 @@ namespace LadderApp
 
                             if (_sb.getCI() == CodigosInterpretaveis.BOBINA_SAIDA)
                             {
-                                OperandosLinha.Add(((EnderecamentoLadder)_sb.getOperandos(0)).Acesso);
-                                ((EnderecamentoLadder)_sb.getOperandos(0)).EmUso = true;
+                                OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso);
+                                ((Address)_sb.getOperandos(0)).EmUso = true;
                             }
                             else if (_sb.getCI() == CodigosInterpretaveis.TEMPORIZADOR)
                             {
-                                OperandosLinha.Add(((EnderecamentoLadder)_sb.getOperandos(0)).Acesso2);
-                                ((EnderecamentoLadder)_sb.getOperandos(0)).EmUso = true;
+                                OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso2);
+                                ((Address)_sb.getOperandos(0)).EmUso = true;
                             }
                             else if (_sb.getCI() == CodigosInterpretaveis.CONTADOR)
                             {
-                                OperandosLinha.Add(((EnderecamentoLadder)_sb.getOperandos(0)).Acesso2);
-                                FuncoesAposLinha += " ExecContador(&" + ((EnderecamentoLadder)_sb.getOperandos(0)).Nome + ");";
-                                ((EnderecamentoLadder)_sb.getOperandos(0)).EmUso = true;
+                                OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso2);
+                                FuncoesAposLinha += " ExecContador(&" + ((Address)_sb.getOperandos(0)).Nome + ");";
+                                ((Address)_sb.getOperandos(0)).EmUso = true;
                             }
                             else if (_sb.getCI() == CodigosInterpretaveis.RESET)
                             {
-                                OperandosSELinha.Add(((EnderecamentoLadder)_sb.getOperandos(0)).Nome + ".Reset = 1;");
-                                ((EnderecamentoLadder)_sb.getOperandos(0)).EmUso = true;
+                                OperandosSELinha.Add(((Address)_sb.getOperandos(0)).Nome + ".Reset = 1;");
+                                ((Address)_sb.getOperandos(0)).EmUso = true;
 
-                                switch (((EnderecamentoLadder)_sb.getOperandos(0)).TpEnderecamento)
+                                switch (((Address)_sb.getOperandos(0)).TpEnderecamento)
                                 {
                                     case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
-                                        OperandosSELinha.Add("ExecContador(&" + ((EnderecamentoLadder)_sb.getOperandos(0)).Nome + ");");
+                                        OperandosSELinha.Add("ExecContador(&" + ((Address)_sb.getOperandos(0)).Nome + ");");
                                         break;
                                     default:
                                         break;
@@ -692,7 +692,7 @@ namespace LadderApp
 
                 /// 1. prepara a configuração para as portas de entrada.
                 /// 2. levantamento das portas que foram usadas no programa
-                foreach (EnderecamentoLadder _endCada in endereco.lstIOEntrada)
+                foreach (Address _endCada in endereco.lstIOEntrada)
                     if (_endCada.Parametro != "" && _endCada.EmUso == true)
                     {
                         bIndicaEntradaUsadaNoPrograma = true;
@@ -707,7 +707,7 @@ namespace LadderApp
 
                 /// 1. prepara a configuração para as portas de saida.
                 /// 2. levantamento das portas que foram usadas no programa
-                foreach (EnderecamentoLadder _endCada in endereco.lstIOSaida)
+                foreach (Address _endCada in endereco.lstIOSaida)
                     if (_endCada.Parametro != "" && _endCada.EmUso == true)
                     {
                         bIndicaSaidaUsadaNoPrograma = true;
@@ -748,7 +748,7 @@ namespace LadderApp
                 }
 
                     /// prepara composição de parametros e declaração de variáveis
-                    foreach (EnderecamentoLadder _endCada in endereco.lstMemoria)
+                    foreach (Address _endCada in endereco.lstMemoria)
                         if (_endCada.EmUso)
                         {
                             /// prerapara a declaração dos endereços
@@ -768,7 +768,7 @@ namespace LadderApp
                 
                 /// Adiciona os parametros dos endereços usados no programa
                 DadosParametros += "// timer parameters" + Environment.NewLine;
-                foreach (EnderecamentoLadder _endCada in endereco.lstTemporizador)
+                foreach (Address _endCada in endereco.lstTemporizador)
                 {
                     if (_endCada.EmUso)
                     {
@@ -804,7 +804,7 @@ namespace LadderApp
 
 
                 /// Adiciona os parametros dos endereços usados no programa
-                foreach (EnderecamentoLadder _endCada in endereco.lstContador)
+                foreach (Address _endCada in endereco.lstContador)
                 {
                     if (_endCada.EmUso)
                     {
@@ -997,7 +997,7 @@ namespace LadderApp
             lstTemporizadoresUtilizados.Clear();
 
             /// Verifica cada linha de forma independente
-            foreach (LinhaCompleta _lc in this.linhasPrograma)
+            foreach (Line _lc in this.linhasPrograma)
             {
                 if (!this.VerificaLinha(_lc))
                     _bResult = false;
@@ -1006,7 +1006,7 @@ namespace LadderApp
             return _bResult;
         }
 
-        private bool VerificaLinha(LinhaCompleta _linha)
+        private bool VerificaLinha(Line _linha)
         {
             ListaSimbolo _lst = new ListaSimbolo();
 
@@ -1055,9 +1055,9 @@ namespace LadderApp
         // Reindexa endrereços da logica ladder
         public bool ReindexaEnderecos()
         {
-            foreach (LinhaCompleta _lc in this.linhasPrograma)
+            foreach (Line _lc in this.linhasPrograma)
             {
-                foreach (SimboloBasico _sb in _lc.simbolos)
+                foreach (Symbol _sb in _lc.simbolos)
                 {
                     switch (_sb.getCI())
                     {
@@ -1069,11 +1069,11 @@ namespace LadderApp
                         case CodigosInterpretaveis.PARALELO_PROXIMO:
                             break;
                         default:
-                            _sb.setOperando(0, endereco.Find((EnderecamentoLadder)_sb.getOperandos(0)));
+                            _sb.setOperando(0, endereco.Find((Address)_sb.getOperandos(0)));
                             break;
                     }
                 }
-                foreach (SimboloBasico _sb in _lc.saida)
+                foreach (Symbol _sb in _lc.saida)
                 {
                     switch (_sb.getCI())
                     {
@@ -1085,22 +1085,22 @@ namespace LadderApp
                         case CodigosInterpretaveis.PARALELO_PROXIMO:
                             break;
                         default:
-                            _sb.setOperando(0, endereco.Find((EnderecamentoLadder)_sb.getOperandos(0)));
+                            _sb.setOperando(0, endereco.Find((Address)_sb.getOperandos(0)));
 
                             if (_sb.getOperandos(0) != null)
                             {
                                 if (_sb.getCI() == CodigosInterpretaveis.CONTADOR)
                                 {
-                                    ((EnderecamentoLadder)_sb.getOperandos(0)).Contador.Tipo = (Int32)_sb.getOperandos(1);
-                                    ((EnderecamentoLadder)_sb.getOperandos(0)).Contador.Preset = (Int32)_sb.getOperandos(2);
-                                    ((EnderecamentoLadder)_sb.getOperandos(0)).Contador.Acumulado = (Int32)_sb.getOperandos(3);
+                                    ((Address)_sb.getOperandos(0)).Contador.Tipo = (Int32)_sb.getOperandos(1);
+                                    ((Address)_sb.getOperandos(0)).Contador.Preset = (Int32)_sb.getOperandos(2);
+                                    ((Address)_sb.getOperandos(0)).Contador.Acumulado = (Int32)_sb.getOperandos(3);
                                 }
                                 else if (_sb.getCI() == CodigosInterpretaveis.TEMPORIZADOR)
                                 {
-                                    ((EnderecamentoLadder)_sb.getOperandos(0)).Temporizador.Tipo = (Int32)_sb.getOperandos(1);
-                                    ((EnderecamentoLadder)_sb.getOperandos(0)).Temporizador.Preset = (Int32)_sb.getOperandos(2);
-                                    ((EnderecamentoLadder)_sb.getOperandos(0)).Temporizador.Acumulado = (Int32)_sb.getOperandos(3);
-                                    ((EnderecamentoLadder)_sb.getOperandos(0)).Temporizador.BaseTempo = (Int32)_sb.getOperandos(4);
+                                    ((Address)_sb.getOperandos(0)).Temporizador.Tipo = (Int32)_sb.getOperandos(1);
+                                    ((Address)_sb.getOperandos(0)).Temporizador.Preset = (Int32)_sb.getOperandos(2);
+                                    ((Address)_sb.getOperandos(0)).Temporizador.Acumulado = (Int32)_sb.getOperandos(3);
+                                    ((Address)_sb.getOperandos(0)).Temporizador.BaseTempo = (Int32)_sb.getOperandos(4);
                                 }
                             }
                             break;

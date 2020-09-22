@@ -9,13 +9,13 @@ using System.Xml.Serialization;
 
 namespace LadderApp
 {
-    public partial class LinhaCompletaVisual
+    public partial class VisualLine
     {
-        public LinhaCompletaVisual()
+        public VisualLine()
         {
         }
 
-        public LinhaCompletaVisual(DiagramaLadder _frmDiag, LinhaCompleta _linhaBase)
+        public VisualLine(DiagramaLadder _frmDiag, Line _linhaBase)
         {
             frmDiag = _frmDiag;
             linhaBase = _linhaBase;
@@ -23,7 +23,7 @@ namespace LadderApp
             InicializaSimbolosFixosDaLinha();
         }
 
-        LinhaCompleta linhaBase = null;
+        Line linhaBase = null;
         
         /// <summary>
         /// Link para o formulario DiagramaLadder aonde sera
@@ -31,8 +31,8 @@ namespace LadderApp
         /// </summary>
         public DiagramaLadder frmDiag = null;
 
-        public LinhaCompletaVisual linhaAnterior = null;
-        public LinhaCompletaVisual linhaProxima = null;
+        public VisualLine linhaAnterior = null;
+        public VisualLine linhaProxima = null;
 
         /// <summary>
         /// objetos fixos na linha
@@ -517,7 +517,7 @@ namespace LadderApp
 
             _indiceSimbolo = VerificaPosicaoDeInserirSimbolo(_bApos, _controle, this.simbolos);
 
-            foreach (SimboloBasico _sb in _lstSB)
+            foreach (Symbol _sb in _lstSB)
             {
                 linhaBase.simbolos.Insert(_indiceSimbolo, _sb);
                 InsereSimboloUnicoVisual(_indiceSimbolo, this.simbolos, _sb);
@@ -559,19 +559,19 @@ namespace LadderApp
                         _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                         /// insere PP antes do objeto atual na linha
-                        linhaBase.saida.Insert(0, new SimboloBasico(CodigosInterpretaveis.PARALELO_PROXIMO));
-                        InsereSimboloUnicoVisual(0, this.saida, new SimboloBasico(CodigosInterpretaveis.PARALELO_PROXIMO));
+                        linhaBase.saida.Insert(0, new Symbol(CodigosInterpretaveis.PARALELO_PROXIMO));
+                        InsereSimboloUnicoVisual(0, this.saida, new Symbol(CodigosInterpretaveis.PARALELO_PROXIMO));
                         /// insere PF depois do objeto atual da linha
-                        linhaBase.saida.Insert(this.saida.Count, new SimboloBasico(CodigosInterpretaveis.PARALELO_FINAL));
-                        InsereSimboloUnicoVisual(this.saida.Count, this.saida, new SimboloBasico(CodigosInterpretaveis.PARALELO_FINAL));
+                        linhaBase.saida.Insert(this.saida.Count, new Symbol(CodigosInterpretaveis.PARALELO_FINAL));
+                        InsereSimboloUnicoVisual(this.saida.Count, this.saida, new Symbol(CodigosInterpretaveis.PARALELO_FINAL));
                     }
                     else
                     {
                         _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_FINALIZADO);
                         _subt2posicionaSimboloInserido = -1;
 
-                        linhaBase.saida.Insert(0, new SimboloBasico(CodigosInterpretaveis.PARALELO_INICIAL));
-                        InsereSimboloUnicoVisual(0, this.saida, new SimboloBasico(CodigosInterpretaveis.PARALELO_INICIAL));
+                        linhaBase.saida.Insert(0, new Symbol(CodigosInterpretaveis.PARALELO_INICIAL));
+                        InsereSimboloUnicoVisual(0, this.saida, new Symbol(CodigosInterpretaveis.PARALELO_INICIAL));
                         _indiceSimbolo++;
                     }
 
@@ -602,7 +602,7 @@ namespace LadderApp
                     break;
             }
 
-            foreach (SimboloBasico _sb in _lstSB)
+            foreach (Symbol _sb in _lstSB)
             {
                 linhaBase.saida.Insert(_indiceSimbolo, _sb);
                 InsereSimboloUnicoVisual(_indiceSimbolo, this.saida, _sb);
@@ -626,7 +626,7 @@ namespace LadderApp
             return _indiceSimbolo;
         }
 
-        private ControleLivre InsereSimboloUnicoVisual(int _indiceSimbolo, List<ControleLivre> _lstCL, SimboloBasico _sB)
+        private ControleLivre InsereSimboloUnicoVisual(int _indiceSimbolo, List<ControleLivre> _lstCL, Symbol _sB)
         {
             /// Visual
             _lstCL.Insert(_indiceSimbolo, new ControleLivre(_sB));
@@ -650,7 +650,7 @@ namespace LadderApp
 
 
 
-        public ControleLivre InsereSimboloDireto(List<ControleLivre> _lstCL, ControleLivre _AposCL, List<SimboloBasico> _lstSB)
+        public ControleLivre InsereSimboloDireto(List<ControleLivre> _lstCL, ControleLivre _AposCL, List<Symbol> _lstSB)
         {
             int _indiceSimbolo = _lstCL.IndexOf(_AposCL);
 
@@ -661,7 +661,7 @@ namespace LadderApp
 
             if (_lstSB.Count > 0)
             {
-                foreach (SimboloBasico _sb in _lstSB)
+                foreach (Symbol _sb in _lstSB)
                 {
                     InsereSimboloUnicoVisual(_indiceSimbolo, _lstCL, _sb);
                     _indiceSimbolo++;
@@ -740,13 +740,13 @@ namespace LadderApp
                                     break;
                             }
 
-                            EnderecamentoLadder _end = null;
+                            Address _end = null;
                             if (_cL.getOperandos(0) != null)
                             {
                                 Object obj = _cL.getOperandos(0);
                                 if (obj.GetType().ToString() == "LadderApp1.EnderecamentoLadder")
                                 {
-                                    _end = (LadderApp.EnderecamentoLadder)obj;
+                                    _end = (LadderApp.Address)obj;
                                 }
                             }
 
@@ -778,7 +778,7 @@ namespace LadderApp
             ProjetoLadder _frmPL;
             _frmPL = this.frmDiag.linkProjeto;
 
-            _frmPL.InsereEnderecoNoSimbolo(frmDiag.ControleSelecionado, (EnderecamentoLadder)_mnu.Tag);
+            _frmPL.InsereEnderecoNoSimbolo(frmDiag.ControleSelecionado, (Address)_mnu.Tag);
         }
 
         void simboloInicioLinha_Click(object sender, MouseEventArgs e)
@@ -814,7 +814,7 @@ namespace LadderApp
             int _auxSaida = 0;
             List<ControleLivre> _lstCLDeletar = new List<ControleLivre>();
             List<ControleLivre> _lstCL = null;
-            List<SimboloBasico> _lstSB = null;
+            List<Symbol> _lstSB = null;
             ControleLivre _cLAMudarCI = null;
 
             if (!simbolos.Contains(_aSerApagado))
@@ -910,7 +910,7 @@ namespace LadderApp
             return true;
         }
 
-        public bool ApagaSimbolo(List<ControleLivre> _lstCL, List<SimboloBasico> _lstSB, ControleLivre _aSerApagado)
+        public bool ApagaSimbolo(List<ControleLivre> _lstCL, List<Symbol> _lstSB, ControleLivre _aSerApagado)
         {
             int _indice = 0;
 

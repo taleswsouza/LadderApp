@@ -7,7 +7,7 @@ namespace LadderApp
 {
     public static class ManipulaLinha
     {
-        public static void AjustaPosicionamento(LinhaCompletaVisual lc)
+        public static void AjustaPosicionamento(VisualLine lc)
         {
             ControleLivre _ctrlLivreAux = null;
 
@@ -177,7 +177,7 @@ namespace LadderApp
             RedimensionaSimbolos(lc);
 
         }
-        private static void RedimensionaSimbolos(LinhaCompletaVisual lc)
+        private static void RedimensionaSimbolos(VisualLine lc)
         {
 
             //--Inicio da linha
@@ -207,11 +207,11 @@ namespace LadderApp
             lc.simboloDesenhoFundo.TabStop = false;
         }
 
-        public static void CopiaSimbolo2Livre(LinhaCompleta linhaFonte, LinhaCompletaVisual linhaDestinho)
+        public static void CopiaSimbolo2Livre(Line linhaFonte, VisualLine linhaDestinho)
         {
             /// transfere os simbolos basicos da linha
             linhaDestinho.simbolos.Clear();
-            foreach(SimboloBasico auxSB in linhaFonte.simbolos)
+            foreach(Symbol auxSB in linhaFonte.simbolos)
             {
                 linhaDestinho.simbolos.Add(new ControleLivre());
                 linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setCI(auxSB.getCI());
@@ -221,7 +221,7 @@ namespace LadderApp
 
             /// transfere os simbolos basicos de saida
             linhaDestinho.saida.Clear();
-            foreach (SimboloBasico auxSB in linhaFonte.saida)
+            foreach (Symbol auxSB in linhaFonte.saida)
             {
                 linhaDestinho.saida.Add(new ControleLivre());
                 linhaDestinho.saida[linhaDestinho.saida.Count - 1].setCI(auxSB.getCI());
@@ -231,13 +231,13 @@ namespace LadderApp
             }
         }
 
-        public static void CopiaLivre2Simbolo(LinhaCompletaVisual linhaFonte, LinhaCompleta linhaDestinho)
+        public static void CopiaLivre2Simbolo(VisualLine linhaFonte, Line linhaDestinho)
         {
             /// transfere os simbolos basicos da linha
             linhaDestinho.simbolos.Clear();
             foreach (ControleLivre auxSB in linhaFonte.simbolos)
             {
-                linhaDestinho.simbolos.Add(new SimboloBasico());
+                linhaDestinho.simbolos.Add(new Symbol());
                 linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setCI(auxSB.getCI());
                 linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setOperando(auxSB.getOperandos());
 
@@ -247,7 +247,7 @@ namespace LadderApp
             linhaDestinho.saida.Clear();
             foreach (ControleLivre auxSB in linhaFonte.saida)
             {
-                linhaDestinho.saida.Add(new SimboloBasico());
+                linhaDestinho.saida.Add(new Symbol());
                 linhaDestinho.saida[linhaDestinho.saida.Count - 1].setCI(auxSB.getCI());
                 for (int i = 0; i < auxSB.getOperandos().Length; i++)
                     linhaDestinho.saida[linhaDestinho.saida.Count - 1].setOperando(i, auxSB.getOperandos(i));

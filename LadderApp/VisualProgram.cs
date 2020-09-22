@@ -20,16 +20,16 @@ namespace LadderApp
 
             if (prgBasico.linhas.Count > 0)
             {
-                foreach (LinhaCompleta _lc in prgBasico.linhas)
+                foreach (Line _lc in prgBasico.linhas)
                 {
-                    LinhaCompletaVisual _lcL = PreparaLinhaQueSeraCriada(_lc);
+                    VisualLine _lcL = PreparaLinhaQueSeraCriada(_lc);
                     InsereLinhaNoFinal(_lcL);
                 }
             }
         }
         
-        private List<LinhaCompletaVisual> linhasPrograma = new List<LinhaCompletaVisual>();
-        public IList<LinhaCompletaVisual> linhas
+        private List<VisualLine> linhasPrograma = new List<VisualLine>();
+        public IList<VisualLine> linhas
         {
             get 
             {
@@ -43,7 +43,7 @@ namespace LadderApp
         /// </summary>
         /// <param name="_lc">nova linha a ser inserida</param>
         /// <returns>indice da linha inserida</returns>
-        public int InsereLinhaNoFinal(LinhaCompletaVisual _lc)
+        public int InsereLinhaNoFinal(VisualLine _lc)
         {
             linhasPrograma.Add(_lc);
             return (linhasPrograma.Count - 1);
@@ -54,13 +54,13 @@ namespace LadderApp
         /// </summary>
         /// <param name="_lc">nova linha a ser inserida</param>
         /// <returns></returns>
-        public int InsereLinhaNoInicio(LinhaCompletaVisual _lc)
+        public int InsereLinhaNoInicio(VisualLine _lc)
         {
 
             return InsereLinhaNoIndice(0, _lc);
         }
 
-        public int InsereLinhaNoIndice(int linha, LinhaCompletaVisual _lc)
+        public int InsereLinhaNoIndice(int linha, VisualLine _lc)
         {
             if (linha > linhasPrograma.Count)
                 linha = linhasPrograma.Count;
@@ -74,9 +74,9 @@ namespace LadderApp
 
         public int InsereLinhaNoIndice(int linha)
         {
-            linha = prgBasico.InsereLinhaNoIndice(linha, new LinhaCompleta());
+            linha = prgBasico.InsereLinhaNoIndice(linha, new Line());
 
-            LinhaCompletaVisual _lc = PreparaLinhaQueSeraCriada(prgBasico.linhas[linha]);
+            VisualLine _lc = PreparaLinhaQueSeraCriada(prgBasico.linhas[linha]);
 
             return InsereLinhaNoIndice(linha, _lc);
         }
@@ -84,9 +84,9 @@ namespace LadderApp
 
         public int InsereLinhaNoFinal()
         {
-            int linha = prgBasico.InsereLinhaNoFinal(new LinhaCompleta());
+            int linha = prgBasico.InsereLinhaNoFinal(new Line());
 
-            LinhaCompletaVisual _lc = PreparaLinhaQueSeraCriada(prgBasico.linhas[linha]);
+            VisualLine _lc = PreparaLinhaQueSeraCriada(prgBasico.linhas[linha]);
 
             return InsereLinhaNoFinal(_lc);
         }
@@ -104,9 +104,9 @@ namespace LadderApp
         /// Insere linha abaixo ou acima da linha selecionada
         /// </summary>
         /// <param name="_acima">true - acima / false - abaixo</param>
-        public LinhaCompletaVisual PreparaLinhaQueSeraCriada(LinhaCompleta _linhaBasica)
+        public VisualLine PreparaLinhaQueSeraCriada(Line _linhaBasica)
         {
-            LinhaCompletaVisual _novaLinhaTela = new LinhaCompletaVisual(frmDiag, _linhaBasica);
+            VisualLine _novaLinhaTela = new VisualLine(frmDiag, _linhaBasica);
             _novaLinhaTela.simboloInicioLinha.MudaLinha += new MudaLinhaEventHandler(frmDiag.simboloInicioLinha_MudaLinha);
 
             return _novaLinhaTela;

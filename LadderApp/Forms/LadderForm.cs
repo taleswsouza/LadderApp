@@ -17,7 +17,7 @@ namespace LadderApp
 
         public ProjetoLadder linkProjeto = null;
 
-        public ProgramaVisual prgLivre = null;
+        public VisualProgram prgLivre = null;
 
         private Boolean RedimencionandoLinhas = false;
 
@@ -27,14 +27,14 @@ namespace LadderApp
             get { return controleSelecionado; }
         }
 
-        private LinhaCompletaVisual linhaSelecionada = null;
-        public LinhaCompletaVisual LinhaSelecionada
+        private VisualLine linhaSelecionada = null;
+        public VisualLine LinhaSelecionada
         {
             get { return linhaSelecionada; }
         }
 
 
-        public List<SimboloBasico> lstVariosSelecionados = new List<SimboloBasico>();
+        public List<Symbol> lstVariosSelecionados = new List<Symbol>();
 
         public DiagramaLadder(ProgramaBasico _prgBasico)
         {
@@ -43,7 +43,7 @@ namespace LadderApp
             this.VScroll = false;
             this.HScroll = false;
 
-            prgLivre = new ProgramaVisual(_prgBasico, this);
+            prgLivre = new VisualProgram(_prgBasico, this);
         }
 
         private void DiagramaLadder_Resize(object sender, EventArgs e)
@@ -63,12 +63,12 @@ namespace LadderApp
 
         public void ApagaLinhasSimbolos()
         {
-            foreach (LinhaCompletaVisual lcl in prgLivre.linhas)
+            foreach (VisualLine lcl in prgLivre.linhas)
             {
             }
         }
 
-        public void DeletaLinha(LinhaCompletaVisual sender)
+        public void DeletaLinha(VisualLine sender)
         {
             int _indiceLinhaDeletar = this.prgLivre.linhas.IndexOf(sender);
             int _indiceLinha = _indiceLinhaDeletar;
@@ -131,12 +131,12 @@ namespace LadderApp
                     {
                         SetMessage(ex.Message);
                     }
-                    LinhaCompletaVisual _LinhaAnterior = prgLivre.linhas[prgLivre.linhas.Count - 1];
+                    VisualLine _LinhaAnterior = prgLivre.linhas[prgLivre.linhas.Count - 1];
 
                     if (_numVezes == 0)
                         prgLivre.linhas[prgLivre.linhas.Count - 1].simboloFimLinha.posicaoXY = new Point(auxX, 0);
 
-                    foreach (LinhaCompletaVisual _linhasDL in prgLivre.linhas)
+                    foreach (VisualLine _linhasDL in prgLivre.linhas)
                     {
                         if (_LinhaAnterior != null)
                             _LinhaAnterior.linhaProxima = _linhasDL;
@@ -279,7 +279,7 @@ namespace LadderApp
             }
         }
 
-        public void Simbolo_ControleSelecionado(ControleLivre sender, LinhaCompletaVisual lCL)
+        public void Simbolo_ControleSelecionado(ControleLivre sender, VisualLine lCL)
         {
             if (controleSelecionado != null)
                 if (!controleSelecionado.IsDisposed)
@@ -348,10 +348,10 @@ namespace LadderApp
             }
         }
 
-        public List<SimboloBasico> VariosSelecionados(ControleLivre _cL, LinhaCompletaVisual _lCL)
+        public List<Symbol> VariosSelecionados(ControleLivre _cL, VisualLine _lCL)
         {
             CodigosInterpretaveis _cI = _cL.getCI();
-            List<SimboloBasico> _lstSB = new List<SimboloBasico>();
+            List<Symbol> _lstSB = new List<Symbol>();
             List<ControleLivre> _lstCL = null;
 
             switch (_cI)
@@ -431,7 +431,7 @@ namespace LadderApp
 
         private void menuToggleBit_Click(object sender, EventArgs e)
         {
-            ((EnderecamentoLadder)controleSelecionado.getOperandos(0)).Valor = ((EnderecamentoLadder)controleSelecionado.getOperandos(0)).Valor == true ? false : true;
+            ((Address)controleSelecionado.getOperandos(0)).Valor = ((Address)controleSelecionado.getOperandos(0)).Valor == true ? false : true;
             linkProjeto.programa.ExecutaLadderSimulado();
             this.Invalidate(true);
         }
@@ -449,15 +449,15 @@ namespace LadderApp
             switch (sender.getCI())
             {
                 case CodigosInterpretaveis.TEMPORIZADOR:
-                    Altera.Tipo = (Int32)((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.Tipo;
-                    Altera.Preset = (Int32)((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.Preset;
-                    Altera.Acumulado = (Int32)((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.Acumulado;
-                    Altera.BaseTempo = (Int32)((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.BaseTempo;
+                    Altera.Tipo = (Int32)((Address)sender.getOperandos(0)).Temporizador.Tipo;
+                    Altera.Preset = (Int32)((Address)sender.getOperandos(0)).Temporizador.Preset;
+                    Altera.Acumulado = (Int32)((Address)sender.getOperandos(0)).Temporizador.Acumulado;
+                    Altera.BaseTempo = (Int32)((Address)sender.getOperandos(0)).Temporizador.BaseTempo;
                     break;
                 case CodigosInterpretaveis.CONTADOR:
-                    Altera.Tipo = (Int32)((EnderecamentoLadder)sender.getOperandos(0)).Contador.Tipo;
-                    Altera.Preset = (Int32)((EnderecamentoLadder)sender.getOperandos(0)).Contador.Preset;
-                    Altera.Acumulado = (Int32)((EnderecamentoLadder)sender.getOperandos(0)).Contador.Acumulado;
+                    Altera.Tipo = (Int32)((Address)sender.getOperandos(0)).Contador.Tipo;
+                    Altera.Preset = (Int32)((Address)sender.getOperandos(0)).Contador.Preset;
+                    Altera.Acumulado = (Int32)((Address)sender.getOperandos(0)).Contador.Acumulado;
                     break;
                 default:
                     break;
@@ -477,25 +477,25 @@ namespace LadderApp
                         /// mantem os parametros do ci atualizados
                         sender.setOperando(4, Altera.BaseTempo);
 
-                        ((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.Tipo = Altera.Tipo;
-                        ((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.Preset = Altera.Preset;
-                        ((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.Acumulado = Altera.Acumulado;
-                        ((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.BaseTempo = Altera.BaseTempo;
+                        ((Address)sender.getOperandos(0)).Temporizador.Tipo = Altera.Tipo;
+                        ((Address)sender.getOperandos(0)).Temporizador.Preset = Altera.Preset;
+                        ((Address)sender.getOperandos(0)).Temporizador.Acumulado = Altera.Acumulado;
+                        ((Address)sender.getOperandos(0)).Temporizador.BaseTempo = Altera.BaseTempo;
 
-                        sender.setOperando(1, ((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.Tipo);
-                        sender.setOperando(2, ((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.Preset);
-                        sender.setOperando(3, ((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.Acumulado);
-                        sender.setOperando(4, ((EnderecamentoLadder)sender.getOperandos(0)).Temporizador.BaseTempo);
+                        sender.setOperando(1, ((Address)sender.getOperandos(0)).Temporizador.Tipo);
+                        sender.setOperando(2, ((Address)sender.getOperandos(0)).Temporizador.Preset);
+                        sender.setOperando(3, ((Address)sender.getOperandos(0)).Temporizador.Acumulado);
+                        sender.setOperando(4, ((Address)sender.getOperandos(0)).Temporizador.BaseTempo);
 
                         break;
                     case CodigosInterpretaveis.CONTADOR:
-                        ((EnderecamentoLadder)sender.getOperandos(0)).Contador.Tipo = Altera.Tipo;
-                        ((EnderecamentoLadder)sender.getOperandos(0)).Contador.Preset = Altera.Preset;
-                        ((EnderecamentoLadder)sender.getOperandos(0)).Contador.Acumulado = Altera.Acumulado;
+                        ((Address)sender.getOperandos(0)).Contador.Tipo = Altera.Tipo;
+                        ((Address)sender.getOperandos(0)).Contador.Preset = Altera.Preset;
+                        ((Address)sender.getOperandos(0)).Contador.Acumulado = Altera.Acumulado;
 
-                        sender.setOperando(1, ((EnderecamentoLadder)sender.getOperandos(0)).Contador.Tipo);
-                        sender.setOperando(2, ((EnderecamentoLadder)sender.getOperandos(0)).Contador.Preset);
-                        sender.setOperando(3, ((EnderecamentoLadder)sender.getOperandos(0)).Contador.Acumulado);
+                        sender.setOperando(1, ((Address)sender.getOperandos(0)).Contador.Tipo);
+                        sender.setOperando(2, ((Address)sender.getOperandos(0)).Contador.Preset);
+                        sender.setOperando(3, ((Address)sender.getOperandos(0)).Contador.Acumulado);
                         break;
                     default:
                         break;
@@ -508,7 +508,7 @@ namespace LadderApp
 
         private void menuToggleBitPulse_Click(object sender, EventArgs e)
         {
-            linkProjeto.programa.auxToggleBitPulse = ((EnderecamentoLadder)controleSelecionado.getOperandos(0));
+            linkProjeto.programa.auxToggleBitPulse = ((Address)controleSelecionado.getOperandos(0));
             linkProjeto.programa.auxToggleBitPulse.Valor = linkProjeto.programa.auxToggleBitPulse.Valor == true ? false : true;
             linkProjeto.programa.ExecutaLadderSimulado();
             this.Invalidate(true);

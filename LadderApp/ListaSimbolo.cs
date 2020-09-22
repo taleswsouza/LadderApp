@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LadderApp
 {
-    public class ListaSimbolo : List<SimboloBasico>, IList<SimboloBasico>
+    public class ListaSimbolo : List<Symbol>, IList<Symbol>
     {
         /// <summary>
         /// suporte - utilizado na funcao "ProcuraCodigoInterpretavel()" - carrega
@@ -39,7 +39,7 @@ namespace LadderApp
 
         public bool ExisteTemporizadorDuplicado(List<EnderecamentoLadder> lstTemporizadoresUtilizados)
         {
-            foreach (SimboloBasico _sb in this)
+            foreach (Symbol _sb in this)
             {
                 if (_sb.getCI() == CodigosInterpretaveis.TEMPORIZADOR)
                 {
@@ -54,7 +54,7 @@ namespace LadderApp
 
         public bool ExisteContadorDuplicado(List<EnderecamentoLadder> lstContadoresUtilizados)
         {
-            foreach (SimboloBasico _sb in this)
+            foreach (Symbol _sb in this)
             {
                 if (_sb.getCI() == CodigosInterpretaveis.CONTADOR)
                 {
@@ -76,12 +76,12 @@ namespace LadderApp
         /// <param name="_lstSB">Lista de entrada com os simbolos que serao
         /// inseridos no objeto</param>
         /// <returns>objeto atual</returns>
-        public ListaSimbolo InsertAllWithClearBefore(List<SimboloBasico> _lstSB)
+        public ListaSimbolo InsertAllWithClearBefore(List<Symbol> _lstSB)
         {
             this.Clear();
 
             if (_lstSB.Count > 0)
-                foreach (SimboloBasico _cadaSB in _lstSB)
+                foreach (Symbol _cadaSB in _lstSB)
                 {
                     this.Add(_cadaSB);
                 }
@@ -104,7 +104,7 @@ namespace LadderApp
 
             if (_arrayCI.Length > 0)
                 foreach (CodigosInterpretaveis _cadaCI in _arrayCI)
-                    this.Add(new SimboloBasico(_cadaCI));
+                    this.Add(new Symbol(_cadaCI));
 
             return this;
         }
@@ -114,7 +114,7 @@ namespace LadderApp
         {
             for(int i = (this.Count - 1); i >= 0; i--)
             {
-                this.Insert(i, new SimboloBasico(CodigosInterpretaveis.PARALELO_PROXIMO));
+                this.Insert(i, new Symbol(CodigosInterpretaveis.PARALELO_PROXIMO));
             }
         }
 
@@ -129,23 +129,23 @@ namespace LadderApp
                     this[0].setCI(CodigosInterpretaveis.PARALELO_INICIAL);
                     break;
                 case TipoInsercaoParalelo.PARALELO_FINALIZADO:
-                    this.Add(new SimboloBasico(CodigosInterpretaveis.PARALELO_FINAL));
+                    this.Add(new Symbol(CodigosInterpretaveis.PARALELO_FINAL));
                     break;
                 case TipoInsercaoParalelo.PARALELO_COMPLETO:
                     this[0].setCI(CodigosInterpretaveis.PARALELO_INICIAL);
-                    this.Add(new SimboloBasico(CodigosInterpretaveis.PARALELO_FINAL));
+                    this.Add(new Symbol(CodigosInterpretaveis.PARALELO_FINAL));
                     break;
             }
         }
 
         public void ValidaOperandos(EnderecamentoPrograma _ep)
         {
-            foreach(SimboloBasico _sb in this)
+            foreach(Symbol _sb in this)
                 _sb.ValidaOperandosSimbolo(_ep);
         }
 
 
-        private bool ProcuraCodigoInterpretavel(SimboloBasico _sb)
+        private bool ProcuraCodigoInterpretavel(Symbol _sb)
         {
             if (_sb.getCI() == ciLocal)
                 return true;
@@ -153,7 +153,7 @@ namespace LadderApp
                 return false;
         }
 
-        private static bool VerificaSeSimboloTemTodosOperandos(SimboloBasico _sb)
+        private static bool VerificaSeSimboloTemTodosOperandos(Symbol _sb)
         {
             bool _bResult = true;
             for (int i = 0; i < _sb.iNumOperandos; i++)
@@ -168,7 +168,7 @@ namespace LadderApp
         }
       
         
-        private static SimboloBasico SimboloBasicoToSimboloBasico(SimboloBasico _sb)
+        private static Symbol SimboloBasicoToSimboloBasico(Symbol _sb)
         {
             return (_sb);
         }

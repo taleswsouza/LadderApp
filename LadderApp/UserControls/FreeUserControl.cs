@@ -9,8 +9,8 @@ using System.Windows.Forms;
 namespace LadderApp
 {
     public delegate void MudaLinhaEventHandler(ControleLivre sender, System.Windows.Forms.Keys e);
-    public delegate void DeletaLinhaEventHandler(LinhaCompletaVisual sender);
-    public delegate void ControleSelecionadoEventHandler(ControleLivre sender, LinhaCompletaVisual lCL);
+    public delegate void DeletaLinhaEventHandler(VisualLine sender);
+    public delegate void ControleSelecionadoEventHandler(ControleLivre sender, VisualLine lCL);
     public delegate void SolicitaMudarEnderecoEventHandler(ControleLivre sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object [] faixa);
     public partial class ControleLivre : ControleBasico
     {
@@ -51,7 +51,7 @@ namespace LadderApp
         private Graphics e;
 
         // Para desenhar as linhas de fundo
-        public LinhaCompletaVisual linhaAtual = null;
+        public VisualLine linhaAtual = null;
 
         List<ControleLivre> lstVPI = null;
 
@@ -178,12 +178,12 @@ namespace LadderApp
         public ControleLivre()
         {
             InitializeComponent();
-            codigoInterpretavel = new SimboloBasico();
+            codigoInterpretavel = new Symbol();
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             this.BackColor = Color.Transparent;
         }
 
-        public ControleLivre(SimboloBasico _sb)
+        public ControleLivre(Symbol _sb)
         {
             InitializeComponent();
             codigoInterpretavel = _sb;
@@ -194,7 +194,7 @@ namespace LadderApp
         public ControleLivre(CodigosInterpretaveis _ci)
         {
             InitializeComponent();
-            codigoInterpretavel = new SimboloBasico(_ci);
+            codigoInterpretavel = new Symbol(_ci);
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             this.BackColor = Color.Transparent;
         }
@@ -311,7 +311,7 @@ namespace LadderApp
             {
 
                 if (this.getCI() == CodigosInterpretaveis.CONTATO_NA &&
-                    ((EnderecamentoLadder)getOperandos(0)).Valor == true)
+                    ((Address)getOperandos(0)).Valor == true)
                     Energizado();
             }
 
@@ -367,7 +367,7 @@ namespace LadderApp
             if (getOperandos(0) != null)
             {
                 if (this.getCI() == CodigosInterpretaveis.CONTATO_NF &&
-                    ((EnderecamentoLadder)getOperandos(0)).Valor == false)
+                    ((Address)getOperandos(0)).Valor == false)
                     Energizado();
             }
             else
@@ -389,7 +389,7 @@ namespace LadderApp
             {
 
                 if (this.getCI() == CodigosInterpretaveis.BOBINA_SAIDA &&
-                    ((EnderecamentoLadder)getOperandos(0)).Valor == true)
+                    ((Address)getOperandos(0)).Valor == true)
                     Energizado();
             }
 
@@ -575,7 +575,7 @@ namespace LadderApp
                 case CodigosInterpretaveis.TEMPORIZADOR:
                     _txtTitulo = "T";
                     if (getOperandos(0) != null)
-                        switch ((Int32)((EnderecamentoLadder)getOperandos(0)).Temporizador.Tipo)
+                        switch ((Int32)((Address)getOperandos(0)).Temporizador.Tipo)
                         {
                             case 0:
                                 _txtTitulo = "TON";
@@ -596,7 +596,7 @@ namespace LadderApp
                 case CodigosInterpretaveis.CONTADOR:
                     _txtTitulo = "C";
                     if (getOperandos(0) != null)
-                        switch ((Int32)((EnderecamentoLadder)getOperandos(0)).Contador.Tipo)
+                        switch ((Int32)((Address)getOperandos(0)).Contador.Tipo)
                         {
                             case 0:
                                 _txtTitulo = "CTU";
@@ -618,10 +618,10 @@ namespace LadderApp
 
             /// para indicar comentário no quadro de saida
             if (getOperandos(0) != null)
-                if (((EnderecamentoLadder)getOperandos(0)).Apelido.Trim() != "")
+                if (((Address)getOperandos(0)).Apelido.Trim() != "")
                 {
                     /// será usado para apresenta um tooltip
-                    this.Tag = ((EnderecamentoLadder)getOperandos(0)).Apelido;
+                    this.Tag = ((Address)getOperandos(0)).Apelido;
                     /// para indicar comentário - desenha uma elipse no canto sup. dir.
                     e.DrawEllipse(new Pen(Color.Black), (xTotalHorizontal - 8 - 3), 3, 7, 7);
                     e.FillEllipse(new SolidBrush(Color.Yellow), (xTotalHorizontal - 8 - 3), 3, 7, 7);
@@ -769,7 +769,7 @@ namespace LadderApp
 
             if (getOperandos(0) != null)
             {
-                _txtComent = ((EnderecamentoLadder)getOperandos(0)).Apelido;
+                _txtComent = ((Address)getOperandos(0)).Apelido;
                 if (_txtComent.Trim() != "")
                 {
                     switch (this.getCI())
@@ -849,7 +849,7 @@ namespace LadderApp
 
             if (getOperandos(0) != null)
             {
-                _txtEndereco = ((EnderecamentoLadder)getOperandos(0)).Nome;
+                _txtEndereco = ((Address)getOperandos(0)).Nome;
             }
             else
                 _txtEndereco = "?";
@@ -869,12 +869,12 @@ namespace LadderApp
             {
                 case CodigosInterpretaveis.CONTADOR:
                     if (getOperandos(0) != null)
-                        _intPreset = (Int32)((EnderecamentoLadder)getOperandos(0)).Contador.Preset;
+                        _intPreset = (Int32)((Address)getOperandos(0)).Contador.Preset;
                     _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
                     break;
                 case CodigosInterpretaveis.TEMPORIZADOR:
                     if (getOperandos(0) != null)
-                        _intPreset = (Int32)((EnderecamentoLadder)getOperandos(0)).Temporizador.Preset;
+                        _intPreset = (Int32)((Address)getOperandos(0)).Temporizador.Preset;
                     _recTxtPreset = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
                     break;
                 default:
@@ -911,7 +911,7 @@ namespace LadderApp
                     return;
                 case CodigosInterpretaveis.TEMPORIZADOR:
                     if (getOperandos(0) != null)
-                        _intBaseTempo = (Int32)((EnderecamentoLadder)getOperandos(0)).Temporizador.BaseTempo;
+                        _intBaseTempo = (Int32)((Address)getOperandos(0)).Temporizador.BaseTempo;
                     _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
                     break;
                 default:
@@ -969,12 +969,12 @@ namespace LadderApp
             {
                 case CodigosInterpretaveis.CONTADOR:
                     if (getOperandos(0) != null)
-                        _intAcum = (Int32)((EnderecamentoLadder)getOperandos(0)).Contador.Acumulado;
+                        _intAcum = (Int32)((Address)getOperandos(0)).Contador.Acumulado;
                     _recTxtAcum = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
                     break;
                 case CodigosInterpretaveis.TEMPORIZADOR:
                     if (getOperandos(0) != null)
-                        _intAcum = (Int32)((EnderecamentoLadder)getOperandos(0)).Temporizador.Acumulado;
+                        _intAcum = (Int32)((Address)getOperandos(0)).Temporizador.Acumulado;
                     _recTxtAcum = new RectangleF((float)(0), (float)(4 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
                     break;
                 default:
@@ -1226,7 +1226,7 @@ namespace LadderApp
         /// <summary>
         /// Retorna o simbolobasico do objeto
         /// </summary>
-        public SimboloBasico SimboloBasico
+        public Symbol SimboloBasico
         {
             get { return codigoInterpretavel; }
         }
@@ -1263,14 +1263,14 @@ namespace LadderApp
             {
                 case CodigosInterpretaveis.CONTATO_NA:
                 case CodigosInterpretaveis.CONTATO_NF:
-                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
+                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
                 case CodigosInterpretaveis.BOBINA_SAIDA:
-                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
+                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
                 case CodigosInterpretaveis.TEMPORIZADOR:
                 case CodigosInterpretaveis.CONTADOR:
-                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
+                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
             }
         }
@@ -1292,7 +1292,7 @@ namespace LadderApp
                     break;
                 case CodigosInterpretaveis.TEMPORIZADOR:
                 case CodigosInterpretaveis.CONTADOR:
-                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
+                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
             }
         }

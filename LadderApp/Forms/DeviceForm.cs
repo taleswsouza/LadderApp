@@ -21,7 +21,7 @@ namespace LadderApp
             InitializeComponent();
         }
 
-        public frmDispositivo(DispositivoLadder dl)
+        public frmDispositivo(Device dl)
         {
             String _txtPino = "";
             Color _cor = corTextoPadrao;

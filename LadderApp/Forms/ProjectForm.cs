@@ -45,7 +45,7 @@ namespace LadderApp
 
             if (programa.StsPrograma == ProgramaBasico.StatusPrograma.NAOINICIADO)
             {
-                programa.dispositivo = new DispositivoLadder(1);
+                programa.dispositivo = new Device(1);
 
                 AlocaEnderecamentoIO();
 
@@ -56,7 +56,7 @@ namespace LadderApp
             else
             {
                 if (programa.dispositivo == null)
-                    programa.dispositivo = new DispositivoLadder(1);
+                    programa.dispositivo = new Device(1);
                 AlocaEnderecamentoIO();
 
                 AlocaEnderecamentoMemoria(programa.endereco.lstMemoria, TipoEnderecamentoDispositivo.DIGITAL_MEMORIA, programa.endereco.lstMemoria.Count);
@@ -140,7 +140,7 @@ namespace LadderApp
                     if (e.Node.Tag != null)
                         if (this.frmDiagLadder.ControleSelecionado != null)
                         {
-                            InsereEnderecoNoSimbolo(this.frmDiagLadder.ControleSelecionado, (EnderecamentoLadder)e.Node.Tag);
+                            InsereEnderecoNoSimbolo(this.frmDiagLadder.ControleSelecionado, (Address)e.Node.Tag);
                             this.frmDiagLadder.ActiveControl = this.frmDiagLadder.ControleSelecionado;
                         }
                     break;
@@ -168,7 +168,7 @@ namespace LadderApp
             _NoEnderecamento.Nodes["NoSaidas"].Nodes.Clear();
             programa.endereco.lstIOEntrada.Clear();
             programa.endereco.lstIOSaida.Clear();
-            foreach (EnderecamentoLadder el in programa.dispositivo.lstEndBitPorta)
+            foreach (Address el in programa.dispositivo.lstEndBitPorta)
             {
                 el.ApontaDispositivo(programa.dispositivo);
                 switch (el.TpEnderecamento)
@@ -197,7 +197,7 @@ namespace LadderApp
 
         }
 
-        void Endereco_MudouComentario(EnderecamentoLadder sender)
+        void Endereco_MudouComentario(Address sender)
         {
             TreeNode _NoEnderecamento = ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
             int _pos = 0;
@@ -244,7 +244,7 @@ namespace LadderApp
         /// <param name="e">Enderecamento do programa</param>
         /// <param name="tp">tipo de memoria a ser realocada</param>
         /// <param name="qtdEnd">Quantidade do tipo desejada</param>
-        public int AlocaEnderecamentoMemoria(List<EnderecamentoLadder> _lstE, TipoEnderecamentoDispositivo tp, int qtdEnd)
+        public int AlocaEnderecamentoMemoria(List<Address> _lstE, TipoEnderecamentoDispositivo tp, int qtdEnd)
         {
             /// Atalho para o No de enderecamento
             TreeNode _NoEnderecamento = ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
@@ -271,7 +271,7 @@ namespace LadderApp
             if ((_qtdAtual == 0) || (_qtdAtual < qtdEnd))
             {
                 for (int i = _qtdAtual + 1; i <= qtdEnd; i++)
-                    _lstE.Add(new EnderecamentoLadder(tp, i, programa.dispositivo));
+                    _lstE.Add(new Address(tp, i, programa.dispositivo));
             }
             else if (_qtdAtual > qtdEnd)
             {
@@ -288,7 +288,7 @@ namespace LadderApp
                 }
             }
 
-            foreach (EnderecamentoLadder el in _lstE)
+            foreach (Address el in _lstE)
             {
                 _NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Add(el.Nome, el.Nome + ( el.Apelido == "" ? "" : " - " + el.Apelido ));
                 _NoEnderecamento.Nodes[_txtNoEndereco].Nodes[el.Nome].Tag = el;
@@ -301,10 +301,10 @@ namespace LadderApp
         private void IndicaEnderecoEmUso(ProgramaBasico _pl, TipoEnderecamentoDispositivo _te)
         {
             _pl.endereco.LimpaIndicacaoEmUso();
-            foreach(LinhaCompleta _lc in _pl.linhas)
+            foreach(Line _lc in _pl.linhas)
             {
                 _lc.simbolos.AddRange(_lc.saida);
-                foreach (SimboloBasico _sb in _lc.simbolos)
+                foreach (Symbol _sb in _lc.simbolos)
                 {
                     switch (_sb.getCI())
                     {
@@ -317,7 +317,7 @@ namespace LadderApp
                         case CodigosInterpretaveis.RESET:
                             if (_sb.getOperandos(0) != null)
                             {
-                                EnderecamentoLadder _el = (EnderecamentoLadder)_sb.getOperandos(0);
+                                Address _el = (Address)_sb.getOperandos(0);
                                 if (_el.TpEnderecamento == _te)
                                     _el.EmUso = true;
                             }
@@ -328,7 +328,7 @@ namespace LadderApp
             }
         }
 
-        public void InsereEnderecoNoSimbolo(ControleLivre _cL, EnderecamentoLadder _end)
+        public void InsereEnderecoNoSimbolo(ControleLivre _cL, Address _end)
         {
             if (!_cL.IsDisposed)
             {

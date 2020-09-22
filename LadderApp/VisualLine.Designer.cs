@@ -1,6 +1,6 @@
 namespace LadderApp
 {
-    partial class LinhaCompletaVisual
+    partial class VisualLine
     {
         /// <summary> 
         /// Required designer variable.
