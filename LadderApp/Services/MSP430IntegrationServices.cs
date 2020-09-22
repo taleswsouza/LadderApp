@@ -6,10 +6,11 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using LadderApp.Exceções;
+using LadderApp.Resources;
 
 namespace LadderApp
 {
-    public class ModuloIntegracaoMSP430
+    public class MSP430IntegrationServices
     {
         private Process p = new Process();
         private ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -33,7 +34,7 @@ namespace LadderApp
             return strResult.Trim();
         }
 
-        public ModuloIntegracaoMSP430()
+        public MSP430IntegrationServices()
         {
             p.StartInfo = startInfo;
             SetDefaults();
@@ -42,7 +43,7 @@ namespace LadderApp
             strMMCU = "-mmcu=msp430x2013 ";
         }
 
-        public ModuloIntegracaoMSP430(bool bDeletarArquivos)
+        public MSP430IntegrationServices(bool bDeletarArquivos)
         {
             p.StartInfo = startInfo;
             SetDefaults();
@@ -319,9 +320,9 @@ namespace LadderApp
         {
             if (strStandardError != "")
             {
-                if (strStandardError.StartsWith(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_INI) && strStandardError.EndsWith(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_FIM))
+                if (strStandardError.StartsWith(VisualResources.STR_RETORNO_MSPJTAG_ESCREVER_INI) && strStandardError.EndsWith(VisualResources.STR_RETORNO_MSPJTAG_ESCREVER_FIM))
                 {
-                    MessageBox.Show(strStandardError.Substring(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_INI.Length, strStandardError.IndexOf(RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_FIM) - RecursoVisual.STR_RETORNO_MSPJTAG_ESCREVER_INI.Length) + " recorded bytes.", "Error message:" + strNomeArquivo);
+                    MessageBox.Show(strStandardError.Substring(VisualResources.STR_RETORNO_MSPJTAG_ESCREVER_INI.Length, strStandardError.IndexOf(VisualResources.STR_RETORNO_MSPJTAG_ESCREVER_FIM) - VisualResources.STR_RETORNO_MSPJTAG_ESCREVER_INI.Length) + " recorded bytes.", "Error message:" + strNomeArquivo);
                     return true;
                 }
                 else

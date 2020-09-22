@@ -119,63 +119,63 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="definicaoH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\definicao.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\definicao.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="enderecosH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\enderecos.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\enderecos.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecContador_funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\ExecContador.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\ExecContador.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecContador_funcoesH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\ExecContador.funcoes.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\ExecContador.funcoes.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecContador_Tipo0_funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\ExecContador_Tipo0.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\ExecContador_Tipo0.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecContador_Tipo1_funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\ExecContador_Tipo1.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\ExecContador_Tipo1.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecTemporizador_funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\ExecTemporizador.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\ExecTemporizador.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecTemporizador_funcoesH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\ExecTemporizador.funcoes.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\ExecTemporizador.funcoes.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecTemporizador_Tipo0_funcoes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\ExecTemporizador_Tipo0.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\ExecTemporizador_Tipo0.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecTemporizador_Tipo1_funcoes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\ExecTemporizador_Tipo1.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\ExecTemporizador_Tipo1.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecTemporizadores_usuarioC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\ExecTemporizadores.usuario.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\ExecTemporizadores.usuario.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecTemporizadores_usuarioH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\ExecTemporizadores.usuario.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\ExecTemporizadores.usuario.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="funcoesH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\funcoes.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\funcoes.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="interrupcaoC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\interrupcao.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\interrupcao.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="mainC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\main.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\main.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="setupHardwareC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\setupHardware.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\setupHardware.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="setupHardwareH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\setupHardware.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\setupHardware.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="usuarioC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\usuario.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\usuario.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="usuarioH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>PLC\usuario.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\PLC\usuario.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

@@ -49,9 +49,9 @@ namespace LadderApp
 
                 AlocaEnderecamentoIO();
 
-                AlocaEnderecamentoMemoria(programa.endereco.lstMemoria, AddressType.DIGITAL_MEMORIA, 10);
-                AlocaEnderecamentoMemoria(programa.endereco.lstTemporizador, AddressType.DIGITAL_MEMORIA_TEMPORIZADOR, 10);
-                AlocaEnderecamentoMemoria(programa.endereco.lstContador, AddressType.DIGITAL_MEMORIA_CONTADOR, 10);
+                AlocaEnderecamentoMemoria(programa.endereco.lstMemoria, AddressTypeEnum.DIGITAL_MEMORIA, 10);
+                AlocaEnderecamentoMemoria(programa.endereco.lstTemporizador, AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR, 10);
+                AlocaEnderecamentoMemoria(programa.endereco.lstContador, AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR, 10);
             }
             else
             {
@@ -59,9 +59,9 @@ namespace LadderApp
                     programa.dispositivo = new Device(1);
                 AlocaEnderecamentoIO();
 
-                AlocaEnderecamentoMemoria(programa.endereco.lstMemoria, AddressType.DIGITAL_MEMORIA, programa.endereco.lstMemoria.Count);
-                AlocaEnderecamentoMemoria(programa.endereco.lstTemporizador, AddressType.DIGITAL_MEMORIA_TEMPORIZADOR, programa.endereco.lstTemporizador.Count);
-                AlocaEnderecamentoMemoria(programa.endereco.lstContador, AddressType.DIGITAL_MEMORIA_CONTADOR, programa.endereco.lstContador.Count);
+                AlocaEnderecamentoMemoria(programa.endereco.lstMemoria, AddressTypeEnum.DIGITAL_MEMORIA, programa.endereco.lstMemoria.Count);
+                AlocaEnderecamentoMemoria(programa.endereco.lstTemporizador, AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR, programa.endereco.lstTemporizador.Count);
+                AlocaEnderecamentoMemoria(programa.endereco.lstContador, AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR, programa.endereco.lstContador.Count);
 
                 programa.ReindexaEnderecos();
             }
@@ -131,9 +131,9 @@ namespace LadderApp
 
                     if (frmMem.ShowDialog() == DialogResult.OK)
                     {
-                        AlocaEnderecamentoMemoria(programa.endereco.lstMemoria, AddressType.DIGITAL_MEMORIA, frmMem.QtdMemoria);
-                        AlocaEnderecamentoMemoria(programa.endereco.lstTemporizador, AddressType.DIGITAL_MEMORIA_TEMPORIZADOR, frmMem.QtdTemporizador);
-                        AlocaEnderecamentoMemoria(programa.endereco.lstContador, AddressType.DIGITAL_MEMORIA_CONTADOR, frmMem.QtdContador);
+                        AlocaEnderecamentoMemoria(programa.endereco.lstMemoria, AddressTypeEnum.DIGITAL_MEMORIA, frmMem.QtdMemoria);
+                        AlocaEnderecamentoMemoria(programa.endereco.lstTemporizador, AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR, frmMem.QtdTemporizador);
+                        AlocaEnderecamentoMemoria(programa.endereco.lstContador, AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR, frmMem.QtdContador);
                     }
                     break;
                 default:
@@ -173,7 +173,7 @@ namespace LadderApp
                 el.ApontaDispositivo(programa.dispositivo);
                 switch (el.TpEnderecamento)
                 {
-                    case AddressType.DIGITAL_ENTRADA:
+                    case AddressTypeEnum.DIGITAL_ENTRADA:
                         programa.endereco.lstIOEntrada.Add(el);
                         //if (!_NoEnderecamento.Nodes["NoEntradas"].Nodes.ContainsKey(el.Nome))
                         //{
@@ -182,7 +182,7 @@ namespace LadderApp
                         //el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
                         //}
                         break;
-                    case AddressType.DIGITAL_SAIDA:
+                    case AddressTypeEnum.DIGITAL_SAIDA:
                         programa.endereco.lstIOSaida.Add(el);
                         //if (!_NoEnderecamento.Nodes["NoSaidas"].Nodes.ContainsKey(el.Nome))
                         //{
@@ -203,31 +203,31 @@ namespace LadderApp
             int _pos = 0;
             switch (sender.TpEnderecamento)
             {
-                case AddressType.DIGITAL_ENTRADA:
+                case AddressTypeEnum.DIGITAL_ENTRADA:
                     _pos = _NoEnderecamento.Nodes["NoEntradas"].Nodes.IndexOfKey(sender.Nome);
 
                     if (_pos >= 0)
                         _NoEnderecamento.Nodes["NoEntradas"].Nodes[_pos].Text = sender.Nome + (sender.Apelido == "" ? "" : " - " + sender.Apelido);
                     break;
-                case AddressType.DIGITAL_SAIDA:
+                case AddressTypeEnum.DIGITAL_SAIDA:
                     _pos = _NoEnderecamento.Nodes["NoSaidas"].Nodes.IndexOfKey(sender.Nome);
 
                     if (_pos >= 0)
                         _NoEnderecamento.Nodes["NoSaidas"].Nodes[_pos].Text = sender.Nome + (sender.Apelido == "" ? "" : " - " + sender.Apelido);
                     break;
-                case AddressType.DIGITAL_MEMORIA:
+                case AddressTypeEnum.DIGITAL_MEMORIA:
                     _pos = _NoEnderecamento.Nodes["NoMemoria"].Nodes.IndexOfKey(sender.Nome);
 
                     if (_pos >= 0)
                         _NoEnderecamento.Nodes["NoMemoria"].Nodes[_pos].Text = sender.Nome + (sender.Apelido == "" ? "" : " - " + sender.Apelido);
                     break;
-                case AddressType.DIGITAL_MEMORIA_CONTADOR:
+                case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
                     _pos = _NoEnderecamento.Nodes["NoContadores"].Nodes.IndexOfKey(sender.Nome);
 
                     if (_pos >= 0)
                         _NoEnderecamento.Nodes["NoContadores"].Nodes[_pos].Text = sender.Nome + (sender.Apelido == "" ? "" : " - " + sender.Apelido);
                     break;
-                case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
+                case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
                     _pos = _NoEnderecamento.Nodes["NoTemporizadores"].Nodes.IndexOfKey(sender.Nome);
 
                     if (_pos >= 0)
@@ -244,7 +244,7 @@ namespace LadderApp
         /// <param name="e">Enderecamento do programa</param>
         /// <param name="tp">tipo de memoria a ser realocada</param>
         /// <param name="qtdEnd">Quantidade do tipo desejada</param>
-        public int AlocaEnderecamentoMemoria(List<Address> _lstE, AddressType tp, int qtdEnd)
+        public int AlocaEnderecamentoMemoria(List<Address> _lstE, AddressTypeEnum tp, int qtdEnd)
         {
             /// Atalho para o No de enderecamento
             TreeNode _NoEnderecamento = ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
@@ -253,13 +253,13 @@ namespace LadderApp
             int _qtdAtual = 1;
             switch (tp)
             {
-                case AddressType.DIGITAL_MEMORIA:
+                case AddressTypeEnum.DIGITAL_MEMORIA:
                     _txtNoEndereco = "NoMemoria";
                     break;
-                case AddressType.DIGITAL_MEMORIA_CONTADOR:
+                case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
                     _txtNoEndereco = "NoContadores";
                     break;
-                case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
+                case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
                     _txtNoEndereco = "NoTemporizadores";
                     break;
             }
@@ -298,7 +298,7 @@ namespace LadderApp
             return 0;
         }
 
-        private void IndicaEnderecoEmUso(ProgramaBasico _pl, AddressType _te)
+        private void IndicaEnderecoEmUso(ProgramaBasico _pl, AddressTypeEnum _te)
         {
             _pl.endereco.LimpaIndicacaoEmUso();
             foreach(Line _lc in _pl.linhas)

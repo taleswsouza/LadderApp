@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LadderApp
 {
-    public enum AddressType
+    public enum AddressTypeEnum
     {
         NENHUM = 0,
         DIGITAL_ENTRADA = 5,

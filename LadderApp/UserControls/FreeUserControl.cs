@@ -11,8 +11,9 @@ namespace LadderApp
     public delegate void MudaLinhaEventHandler(ControleLivre sender, System.Windows.Forms.Keys e);
     public delegate void DeletaLinhaEventHandler(VisualLine sender);
     public delegate void ControleSelecionadoEventHandler(ControleLivre sender, VisualLine lCL);
-    public delegate void SolicitaMudarEnderecoEventHandler(ControleLivre sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object [] faixa);
+    public delegate void SolicitaMudarEnderecoEventHandler(ControleLivre sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object[] faixa);
     public partial class ControleLivre : ControleBasico
+
     {
         public event MudaLinhaEventHandler MudaLinha;
         public event DeletaLinhaEventHandler DeletaLinha;
@@ -24,12 +25,12 @@ namespace LadderApp
         // indicador de insercao
         List<System.Windows.Forms.Panel> listaIndicadores = new List<System.Windows.Forms.Panel>();
         System.Windows.Forms.Panel indicadorInsercao = null;
-        
+
         private Color corPena = Color.Blue;
         private Pen penaLinha = new Pen(Color.Blue, 1);
         private Pen penaTexto = new Pen(Color.Blue, 1);
         private Pen penaSelecao = new Pen(Color.Black, 3);
-        
+
         private Pen pena = new Pen(Color.Blue, 1);
 
         private SolidBrush brushEnergizado = new SolidBrush(Color.FromArgb(0, 255, 0));
@@ -58,8 +59,9 @@ namespace LadderApp
         private bool ultimoVPI = false;
         public bool UltimoVPI
         {
-            get { return ultimoVPI;  }
-            set {
+            get { return ultimoVPI; }
+            set
+            {
                 if (getCI() == CodigosInterpretaveis.PARALELO_PROXIMO)
                     ultimoVPI = value;
             }
@@ -90,7 +92,7 @@ namespace LadderApp
         int yInicioVSimbolo = 0;
         int yFimVSimbolo = 0;
 
-        
+
         int xInicioHSimboloBobina = 0;
         int xFimHSimboloBobina = 0;
 
@@ -371,8 +373,8 @@ namespace LadderApp
                     Energizado();
             }
             else
-                Energizado(); 
-            
+                Energizado();
+
 
             DesenhaContatoNA();
 
@@ -430,7 +432,7 @@ namespace LadderApp
         private void DesenhaBobinaComString(string Texto)
         {
             DesenhaBobinaSaida();
-            
+
             xy1 = new Point(xMeioHorizontal - (int)(fonteTexto.Size / 2.0F), yMeioVertical - (int)(fonteTexto.Size / 2.0F));
             e.DrawString(Texto, fonteTexto, brushTextoSimbolo, xy1.X, xy1.Y);
         }
@@ -444,7 +446,7 @@ namespace LadderApp
             e.DrawLine(penaLinha, xy1, xy2);
 
             // Linha horizontal
-            xy1 = new Point(0, (linhaAtual.tamY /2));
+            xy1 = new Point(0, (linhaAtual.tamY / 2));
             xy2 = new Point(xTotalHorizontal, (linhaAtual.tamY / 2));
             e.DrawLine(penaLinha, xy1, xy2);
         }
@@ -570,7 +572,7 @@ namespace LadderApp
 
             DesenhaAcum();
 
-            switch(this.getCI())
+            switch (this.getCI())
             {
                 case CodigosInterpretaveis.TEMPORIZADOR:
                     _txtTitulo = "T";
@@ -589,7 +591,7 @@ namespace LadderApp
                             default:
                                 _txtTitulo = "T?";
                                 break;
-                        } 
+                        }
 
                     DesenhaBaseTempo();
                     break;
@@ -607,7 +609,7 @@ namespace LadderApp
                             default:
                                 _txtTitulo = "C?";
                                 break;
-                        } 
+                        }
                     break;
             }
 
@@ -646,8 +648,8 @@ namespace LadderApp
             int _posYOriginal = linhaAtual.posY;
 
 
-            SuporteParalelo _par = null;
-            List<SuporteParalelo> _lst_par = new List<SuporteParalelo>();
+            VisualParallelBranch _par = null;
+            List<VisualParallelBranch> _lst_par = new List<VisualParallelBranch>();
 
             ControleLivre _simbAntAux = null;
             ControleLivre _simbAnt2DesenhoAux = null;
@@ -667,7 +669,7 @@ namespace LadderApp
                         switch (simbAux.getCI())
                         {
                             case CodigosInterpretaveis.PARALELO_INICIAL:
-                                _par = new SuporteParalelo();
+                                _par = new VisualParallelBranch();
                                 _par.par = simbAux;
 
                                 _lst_par.Add(_par);
@@ -788,12 +790,12 @@ namespace LadderApp
 
                     int intNumLinhas = 1;
                     String strSegundaLinha = "";
-                    if (_propostoSize.Width > ((xTotalHorizontal - (xDecimoHorizontal / 2) - 3))+1)
+                    if (_propostoSize.Width > ((xTotalHorizontal - (xDecimoHorizontal / 2) - 3)) + 1)
                     {
                         intNumLinhas = 2;
                         for (int i = 0; i < 20; i++)
                         {
-                            strSegundaLinha = _txtComent.Substring(_txtComent.Length-1,1) + strSegundaLinha;
+                            strSegundaLinha = _txtComent.Substring(_txtComent.Length - 1, 1) + strSegundaLinha;
                             _txtComent = _txtComent.Remove(_txtComent.Length - 1, 1);
                             _propostoSize = TextRenderer.MeasureText(_txtComent, fonteTexto);
                             if (_propostoSize.Width < (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
@@ -827,9 +829,9 @@ namespace LadderApp
 
         private void DesenhaEndereco()
         {
-            String _txtEndereco = ""; 
+            String _txtEndereco = "";
             RectangleF _recTxtEnd;
-            
+
             switch (this.getCI())
             {
                 case CodigosInterpretaveis.TEMPORIZADOR:
@@ -898,7 +900,7 @@ namespace LadderApp
             e.DrawString(_txtPreset, fonteTexto, brushTextoSimbolo, _recTxtPreset, _stringFormat);
 
         }
-        
+
         private void DesenhaBaseTempo()
         {
             String _txtBaseTempo = "";
@@ -1044,8 +1046,8 @@ namespace LadderApp
                     e.Clear(Color.White);
 
                 if (!usoTxtIndicado)
-                    ApresentaCamposTxt(); 
-                
+                    ApresentaCamposTxt();
+
                 switch (getCI())
                 {
                     case CodigosInterpretaveis.NENHUM:
@@ -1258,7 +1260,7 @@ namespace LadderApp
             /// caso o evento nao este alocado, nao executa
             if (SolicitaMudarEndereco == null)
                 return;
- 
+
             switch (getCI())
             {
                 case CodigosInterpretaveis.CONTATO_NA:
@@ -1286,7 +1288,7 @@ namespace LadderApp
             {
                 case CodigosInterpretaveis.CONTATO_NA:
                 case CodigosInterpretaveis.CONTATO_NF:
-//                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
+                    //                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
                     break;
                 case CodigosInterpretaveis.BOBINA_SAIDA:
                     break;

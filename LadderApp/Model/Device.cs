@@ -87,7 +87,7 @@ namespace LadderApp
         void InicialiazaPadrao()
         {
             BitPortasDispositivo _pinoAux = null;
-            PinType _tpPino = PinType.IO_DIGITAL_ENTRADA;
+            PinTypeEnum _tpPino = PinTypeEnum.IO_DIGITAL_ENTRADA;
 
             dispositivoId = 1;
             dispositivoFabricante = "Texas Instruments";
@@ -102,9 +102,9 @@ namespace LadderApp
 
                 //Apenas para criar alternancia dos tipos de pino
                 if ((i <= 8) || (i >= 15 && i <= 16) )
-                    _pinoAux.TipoPino = PinType.IO_DIGITAL_ENTRADA_OU_SAIDA;
+                    _pinoAux.TipoPino = PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA;
                 else
-                    _pinoAux.TipoPino = PinType.NENHUM;
+                    _pinoAux.TipoPino = PinTypeEnum.NENHUM;
 
                 _tpPino = _pinoAux.TipoPino;
 

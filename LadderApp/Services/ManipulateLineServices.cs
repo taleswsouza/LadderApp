@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace LadderApp
 {
-    public static class ManipulateLine
+    public static class ManipulateLineServices
     {
         public static void AjustaPosicionamento(VisualLine lc)
         {
@@ -13,8 +13,8 @@ namespace LadderApp
 
             int _maiorX = 0;
 
-            SuporteParalelo _par = null;
-            List<SuporteParalelo> _lst_par = new List<SuporteParalelo>();
+            VisualParallelBranch _par = null;
+            List<VisualParallelBranch> _lst_par = new List<VisualParallelBranch>();
 
             int _ultTamY2ParaleloFinal = 0; // acumula o tamanho Y (pos+tam) do ultimo
             // VPI tratado dentro de um mesmo paralelo
@@ -61,7 +61,7 @@ namespace LadderApp
                         _posX = _acumTamX;
                         _tamX = lc.tamX / 3;
 
-                        _par = new SuporteParalelo();
+                        _par = new VisualParallelBranch();
                         _lst_par.Add(_par);
 
                         _par._yAcum = _posY;

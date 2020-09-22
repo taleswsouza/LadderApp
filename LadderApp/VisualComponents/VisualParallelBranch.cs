@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LadderApp
 {
-    public class SuporteParalelo
+    public class VisualParallelBranch
     {
         public ControleLivre par = null;
         public ControleLivre ultimoVPI = null;

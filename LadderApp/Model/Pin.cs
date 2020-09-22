@@ -18,38 +18,38 @@ namespace LadderApp
         /// <summary>
         /// Tipo da pino do dispositivo
         /// </summary>
-        private PinType tipoPino = PinType.NENHUM;
-        public PinType TipoPino
+        private PinTypeEnum tipoPino = PinTypeEnum.NENHUM;
+        public PinTypeEnum TipoPino
         {
             get { return tipoPino; }
             set
             {
-                if (value == PinType.IO_DIGITAL_ENTRADA ||
-                   value == PinType.IO_DIGITAL_SAIDA ||
-                   value == PinType.IO_DIGITAL_ENTRADA_OU_SAIDA)
+                if (value == PinTypeEnum.IO_DIGITAL_ENTRADA ||
+                   value == PinTypeEnum.IO_DIGITAL_SAIDA ||
+                   value == PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA)
                 {
                     switch (value)
                     {
-                        case PinType.IO_DIGITAL_ENTRADA:
-                            tipoDefinido = AddressType.DIGITAL_ENTRADA;
+                        case PinTypeEnum.IO_DIGITAL_ENTRADA:
+                            tipoDefinido = AddressTypeEnum.DIGITAL_ENTRADA;
                             tipoPino = value;
                             break;
-                        case PinType.IO_DIGITAL_SAIDA:
-                            tipoDefinido = AddressType.DIGITAL_SAIDA;
+                        case PinTypeEnum.IO_DIGITAL_SAIDA:
+                            tipoDefinido = AddressTypeEnum.DIGITAL_SAIDA;
                             tipoPino = value;
                             break;
-                        case PinType.IO_DIGITAL_ENTRADA_OU_SAIDA:
-                            tipoDefinido = AddressType.NENHUM;
+                        case PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA:
+                            tipoDefinido = AddressTypeEnum.NENHUM;
                             tipoPino = value;
                             break;
                         default:
-                            tipoDefinido = AddressType.NENHUM;
-                            tipoPino = PinType.NENHUM;
+                            tipoDefinido = AddressTypeEnum.NENHUM;
+                            tipoPino = PinTypeEnum.NENHUM;
                             break;
                     }
                 }
                 else
-                    tipoPino = PinType.NENHUM;
+                    tipoPino = PinTypeEnum.NENHUM;
 
             }
         }
@@ -57,31 +57,31 @@ namespace LadderApp
         /// <summary>
         /// Tipo da pino do dispositivo
         /// </summary>
-        private AddressType tipoDefinido = AddressType.NENHUM;
-        public AddressType TipoDefinido
+        private AddressTypeEnum tipoDefinido = AddressTypeEnum.NENHUM;
+        public AddressTypeEnum TipoDefinido
         {
             get { return tipoDefinido; }
             set
             {
-                if (tipoPino == PinType.IO_DIGITAL_ENTRADA_OU_SAIDA)
+                if (tipoPino == PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA)
                 {
                     switch (value)
                     {
-                        case AddressType.DIGITAL_ENTRADA:
-                        case AddressType.DIGITAL_SAIDA:
+                        case AddressTypeEnum.DIGITAL_ENTRADA:
+                        case AddressTypeEnum.DIGITAL_SAIDA:
                             tipoDefinido = value;
                             break;
                         default:
-                            tipoDefinido = AddressType.NENHUM;
+                            tipoDefinido = AddressTypeEnum.NENHUM;
                             break;
                     }
                 }
-                else if (tipoPino == PinType.IO_DIGITAL_ENTRADA)
-                    tipoDefinido = AddressType.DIGITAL_ENTRADA;
-                else if (tipoPino == PinType.IO_DIGITAL_SAIDA)
-                    tipoDefinido = AddressType.DIGITAL_SAIDA;
+                else if (tipoPino == PinTypeEnum.IO_DIGITAL_ENTRADA)
+                    tipoDefinido = AddressTypeEnum.DIGITAL_ENTRADA;
+                else if (tipoPino == PinTypeEnum.IO_DIGITAL_SAIDA)
+                    tipoDefinido = AddressTypeEnum.DIGITAL_SAIDA;
                 else
-                    tipoDefinido = AddressType.NENHUM;
+                    tipoDefinido = AddressTypeEnum.NENHUM;
             }
         }
 

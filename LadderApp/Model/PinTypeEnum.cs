@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LadderApp
 {
-    public enum PinType
+    public enum PinTypeEnum
     {
         NENHUM = 0,
         IO_DIGITAL_ENTRADA = 1,

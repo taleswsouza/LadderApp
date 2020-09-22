@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LadderApp
 {
-    public class ListaSimbolo : List<Symbol>, IList<Symbol>
+    public class SymbolList : List<Symbol>, IList<Symbol>
     {
         /// <summary>
         /// suporte - utilizado na funcao "ProcuraCodigoInterpretavel()" - carrega
@@ -76,7 +76,7 @@ namespace LadderApp
         /// <param name="_lstSB">Lista de entrada com os simbolos que serao
         /// inseridos no objeto</param>
         /// <returns>objeto atual</returns>
-        public ListaSimbolo InsertAllWithClearBefore(List<Symbol> _lstSB)
+        public SymbolList InsertAllWithClearBefore(List<Symbol> _lstSB)
         {
             this.Clear();
 
@@ -98,7 +98,7 @@ namespace LadderApp
         /// <param name="_lstSB">Lista de entrada com os CodigosInterpretaveis que serao
         /// inseridos no objeto</param>
         /// <returns>objeto atual</returns>
-        public ListaSimbolo InsertAllWithClearBefore(CodigosInterpretaveis [] _arrayCI)
+        public SymbolList InsertAllWithClearBefore(CodigosInterpretaveis [] _arrayCI)
         {
             this.Clear();
 

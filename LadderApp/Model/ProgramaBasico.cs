@@ -9,6 +9,8 @@ using System.Xml.Serialization;
 using System.IO;
 using System.ComponentModel;
 using LadderApp.Formularios;
+using LadderApp.Resources;
+
 namespace LadderApp
 {
     [XmlInclude(typeof(Addressing))]
@@ -402,12 +404,12 @@ namespace LadderApp
                                 {
                                     switch (((Address)_sb.getOperandos(0)).TpEnderecamento)
                                     {
-                                        case AddressType.DIGITAL_MEMORIA_CONTADOR:
+                                        case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
                                             ((Address)_sb.getOperandos(0)).Contador.Reset = true;
                                             ExecutaSimuladoContadores(_sb, ((Address)_sb.getOperandos(0)));
                                             break;
 
-                                        case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
+                                        case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
                                             ((Address)_sb.getOperandos(0)).Temporizador.Reset = true;
                                             break;
 
@@ -609,7 +611,7 @@ namespace LadderApp
 
                                 switch (((Address)_sb.getOperandos(0)).TpEnderecamento)
                                 {
-                                    case AddressType.DIGITAL_MEMORIA_CONTADOR:
+                                    case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
                                         OperandosSELinha.Add("ExecContador(&" + ((Address)_sb.getOperandos(0)).Nome + ");");
                                         break;
                                     default:
@@ -834,10 +836,10 @@ namespace LadderApp
                     _lstEndUsados.Clear();
                 }
 
-                ModuloIntegracaoMSP430 msp430gcc = new ModuloIntegracaoMSP430(false);
+                MSP430IntegrationServices msp430gcc = new MSP430IntegrationServices(false);
 
                 /// Prepara ENDERECOS
-                DadosArquivoEnderecosH = ArquivosFontesC.enderecosH;
+                DadosArquivoEnderecosH = MicrocontrollersBaseCodeFilesResource.enderecosH;
                 DadosArquivoEnderecosH = DadosArquivoEnderecosH.Replace("#ENDEREÇOS#", DadosEnderecos);
                 DadosArquivoEnderecosH.Trim();
 
@@ -845,22 +847,22 @@ namespace LadderApp
 
 
                 /// Prepara DEFINICAO
-                msp430gcc.CriaArquivo("definicao.h", ArquivosFontesC.definicaoH);
+                msp430gcc.CriaArquivo("definicao.h", MicrocontrollersBaseCodeFilesResource.definicaoH);
 
 
                 /// Prepara SETUPHARDWARE
-                msp430gcc.CriaArquivo("setuphardware.h", ArquivosFontesC.setupHardwareH);
+                msp430gcc.CriaArquivo("setuphardware.h", MicrocontrollersBaseCodeFilesResource.setupHardwareH);
 
 
                 /// Prepara FUNCOES
                 if (bIndicaContadorNoPrograma) /// CONTADOR
-                    DadosArquivoFuncoesH = ArquivosFontesC.funcoesH.Replace("#EXECCONTADOR_H#", ArquivosFontesC.ExecContador_funcoesH);
+                    DadosArquivoFuncoesH = MicrocontrollersBaseCodeFilesResource.funcoesH.Replace("#EXECCONTADOR_H#", MicrocontrollersBaseCodeFilesResource.ExecContador_funcoesH);
                 else
-                    DadosArquivoFuncoesH = ArquivosFontesC.funcoesH.Replace("#EXECCONTADOR_H#", "");
+                    DadosArquivoFuncoesH = MicrocontrollersBaseCodeFilesResource.funcoesH.Replace("#EXECCONTADOR_H#", "");
 
 
                 if (bIndicaTemporizadorNoPrograma) /// TEMPORIZADOR
-                    DadosArquivoFuncoesH = DadosArquivoFuncoesH.Replace("#EXECTEMPORIZADOR_H#", ArquivosFontesC.ExecTemporizador_funcoesH);
+                    DadosArquivoFuncoesH = DadosArquivoFuncoesH.Replace("#EXECTEMPORIZADOR_H#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_funcoesH);
                 else
                     DadosArquivoFuncoesH = DadosArquivoFuncoesH.Replace("#EXECTEMPORIZADOR_H#", "");
 
@@ -869,16 +871,16 @@ namespace LadderApp
 
                 /// Prepara USUARIO
                 if (bIndicaTemporizadorNoPrograma)
-                    DadosArquivoUsuarioH = ArquivosFontesC.usuarioH.Replace("#EXECTEMPORIZADORES_H#", ArquivosFontesC.ExecTemporizadores_usuarioH);
+                    DadosArquivoUsuarioH = MicrocontrollersBaseCodeFilesResource.usuarioH.Replace("#EXECTEMPORIZADORES_H#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioH);
                 else
-                    DadosArquivoUsuarioH = ArquivosFontesC.usuarioH.Replace("#EXECTEMPORIZADORES_H#", "");
+                    DadosArquivoUsuarioH = MicrocontrollersBaseCodeFilesResource.usuarioH.Replace("#EXECTEMPORIZADORES_H#", "");
 
                 msp430gcc.CriaArquivo("usuario.h", DadosArquivoUsuarioH);
 
-                DadosArquivoUsuarioC = ArquivosFontesC.usuarioC;
+                DadosArquivoUsuarioC = MicrocontrollersBaseCodeFilesResource.usuarioC;
                 if (bIndicaTemporizadorNoPrograma)
                 {
-                    DadosArquivoUsuarioC = DadosArquivoUsuarioC.Replace("#EXECTEMPORIZADORES_C#", ArquivosFontesC.ExecTemporizadores_usuarioC);
+                    DadosArquivoUsuarioC = DadosArquivoUsuarioC.Replace("#EXECTEMPORIZADORES_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioC);
                     DadosArquivoUsuarioC = DadosArquivoUsuarioC.Replace("#TEMPORIZADORES#", DadosTemporizadores);
                 }
                 else
@@ -893,7 +895,7 @@ namespace LadderApp
 
 
                 /// Prepara MAIN
-                DadosArquivoMainC = ArquivosFontesC.mainC;
+                DadosArquivoMainC = MicrocontrollersBaseCodeFilesResource.mainC;
 
                 if (bGravarLadderNoExecutavel)
                 {
@@ -925,35 +927,35 @@ namespace LadderApp
                 /// Prepara FUNCOES
                 if (bIndicaContadorNoPrograma) /// CONTADOR
                 {
-                    DadosArquivoFuncoesC = ArquivosFontesC.funcoesC.Replace("#EXECCONTADOR_C#", ArquivosFontesC.ExecContador_funcoesC);
+                    DadosArquivoFuncoesC = MicrocontrollersBaseCodeFilesResource.funcoesC.Replace("#EXECCONTADOR_C#", MicrocontrollersBaseCodeFilesResource.ExecContador_funcoesC);
 
                     /// TIPOS DE TEMPORIZADORES USADOS
                     if (_lstTiposContadoresUsados.Contains(0))
-                        DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECCONTADOR_TIPO0#", ArquivosFontesC.ExecContador_Tipo0_funcoesC);
+                        DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECCONTADOR_TIPO0#", MicrocontrollersBaseCodeFilesResource.ExecContador_Tipo0_funcoesC);
                     else
                         DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECCONTADOR_TIPO0#", "");
 
                     if (_lstTiposContadoresUsados.Contains(1))
-                        DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECCONTADOR_TIPO1#", ArquivosFontesC.ExecContador_Tipo1_funcoesC);
+                        DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECCONTADOR_TIPO1#", MicrocontrollersBaseCodeFilesResource.ExecContador_Tipo1_funcoesC);
                     else
                         DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECCONTADOR_TIPO1#", "");
                 }
                 else
-                    DadosArquivoFuncoesC = ArquivosFontesC.funcoesC.Replace("#EXECCONTADOR_C#", "");
+                    DadosArquivoFuncoesC = MicrocontrollersBaseCodeFilesResource.funcoesC.Replace("#EXECCONTADOR_C#", "");
 
 
                 if (bIndicaTemporizadorNoPrograma) /// TEMPORIZADOR
                 {
-                    DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_C#", ArquivosFontesC.ExecTemporizador_funcoesC);
+                    DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_funcoesC);
 
                     /// TIPOS DE TEMPORIZADORES USADOS
                     if (_lstTiposTemporizadoresUsados.Contains(0))
-                        DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_TIPO0#", ArquivosFontesC.ExecTemporizador_Tipo0_funcoes);
+                        DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_TIPO0#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_Tipo0_funcoes);
                     else
                         DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_TIPO0#", "");
                     
                     if (_lstTiposTemporizadoresUsados.Contains(1))
-                        DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_TIPO1#", ArquivosFontesC.ExecTemporizador_Tipo1_funcoes);
+                        DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_TIPO1#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_Tipo1_funcoes);
                     else
                         DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_TIPO1#", "");
                 }
@@ -966,7 +968,7 @@ namespace LadderApp
 
                 
                 /// Prepara SETUPHARDARE
-                DadosArquivoSetupHardwareC = ArquivosFontesC.setupHardwareC.Replace("#SETUPIO#", DadosSetupIO);
+                DadosArquivoSetupHardwareC = MicrocontrollersBaseCodeFilesResource.setupHardwareC.Replace("#SETUPIO#", DadosSetupIO);
                 DadosArquivoSetupHardwareC = DadosArquivoSetupHardwareC.Replace("#LEENTRADAS#", DadosLeEntradas);
                 DadosArquivoSetupHardwareC = DadosArquivoSetupHardwareC.Replace("#ESCREVESAIDAS#", DadosEscreveSaidas);
                 msp430gcc.CriaArquivo("setuphardware.c", DadosArquivoSetupHardwareC);
@@ -974,7 +976,7 @@ namespace LadderApp
 
                 
                 /// Prepara INTERRUPCAO
-                msp430gcc.CriaArquivo("interrupcao.c", ArquivosFontesC.interrupcaoC);
+                msp430gcc.CriaArquivo("interrupcao.c", MicrocontrollersBaseCodeFilesResource.interrupcaoC);
                 msp430gcc.CompilaMSP430gcc("interrupcao");
                 
                 /// CRIA ELF
@@ -1008,7 +1010,7 @@ namespace LadderApp
 
         private bool VerificaLinha(Line _linha)
         {
-            ListaSimbolo _lst = new ListaSimbolo();
+            SymbolList _lst = new SymbolList();
 
             _lst.InsertAllWithClearBefore(_linha.saida);
 

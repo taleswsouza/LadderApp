@@ -164,7 +164,7 @@ namespace LadderApp
 
             if (_novoOperando != null)
             {
-                if (_novoOperando.GetType().Name == "EnderecamentoLadder")
+                if (_novoOperando.GetType().Name == Address.ClassName())
                 {
                     if (_novoOperando == null)
                         _end = (Address)getOperandos(0);
@@ -195,11 +195,11 @@ namespace LadderApp
                     {
                         switch (_end.TpEnderecamento)
                         {
-                            case AddressType.DIGITAL_MEMORIA:
-                            case AddressType.DIGITAL_MEMORIA_CONTADOR:
-                            case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
-                            case AddressType.DIGITAL_ENTRADA:
-                            case AddressType.DIGITAL_SAIDA:
+                            case AddressTypeEnum.DIGITAL_MEMORIA:
+                            case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
+                            case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
+                            case AddressTypeEnum.DIGITAL_ENTRADA:
+                            case AddressTypeEnum.DIGITAL_SAIDA:
                                 _bValido = true;
                                 break;
                             default:
@@ -216,8 +216,8 @@ namespace LadderApp
                     {
                         switch (_end.TpEnderecamento)
                         {
-                            case AddressType.DIGITAL_MEMORIA:
-                            case AddressType.DIGITAL_SAIDA:
+                            case AddressTypeEnum.DIGITAL_MEMORIA:
+                            case AddressTypeEnum.DIGITAL_SAIDA:
                                 _bValido = true;
                                 break;
                             default:
@@ -234,7 +234,7 @@ namespace LadderApp
                         _bEndereco = true;
                         switch (_end.TpEnderecamento)
                         {
-                            case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
+                            case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
                                 _bValido = true;
                                 break;
                             default:
@@ -263,7 +263,7 @@ namespace LadderApp
                         _bEndereco = true;
                         switch (_end.TpEnderecamento)
                         {
-                            case AddressType.DIGITAL_MEMORIA_CONTADOR:
+                            case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
                                 _bValido = true;
                                 break;
                             default:
@@ -297,8 +297,8 @@ namespace LadderApp
                     {
                         switch (_end.TpEnderecamento)
                         {
-                            case AddressType.DIGITAL_MEMORIA_CONTADOR:
-                            case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
+                            case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
+                            case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
                                 _bValido = true;
                                 break;
                             default:
@@ -349,7 +349,7 @@ namespace LadderApp
         {
             for(int i = 0; i < iNumOperandos; i++)
                 if (Operandos[i] != null)
-                    if (Operandos[i].GetType().Name == "EnderecamentoLadder")
+                    if (Operandos[i].GetType().Name == Address.ClassName())
                     {
                         /// Verifica se o endereco atual existe na lista de enderecos
                         /// do programa atual, se existir recupera o opontamento corrigido

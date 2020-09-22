@@ -64,6 +64,11 @@
   <ItemGroup>
     <Compile Include="OperationCode\CodigoInterpretavel.cs" />
     <Compile Include="OperationCode\Txt2CodigosInterpretaveis.cs" />
+    <Compile Include="Resources\MicrocontrollersBaseCodeFilesResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MicrocontrollersBaseCodeFilesResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\FreeUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -102,7 +107,7 @@
     <Compile Include="Forms\LadderForm.Designer.cs">
       <DependentUpon>LadderForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Device.cs" />
+    <Compile Include="Model\Device.cs" />
     <Compile Include="Forms\MainWindowForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,7 +115,7 @@
       <DependentUpon>MainWindowForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Address.cs" />
-    <Compile Include="Addressing.cs" />
+    <Compile Include="Model\Addressing.cs" />
     <Compile Include="Forms\DeviceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,21 +128,21 @@
     <Compile Include="Forms\AddressingForm.Designer.cs">
       <DependentUpon>AddressingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IOperand.cs" />
-    <Compile Include="ISymbol.cs" />
+    <Compile Include="Model\IOperand.cs" />
+    <Compile Include="Model\ISymbol.cs" />
     <Compile Include="Model\Line.cs" />
-    <Compile Include="ListaSimbolo.cs" />
-    <Compile Include="ManipulateLine.cs" />
-    <Compile Include="PinosDispositivo.cs" />
-    <Compile Include="VisualLine.cs">
+    <Compile Include="Model\SymbolList.cs" />
+    <Compile Include="Services\ManipulateLineServices.cs" />
+    <Compile Include="Model\Pin.cs" />
+    <Compile Include="VisualComponents\VisualLine.cs">
     </Compile>
-    <Compile Include="VisualLine.Designer.cs">
+    <Compile Include="VisualComponents\VisualLine.Designer.cs">
       <DependentUpon>VisualLine.cs</DependentUpon>
     </Compile>
-    <Compile Include="ModuloIntegracaoMSP430.cs" />
+    <Compile Include="Services\MSP430IntegrationServices.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Model\ProgramaBasico.cs" />
-    <Compile Include="VisualProgram.cs" />
+    <Compile Include="VisualComponents\VisualProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="UserControls\BasicUserControl.resx">
       <SubType>Designer</SubType>
@@ -179,7 +184,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>AddressingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VisualLine.resx">
+    <EmbeddedResource Include="VisualComponents\VisualLine.resx">
       <SubType>Designer</SubType>
       <DependentUpon>VisualLine.cs</DependentUpon>
     </EmbeddedResource>
@@ -192,15 +197,15 @@
       <SubType>Designer</SubType>
       <DependentUpon>ProjectForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StringResource.resx">
+    <EmbeddedResource Include="Resources\VisualResources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>StringResource.Designer.cs</LastGenOutput>
+      <LastGenOutput>VisualResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArquivosFontesC.resx">
+    <EmbeddedResource Include="Resources\MicrocontrollersBaseCodeFilesResource.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ArquivosFontesC.Designer.cs</LastGenOutput>
+      <LastGenOutput>MicrocontrollersBaseCodeFilesResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -225,22 +230,17 @@
     <Compile Include="UserControls\BasicUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="StringResource.Designer.cs">
+    <Compile Include="Resources\VisualResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>StringResource.resx</DependentUpon>
+      <DependentUpon>VisualResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ArquivosFontesC.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ArquivosFontesC.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Symbol.cs" />
-    <Compile Include="Counter.cs" />
-    <Compile Include="Timer.cs" />
-    <Compile Include="SuporteParalelo.cs" />
-    <Compile Include="AddressType.cs" />
-    <Compile Include="PinType.cs" />
+    <Compile Include="Model\Symbol.cs" />
+    <Compile Include="Model\Counter.cs" />
+    <Compile Include="Model\Timer.cs" />
+    <Compile Include="VisualComponents\VisualParallelBranch.cs" />
+    <Compile Include="Model\AddressTypeEnum.cs" />
+    <Compile Include="Model\PinTypeEnum.cs" />
     <Compile Include="OperationCode\CodigosInterpretaveis2Txt.cs" />
   </ItemGroup>
   <ItemGroup>

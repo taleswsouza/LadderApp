@@ -619,7 +619,7 @@ namespace LadderApp
             simboloFimLinha.Dispose();
         }
 
-        public Symbol Insere2Saida(ListaSimbolo _lstSB)
+        public Symbol Insere2Saida(SymbolList _lstSB)
         {
             int _indiceSimbolo = 0;
             int _subt2posicionaSimboloInserido = 0;
@@ -633,7 +633,7 @@ namespace LadderApp
 
                     if (_lstSB.Count > 1)
                     {
-                        _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_COMPLETO);
+                        _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_COMPLETO);
                         _subt2posicionaSimboloInserido = -1;
                     }
 
@@ -647,7 +647,7 @@ namespace LadderApp
                     if (_indiceSimbolo == 0)
                     {
                         /// prepara para inserir antes do objeto atual
-                        _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_INICIADO);
+                        _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                         /// insere PP antes do objeto atual na linha
                         this.saida.Insert(0, new Symbol(CodigosInterpretaveis.PARALELO_PROXIMO));
@@ -656,7 +656,7 @@ namespace LadderApp
                     }
                     else
                     {
-                        _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_FINALIZADO);
+                        _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_FINALIZADO);
                         _subt2posicionaSimboloInserido = -1;
 
                         this.saida.Insert(0, new Symbol(CodigosInterpretaveis.PARALELO_INICIAL));
@@ -668,7 +668,7 @@ namespace LadderApp
                     switch (this.saida[_indiceSimbolo].getCI())
                     {
                         case CodigosInterpretaveis.PARALELO_INICIAL:
-                            _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_INICIADO);
+                            _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                             this.saida[0].setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
                             break;

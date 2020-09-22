@@ -112,8 +112,8 @@ namespace LadderApp
             int _guardaAcumXnoMaiorSimbSaida = 0;
             int _guardaTamSaida = 0;
 
-            SuporteParalelo _par = null;
-            List<SuporteParalelo> _lst_par = new List<SuporteParalelo>();
+            VisualParallelBranch _par = null;
+            List<VisualParallelBranch> _lst_par = new List<VisualParallelBranch>();
 
             /// acumula o tamanho Y (pos+tam) do ultimo
             /// VPI tratado dentro de um mesmo paralelo
@@ -163,7 +163,7 @@ namespace LadderApp
                         _posX = _acumTamX;
                         _tamX = this.tamX / 3;
 
-                        _par = new SuporteParalelo();
+                        _par = new VisualParallelBranch();
                         _lst_par.Add(_par);
 
                         _par._yAcum = _posY;
@@ -472,7 +472,7 @@ namespace LadderApp
 
         public ControleLivre InsereSimbolo(bool _bApos, LocalInsereSimbolo _lIS, ControleLivre _controle, params CodigosInterpretaveis[] _arrayCI)
         {
-            ListaSimbolo _lstSB = new ListaSimbolo();
+            SymbolList _lstSB = new SymbolList();
 
             /// Insere o array de CodigosInterpretaveis em uma lista de simbolos para facilitar a manipulacao
             _lstSB.InsertAllWithClearBefore(_arrayCI);
@@ -493,7 +493,7 @@ namespace LadderApp
         }
 
 
-        public ControleLivre InsereSimboloIndefinido(bool _bApos, ControleLivre _controle, ListaSimbolo _lstSB)
+        public ControleLivre InsereSimboloIndefinido(bool _bApos, ControleLivre _controle, SymbolList _lstSB)
         {
 
             _lstSB.ValidaOperandos(this.frmDiag.linkProjeto.programa.endereco);
@@ -511,7 +511,7 @@ namespace LadderApp
             }
         }
 
-        private ControleLivre Insere2Simbolo(bool _bApos, ControleLivre _controle, ListaSimbolo _lstSB)
+        private ControleLivre Insere2Simbolo(bool _bApos, ControleLivre _controle, SymbolList _lstSB)
         {
             int _indiceSimbolo = 0;
 
@@ -527,7 +527,7 @@ namespace LadderApp
             return this.simbolos[_indiceSimbolo - 1];
         }
 
-        private ControleLivre Insere2Saida(bool _bApos, ControleLivre _controle, ListaSimbolo _lstSB)
+        private ControleLivre Insere2Saida(bool _bApos, ControleLivre _controle, SymbolList _lstSB)
         {
             int _indiceSimbolo = 0;
             int _subt2posicionaSimboloInserido = 0;
@@ -541,7 +541,7 @@ namespace LadderApp
 
                     if (_lstSB.Count > 1)
                     {
-                        _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_COMPLETO);
+                        _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_COMPLETO);
                         _subt2posicionaSimboloInserido = -1;
                     }
 
@@ -556,7 +556,7 @@ namespace LadderApp
                     if (_indiceSimbolo == 0)
                     {
                         /// prepara para inserir antes do objeto atual
-                        _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_INICIADO);
+                        _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                         /// insere PP antes do objeto atual na linha
                         linhaBase.saida.Insert(0, new Symbol(CodigosInterpretaveis.PARALELO_PROXIMO));
@@ -567,7 +567,7 @@ namespace LadderApp
                     }
                     else
                     {
-                        _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_FINALIZADO);
+                        _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_FINALIZADO);
                         _subt2posicionaSimboloInserido = -1;
 
                         linhaBase.saida.Insert(0, new Symbol(CodigosInterpretaveis.PARALELO_INICIAL));
@@ -583,7 +583,7 @@ namespace LadderApp
                     switch (this.saida[_indiceSimbolo].getCI())
                     {
                         case CodigosInterpretaveis.PARALELO_INICIAL:
-                            _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_INICIADO);
+                            _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                             linhaBase.saida[0].setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
                             this.saida[0].setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
@@ -744,7 +744,7 @@ namespace LadderApp
                             if (_cL.getOperandos(0) != null)
                             {
                                 Object obj = _cL.getOperandos(0);
-                                if (obj.GetType().ToString() == "LadderApp1.EnderecamentoLadder")
+                                if (obj.GetType().Name == Address.ClassName()) // TODO Vefiry: ==  "LadderApp1.EnderecamentoLadder")
                                 {
                                     _end = (LadderApp.Address)obj;
                                 }

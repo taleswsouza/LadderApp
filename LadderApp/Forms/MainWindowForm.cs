@@ -14,6 +14,7 @@ using System.Security;
 using LadderApp.Exceções;
 using LadderApp.CodigoInterpretavel;
 using System.Diagnostics;
+using LadderApp.Resources;
 
 namespace LadderApp
 {
@@ -56,7 +57,7 @@ namespace LadderApp
             }
             else
             {
-                DialogResult _result = MessageBox.Show(RecursoVisual.STR_QUESTIONA_SALVAR_PROJETO.Replace("%%", frmProj.Text.Trim()).Trim(), "LadderApp",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                DialogResult _result = MessageBox.Show(VisualResources.STR_QUESTIONA_SALVAR_PROJETO.Replace("%%", frmProj.Text.Trim()).Trim(), "LadderApp",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
 
                 if (_result == DialogResult.Yes)
                 {
@@ -116,7 +117,7 @@ namespace LadderApp
                     case ".a43":
                         try
                         {
-                            ModuloIntegracaoMSP430 p = new ModuloIntegracaoMSP430();
+                            MSP430IntegrationServices p = new MSP430IntegrationServices();
 
                             String strLido = p.ConvertHex2String(FileName);
 
@@ -219,7 +220,7 @@ namespace LadderApp
                         DataFormats.Format myFormat = DataFormats.GetFormat("List<SimboloBasico>");
                         Object returnObject = null;
                         List<Symbol> _lstSB = new List<Symbol>();
-                        ListaSimbolo _lstSB2 = new ListaSimbolo();
+                        SymbolList _lstSB2 = new SymbolList();
 
                         IDataObject iData = Clipboard.GetDataObject();
 
@@ -633,7 +634,7 @@ namespace LadderApp
                 Int32 intIndiceLinha = 0;
                 Int32 iNumOperandos = 0;
                 Address _endLido;
-                AddressType _tpEndLido;
+                AddressTypeEnum _tpEndLido;
                 Int32 _iIndiceEndLido = 0;
 
 
@@ -643,9 +644,9 @@ namespace LadderApp
                 programa.Nome = strNomeProjeto;
                 programa.dispositivo = new Device(1);
                 programa.endereco.AlocaEnderecamentoIO(programa.dispositivo);
-                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstMemoria, AddressType.DIGITAL_MEMORIA, 10);
-                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstTemporizador, AddressType.DIGITAL_MEMORIA_TEMPORIZADOR, 10);
-                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstContador, AddressType.DIGITAL_MEMORIA_CONTADOR, 10);
+                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstMemoria, AddressTypeEnum.DIGITAL_MEMORIA, 10);
+                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstTemporizador, AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR, 10);
+                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstContador, AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR, 10);
                 intIndiceLinha = programa.InsereLinhaNoFinal(new Line());
 
                 for (int i = DadosConvertidosChar.IndexOf("@laddermic.com") + 15; i < DadosConvertidosChar.Length; i++)
@@ -672,7 +673,7 @@ namespace LadderApp
                             {
                                 Symbol _sb = new Symbol((CodigosInterpretaveis)guarda);
 
-                                _tpEndLido =(AddressType)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
+                                _tpEndLido =(AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
@@ -693,9 +694,9 @@ namespace LadderApp
                             intContaFim = 0;
                             iNumOperandos = 2;
                             {
-                                ListaSimbolo _lstSB = new ListaSimbolo();
+                                SymbolList _lstSB = new SymbolList();
                                 _lstSB.Add(new Symbol((CodigosInterpretaveis)guarda));
-                                _tpEndLido = (AddressType)Convert.ToChar(DadosConvertidosChar.Substring(i+1, 1));
+                                _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i+1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i+2, 1));
                                 _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
@@ -722,9 +723,9 @@ namespace LadderApp
                             intContaFim = 0;
                             iNumOperandos = 3;
                             {
-                                ListaSimbolo _lstSB = new ListaSimbolo();
+                                SymbolList _lstSB = new SymbolList();
                                 _lstSB.Add(new Symbol((CodigosInterpretaveis)guarda));
-                                _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressType.DIGITAL_MEMORIA_CONTADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
+                                _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
 
@@ -739,9 +740,9 @@ namespace LadderApp
                             intContaFim = 0;
                             iNumOperandos = 4;
                             {
-                                ListaSimbolo _lstSB = new ListaSimbolo();
+                                SymbolList _lstSB = new SymbolList();
                                 _lstSB.Add(new Symbol((CodigosInterpretaveis)guarda));
-                                _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressType.DIGITAL_MEMORIA_TEMPORIZADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
+                                _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.BaseTempo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 4, 1));
@@ -761,7 +762,7 @@ namespace LadderApp
                     if (intContaFim >= 2)
                     {
                         /// grava os dados lidos do codigo intepretavel
-                        ModuloIntegracaoMSP430 p = new ModuloIntegracaoMSP430();
+                        MSP430IntegrationServices p = new MSP430IntegrationServices();
                         p.CriaArquivo("codigosinterpretaveis.txt", DadosConvertidosChar.Substring(DadosConvertidosChar.IndexOf("@laddermic.com"), i - DadosConvertidosChar.IndexOf("@laddermic.com") + 1));
 
                         /// força saída do loop
@@ -792,7 +793,7 @@ namespace LadderApp
                     {
                         Symbol _sb = frmProj.frmDiagLadder.ControleSelecionado.SimboloBasico;
                         if (_sb.getOperandos(0) != null)
-                            if ((_sb.getOperandos(0).GetType().Name == "EnderecamentoLadder"))
+                            if ((_sb.getOperandos(0).GetType().Name == Address.ClassName()))
                             {
                                 ChangeCommentForm frmAltComent = new ChangeCommentForm();
 
@@ -965,7 +966,7 @@ namespace LadderApp
 
         private void lerProgramaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ModuloIntegracaoMSP430 p = new ModuloIntegracaoMSP430();
+            MSP430IntegrationServices p = new MSP430IntegrationServices();
             try
             {
                 String strLido = p.LeViaUSB();
