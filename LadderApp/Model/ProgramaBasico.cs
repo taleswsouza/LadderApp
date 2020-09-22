@@ -402,12 +402,12 @@ namespace LadderApp
                                 {
                                     switch (((Address)_sb.getOperandos(0)).TpEnderecamento)
                                     {
-                                        case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                                        case AddressType.DIGITAL_MEMORIA_CONTADOR:
                                             ((Address)_sb.getOperandos(0)).Contador.Reset = true;
                                             ExecutaSimuladoContadores(_sb, ((Address)_sb.getOperandos(0)));
                                             break;
 
-                                        case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                                        case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                                             ((Address)_sb.getOperandos(0)).Temporizador.Reset = true;
                                             break;
 
@@ -441,7 +441,7 @@ namespace LadderApp
         {
             DialogResult _result;
             String _strSenha = "";
-            frmSenha _frmSenha = new frmSenha();
+            PasswordForm _frmSenha = new PasswordForm();
 
             _frmSenha.Text = "Enter the new password:";
             _frmSenha.lblSenhaAtual.Text = "New password:";
@@ -609,7 +609,7 @@ namespace LadderApp
 
                                 switch (((Address)_sb.getOperandos(0)).TpEnderecamento)
                                 {
-                                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                                    case AddressType.DIGITAL_MEMORIA_CONTADOR:
                                         OperandosSELinha.Add("ExecContador(&" + ((Address)_sb.getOperandos(0)).Nome + ");");
                                         break;
                                     default:

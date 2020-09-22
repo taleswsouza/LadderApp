@@ -14,7 +14,7 @@ namespace LadderApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new EditorLadder());
+            Application.Run(new MainWindowForm());
         }
     }
 }

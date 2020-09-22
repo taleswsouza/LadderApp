@@ -33,24 +33,24 @@ namespace LadderApp
             return Find(_end.TpEnderecamento, _end.Indice);
         }
 
-        public Address Find(TipoEnderecamentoDispositivo tpEnderecamento, Int32 indice)
+        public Address Find(AddressType tpEnderecamento, Int32 indice)
         {
             List<Address> _lstGenerica;
             switch (tpEnderecamento)
             {
-                case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
+                case AddressType.DIGITAL_MEMORIA:
                     _lstGenerica = lstMemoria;
                     break;
-                case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                case AddressType.DIGITAL_MEMORIA_CONTADOR:
                     _lstGenerica = lstContador;
                     break;
-                case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                     _lstGenerica = lstTemporizador;
                     break;
-                case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
+                case AddressType.DIGITAL_ENTRADA:
                     _lstGenerica = lstIOEntrada;
                     break;
-                case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                case AddressType.DIGITAL_SAIDA:
                     _lstGenerica = lstIOSaida;
                     break;
                 default:
@@ -73,47 +73,47 @@ namespace LadderApp
         public List<Address> ListaNomes(CodigosInterpretaveis _ci)
         {
             List<Address> _listaEnderecos = new List<Address>();
-            List<TipoEnderecamentoDispositivo> tiposListados = new List<TipoEnderecamentoDispositivo>();
+            List<AddressType> tiposListados = new List<AddressType>();
             List<Address> _lstGenerica;
 
             switch(_ci)
             {
                 case CodigosInterpretaveis.CONTATO_NA:
                 case CodigosInterpretaveis.CONTATO_NF:
-                    tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_ENTRADA);
-                    tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA);
-                    tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR);
-                    tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR);
+                    tiposListados.Add(AddressType.DIGITAL_ENTRADA);
+                    tiposListados.Add(AddressType.DIGITAL_MEMORIA);
+                    tiposListados.Add(AddressType.DIGITAL_MEMORIA_CONTADOR);
+                    tiposListados.Add(AddressType.DIGITAL_MEMORIA_TEMPORIZADOR);
                     break;
                 case CodigosInterpretaveis.TEMPORIZADOR:
-                    tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR);
+                    tiposListados.Add(AddressType.DIGITAL_MEMORIA_TEMPORIZADOR);
                     break;
                 case CodigosInterpretaveis.CONTADOR:
-                    tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR);
+                    tiposListados.Add(AddressType.DIGITAL_MEMORIA_CONTADOR);
                     break;
                 case CodigosInterpretaveis.BOBINA_SAIDA:
-                    tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA);
-                    tiposListados.Add(TipoEnderecamentoDispositivo.DIGITAL_SAIDA);
+                    tiposListados.Add(AddressType.DIGITAL_MEMORIA);
+                    tiposListados.Add(AddressType.DIGITAL_SAIDA);
                     break;
             }
 
-            foreach (TipoEnderecamentoDispositivo _cadaTipo in tiposListados)
+            foreach (AddressType _cadaTipo in tiposListados)
             {
                 switch (_cadaTipo)
                 {
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
+                    case AddressType.DIGITAL_MEMORIA:
                         _lstGenerica = lstMemoria;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                    case AddressType.DIGITAL_MEMORIA_CONTADOR:
                         _lstGenerica = lstContador;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                    case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                         _lstGenerica = lstTemporizador;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
+                    case AddressType.DIGITAL_ENTRADA:
                         _lstGenerica = lstIOEntrada;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                    case AddressType.DIGITAL_SAIDA:
                         _lstGenerica = lstIOSaida;
                         break;
                     default:
@@ -130,32 +130,32 @@ namespace LadderApp
         public void LimpaIndicacaoEmUso()
         {
             List<Address> _lstGenerica;
-            List<TipoEnderecamentoDispositivo> _lstTpEnd = new List<TipoEnderecamentoDispositivo>();
+            List<AddressType> _lstTpEnd = new List<AddressType>();
 
-            _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA);
-            _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR);
-            _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR);
-            _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_ENTRADA);
-            _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_SAIDA);
+            _lstTpEnd.Add(AddressType.DIGITAL_MEMORIA);
+            _lstTpEnd.Add(AddressType.DIGITAL_MEMORIA_CONTADOR);
+            _lstTpEnd.Add(AddressType.DIGITAL_MEMORIA_TEMPORIZADOR);
+            _lstTpEnd.Add(AddressType.DIGITAL_ENTRADA);
+            _lstTpEnd.Add(AddressType.DIGITAL_SAIDA);
 
-            foreach (TipoEnderecamentoDispositivo _tp in _lstTpEnd)
+            foreach (AddressType _tp in _lstTpEnd)
             {
 
                 switch (_tp)
                 {
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
+                    case AddressType.DIGITAL_MEMORIA:
                         _lstGenerica = lstMemoria;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                    case AddressType.DIGITAL_MEMORIA_CONTADOR:
                         _lstGenerica = lstContador;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                    case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                         _lstGenerica = lstTemporizador;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
+                    case AddressType.DIGITAL_ENTRADA:
                         _lstGenerica = lstIOEntrada;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                    case AddressType.DIGITAL_SAIDA:
                         _lstGenerica = lstIOSaida;
                         break;
                     default:
@@ -170,33 +170,33 @@ namespace LadderApp
         public List<Address> ListaEnderecamentosEmUso()
         {
             List<Address> _lstGenerica;
-            List<TipoEnderecamentoDispositivo> _lstTpEnd = new List<TipoEnderecamentoDispositivo>();
+            List<AddressType> _lstTpEnd = new List<AddressType>();
             List<Address> _lstResult = new List<Address>();
 
-            _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA);
-            _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR);
-            _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR);
-            _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_ENTRADA);
-            _lstTpEnd.Add(TipoEnderecamentoDispositivo.DIGITAL_SAIDA);
+            _lstTpEnd.Add(AddressType.DIGITAL_MEMORIA);
+            _lstTpEnd.Add(AddressType.DIGITAL_MEMORIA_CONTADOR);
+            _lstTpEnd.Add(AddressType.DIGITAL_MEMORIA_TEMPORIZADOR);
+            _lstTpEnd.Add(AddressType.DIGITAL_ENTRADA);
+            _lstTpEnd.Add(AddressType.DIGITAL_SAIDA);
 
-            foreach (TipoEnderecamentoDispositivo _tp in _lstTpEnd)
+            foreach (AddressType _tp in _lstTpEnd)
             {
 
                 switch (_tp)
                 {
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
+                    case AddressType.DIGITAL_MEMORIA:
                         _lstGenerica = lstMemoria;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                    case AddressType.DIGITAL_MEMORIA_CONTADOR:
                         _lstGenerica = lstContador;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                    case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                         _lstGenerica = lstTemporizador;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
+                    case AddressType.DIGITAL_ENTRADA:
                         _lstGenerica = lstIOEntrada;
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                    case AddressType.DIGITAL_SAIDA:
                         _lstGenerica = lstIOSaida;
                         break;
                     default:
@@ -221,10 +221,10 @@ namespace LadderApp
                 el.ApontaDispositivo(dispositivo);
                 switch (el.TpEnderecamento)
                 {
-                    case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
+                    case AddressType.DIGITAL_ENTRADA:
                         this.lstIOEntrada.Add(el);
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                    case AddressType.DIGITAL_SAIDA:
                         this.lstIOSaida.Add(el);
                         break;
                 }
@@ -239,7 +239,7 @@ namespace LadderApp
         /// <param name="e">Enderecamento do programa</param>
         /// <param name="tp">tipo de memoria a ser realocada</param>
         /// <param name="qtdEnd">Quantidade do tipo desejada</param>
-        public int AlocaEnderecamentoMemoria(Device dispositivo, List<Address> _lstE, TipoEnderecamentoDispositivo tp, int qtdEnd)
+        public int AlocaEnderecamentoMemoria(Device dispositivo, List<Address> _lstE, AddressType tp, int qtdEnd)
         {
             int _qtdAtual = 1;
 

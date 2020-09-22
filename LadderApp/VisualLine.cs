@@ -15,7 +15,7 @@ namespace LadderApp
         {
         }
 
-        public VisualLine(DiagramaLadder _frmDiag, Line _linhaBase)
+        public VisualLine(LadderForm _frmDiag, Line _linhaBase)
         {
             frmDiag = _frmDiag;
             linhaBase = _linhaBase;
@@ -29,7 +29,7 @@ namespace LadderApp
         /// Link para o formulario DiagramaLadder aonde sera
         /// desenhada os controles da linha
         /// </summary>
-        public DiagramaLadder frmDiag = null;
+        public LadderForm frmDiag = null;
 
         public VisualLine linhaAnterior = null;
         public VisualLine linhaProxima = null;
@@ -678,7 +678,7 @@ namespace LadderApp
             ControleLivre _cL = (ControleLivre)sender;
             CodigosInterpretaveis _cI = _cL.getCI();
 
-            ProjetoLadder _frmPL;
+            ProjectForm _frmPL;
             _frmPL = frmDiag.linkProjeto;
 
             if (e.Button == MouseButtons.Right)
@@ -775,7 +775,7 @@ namespace LadderApp
         {
             ToolStripMenuItem _mnu = (ToolStripMenuItem)sender;
 
-            ProjetoLadder _frmPL;
+            ProjectForm _frmPL;
             _frmPL = this.frmDiag.linkProjeto;
 
             _frmPL.InsereEnderecoNoSimbolo(frmDiag.ControleSelecionado, (Address)_mnu.Tag);
@@ -785,8 +785,8 @@ namespace LadderApp
         {
             ControleLivre _cL = (ControleLivre)sender;
             CodigosInterpretaveis _cI = _cL.getCI();
-            DiagramaLadder _frmDL;
-            _frmDL = (DiagramaLadder)_cL.Parent;
+            LadderForm _frmDL;
+            _frmDL = (LadderForm)_cL.Parent;
 
             if (e.Button == MouseButtons.Right)
             {

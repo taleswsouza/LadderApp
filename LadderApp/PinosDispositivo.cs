@@ -18,38 +18,38 @@ namespace LadderApp
         /// <summary>
         /// Tipo da pino do dispositivo
         /// </summary>
-        private TiposPinosDispositivo tipoPino = TiposPinosDispositivo.NENHUM;
-        public TiposPinosDispositivo TipoPino
+        private PinType tipoPino = PinType.NENHUM;
+        public PinType TipoPino
         {
             get { return tipoPino; }
             set
             {
-                if (value == TiposPinosDispositivo.IO_DIGITAL_ENTRADA ||
-                   value == TiposPinosDispositivo.IO_DIGITAL_SAIDA ||
-                   value == TiposPinosDispositivo.IO_DIGITAL_ENTRADA_OU_SAIDA)
+                if (value == PinType.IO_DIGITAL_ENTRADA ||
+                   value == PinType.IO_DIGITAL_SAIDA ||
+                   value == PinType.IO_DIGITAL_ENTRADA_OU_SAIDA)
                 {
                     switch (value)
                     {
-                        case TiposPinosDispositivo.IO_DIGITAL_ENTRADA:
-                            tipoDefinido = TipoEnderecamentoDispositivo.DIGITAL_ENTRADA;
+                        case PinType.IO_DIGITAL_ENTRADA:
+                            tipoDefinido = AddressType.DIGITAL_ENTRADA;
                             tipoPino = value;
                             break;
-                        case TiposPinosDispositivo.IO_DIGITAL_SAIDA:
-                            tipoDefinido = TipoEnderecamentoDispositivo.DIGITAL_SAIDA;
+                        case PinType.IO_DIGITAL_SAIDA:
+                            tipoDefinido = AddressType.DIGITAL_SAIDA;
                             tipoPino = value;
                             break;
-                        case TiposPinosDispositivo.IO_DIGITAL_ENTRADA_OU_SAIDA:
-                            tipoDefinido = TipoEnderecamentoDispositivo.NENHUM;
+                        case PinType.IO_DIGITAL_ENTRADA_OU_SAIDA:
+                            tipoDefinido = AddressType.NENHUM;
                             tipoPino = value;
                             break;
                         default:
-                            tipoDefinido = TipoEnderecamentoDispositivo.NENHUM;
-                            tipoPino = TiposPinosDispositivo.NENHUM;
+                            tipoDefinido = AddressType.NENHUM;
+                            tipoPino = PinType.NENHUM;
                             break;
                     }
                 }
                 else
-                    tipoPino = TiposPinosDispositivo.NENHUM;
+                    tipoPino = PinType.NENHUM;
 
             }
         }
@@ -57,31 +57,31 @@ namespace LadderApp
         /// <summary>
         /// Tipo da pino do dispositivo
         /// </summary>
-        private TipoEnderecamentoDispositivo tipoDefinido = TipoEnderecamentoDispositivo.NENHUM;
-        public TipoEnderecamentoDispositivo TipoDefinido
+        private AddressType tipoDefinido = AddressType.NENHUM;
+        public AddressType TipoDefinido
         {
             get { return tipoDefinido; }
             set
             {
-                if (tipoPino == TiposPinosDispositivo.IO_DIGITAL_ENTRADA_OU_SAIDA)
+                if (tipoPino == PinType.IO_DIGITAL_ENTRADA_OU_SAIDA)
                 {
                     switch (value)
                     {
-                        case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
-                        case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                        case AddressType.DIGITAL_ENTRADA:
+                        case AddressType.DIGITAL_SAIDA:
                             tipoDefinido = value;
                             break;
                         default:
-                            tipoDefinido = TipoEnderecamentoDispositivo.NENHUM;
+                            tipoDefinido = AddressType.NENHUM;
                             break;
                     }
                 }
-                else if (tipoPino == TiposPinosDispositivo.IO_DIGITAL_ENTRADA)
-                    tipoDefinido = TipoEnderecamentoDispositivo.DIGITAL_ENTRADA;
-                else if (tipoPino == TiposPinosDispositivo.IO_DIGITAL_SAIDA)
-                    tipoDefinido = TipoEnderecamentoDispositivo.DIGITAL_SAIDA;
+                else if (tipoPino == PinType.IO_DIGITAL_ENTRADA)
+                    tipoDefinido = AddressType.DIGITAL_ENTRADA;
+                else if (tipoPino == PinType.IO_DIGITAL_SAIDA)
+                    tipoDefinido = AddressType.DIGITAL_SAIDA;
                 else
-                    tipoDefinido = TipoEnderecamentoDispositivo.NENHUM;
+                    tipoDefinido = AddressType.NENHUM;
             }
         }
 

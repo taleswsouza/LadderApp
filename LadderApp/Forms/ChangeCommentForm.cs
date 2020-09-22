@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace LadderApp.Formularios
 {
-    public partial class frmAlteraComentario : Form
+    public partial class ChangeCommentForm : Form
     {
-        public frmAlteraComentario()
+        public ChangeCommentForm()
         {
             InitializeComponent();
         }

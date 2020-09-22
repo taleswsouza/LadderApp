@@ -5,7 +5,7 @@ using System.Text;
 namespace LadderApp
 {
     public delegate void MudouOperandoEventHandler(Object sender);
-    public interface IOperando
+    public interface IOperand
     {
         event MudouOperandoEventHandler MudouOperando;
     }

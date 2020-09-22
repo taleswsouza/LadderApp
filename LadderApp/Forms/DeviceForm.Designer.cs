@@ -1,6 +1,6 @@
 namespace LadderApp
 {
-    partial class frmDispositivo
+    partial class DeviceForm
     {
         /// <summary>
         /// Required designer variable.

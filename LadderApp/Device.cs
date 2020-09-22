@@ -6,7 +6,7 @@ using System.IO;
 
 namespace LadderApp
 {
-    public class DispositivoLadder
+    public class Device
     {
         /// <summary>
         /// id - Identificador
@@ -75,11 +75,11 @@ namespace LadderApp
         [XmlElement(ElementName = "EnderecoPinos")]
         public List<Address> lstEndBitPorta = new List<Address>();
 
-        public DispositivoLadder()
+        public Device()
         {
         }
 
-        public DispositivoLadder(int idDispositivo)
+        public Device(int idDispositivo)
         {
             InicialiazaPadrao();
         }
@@ -87,7 +87,7 @@ namespace LadderApp
         void InicialiazaPadrao()
         {
             BitPortasDispositivo _pinoAux = null;
-            TiposPinosDispositivo _tpPino = TiposPinosDispositivo.IO_DIGITAL_ENTRADA;
+            PinType _tpPino = PinType.IO_DIGITAL_ENTRADA;
 
             dispositivoId = 1;
             dispositivoFabricante = "Texas Instruments";
@@ -102,9 +102,9 @@ namespace LadderApp
 
                 //Apenas para criar alternancia dos tipos de pino
                 if ((i <= 8) || (i >= 15 && i <= 16) )
-                    _pinoAux.TipoPino = TiposPinosDispositivo.IO_DIGITAL_ENTRADA_OU_SAIDA;
+                    _pinoAux.TipoPino = PinType.IO_DIGITAL_ENTRADA_OU_SAIDA;
                 else
-                    _pinoAux.TipoPino = TiposPinosDispositivo.NENHUM;
+                    _pinoAux.TipoPino = PinType.NENHUM;
 
                 _tpPino = _pinoAux.TipoPino;
 

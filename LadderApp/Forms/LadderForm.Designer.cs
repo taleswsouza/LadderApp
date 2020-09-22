@@ -1,6 +1,6 @@
 namespace LadderApp
 {
-    partial class DiagramaLadder
+    partial class LadderForm
     {
         /// <summary>
         /// Required designer variable.

@@ -4,16 +4,16 @@ using System.Text;
 
 namespace LadderApp
 {
-    public class ProgramaVisual
+    public class VisualProgram
     {
         ProgramaBasico prgBasico = null;
-        DiagramaLadder frmDiag = null;
+        LadderForm frmDiag = null;
 
         /// <summary>
         /// Construtor da classe do programa de linhas da visao (controlelivre)
         /// </summary>
         /// <param name="_prgBasico">link para o programa basico (simbolobasico)</param>
-        public ProgramaVisual(ProgramaBasico _prgBasico, DiagramaLadder _frmDiag)
+        public VisualProgram(ProgramaBasico _prgBasico, LadderForm _frmDiag)
         {
             prgBasico = _prgBasico;
             frmDiag = _frmDiag;

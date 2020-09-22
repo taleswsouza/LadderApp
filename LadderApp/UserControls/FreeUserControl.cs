@@ -1130,8 +1130,8 @@ namespace LadderApp
                 if (ControleSelecionado != null)
                     ControleSelecionado(this, linhaAtual);
 
-                DiagramaLadder _frmDL;
-                _frmDL = (DiagramaLadder)this.Parent;
+                LadderForm _frmDL;
+                _frmDL = (LadderForm)this.Parent;
                 _frmDL.SetMessage(this.Location.ToString() + " - " + this.Size.ToString() + " - " + this.TabStop.ToString() + " - " + this.TabIndex.ToString() + " - " + this.getCI().ToString());
 
                 this.Refresh();

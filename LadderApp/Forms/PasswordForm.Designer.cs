@@ -1,6 +1,6 @@
 namespace LadderApp.Formularios
 {
-    partial class frmSenha
+    partial class PasswordForm
     {
         /// <summary>
         /// Required designer variable.

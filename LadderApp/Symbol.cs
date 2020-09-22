@@ -6,16 +6,16 @@ using System.Xml.Serialization;
 
 namespace LadderApp
 {
-    [XmlInclude(typeof(EnderecamentoLadder))]
+    [XmlInclude(typeof(Address))]
     [XmlType(TypeName="Simbolo")]
     [Serializable]
-    public class SimboloBasico : ISymbol
+    public class Symbol : ISymbol
     {
-        public SimboloBasico()
+        public Symbol()
         {
         }
 
-        public SimboloBasico(CodigosInterpretaveis _ci)
+        public Symbol(CodigosInterpretaveis _ci)
         {
             codigoInterpretavel = _ci;
         }
@@ -157,8 +157,8 @@ namespace LadderApp
         /// <returns></returns>
         private bool ValidaEndereco(int _indice, Object _novoOperando)
         {
-            EnderecamentoLadder _end = null;
-            EnderecamentoLadder _atualOperando = null;
+            Address _end = null;
+            Address _atualOperando = null;
             bool _bValido = true;
             bool _bEndereco = false;
 
@@ -167,9 +167,9 @@ namespace LadderApp
                 if (_novoOperando.GetType().Name == "EnderecamentoLadder")
                 {
                     if (_novoOperando == null)
-                        _end = (EnderecamentoLadder)getOperandos(0);
+                        _end = (Address)getOperandos(0);
                     else
-                        _end = (EnderecamentoLadder)_novoOperando;
+                        _end = (Address)_novoOperando;
                 }
                 else if (_novoOperando.GetType().Name == "Int32")
                 {
@@ -195,11 +195,11 @@ namespace LadderApp
                     {
                         switch (_end.TpEnderecamento)
                         {
-                            case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
-                            case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
-                            case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
-                            case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
-                            case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                            case AddressType.DIGITAL_MEMORIA:
+                            case AddressType.DIGITAL_MEMORIA_CONTADOR:
+                            case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
+                            case AddressType.DIGITAL_ENTRADA:
+                            case AddressType.DIGITAL_SAIDA:
                                 _bValido = true;
                                 break;
                             default:
@@ -216,8 +216,8 @@ namespace LadderApp
                     {
                         switch (_end.TpEnderecamento)
                         {
-                            case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
-                            case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                            case AddressType.DIGITAL_MEMORIA:
+                            case AddressType.DIGITAL_SAIDA:
                                 _bValido = true;
                                 break;
                             default:
@@ -234,7 +234,7 @@ namespace LadderApp
                         _bEndereco = true;
                         switch (_end.TpEnderecamento)
                         {
-                            case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                            case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                                 _bValido = true;
                                 break;
                             default:
@@ -263,7 +263,7 @@ namespace LadderApp
                         _bEndereco = true;
                         switch (_end.TpEnderecamento)
                         {
-                            case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                            case AddressType.DIGITAL_MEMORIA_CONTADOR:
                                 _bValido = true;
                                 break;
                             default:
@@ -297,8 +297,8 @@ namespace LadderApp
                     {
                         switch (_end.TpEnderecamento)
                         {
-                            case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
-                            case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                            case AddressType.DIGITAL_MEMORIA_CONTADOR:
+                            case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                                 _bValido = true;
                                 break;
                             default:
@@ -317,7 +317,7 @@ namespace LadderApp
             if (_bEndereco)
             {
                 if (getOperandos(0) != null)
-                    _atualOperando = (EnderecamentoLadder)getOperandos(0);
+                    _atualOperando = (Address)getOperandos(0);
 
                 if (_bValido)
                 {
@@ -345,7 +345,7 @@ namespace LadderApp
             ValidaEndereco(0, null);
         }
 
-        public void ValidaOperandosSimbolo(EnderecamentoPrograma _EndDisp)
+        public void ValidaOperandosSimbolo(Addressing _EndDisp)
         {
             for(int i = 0; i < iNumOperandos; i++)
                 if (Operandos[i] != null)
@@ -354,7 +354,7 @@ namespace LadderApp
                         /// Verifica se o endereco atual existe na lista de enderecos
                         /// do programa atual, se existir recupera o opontamento corrigido
                         /// para o endereco
-                        Object oper = _EndDisp.Find(((EnderecamentoLadder)Operandos[i]));
+                        Object oper = _EndDisp.Find(((Address)Operandos[i]));
                         /// recebido o endereco corrigido valida o endereco a faz as atribui
                         /// coes necessarias
                         if (oper != null)

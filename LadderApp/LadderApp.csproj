@@ -90,11 +90,11 @@
     <Compile Include="Forms\AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\AlteraTemporizadorContador.cs">
+    <Compile Include="Forms\ChangeTimerCounterParametersForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AlteraTemporizadorContador.Designer.cs">
-      <DependentUpon>AlteraTemporizadorContador.cs</DependentUpon>
+    <Compile Include="Forms\ChangeTimerCounterParametersForm.Designer.cs">
+      <DependentUpon>ChangeTimerCounterParametersForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\LadderForm.cs">
       <SubType>Form</SubType>
@@ -102,15 +102,15 @@
     <Compile Include="Forms\LadderForm.Designer.cs">
       <DependentUpon>LadderForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="DispositivoLadder.cs" />
+    <Compile Include="Device.cs" />
     <Compile Include="Forms\MainWindowForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MainWindowForm.Designer.cs">
       <DependentUpon>MainWindowForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EnderecamentoLadder.cs" />
-    <Compile Include="EnderecamentoPrograma.cs" />
+    <Compile Include="Model\Address.cs" />
+    <Compile Include="Addressing.cs" />
     <Compile Include="Forms\DeviceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,21 +123,21 @@
     <Compile Include="Forms\AddressingForm.Designer.cs">
       <DependentUpon>AddressingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IOperando.cs" />
+    <Compile Include="IOperand.cs" />
     <Compile Include="ISymbol.cs" />
-    <Compile Include="LinhaCompleta.cs" />
+    <Compile Include="Model\Line.cs" />
     <Compile Include="ListaSimbolo.cs" />
-    <Compile Include="ManipulaLinha.cs" />
+    <Compile Include="ManipulateLine.cs" />
     <Compile Include="PinosDispositivo.cs" />
-    <Compile Include="LinhaCompletaVisual.cs">
+    <Compile Include="VisualLine.cs">
     </Compile>
-    <Compile Include="LinhaCompletaVisual.Designer.cs">
-      <DependentUpon>LinhaCompletaVisual.cs</DependentUpon>
+    <Compile Include="VisualLine.Designer.cs">
+      <DependentUpon>VisualLine.cs</DependentUpon>
     </Compile>
     <Compile Include="ModuloIntegracaoMSP430.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProgramaBasico.cs" />
-    <Compile Include="ProgramaVisual.cs" />
+    <Compile Include="Model\ProgramaBasico.cs" />
+    <Compile Include="VisualProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="UserControls\BasicUserControl.resx">
       <SubType>Designer</SubType>
@@ -159,9 +159,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\AlteraTemporizadorContador.resx">
+    <EmbeddedResource Include="Forms\ChangeTimerCounterParametersForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>AlteraTemporizadorContador.cs</DependentUpon>
+      <DependentUpon>ChangeTimerCounterParametersForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\LadderForm.resx">
       <SubType>Designer</SubType>
@@ -179,9 +179,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>AddressingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LinhaCompletaVisual.resx">
+    <EmbeddedResource Include="VisualLine.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>LinhaCompletaVisual.cs</DependentUpon>
+      <DependentUpon>VisualLine.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -192,10 +192,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>ProjectForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RecursoVisual.resx">
+    <EmbeddedResource Include="StringResource.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>RecursoVisual.Designer.cs</LastGenOutput>
+      <LastGenOutput>StringResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ArquivosFontesC.resx">
       <SubType>Designer</SubType>
@@ -225,22 +225,22 @@
     <Compile Include="UserControls\BasicUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="RecursoVisual.Designer.cs">
+    <Compile Include="StringResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RecursoVisual.resx</DependentUpon>
+      <DependentUpon>StringResource.resx</DependentUpon>
     </Compile>
     <Compile Include="ArquivosFontesC.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ArquivosFontesC.resx</DependentUpon>
     </Compile>
-    <Compile Include="SimboloBasico.cs" />
-    <Compile Include="SimulaContador.cs" />
-    <Compile Include="SimulaTemporizador.cs" />
+    <Compile Include="Symbol.cs" />
+    <Compile Include="Counter.cs" />
+    <Compile Include="Timer.cs" />
     <Compile Include="SuporteParalelo.cs" />
-    <Compile Include="TipoEnderecamentoDispositivo.cs" />
-    <Compile Include="TiposPinosDispositivo.cs" />
+    <Compile Include="AddressType.cs" />
+    <Compile Include="PinType.cs" />
     <Compile Include="OperationCode\CodigosInterpretaveis2Txt.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -302,6 +302,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

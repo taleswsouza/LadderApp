@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace LadderApp.Formularios
 {
-    public partial class frmSenha : Form
+    public partial class PasswordForm : Form
     {
-        public frmSenha()
+        public PasswordForm()
         {
             InitializeComponent();
         }

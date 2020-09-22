@@ -5,20 +5,20 @@ using System.Xml.Serialization;
 
 namespace LadderApp
 {
-    public class LinhaCompleta
+    public class Line
     {
         [XmlIgnore]
-        public SimboloBasico simboloInicioLinha = new SimboloBasico(CodigosInterpretaveis.INICIO_DA_LINHA);
+        public Symbol simboloInicioLinha = new Symbol(CodigosInterpretaveis.INICIO_DA_LINHA);
         [XmlElement(ElementName = "Simbolo")]
-        public List<SimboloBasico> simbolos = new List<SimboloBasico>();
-        public List<SimboloBasico> saida = new List<SimboloBasico>();
+        public List<Symbol> simbolos = new List<Symbol>();
+        public List<Symbol> saida = new List<Symbol>();
         [XmlIgnore]
-        public SimboloBasico simboloFimLinha = new SimboloBasico(CodigosInterpretaveis.FIM_DA_LINHA);
+        public Symbol simboloFimLinha = new Symbol(CodigosInterpretaveis.FIM_DA_LINHA);
 
         [XmlIgnore]
-        public EnderecamentoPrograma endereco = null;
+        public Addressing endereco = null;
 
-        public LinhaCompleta(int quallinha, EnderecamentoPrograma _endereco)
+        public Line(int quallinha, Addressing _endereco)
         {
             endereco = _endereco;
             
@@ -47,7 +47,7 @@ namespace LadderApp
             }
         }
 
-        public LinhaCompleta()
+        public Line()
         {
         }
         
@@ -56,232 +56,232 @@ namespace LadderApp
             // Inicio de Linha
             simboloInicioLinha.setCI(CodigosInterpretaveis.INICIO_DA_LINHA);
 
-            SimboloBasico ex1 = null;
+            Symbol ex1 = null;
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NF);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NF);
             simbolos.Add(ex1);
             //
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NF);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
             //
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
             //teste inicio
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
             // teste fim
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
             //saida
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.BOBINA_SAIDA);
             saida.Add(ex1);
 
@@ -294,65 +294,65 @@ namespace LadderApp
             // Inicio de Linha
             simboloInicioLinha.setCI(CodigosInterpretaveis.INICIO_DA_LINHA);
 
-            SimboloBasico ex1 = null;
+            Symbol ex1 = null;
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NF);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NF);
             simbolos.Add(ex1);
             //
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NF);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
             //
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
@@ -361,118 +361,118 @@ namespace LadderApp
             //ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             //simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
             //teste inicio
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
             // teste fim
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             simbolos.Add(ex1);
 
             //saida
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.BOBINA_SAIDA);
             saida.Add(ex1);
 
@@ -485,21 +485,21 @@ namespace LadderApp
             // Inicio de Linha
             simboloInicioLinha.setCI(CodigosInterpretaveis.INICIO_DA_LINHA);
 
-            SimboloBasico ex1 = null;
+            Symbol ex1 = null;
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             ex1.setOperando(0, endereco.lstMemoria[1]);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NF);
             ex1.setOperando(0, endereco.lstTemporizador[2]);
             simbolos.Add(ex1);
 
             
             //saida
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.BOBINA_SAIDA);
             ex1.setOperando(0, endereco.lstMemoria[1]);
             saida.Add(ex1);
@@ -513,29 +513,29 @@ namespace LadderApp
             // Inicio de Linha
             simboloInicioLinha.setCI(CodigosInterpretaveis.INICIO_DA_LINHA);
 
-            SimboloBasico ex1 = null;
+            Symbol ex1 = null;
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             saida.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.BOBINA_SAIDA);
             saida.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             saida.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.BOBINA_SAIDA);
             saida.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             saida.Add(ex1);
 
@@ -548,39 +548,39 @@ namespace LadderApp
             // Inicio de Linha
             simboloInicioLinha.setCI(CodigosInterpretaveis.INICIO_DA_LINHA);
 
-            SimboloBasico ex1 = null;
+            Symbol ex1 = null;
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
             ex1.setOperando(0, endereco.lstMemoria[0]);
             endereco.lstMemoria[0].EmUso = true;
             simbolos.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_INICIAL);
             saida.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.BOBINA_SAIDA);
             saida.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             saida.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.BOBINA_SAIDA);
             saida.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_PROXIMO);
             saida.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.BOBINA_SAIDA);
             saida.Add(ex1);
 
-            ex1 = new SimboloBasico();
+            ex1 = new Symbol();
             ex1.setCI(CodigosInterpretaveis.PARALELO_FINAL);
             saida.Add(ex1);
 
@@ -602,14 +602,14 @@ namespace LadderApp
         public void ApagaLinha()
         {
             saida.Reverse();
-            foreach (SimboloBasico cl in saida)
+            foreach (Symbol cl in saida)
             {
                 cl.Dispose();
             }
             saida.Clear();
 
             simbolos.Reverse();
-            foreach (SimboloBasico cl in simbolos)
+            foreach (Symbol cl in simbolos)
             {
                 cl.Dispose();
             }
@@ -619,7 +619,7 @@ namespace LadderApp
             simboloFimLinha.Dispose();
         }
 
-        public SimboloBasico Insere2Saida(ListaSimbolo _lstSB)
+        public Symbol Insere2Saida(ListaSimbolo _lstSB)
         {
             int _indiceSimbolo = 0;
             int _subt2posicionaSimboloInserido = 0;
@@ -650,16 +650,16 @@ namespace LadderApp
                         _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                         /// insere PP antes do objeto atual na linha
-                        this.saida.Insert(0, new SimboloBasico(CodigosInterpretaveis.PARALELO_PROXIMO));
+                        this.saida.Insert(0, new Symbol(CodigosInterpretaveis.PARALELO_PROXIMO));
                         /// insere PF depois do objeto atual da linha
-                        this.saida.Insert(this.saida.Count, new SimboloBasico(CodigosInterpretaveis.PARALELO_FINAL));
+                        this.saida.Insert(this.saida.Count, new Symbol(CodigosInterpretaveis.PARALELO_FINAL));
                     }
                     else
                     {
                         _lstSB.InsereParalelo(ListaSimbolo.TipoInsercaoParalelo.PARALELO_FINALIZADO);
                         _subt2posicionaSimboloInserido = -1;
 
-                        this.saida.Insert(0, new SimboloBasico(CodigosInterpretaveis.PARALELO_INICIAL));
+                        this.saida.Insert(0, new Symbol(CodigosInterpretaveis.PARALELO_INICIAL));
                         _indiceSimbolo++;
                     }
 
@@ -686,7 +686,7 @@ namespace LadderApp
                     break;
             }
 
-            foreach (SimboloBasico _sb in _lstSB)
+            foreach (Symbol _sb in _lstSB)
             {
                 this.saida.Insert(_indiceSimbolo, _sb);
                 _indiceSimbolo++;

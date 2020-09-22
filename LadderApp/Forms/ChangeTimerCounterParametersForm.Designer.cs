@@ -1,6 +1,6 @@
 namespace LadderApp.Formularios
 {
-    partial class AlteraTemporizadorContador
+    partial class ChangeTimerCounterParametersForm
     {
         /// <summary>
         /// Required designer variable.

@@ -10,12 +10,12 @@ using LadderApp.Formularios;
 
 namespace LadderApp
 {
-    public partial class DiagramaLadder : Form
+    public partial class LadderForm : Form
     {
         private int tempVertical = 0;
         private int tempHorizontal = 0;
 
-        public ProjetoLadder linkProjeto = null;
+        public ProjectForm linkProjeto = null;
 
         public VisualProgram prgLivre = null;
 
@@ -36,7 +36,7 @@ namespace LadderApp
 
         public List<Symbol> lstVariosSelecionados = new List<Symbol>();
 
-        public DiagramaLadder(ProgramaBasico _prgBasico)
+        public LadderForm(ProgramaBasico _prgBasico)
         {
             InitializeComponent();
 
@@ -438,7 +438,7 @@ namespace LadderApp
 
         public void ControleSelecionado_SolicitaMudarEndereco(ControleLivre sender, Rectangle rect, Type tipo, int valorMax, int valorMin, params object[] faixa)
         {
-            AlteraTemporizadorContador Altera = new AlteraTemporizadorContador(sender.getCI());
+            ChangeTimerCounterParametersForm Altera = new ChangeTimerCounterParametersForm(sender.getCI());
 
             if (sender.getOperandos(0) == null)
             {

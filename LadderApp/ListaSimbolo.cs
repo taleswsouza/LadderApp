@@ -37,31 +37,31 @@ namespace LadderApp
         }
 
 
-        public bool ExisteTemporizadorDuplicado(List<EnderecamentoLadder> lstTemporizadoresUtilizados)
+        public bool ExisteTemporizadorDuplicado(List<Address> lstTemporizadoresUtilizados)
         {
             foreach (Symbol _sb in this)
             {
                 if (_sb.getCI() == CodigosInterpretaveis.TEMPORIZADOR)
                 {
-                    if (lstTemporizadoresUtilizados.Contains((EnderecamentoLadder)_sb.getOperandos(0)))
+                    if (lstTemporizadoresUtilizados.Contains((Address)_sb.getOperandos(0)))
                         return false;
                     else
-                        lstTemporizadoresUtilizados.Add((EnderecamentoLadder)_sb.getOperandos(0));
+                        lstTemporizadoresUtilizados.Add((Address)_sb.getOperandos(0));
                 }
             }
             return true;
         }
 
-        public bool ExisteContadorDuplicado(List<EnderecamentoLadder> lstContadoresUtilizados)
+        public bool ExisteContadorDuplicado(List<Address> lstContadoresUtilizados)
         {
             foreach (Symbol _sb in this)
             {
                 if (_sb.getCI() == CodigosInterpretaveis.CONTADOR)
                 {
-                    if (lstContadoresUtilizados.Contains((EnderecamentoLadder)_sb.getOperandos(0)))
+                    if (lstContadoresUtilizados.Contains((Address)_sb.getOperandos(0)))
                         return false;
                     else
-                        lstContadoresUtilizados.Add((EnderecamentoLadder)_sb.getOperandos(0));
+                        lstContadoresUtilizados.Add((Address)_sb.getOperandos(0));
                 }
             }
             return true;
@@ -138,7 +138,7 @@ namespace LadderApp
             }
         }
 
-        public void ValidaOperandos(EnderecamentoPrograma _ep)
+        public void ValidaOperandos(Addressing _ep)
         {
             foreach(Symbol _sb in this)
                 _sb.ValidaOperandosSimbolo(_ep);

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LadderApp
 {
-    public class SimulaTemporizador
+    public class Timer
     {
         //====================================================================================
         // Tipo definido para Temporizador

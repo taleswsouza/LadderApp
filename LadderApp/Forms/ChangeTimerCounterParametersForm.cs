@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace LadderApp.Formularios
 {
-    public partial class AlteraTemporizadorContador : Form
+    public partial class ChangeTimerCounterParametersForm : Form
     {
         public CodigosInterpretaveis Funcao = CodigosInterpretaveis.NENHUM;
         public Int32 Tipo = 0;
@@ -16,7 +16,7 @@ namespace LadderApp.Formularios
         public Int32 Preset = 0;
         public Int32 Acumulado = 0;
 
-        public AlteraTemporizadorContador(CodigosInterpretaveis funcao)
+        public ChangeTimerCounterParametersForm(CodigosInterpretaveis funcao)
         {
             InitializeComponent();
 

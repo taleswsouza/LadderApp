@@ -111,13 +111,13 @@ namespace LadderApp.CodigoInterpretavel
             }
         }
 
-        public TipoEnderecamentoDispositivo LeTipoEnderecamento(Int32 _pos)
+        public AddressType LeTipoEnderecamento(Int32 _pos)
         {
             if (ExisteCodigoInterpretavel())
             {
                 try
                 {
-                    return (TipoEnderecamentoDispositivo)Convert.ToChar(DadosConvertidosChar.Substring(_pos, 1));
+                    return (AddressType)Convert.ToChar(DadosConvertidosChar.Substring(_pos, 1));
                 }
                 catch
                 {
@@ -125,7 +125,7 @@ namespace LadderApp.CodigoInterpretavel
                 }
             }
 
-            return TipoEnderecamentoDispositivo.NENHUM;
+            return AddressType.NENHUM;
         }
 
         public Int32 LeInteiro(Int32 _pos)
@@ -148,7 +148,7 @@ namespace LadderApp.CodigoInterpretavel
         public Address LeEndereco(ref Int32 _pos, Addressing enderecamento)
         {
             Address _endLido = null;
-            TipoEnderecamentoDispositivo _tpEndLido;
+            AddressType _tpEndLido;
             Int32 _iIndiceEndLido = 0;
             Symbol _sb = null;
 
@@ -231,7 +231,7 @@ namespace LadderApp.CodigoInterpretavel
                 Int32 intContaFim = 0;
                 Int32 intIndiceLinha = 0;
                 Address _endLido;
-                TipoEnderecamentoDispositivo _tpEndLido;
+                AddressType _tpEndLido;
                 Int32 _iIndiceEndLido = 0;
 
 
@@ -241,9 +241,9 @@ namespace LadderApp.CodigoInterpretavel
                 programa.Nome = strNomeProjeto;
                 programa.dispositivo = new Device(1);
                 programa.endereco.AlocaEnderecamentoIO(programa.dispositivo);
-                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstMemoria, TipoEnderecamentoDispositivo.DIGITAL_MEMORIA, 10);
-                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstTemporizador, TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR, 10);
-                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstContador, TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR, 10);
+                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstMemoria, AddressType.DIGITAL_MEMORIA, 10);
+                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstTemporizador, AddressType.DIGITAL_MEMORIA_TEMPORIZADOR, 10);
+                programa.endereco.AlocaEnderecamentoMemoria(programa.dispositivo, programa.endereco.lstContador, AddressType.DIGITAL_MEMORIA_CONTADOR, 10);
                 intIndiceLinha = programa.InsereLinhaNoFinal(new Line());
 
                 for (int i = this.PosInicial; i < DadosConvertidosChar.Length; i++)
@@ -287,7 +287,7 @@ namespace LadderApp.CodigoInterpretavel
                             {
                                 ListaSimbolo _lstSB = new ListaSimbolo();
                                 _lstSB.Add(new Symbol((CodigosInterpretaveis)guarda));
-                                _tpEndLido = (TipoEnderecamentoDispositivo)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
+                                _tpEndLido = (AddressType)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
@@ -314,7 +314,7 @@ namespace LadderApp.CodigoInterpretavel
                             {
                                 ListaSimbolo _lstSB = new ListaSimbolo();
                                 _lstSB.Add(new Symbol((CodigosInterpretaveis)guarda));
-                                _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
+                                _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressType.DIGITAL_MEMORIA_CONTADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
 
@@ -330,7 +330,7 @@ namespace LadderApp.CodigoInterpretavel
                             {
                                 ListaSimbolo _lstSB = new ListaSimbolo();
                                 _lstSB.Add(new Symbol((CodigosInterpretaveis)guarda));
-                                _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
+                                _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressType.DIGITAL_MEMORIA_TEMPORIZADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.BaseTempo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 4, 1));

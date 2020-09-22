@@ -8,14 +8,14 @@ using System.Windows.Forms;
 
 namespace LadderApp
 {
-    public partial class Memoria : Form
+    public partial class AddressingForm : Form
     {
-        public Memoria()
+        public AddressingForm()
         {
             InitializeComponent();
         }
 
-        public Memoria(Addressing ep)
+        public AddressingForm(Addressing ep)
         {
             InitializeComponent();
 

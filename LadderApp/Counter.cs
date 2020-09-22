@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LadderApp
 {
-    public class SimulaContador
+    public class Counter
     {
         //====================================================================================
         // Tipo definido para Contadores

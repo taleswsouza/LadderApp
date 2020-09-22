@@ -6,10 +6,10 @@ using System.Xml.Serialization;
 
 namespace LadderApp
 {
-    public delegate void MudouComentarioEventHandler(EnderecamentoLadder sender);
+    public delegate void MudouComentarioEventHandler(Address sender);
     [Serializable]
     [XmlType(TypeName = "Endereco")]
-    public class EnderecamentoLadder : IOperando
+    public class Address : IOperand
     {
         public event MudouOperandoEventHandler MudouOperando;
         public event MudouComentarioEventHandler MudouComentario;
@@ -27,9 +27,9 @@ namespace LadderApp
         /// <summary>
         /// Tipo do endereco
         /// </summary>
-        private TipoEnderecamentoDispositivo tpEnderecamento = TipoEnderecamentoDispositivo.NENHUM;
+        private AddressType tpEnderecamento = AddressType.NENHUM;
         [XmlElement(Order = 5, ElementName = "Tipo")]
-        public TipoEnderecamentoDispositivo TpEnderecamento
+        public AddressType TpEnderecamento
         {
             get { return tpEnderecamento; }
             set {
@@ -37,19 +37,19 @@ namespace LadderApp
                 {
                     switch (value)
                     {
-                        case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
+                        case AddressType.DIGITAL_ENTRADA:
                            break;
-                        case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                        case AddressType.DIGITAL_SAIDA:
                             break;
-                        case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
+                        case AddressType.DIGITAL_MEMORIA:
                             break;
-                        case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                        case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                             Acesso2 = "T" + indice.ToString() + ".EN";
-                            temporizador = new SimulaTemporizador();
+                            temporizador = new Timer();
                             break;
-                        case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                        case AddressType.DIGITAL_MEMORIA_CONTADOR:
                             Acesso2 = "C" + indice.ToString() + ".EN";
-                            contador = new SimulaContador();
+                            contador = new Counter();
                             break;
                         default:
                             break;
@@ -74,19 +74,19 @@ namespace LadderApp
                 String NomeStr = "";
                 switch (this.tpEnderecamento)
                 {
-                    case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
+                    case AddressType.DIGITAL_ENTRADA:
                         NomeStr = "E" + indice.ToString() + "(P" + (((indice - 1) / dispositivo.QtdBitsPorta) + 1) + "." + ((indice - 1) - ((Int16)((indice - 1) / dispositivo.QtdBitsPorta) * dispositivo.QtdBitsPorta)) + ")";
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                    case AddressType.DIGITAL_SAIDA:
                         NomeStr = "S" + indice.ToString() + "(P" + (((indice - 1) / dispositivo.QtdBitsPorta) + 1) + "." + ((indice - 1) - ((Int16)((indice - 1) / dispositivo.QtdBitsPorta) * dispositivo.QtdBitsPorta)) + ")";
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
+                    case AddressType.DIGITAL_MEMORIA:
                         NomeStr = "M" + indice.ToString();
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                    case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                         NomeStr = "T" + indice.ToString();
                         break;
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                    case AddressType.DIGITAL_MEMORIA_CONTADOR:
                         NomeStr = "C" + indice.ToString();
                         break;
                     default:
@@ -124,15 +124,15 @@ namespace LadderApp
             get {
                 switch (this.tpEnderecamento)
                 {
-                    case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
+                    case AddressType.DIGITAL_ENTRADA:
                         return "P" + (((indice - 1) / dispositivo.QtdBitsPorta) + 1);
-                    case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                    case AddressType.DIGITAL_SAIDA:
                         return "P" + (((indice - 1) / dispositivo.QtdBitsPorta) + 1);
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
+                    case AddressType.DIGITAL_MEMORIA:
                         return "M" + ((indice / BitsPorta) + 1);
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                    case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                         return "T" + indice.ToString();
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                    case AddressType.DIGITAL_MEMORIA_CONTADOR:
                         return "C" + indice.ToString();
                     default:
                         return "ERROR";
@@ -148,9 +148,9 @@ namespace LadderApp
             get {
                 switch (this.tpEnderecamento)
                 {
-                    case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
+                    case AddressType.DIGITAL_ENTRADA:
                         return "P" + (((indice - 1) / dispositivo.QtdBitsPorta) + 1) + "_DIR.Bit" + ((indice - 1) - ((Int16)((indice - 1) / dispositivo.QtdBitsPorta) * dispositivo.QtdBitsPorta)) + " = 0";
-                    case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                    case AddressType.DIGITAL_SAIDA:
                         return "P" + (((indice - 1) / dispositivo.QtdBitsPorta) + 1) + "_DIR.Bit" + ((indice - 1) - ((Int16)((indice - 1) / dispositivo.QtdBitsPorta) * dispositivo.QtdBitsPorta)) + " = 1";
                     default:
                         return "ERROR";
@@ -168,15 +168,15 @@ namespace LadderApp
             get {
                 switch (this.tpEnderecamento)
                 {
-                    case TipoEnderecamentoDispositivo.DIGITAL_ENTRADA:
+                    case AddressType.DIGITAL_ENTRADA:
                         return "P" + (((indice - 1) / dispositivo.QtdBitsPorta) + 1) + "_IN.Bit" + ((indice - 1) - ((Int16)((indice - 1) / dispositivo.QtdBitsPorta) * dispositivo.QtdBitsPorta));
-                    case TipoEnderecamentoDispositivo.DIGITAL_SAIDA:
+                    case AddressType.DIGITAL_SAIDA:
                         return "P" + (((indice - 1) / dispositivo.QtdBitsPorta) + 1) + "_OUT.Bit" + ((indice - 1) - ((Int16)((indice - 1) / dispositivo.QtdBitsPorta) * dispositivo.QtdBitsPorta));
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA:
+                    case AddressType.DIGITAL_MEMORIA:
                         return "M" + ((indice / BitsPorta) + 1) + ".Bit" + (indice - (Int16)(indice / BitsPorta) * BitsPorta);
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_TEMPORIZADOR:
+                    case AddressType.DIGITAL_MEMORIA_TEMPORIZADOR:
                         return "T" + indice.ToString() + ".DN";
-                    case TipoEnderecamentoDispositivo.DIGITAL_MEMORIA_CONTADOR:
+                    case AddressType.DIGITAL_MEMORIA_CONTADOR:
                         return "C" + indice.ToString() + ".DN";
                     default:
                         return "ERROR";
@@ -223,7 +223,7 @@ namespace LadderApp
         /// </summary>
         /// <param name="_tpE">Tipo da endereco</param>
         /// <param name="_indicePosInicial">Indice identificador do endereco no tipo</param>
-        public EnderecamentoLadder(TipoEnderecamentoDispositivo _tpE, int _indice, DispositivoLadder dispositivo)
+        public Address(AddressType _tpE, int _indice, Device dispositivo)
         {
             this.dispositivo = dispositivo;
             indice = _indice;
@@ -231,7 +231,7 @@ namespace LadderApp
             TpEnderecamento = _tpE;
         }
 
-        public EnderecamentoLadder()
+        public Address()
         {
         }
 
@@ -252,8 +252,8 @@ namespace LadderApp
         /// <summary>
         /// Aponta para o dispositivo do endereço
         /// </summary>
-        private DispositivoLadder dispositivo = null;
-        public void ApontaDispositivo(DispositivoLadder dispositivo)
+        private Device dispositivo = null;
+        public void ApontaDispositivo(Device dispositivo)
         {
             this.dispositivo = dispositivo;
         }
@@ -261,9 +261,9 @@ namespace LadderApp
         /// <summary>
         /// Permite simulado de contadores
         /// </summary>
-        SimulaContador contador = null;
+        Counter contador = null;
         [XmlIgnore]
-        public SimulaContador Contador
+        public Counter Contador
         {
             get { return contador; }
             set { contador = value; }
@@ -272,9 +272,9 @@ namespace LadderApp
         /// <summary>
         /// Permite simulado de temporizadores
         /// </summary>
-        SimulaTemporizador temporizador = null;
+        Timer temporizador = null;
         [XmlIgnore]
-        public SimulaTemporizador Temporizador
+        public Timer Temporizador
         {
             get { return temporizador; }
             set { temporizador = value; }
@@ -282,7 +282,7 @@ namespace LadderApp
 
         public static String ClassName()
         {
-            return (new EnderecamentoLadder()).GetType().Name;
+            return (new Address()).GetType().Name;
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace LadderApp
 {
-    partial class Memoria
+    partial class AddressingForm
     {
         /// <summary>
         /// Required designer variable.

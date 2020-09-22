@@ -8,9 +8,9 @@ using System.Web.Configuration;
 
 namespace LadderApp.Formularios
 {
-    partial class frmSobre : Form
+    partial class AboutForm : Form
     {
-        public frmSobre()
+        public AboutForm()
         {
             InitializeComponent();
 

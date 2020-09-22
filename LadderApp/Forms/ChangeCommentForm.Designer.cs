@@ -1,6 +1,6 @@
 namespace LadderApp.Formularios
 {
-    partial class frmAlteraComentario
+    partial class ChangeCommentForm
     {
         /// <summary>
         /// Required designer variable.

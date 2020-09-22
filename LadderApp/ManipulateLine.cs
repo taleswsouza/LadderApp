@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace LadderApp
 {
-    public static class ManipulaLinha
+    public static class ManipulateLine
     {
         public static void AjustaPosicionamento(VisualLine lc)
         {
@@ -162,8 +162,8 @@ namespace LadderApp
             lc.simboloInicioLinha.tamanhoXY = new Size(lc.tamX, _tamY2DesenhoFundo);
 
             //--Fim da linha
-            DiagramaLadder dlFormAux = null;
-            dlFormAux = (DiagramaLadder)lc.frmDiag;
+            LadderForm dlFormAux = null;
+            dlFormAux = (LadderForm)lc.frmDiag;
             if (_acumTamX < (dlFormAux.Width - lc.tamX))
                 _acumTamX = (dlFormAux.Width - lc.tamX);
 
