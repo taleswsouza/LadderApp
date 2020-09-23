@@ -27,21 +27,21 @@ namespace LadderApp
         List<System.Windows.Forms.Panel> listaIndicadores = new List<System.Windows.Forms.Panel>();
         System.Windows.Forms.Panel indicadorInsercao = null;
 
-        private Color corPena = Color.Blue;
-        private Pen penaLinha = new Pen(Color.Blue, 1);
-        private Pen penaTexto = new Pen(Color.Blue, 1);
-        private Pen penaSelecao = new Pen(Color.Black, 3);
+        private Color penColor = Color.Blue;
+        private Pen linePen = new Pen(Color.Blue, 1);
+        private Pen textPen = new Pen(Color.Blue, 1);
+        private Pen selectionPen = new Pen(Color.Black, 3);
 
-        private Pen pena = new Pen(Color.Blue, 1);
+        private Pen pen = new Pen(Color.Blue, 1);
 
-        private SolidBrush brushEnergizado = new SolidBrush(Color.FromArgb(0, 255, 0));
-        private SolidBrush brushComentario = new SolidBrush(Color.Yellow);
-        private SolidBrush brushSelecao = new SolidBrush(Color.Red);
-        private SolidBrush brushTextoEndereco = new SolidBrush(Color.Black);
-        private SolidBrush brushTextoSimbolo = new SolidBrush(Color.Blue);
-        private SolidBrush brushTextoComentario = new SolidBrush(Color.Black);
+        private SolidBrush energizedBrush = new SolidBrush(Color.FromArgb(0, 255, 0));
+        private SolidBrush commentBrush = new SolidBrush(Color.Yellow);
+        private SolidBrush selectionBrush = new SolidBrush(Color.Red);
+        private SolidBrush addressTextBrush = new SolidBrush(Color.Black);
+        private SolidBrush symbolTextBrush = new SolidBrush(Color.Blue);
+        private SolidBrush commentTextBrush = new SolidBrush(Color.Black);
 
-        Font fonteTexto = new Font(FontFamily.GenericSansSerif.Name, 10, FontStyle.Regular, GraphicsUnit.Pixel);
+        Font textFont = new Font(FontFamily.GenericSansSerif.Name, 10, FontStyle.Regular, GraphicsUnit.Pixel);
 
         [FlagsAttribute]
         private enum TipoSelecaoFlag : short
@@ -52,10 +52,11 @@ namespace LadderApp
 
         private Graphics e;
 
-        // Para desenhar as linhas de fundo
-        public VisualLine linhaAtual = null;
+        private VisualLine visualLine;
+        public VisualLine VisualLine { get => visualLine; set => visualLine = value; }
 
-        List<FreeUserControl> lstVPI = null;
+
+        List<FreeUserControl> lstVPI;
 
         private bool ultimoVPI = false;
         public bool UltimoVPI
@@ -63,7 +64,7 @@ namespace LadderApp
             get { return ultimoVPI; }
             set
             {
-                if (getCI() == OpCode.PARALELO_PROXIMO)
+                if (OpCode== OperationCode.PARALELO_PROXIMO)
                     ultimoVPI = value;
             }
         }
@@ -115,11 +116,11 @@ namespace LadderApp
         {
             get
             {
-                switch (getCI())
+                switch (OpCode)
                 {
-                    case OpCode.PARALELO_INICIAL:
-                    case OpCode.PARALELO_PROXIMO:
-                    case OpCode.PARALELO_FINAL:
+                    case OperationCode.PARALELO_INICIAL:
+                    case OperationCode.PARALELO_PROXIMO:
+                    case OperationCode.PARALELO_FINAL:
                         return aponta2PI;
                     default:
                         return null;
@@ -136,11 +137,11 @@ namespace LadderApp
         {
             get
             {
-                switch (getCI())
+                switch (OpCode)
                 {
-                    case OpCode.PARALELO_INICIAL:
-                    case OpCode.PARALELO_PROXIMO:
-                    case OpCode.PARALELO_FINAL:
+                    case OperationCode.PARALELO_INICIAL:
+                    case OperationCode.PARALELO_PROXIMO:
+                    case OperationCode.PARALELO_FINAL:
                         return aponta2PF;
                     default:
                         return null;
@@ -162,11 +163,11 @@ namespace LadderApp
         {
             get
             {
-                switch (getCI())
+                switch (OpCode)
                 {
-                    case OpCode.PARALELO_INICIAL:
-                    case OpCode.PARALELO_PROXIMO:
-                    case OpCode.PARALELO_FINAL:
+                    case OperationCode.PARALELO_INICIAL:
+                    case OperationCode.PARALELO_PROXIMO:
+                    case OperationCode.PARALELO_FINAL:
                         return aponta2proxPP;
                     default:
                         return null;
@@ -194,7 +195,7 @@ namespace LadderApp
             this.BackColor = Color.Transparent;
         }
 
-        public FreeUserControl(OpCode _ci)
+        public FreeUserControl(OperationCode _ci)
         {
             InitializeComponent();
             codigoInterpretavel = new Symbol(_ci);
@@ -240,51 +241,51 @@ namespace LadderApp
             // Geral selecao
             rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
 
-            switch (getCI())
+            switch (OpCode)
             {
-                case OpCode.NENHUM:
+                case OperationCode.None:
                     break;
-                case OpCode.INICIO_DA_LINHA:
-                    xyConexao = new Point(xDecimoHorizontal * 7, (linhaAtual.tamY / 2));
+                case OperationCode.INICIO_DA_LINHA:
+                    xyConexao = new Point(xDecimoHorizontal * 7, (VisualLine.tamY / 2));
                     //Selecao
                     rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
-                case OpCode.FIM_DA_LINHA:
-                    xyConexao = new Point(0, (linhaAtual.tamY / 2));
+                case OperationCode.FIM_DA_LINHA:
+                    xyConexao = new Point(0, (VisualLine.tamY / 2));
                     break;
-                case OpCode.CONTATO_NA:
+                case OperationCode.CONTATO_NA:
                     //Selecao
                     rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
-                case OpCode.CONTATO_NF:
+                case OperationCode.CONTATO_NF:
                     break;
-                case OpCode.BOBINA_SAIDA:
+                case OperationCode.BOBINA_SAIDA:
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     rectSimbolo = new Rectangle(2, 2, xTotalHorizontal - 4, yTotalVertical - 4);
                     break;
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     rectSimbolo = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
-                case OpCode.PARALELO_INICIAL:
+                case OperationCode.PARALELO_INICIAL:
                     // selecao em torno do ponto de conexao
-                    rectSelecao = new Rectangle(1, (linhaAtual.tamY / 4) + 3, xTotalHorizontal - 3, (linhaAtual.tamY / 2) - 3);
+                    rectSelecao = new Rectangle(1, (VisualLine.tamY / 4) + 3, xTotalHorizontal - 3, (VisualLine.tamY / 2) - 3);
 
-                    xyConexao = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
+                    xyConexao = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
                     break;
-                case OpCode.PARALELO_FINAL:
-                    rectSelecao = new Rectangle(1, (linhaAtual.tamY / 4) + 3, xTotalHorizontal - 3, yTotalVertical - (linhaAtual.tamY / 2) - 3);
-                    xyConexao = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
+                case OperationCode.PARALELO_FINAL:
+                    rectSelecao = new Rectangle(1, (VisualLine.tamY / 4) + 3, xTotalHorizontal - 3, yTotalVertical - (VisualLine.tamY / 2) - 3);
+                    xyConexao = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
                     break;
-                case OpCode.PARALELO_PROXIMO:
+                case OperationCode.PARALELO_PROXIMO:
                     // selecao em torno do ponto de conexao
-                    rectSelecao = new Rectangle(1, (linhaAtual.tamY / 4) + 3, xTotalHorizontal - 3, (linhaAtual.tamY / 2) - 3);
+                    rectSelecao = new Rectangle(1, (VisualLine.tamY / 4) + 3, xTotalHorizontal - 3, (VisualLine.tamY / 2) - 3);
                     if (ultimoVPI)
                         xyConexao = new Point(xMeioHorizontal, yMeioVertical);
                     else
-                        xyConexao = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
+                        xyConexao = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
                     break;
-                case OpCode.LINHA_DE_FUNDO:
+                case OperationCode.LINHA_DE_FUNDO:
                     break;
                 default:
                     break;
@@ -293,7 +294,7 @@ namespace LadderApp
 
         public void SalvaVPI2PF(List<FreeUserControl> _lstVPI)
         {
-            if (getCI() == OpCode.PARALELO_FINAL)
+            if (OpCode== OperationCode.PARALELO_FINAL)
             {
                 if (lstVPI == null)
                     lstVPI = new List<FreeUserControl>();
@@ -313,7 +314,7 @@ namespace LadderApp
             if (getOperandos(0) != null)
             {
 
-                if (this.getCI() == OpCode.CONTATO_NA &&
+                if (this.OpCode== OperationCode.CONTATO_NA &&
                     ((Address)getOperandos(0)).Valor == true)
                     Energizado();
             }
@@ -321,44 +322,44 @@ namespace LadderApp
             // -| Linha horizontal anterior ao simbolo
             xy1 = new Point(0, yMeioVertical);
             xy2 = new Point(xInicioHSimbolo, yMeioVertical);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             // |- Linha horizontal posterior ao simbolo
             xy1 = new Point(xFimHSimbolo, yMeioVertical);
             xy2 = new Point(this.Width, yMeioVertical);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             ///////////////////////////////
             // -| Primeiro barra do simbolo
             xy1 = new Point(xInicioHSimbolo, yInicioVSimbolo);
             xy2 = new Point(xInicioHSimbolo, yFimVSimbolo);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             // para compor a primeira barra estilo colchete (barra horizontal superior)
             xy1 = new Point(xInicioHSimbolo - xDecimoHorizontal, yInicioVSimbolo);
             xy2 = new Point(xInicioHSimbolo, yInicioVSimbolo);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             // para compor a primeira barra estilo colchete (barra horizontal inferior)
             xy1 = new Point(xInicioHSimbolo - xDecimoHorizontal, yFimVSimbolo);
             xy2 = new Point(xInicioHSimbolo, yFimVSimbolo);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             //////////////////////////////
             // |- Segunda barra do simbolo
             xy1 = new Point(xFimHSimbolo, yInicioVSimbolo);
             xy2 = new Point(xFimHSimbolo, yFimVSimbolo);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             // para compor a segunda barra estilo colchete (barra horizontal superior)
             xy1 = new Point(xFimHSimbolo + xDecimoHorizontal, yInicioVSimbolo);
             xy2 = new Point(xFimHSimbolo, yInicioVSimbolo);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             // para compor a segunda barra estilo colchete (barra horizontal inferior)
             xy1 = new Point(xFimHSimbolo + xDecimoHorizontal, yFimVSimbolo);
             xy2 = new Point(xFimHSimbolo, yFimVSimbolo);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             DesenhaEndereco();
 
@@ -369,7 +370,7 @@ namespace LadderApp
         {
             if (getOperandos(0) != null)
             {
-                if (this.getCI() == OpCode.CONTATO_NF &&
+                if (this.OpCode== OperationCode.CONTATO_NF &&
                     ((Address)getOperandos(0)).Valor == false)
                     Energizado();
             }
@@ -383,7 +384,7 @@ namespace LadderApp
             // barra do NF
             xy1 = new Point(xInicioHSimbolo - xDecimoHorizontal, yFimVSimbolo);
             xy2 = new Point(xFimHSimbolo + xDecimoHorizontal, yInicioVSimbolo);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
         }
 
         private void DesenhaBobinaSaida()
@@ -391,7 +392,7 @@ namespace LadderApp
             if (getOperandos(0) != null)
             {
 
-                if (this.getCI() == OpCode.BOBINA_SAIDA &&
+                if (this.OpCode== OperationCode.BOBINA_SAIDA &&
                     ((Address)getOperandos(0)).Valor == true)
                     Energizado();
             }
@@ -401,12 +402,12 @@ namespace LadderApp
             // Linha horizontal anterior ao simbolo
             xy1 = new Point(0, yMeioVertical);
             xy2 = new Point(xInicioHSimboloBobina, yMeioVertical);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal posterior ao simbolo
             xy1 = new Point(xFimHSimboloBobina, yMeioVertical);
             xy2 = new Point(this.Width, yMeioVertical);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             // ( do simbolo
             xy1 = new Point(xInicioHSimboloBobina + xDecimoHorizontal, yInicioVSimbolo);
@@ -415,7 +416,7 @@ namespace LadderApp
             pontosCurva[0] = xy1;
             pontosCurva[1] = xy2;
             pontosCurva[2] = xy3;
-            e.DrawCurve(penaLinha, pontosCurva, 0.7F);
+            e.DrawCurve(linePen, pontosCurva, 0.7F);
 
             // ) do simbolo
             xy1 = new Point(xFimHSimboloBobina - xDecimoHorizontal, yInicioVSimbolo);
@@ -424,7 +425,7 @@ namespace LadderApp
             pontosCurva[0] = xy1;
             pontosCurva[1] = xy2;
             pontosCurva[2] = xy3;
-            e.DrawCurve(penaLinha, pontosCurva, 0.7F);
+            e.DrawCurve(linePen, pontosCurva, 0.7F);
 
             DesenhaEndereco();
             DesenhaComentario();
@@ -434,40 +435,40 @@ namespace LadderApp
         {
             DesenhaBobinaSaida();
 
-            xy1 = new Point(xMeioHorizontal - (int)(fonteTexto.Size / 2.0F), yMeioVertical - (int)(fonteTexto.Size / 2.0F));
-            e.DrawString(Texto, fonteTexto, brushTextoSimbolo, xy1.X, xy1.Y);
+            xy1 = new Point(xMeioHorizontal - (int)(textFont.Size / 2.0F), yMeioVertical - (int)(textFont.Size / 2.0F));
+            e.DrawString(Texto, textFont, symbolTextBrush, xy1.X, xy1.Y);
         }
 
 
         private void DesenhaParaleloInicial()
         {
             // Linha vertical
-            xy1 = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
+            xy1 = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
             xy2 = new Point(xMeioHorizontal, yTotalVertical);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal
-            xy1 = new Point(0, (linhaAtual.tamY / 2));
-            xy2 = new Point(xTotalHorizontal, (linhaAtual.tamY / 2));
-            e.DrawLine(penaLinha, xy1, xy2);
+            xy1 = new Point(0, (VisualLine.tamY / 2));
+            xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
+            e.DrawLine(linePen, xy1, xy2);
         }
 
         private void DesenhaParaleloFinal()
         {
             // Linha vertical
-            xy1 = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
-            xy2 = new Point(xMeioHorizontal, (yTotalVertical - (linhaAtual.tamY / 2)));
-            e.DrawLine(penaLinha, xy1, xy2);
+            xy1 = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
+            xy2 = new Point(xMeioHorizontal, (yTotalVertical - (VisualLine.tamY / 2)));
+            e.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal 1
-            xy1 = new Point(0, (linhaAtual.tamY / 2));
-            xy2 = new Point(xTotalHorizontal, (linhaAtual.tamY / 2));
-            e.DrawLine(penaLinha, xy1, xy2);
+            xy1 = new Point(0, (VisualLine.tamY / 2));
+            xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
+            e.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal 2
-            xy1 = new Point(0, (yTotalVertical - (linhaAtual.tamY / 2)));
-            xy2 = new Point(xMeioHorizontal, (yTotalVertical - (linhaAtual.tamY / 2)));
-            e.DrawLine(penaLinha, xy1, xy2);
+            xy1 = new Point(0, (yTotalVertical - (VisualLine.tamY / 2)));
+            xy2 = new Point(xMeioHorizontal, (yTotalVertical - (VisualLine.tamY / 2)));
+            e.DrawLine(linePen, xy1, xy2);
 
             if (lstVPI != null)
             {
@@ -478,7 +479,7 @@ namespace LadderApp
                     xy3 = _simbAux.xyConexao;
                     xy1 = new Point(0, ((_simbAux.posicaoXY.Y + xy3.Y) - this.posicaoXY.Y));
                     xy2 = new Point(xMeioHorizontal, ((_simbAux.posicaoXY.Y + xy3.Y) - this.posicaoXY.Y));
-                    e.DrawLine(penaLinha, xy1, xy2);
+                    e.DrawLine(linePen, xy1, xy2);
                 }
             }
         }
@@ -490,12 +491,12 @@ namespace LadderApp
                 // Linha | do L
                 xy1 = new Point(xMeioHorizontal, 0);
                 xy2 = new Point(xMeioHorizontal, yMeioVertical);
-                e.DrawLine(penaLinha, xy1, xy2);
+                e.DrawLine(linePen, xy1, xy2);
 
                 // Linha _ do L
                 xy1 = new Point(xMeioHorizontal, yMeioVertical);
                 xy2 = new Point(xTotalHorizontal, yMeioVertical);
-                e.DrawLine(penaLinha, xy1, xy2);
+                e.DrawLine(linePen, xy1, xy2);
 
             }
             else
@@ -503,12 +504,12 @@ namespace LadderApp
                 // Linha | do L
                 xy1 = new Point(xMeioHorizontal, 0);
                 xy2 = new Point(xMeioHorizontal, yTotalVertical);
-                e.DrawLine(penaLinha, xy1, xy2);
+                e.DrawLine(linePen, xy1, xy2);
 
                 // Linha horizontal
-                xy1 = new Point(xMeioHorizontal, (linhaAtual.tamY / 2));
-                xy2 = new Point(xTotalHorizontal, (linhaAtual.tamY / 2));
-                e.DrawLine(penaLinha, xy1, xy2);
+                xy1 = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
+                xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
+                e.DrawLine(linePen, xy1, xy2);
             }
         }
 
@@ -519,12 +520,12 @@ namespace LadderApp
             // Linha vertical
             xy1 = new Point(xDecimoHorizontal * 7, 0);
             xy2 = new Point(xDecimoHorizontal * 7, yTotalVertical);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             // Linha |-
-            xy1 = new Point(xDecimoHorizontal * 7, (linhaAtual.tamY / 2));
-            xy2 = new Point(xTotalHorizontal, (linhaAtual.tamY / 2));
-            e.DrawLine(penaLinha, xy1, xy2);
+            xy1 = new Point(xDecimoHorizontal * 7, (VisualLine.tamY / 2));
+            xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
+            e.DrawLine(linePen, xy1, xy2);
 
             // Posicao numero da linha
             xy1 = new Point(xMeioHorizontal, yMeioVertical);
@@ -532,13 +533,13 @@ namespace LadderApp
             if (getOperandos(0) != null)
             {
                 // Endereco
-                RectangleF _recTxtLinha = new RectangleF(0F, (float)((linhaAtual.tamY / 2) - fonteTexto.Height), (float)(xDecimoHorizontal * 7), (float)(fonteTexto.Height));
+                RectangleF _recTxtLinha = new RectangleF(0F, (float)((VisualLine.tamY / 2) - textFont.Height), (float)(xDecimoHorizontal * 7), (float)(textFont.Height));
                 StringFormat _stringFormat = new StringFormat();
                 _stringFormat.Alignment = StringAlignment.Center;
                 _stringFormat.LineAlignment = StringAlignment.Center;
 
                 if (getOperandos(0) != null)
-                    e.DrawString(getOperandos(0).ToString().PadLeft(4, '0'), fonteTexto, brushTextoSimbolo, _recTxtLinha, _stringFormat);
+                    e.DrawString(getOperandos(0).ToString().PadLeft(4, '0'), textFont, symbolTextBrush, _recTxtLinha, _stringFormat);
             }
         }
 
@@ -547,12 +548,12 @@ namespace LadderApp
             // Linha vertical
             xy1 = new Point(xDecimoHorizontal, 0);
             xy2 = new Point(xDecimoHorizontal, yTotalVertical);
-            e.DrawLine(penaLinha, xy1, xy2);
+            e.DrawLine(linePen, xy1, xy2);
 
             // Linha |-
-            xy1 = new Point(0, (linhaAtual.tamY / 2));
-            xy2 = new Point(xDecimoHorizontal, (linhaAtual.tamY / 2));
-            e.DrawLine(penaLinha, xy1, xy2);
+            xy1 = new Point(0, (VisualLine.tamY / 2));
+            xy2 = new Point(xDecimoHorizontal, (VisualLine.tamY / 2));
+            e.DrawLine(linePen, xy1, xy2);
         }
 
 
@@ -561,7 +562,7 @@ namespace LadderApp
             RectangleF _recTxtTitulo;
             String _txtTitulo = "";
 
-            _recTxtTitulo = new RectangleF(1F, 3F, (float)xTotalHorizontal, (float)(fonteTexto.Height));
+            _recTxtTitulo = new RectangleF(1F, 3F, (float)xTotalHorizontal, (float)(textFont.Height));
 
             StringFormat _stringFormat = new StringFormat();
             _stringFormat.Alignment = StringAlignment.Center;
@@ -573,9 +574,9 @@ namespace LadderApp
 
             DesenhaAcum();
 
-            switch (this.getCI())
+            switch (this.OpCode)
             {
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     _txtTitulo = "T";
                     if (getOperandos(0) != null)
                         switch ((Int32)((Address)getOperandos(0)).Temporizador.Tipo)
@@ -596,7 +597,7 @@ namespace LadderApp
 
                     DesenhaBaseTempo();
                     break;
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     _txtTitulo = "C";
                     if (getOperandos(0) != null)
                         switch ((Int32)((Address)getOperandos(0)).Contador.Tipo)
@@ -616,8 +617,8 @@ namespace LadderApp
 
 
 
-            e.DrawString(_txtTitulo, fonteTexto, brushTextoSimbolo, _recTxtTitulo, _stringFormat);
-            e.DrawRectangle(penaLinha, rectSimbolo);
+            e.DrawString(_txtTitulo, textFont, symbolTextBrush, _recTxtTitulo, _stringFormat);
+            e.DrawRectangle(linePen, rectSimbolo);
 
             /// para indicar comentário no quadro de saida
             if (getOperandos(0) != null)
@@ -646,7 +647,7 @@ namespace LadderApp
             //  dos controles
             int _posX = 0; // linhaAtual.posX;  // auxiliar para posX
             int _posY = 0; // linhaAtual.posY;  // auxiliar para posY
-            int _posYOriginal = linhaAtual.posY;
+            int _posYOriginal = VisualLine.posY;
 
 
             VisualParallelBranch _par = null;
@@ -655,27 +656,27 @@ namespace LadderApp
             FreeUserControl _simbAntAux = null;
             FreeUserControl _simbAnt2DesenhoAux = null;
 
-            _simbAnt2DesenhoAux = linhaAtual.simboloInicioLinha;
+            _simbAnt2DesenhoAux = VisualLine.simboloInicioLinha;
 
             e.Clear(Color.White);
-            if (linhaAtual.simbolos.Count > 0)
+            if (VisualLine.simbolos.Count > 0)
             {
-                foreach (FreeUserControl simbAux in linhaAtual.simbolos)
+                foreach (FreeUserControl simbAux in VisualLine.simbolos)
                 {
 
-                    if (simbAux.getCI() == OpCode.PARALELO_INICIAL ||
-                        simbAux.getCI() == OpCode.PARALELO_PROXIMO ||
-                        simbAux.getCI() == OpCode.PARALELO_FINAL)
+                    if (simbAux.OpCode== OperationCode.PARALELO_INICIAL ||
+                        simbAux.OpCode== OperationCode.PARALELO_PROXIMO ||
+                        simbAux.OpCode== OperationCode.PARALELO_FINAL)
                     {
-                        switch (simbAux.getCI())
+                        switch (simbAux.OpCode)
                         {
-                            case OpCode.PARALELO_INICIAL:
+                            case OperationCode.PARALELO_INICIAL:
                                 _par = new VisualParallelBranch();
                                 _par.par = simbAux;
 
                                 _lst_par.Add(_par);
                                 break;
-                            case OpCode.PARALELO_FINAL:
+                            case OperationCode.PARALELO_FINAL:
 
                                 simbAux.Refresh();
 
@@ -693,7 +694,7 @@ namespace LadderApp
                                     _posY -= _posYOriginal;
                                     xy2 = new Point(_posX, _posY);
 
-                                    e.DrawLine(pena, xy1, xy2);
+                                    e.DrawLine(pen, xy1, xy2);
                                 }
 
                                 _posX = simbAux.posicaoXY.X + simbAux.XYConexao.X;
@@ -706,7 +707,7 @@ namespace LadderApp
                                 _posY -= _posYOriginal;
                                 xy2 = new Point(_posX, _posY);
 
-                                e.DrawLine(pena, xy1, xy2);
+                                e.DrawLine(pen, xy1, xy2);
 
                                 _par = null;
                                 _lst_par.RemoveAt(_lst_par.Count - 1);
@@ -714,14 +715,14 @@ namespace LadderApp
                                 if (_lst_par.Count > 0)
                                     _par = _lst_par[_lst_par.Count - 1];
                                 break;
-                            case OpCode.PARALELO_PROXIMO:
+                            case OperationCode.PARALELO_PROXIMO:
                                 _par.lstVPI.Add(simbAux);
                                 break;
                             default:
                                 break;
                         }
 
-                        if (simbAux.getCI() != OpCode.PARALELO_FINAL)
+                        if (simbAux.OpCode!= OperationCode.PARALELO_FINAL)
                         {
                             _posX = _simbAnt2DesenhoAux.posicaoXY.X + _simbAnt2DesenhoAux.XYConexao.X;
                             _posY = _simbAnt2DesenhoAux.posicaoXY.Y + _simbAnt2DesenhoAux.XYConexao.Y;
@@ -733,11 +734,11 @@ namespace LadderApp
                             _posY -= _posYOriginal;
                             xy2 = new Point(_posX, _posY);
 
-                            e.DrawLine(pena, xy1, xy2);
+                            e.DrawLine(pen, xy1, xy2);
                         }
 
 
-                        if (_lst_par.Count > 0 && simbAux.getCI() == OpCode.PARALELO_FINAL)
+                        if (_lst_par.Count > 0 && simbAux.OpCode== OperationCode.PARALELO_FINAL)
                             if (_par.lstVPI.Count > 0)
                                 _simbAnt2DesenhoAux = _par.lstVPI[_par.lstVPI.Count - 1];
                             else
@@ -757,12 +758,12 @@ namespace LadderApp
 
             xy1 = new Point(_posX, _posY);
 
-            _posX = linhaAtual.simboloFimLinha.posicaoXY.X + linhaAtual.simboloFimLinha.XYConexao.X;
-            _posY = linhaAtual.simboloFimLinha.posicaoXY.Y + linhaAtual.simboloFimLinha.XYConexao.Y;
+            _posX = VisualLine.simboloFimLinha.posicaoXY.X + VisualLine.simboloFimLinha.XYConexao.X;
+            _posY = VisualLine.simboloFimLinha.posicaoXY.Y + VisualLine.simboloFimLinha.XYConexao.Y;
             _posY -= _posYOriginal;
             xy2 = new Point(_posX, _posY);
 
-            e.DrawLine(pena, xy1, xy2);
+            e.DrawLine(pen, xy1, xy2);
         }
 
         private void DesenhaComentario()
@@ -775,14 +776,14 @@ namespace LadderApp
                 _txtComent = ((Address)getOperandos(0)).Apelido;
                 if (_txtComent.Trim() != "")
                 {
-                    switch (this.getCI())
+                    switch (this.OpCode)
                     {
                         default:
                             break;
                     }
 
                     Size _propostoSize;
-                    _propostoSize = TextRenderer.MeasureText(_txtComent, fonteTexto);
+                    _propostoSize = TextRenderer.MeasureText(_txtComent, textFont);
                     _recTxtComent = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(yFimVSimbolo + 2)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)_propostoSize.Height));
 
                     StringFormat _stringFormat = new StringFormat();
@@ -798,25 +799,25 @@ namespace LadderApp
                         {
                             strSegundaLinha = _txtComent.Substring(_txtComent.Length - 1, 1) + strSegundaLinha;
                             _txtComent = _txtComent.Remove(_txtComent.Length - 1, 1);
-                            _propostoSize = TextRenderer.MeasureText(_txtComent, fonteTexto);
+                            _propostoSize = TextRenderer.MeasureText(_txtComent, textFont);
                             if (_propostoSize.Width < (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
                             {
                                 i = 20; // sai do loop
                                 /// caso a segundo linha não permitiu coloca *** no final.
-                                _propostoSize = TextRenderer.MeasureText(strSegundaLinha, fonteTexto);
+                                _propostoSize = TextRenderer.MeasureText(strSegundaLinha, textFont);
                                 if (_propostoSize.Width > (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
                                 {
                                     strSegundaLinha = strSegundaLinha.Substring(0, _txtComent.Length - 3) + " ...";
                                 }
                             }
                         }
-                        _recTxtComent.Height = (float)(fonteTexto.Size * fonteTexto.FontFamily.GetCellAscent(FontStyle.Regular) / fonteTexto.FontFamily.GetEmHeight(FontStyle.Regular));
+                        _recTxtComent.Height = (float)(textFont.Size * textFont.FontFamily.GetCellAscent(FontStyle.Regular) / textFont.FontFamily.GetEmHeight(FontStyle.Regular));
                     }
 
                     for (int i = 1; i <= intNumLinhas; i++)
                     {
-                        e.FillRectangle(brushComentario, _recTxtComent);
-                        e.DrawString(_txtComent, fonteTexto, brushTextoComentario, _recTxtComent, _stringFormat);
+                        e.FillRectangle(commentBrush, _recTxtComent);
+                        e.DrawString(_txtComent, textFont, commentTextBrush, _recTxtComent, _stringFormat);
 
                         _recTxtComent.Y += _recTxtComent.Height;
                         _txtComent = strSegundaLinha;
@@ -833,14 +834,14 @@ namespace LadderApp
             String _txtEndereco = "";
             RectangleF _recTxtEnd;
 
-            switch (this.getCI())
+            switch (this.OpCode)
             {
-                case OpCode.TEMPORIZADOR:
-                case OpCode.CONTADOR:
-                    _recTxtEnd = new RectangleF((float)(xMeioHorizontal / 2), (float)this.yQuintoVertical, (float)xMeioHorizontal, (float)fonteTexto.GetHeight());
+                case OperationCode.TEMPORIZADOR:
+                case OperationCode.CONTADOR:
+                    _recTxtEnd = new RectangleF((float)(xMeioHorizontal / 2), (float)this.yQuintoVertical, (float)xMeioHorizontal, (float)textFont.GetHeight());
                     break;
                 default:
-                    _recTxtEnd = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(3)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)fonteTexto.GetHeight()));
+                    _recTxtEnd = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(3)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)textFont.GetHeight()));
                     break;
             }
 
@@ -858,7 +859,7 @@ namespace LadderApp
                 _txtEndereco = "?";
 
 
-            e.DrawString(_txtEndereco, fonteTexto, brushTextoSimbolo, _recTxtEnd, _stringFormat);
+            e.DrawString(_txtEndereco, textFont, symbolTextBrush, _recTxtEnd, _stringFormat);
 
         }
 
@@ -868,20 +869,20 @@ namespace LadderApp
             Int32 _intPreset = -1;
             RectangleF _recTxtPreset;
 
-            switch (this.getCI())
+            switch (this.OpCode)
             {
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     if (getOperandos(0) != null)
                         _intPreset = (Int32)((Address)getOperandos(0)).Contador.Preset;
-                    _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
+                    _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     if (getOperandos(0) != null)
                         _intPreset = (Int32)((Address)getOperandos(0)).Temporizador.Preset;
-                    _recTxtPreset = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
+                    _recTxtPreset = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
-                    _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
+                    _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
             }
 
@@ -898,7 +899,7 @@ namespace LadderApp
             else
                 _txtPreset = "PR: ?";
 
-            e.DrawString(_txtPreset, fonteTexto, brushTextoSimbolo, _recTxtPreset, _stringFormat);
+            e.DrawString(_txtPreset, textFont, symbolTextBrush, _recTxtPreset, _stringFormat);
 
         }
 
@@ -908,17 +909,17 @@ namespace LadderApp
             Int32 _intBaseTempo = -1;
             RectangleF _recTxtBaseTempo;
 
-            switch (this.getCI())
+            switch (this.OpCode)
             {
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     return;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     if (getOperandos(0) != null)
                         _intBaseTempo = (Int32)((Address)getOperandos(0)).Temporizador.BaseTempo;
-                    _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
+                    _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
-                    _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
+                    _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
             }
 
@@ -953,9 +954,7 @@ namespace LadderApp
             else
                 _txtBaseTempo = "BT: ?";
 
-            e.DrawString(_txtBaseTempo, fonteTexto, brushTextoSimbolo, _recTxtBaseTempo, _stringFormat);
-            //txtPreset.Bounds = _recTxtPreset;
-
+            e.DrawString(_txtBaseTempo, textFont, symbolTextBrush, _recTxtBaseTempo, _stringFormat);
         }
 
         /// <summary>
@@ -968,20 +967,20 @@ namespace LadderApp
             Int32 _intAcum = -1;
             RectangleF _recTxtAcum;
 
-            switch (this.getCI())
+            switch (this.OpCode)
             {
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     if (getOperandos(0) != null)
                         _intAcum = (Int32)((Address)getOperandos(0)).Contador.Acumulado;
-                    _recTxtAcum = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
+                    _recTxtAcum = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     if (getOperandos(0) != null)
                         _intAcum = (Int32)((Address)getOperandos(0)).Temporizador.Acumulado;
-                    _recTxtAcum = new RectangleF((float)(0), (float)(4 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(fonteTexto.Height));
+                    _recTxtAcum = new RectangleF((float)(0), (float)(4 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
-                    _recTxtAcum = new RectangleF((float)(xMeioHorizontal / 2), (float)(3 * this.yQuintoVertical + 2), xMeioHorizontal, (float)(fonteTexto.Height));
+                    _recTxtAcum = new RectangleF((float)(xMeioHorizontal / 2), (float)(3 * this.yQuintoVertical + 2), xMeioHorizontal, (float)(textFont.Height));
                     break;
             }
 
@@ -998,7 +997,7 @@ namespace LadderApp
             else
                 _txtAcum = "AC: ?";
 
-            e.DrawString(_txtAcum, fonteTexto, brushTextoSimbolo, _recTxtAcum, _stringFormat);
+            e.DrawString(_txtAcum, textFont, symbolTextBrush, _recTxtAcum, _stringFormat);
 
         }
 
@@ -1008,14 +1007,14 @@ namespace LadderApp
             switch (tipoSelecao)
             {
                 case TipoSelecaoFlag.Borda:
-                    e.DrawRectangle(penaSelecao, rectSelecao);
+                    e.DrawRectangle(selectionPen, rectSelecao);
                     break;
                 case TipoSelecaoFlag.Fundo:
-                    e.FillRectangle(brushSelecao, rectSelecao);
+                    e.FillRectangle(selectionBrush, rectSelecao);
                     break;
                 default:
-                    e.FillRectangle(brushSelecao, rectSelecao);
-                    e.DrawRectangle(penaSelecao, rectSelecao);
+                    e.FillRectangle(selectionBrush, rectSelecao);
+                    e.DrawRectangle(selectionPen, rectSelecao);
                     break;
             }
         }
@@ -1024,12 +1023,12 @@ namespace LadderApp
         private void Energizado()
         {
             // Sobre a linha horizontal antes do simbolo
-            rectEnergizado = new Rectangle(Convert.ToInt32(penaSelecao.Width), (yTotalVertical - ySextoVertical) / 2, xInicioHSimbolo - Convert.ToInt32(penaSelecao.Width), ySextoVertical);
-            e.FillRectangle(brushEnergizado, rectEnergizado);
+            rectEnergizado = new Rectangle(Convert.ToInt32(selectionPen.Width), (yTotalVertical - ySextoVertical) / 2, xInicioHSimbolo - Convert.ToInt32(selectionPen.Width), ySextoVertical);
+            e.FillRectangle(energizedBrush, rectEnergizado);
 
             // Sobre a linha horizontal depois do simbolo
-            rectEnergizado = new Rectangle(xFimHSimbolo, (yTotalVertical - ySextoVertical) / 2, xTotalHorizontal - xFimHSimbolo - Convert.ToInt32(penaSelecao.Width), ySextoVertical);
-            e.FillRectangle(brushEnergizado, rectEnergizado);
+            rectEnergizado = new Rectangle(xFimHSimbolo, (yTotalVertical - ySextoVertical) / 2, xTotalHorizontal - xFimHSimbolo - Convert.ToInt32(selectionPen.Width), ySextoVertical);
+            e.FillRectangle(energizedBrush, rectEnergizado);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -1049,47 +1048,45 @@ namespace LadderApp
                 if (!usoTxtIndicado)
                     ApresentaCamposTxt();
 
-                switch (getCI())
+                switch (OpCode)
                 {
-                    case OpCode.NENHUM:
+                    case OperationCode.None:
                         e.Clear(Color.White);
                         break;
-                    case OpCode.INICIO_DA_LINHA:
+                    case OperationCode.INICIO_DA_LINHA:
                         DesenhaInicioLinha();
                         break;
-                    case OpCode.FIM_DA_LINHA:
+                    case OperationCode.FIM_DA_LINHA:
                         DesenhaFimLinha();
                         break;
-                    case OpCode.CONTATO_NA:
+                    case OperationCode.CONTATO_NA:
                         DesenhaContatoNA();
                         break;
-                    case OpCode.CONTATO_NF:
+                    case OperationCode.CONTATO_NF:
                         DesenhaContatoNF();
                         break;
-                    case OpCode.BOBINA_SAIDA:
+                    case OperationCode.BOBINA_SAIDA:
                         DesenhaBobinaSaida();
                         break;
-                    case OpCode.TEMPORIZADOR:
-                        //DesenhaBobinaComString("T");
+                    case OperationCode.TEMPORIZADOR:
                         DesenhaQuadroSaida();
                         break;
-                    case OpCode.CONTADOR:
-                        //DesenhaBobinaComString("C");
+                    case OperationCode.CONTADOR:
                         DesenhaQuadroSaida();
                         break;
-                    case OpCode.PARALELO_INICIAL:
+                    case OperationCode.PARALELO_INICIAL:
                         DesenhaParaleloInicial();
                         break;
-                    case OpCode.PARALELO_FINAL:
+                    case OperationCode.PARALELO_FINAL:
                         DesenhaParaleloFinal();
                         break;
-                    case OpCode.PARALELO_PROXIMO:
+                    case OperationCode.PARALELO_PROXIMO:
                         DesenhaParaleloProximo();
                         break;
-                    case OpCode.LINHA_DE_FUNDO:
+                    case OperationCode.LINHA_DE_FUNDO:
                         DesenhaFundo();
                         break;
-                    case OpCode.RESET:
+                    case OperationCode.RESET:
                         DesenhaBobinaComString("R");
                         break;
                     default:
@@ -1104,38 +1101,33 @@ namespace LadderApp
 
         private void ControleLivre_Load(object sender, EventArgs e)
         {
-            this.e = System.Drawing.Graphics.FromHwnd(this.Handle);
-            if (getCI() != null)
+            this.e = Graphics.FromHwnd(Handle);
+            if (OpCode!= null)
                 AtualizaVariaveisDesenho();
         }
 
         private void ControleLivre_Paint(object sender, PaintEventArgs e)
         {
-            if (this.e != null && linhaAtual.tamY > 0)
+            if (this.e != null && VisualLine.tamY > 0)
             {
                 this.e = e.Graphics;
                 DesenhaSimbolo();
             }
         }
 
-        private void ControleLivre_Click(object sender, EventArgs e)
-        {
-            //txtInvisivel.Select();
-        }
-
         private void ControleLivre_Enter(object sender, EventArgs e)
         {
-            if (getCI() != OpCode.LINHA_DE_FUNDO &&
-                getCI() != OpCode.FIM_DA_LINHA)
+            if (OpCode!= OperationCode.LINHA_DE_FUNDO &&
+                OpCode!= OperationCode.FIM_DA_LINHA)
             {
                 this.selecionado = true;
 
                 if (ControleSelecionado != null)
-                    ControleSelecionado(this, linhaAtual);
+                    ControleSelecionado(this, VisualLine);
 
                 LadderForm _frmDL;
                 _frmDL = (LadderForm)this.Parent;
-                _frmDL.SetMessage(this.Location.ToString() + " - " + this.Size.ToString() + " - " + this.TabStop.ToString() + " - " + this.TabIndex.ToString() + " - " + this.getCI().ToString());
+                _frmDL.SetMessage(this.Location.ToString() + " - " + this.Size.ToString() + " - " + this.TabStop.ToString() + " - " + this.TabIndex.ToString() + " - " + this.OpCode.ToString());
 
                 this.Refresh();
             }
@@ -1143,8 +1135,8 @@ namespace LadderApp
 
         private void ControleLivre_Leave(object sender, EventArgs e)
         {
-            if (getCI() != OpCode.LINHA_DE_FUNDO &&
-                getCI() != OpCode.FIM_DA_LINHA)
+            if (OpCode!= OperationCode.LINHA_DE_FUNDO &&
+                OpCode!= OperationCode.FIM_DA_LINHA)
             {
                 this.Refresh();
             }
@@ -1152,7 +1144,7 @@ namespace LadderApp
 
         public void NovasInsercoesLinhaHorizontal(bool bHabilita)
         {
-            if (bHabilita == true && getCI() != OpCode.FIM_DA_LINHA)
+            if (bHabilita == true && OpCode!= OperationCode.FIM_DA_LINHA)
             {
                 indicadorInsercao = new System.Windows.Forms.Panel();
                 indicadorInsercao.BackColor = Color.Transparent;
@@ -1164,7 +1156,7 @@ namespace LadderApp
 
                 listaIndicadores.Add(indicadorInsercao);
             }
-            else if (getCI() != OpCode.FIM_DA_LINHA)
+            else if (OpCode!= OperationCode.FIM_DA_LINHA)
             {
                 foreach (System.Windows.Forms.Panel ii in listaIndicadores)
                 {
@@ -1176,25 +1168,25 @@ namespace LadderApp
 
         private void ControleLivre_MouseEnter(object sender, EventArgs e)
         {
-            if (getCI() != OpCode.FIM_DA_LINHA)
+            if (OpCode!= OperationCode.FIM_DA_LINHA)
                 NovasInsercoesLinhaHorizontal(false); // era true
         }
 
         private void ControleLivre_MouseLeave(object sender, EventArgs e)
         {
-            if (getCI() != OpCode.FIM_DA_LINHA)
+            if (OpCode!= OperationCode.FIM_DA_LINHA)
                 NovasInsercoesLinhaHorizontal(false);
         }
 
         private void ControleLivre_Resize(object sender, EventArgs e)
         {
-            if (getCI() != null)
+            if (OpCode!= null)
                 AtualizaVariaveisDesenho();
         }
 
         private void ControleLivre_SizeChanged(object sender, EventArgs e)
         {
-            if (getCI() != null)
+            if (OpCode!= null)
                 AtualizaVariaveisDesenho();
         }
 
@@ -1210,7 +1202,7 @@ namespace LadderApp
         private void ControleLivre_KeyDown(object sender, KeyEventArgs e)
         {
 
-            if (this.getCI() == OpCode.INICIO_DA_LINHA)
+            if (this.OpCode== OperationCode.INICIO_DA_LINHA)
             {
                 if (MudaLinha != null &&
                     (e.KeyData == Keys.Down || e.KeyData == Keys.Up))
@@ -1221,7 +1213,7 @@ namespace LadderApp
                 if (DeletaLinha != null &&
                     (e.KeyData == Keys.Delete))
                 {
-                    DeletaLinha(linhaAtual);
+                    DeletaLinha(VisualLine);
                 }
             }
         }
@@ -1232,12 +1224,6 @@ namespace LadderApp
         public Symbol SimboloBasico
         {
             get { return codigoInterpretavel; }
-        }
-
-        public override void setCI(OpCode codInterpretavelNovo)
-        {
-            base.setCI(codInterpretavelNovo);
-            ApresentaCamposTxt();
         }
 
         private void ApresentaCamposTxt()
@@ -1262,17 +1248,17 @@ namespace LadderApp
             if (SolicitaMudarEndereco == null)
                 return;
 
-            switch (getCI())
+            switch (OpCode)
             {
-                case OpCode.CONTATO_NA:
-                case OpCode.CONTATO_NF:
+                case OperationCode.CONTATO_NA:
+                case OperationCode.CONTATO_NF:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
-                case OpCode.BOBINA_SAIDA:
+                case OperationCode.BOBINA_SAIDA:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
-                case OpCode.TEMPORIZADOR:
-                case OpCode.CONTADOR:
+                case OperationCode.TEMPORIZADOR:
+                case OperationCode.CONTADOR:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
             }
@@ -1285,16 +1271,16 @@ namespace LadderApp
 
         private void ControleLivre_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            switch (getCI())
+            switch (OpCode)
             {
-                case OpCode.CONTATO_NA:
-                case OpCode.CONTATO_NF:
+                case OperationCode.CONTATO_NA:
+                case OperationCode.CONTATO_NF:
                     //                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
                     break;
-                case OpCode.BOBINA_SAIDA:
+                case OperationCode.BOBINA_SAIDA:
                     break;
-                case OpCode.TEMPORIZADOR:
-                case OpCode.CONTADOR:
+                case OperationCode.TEMPORIZADOR:
+                case OperationCode.CONTADOR:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
             }

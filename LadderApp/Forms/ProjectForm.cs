@@ -306,15 +306,15 @@ namespace LadderApp
                 _lc.simbolos.AddRange(_lc.saida);
                 foreach (Symbol _sb in _lc.simbolos)
                 {
-                    switch (_sb.getCI())
+                    switch (_sb.OpCode)
                     {
                             /// pporque disso aqui
-                        case OpCode.CONTATO_NA:
-                        case OpCode.CONTATO_NF:
-                        case OpCode.BOBINA_SAIDA:
-                        case OpCode.TEMPORIZADOR:
-                        case OpCode.CONTADOR:
-                        case OpCode.RESET:
+                        case OperationCode.CONTATO_NA:
+                        case OperationCode.CONTATO_NF:
+                        case OperationCode.BOBINA_SAIDA:
+                        case OperationCode.TEMPORIZADOR:
+                        case OperationCode.CONTADOR:
+                        case OperationCode.RESET:
                             if (_sb.getOperandos(0) != null)
                             {
                                 Address _el = (Address)_sb.getOperandos(0);

@@ -62,7 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OperationCode\OpCode.cs" />
+    <Compile Include="OperationCode\OperationCode.cs" />
     <Compile Include="Services\Text2OpCodeServices.cs" />
     <Compile Include="Resources\MicrocontrollersBaseCodeFilesResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -76,7 +76,7 @@
       <DependentUpon>FreeUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\CouldNotInitializeTIUSBException.cs" />
-    <Compile Include="Exceptions\NaoECodigoInterpretavelException.cs" />
+    <Compile Include="Exceptions\NotValidOpCodeException.cs" />
     <Compile Include="Forms\ChangeCommentForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -181,11 +181,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>AddressingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProjectForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ProjectForm.cs</DependentUpon>
@@ -200,11 +195,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MicrocontrollersBaseCodeFilesResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -280,7 +270,6 @@
     <None Include="PLC\ExecTemporizadores.usuario.h" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Help\InstrucoesLadder.htm" />
     <None Include="PLC\ExecContador_Tipo0.funcoes.c" />
     <None Include="PLC\ExecContador_Tipo1.funcoes.c" />
     <None Include="PLC\ExecTemporizador.funcoes.c" />

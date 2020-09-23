@@ -15,9 +15,9 @@ namespace LadderApp
         {
         }
 
-        public Symbol(OpCode _ci)
+        public Symbol(OperationCode opCode)
         {
-            codigoInterpretavel = _ci;
+            this.opCode = opCode;
         }
         
         [XmlIgnore]
@@ -27,25 +27,16 @@ namespace LadderApp
         public Object[] Operandos = new Object[5];
 
 
-        private OpCode codigoInterpretavelAtual = OpCode.NENHUM;
+        private OperationCode opCode = OperationCode.None;
         [XmlElement(Order = 1, ElementName = "Instrucao")]
-        public OpCode codigoInterpretavel
+        public OperationCode OpCode
         {
-            get { return codigoInterpretavelAtual; }
-            set {
-                codigoInterpretavelAtual = value;
+            get => opCode;
+            set
+            {
+                this.opCode = value;
                 RealocaOperandos();
             }
-        }
-        public void setCI(OpCode codigo)
-        {
-            codigoInterpretavel = codigo;
-            RealocaOperandos();
-        }
-
-        public OpCode getCI()
-        {
-            return codigoInterpretavel;
         }
 
         public Object[] getOperandos()
@@ -84,25 +75,25 @@ namespace LadderApp
             Operandos = new Object[5];
 
             /// Aloca espaco para a quantidade de operandos de cada codigo interpretavel
-            switch (getCI())
+            switch (OpCode)
             {
-                case OpCode.NENHUM:
-                case OpCode.FIM_DA_LINHA:
+                case OperationCode.None:
+                case OperationCode.FIM_DA_LINHA:
                     iNumOperandos = 0;
                     break;
-                case OpCode.INICIO_DA_LINHA:
-                case OpCode.CONTATO_NA:
-                case OpCode.CONTATO_NF:
-                case OpCode.BOBINA_SAIDA:
-                case OpCode.RESET:
+                case OperationCode.INICIO_DA_LINHA:
+                case OperationCode.CONTATO_NA:
+                case OperationCode.CONTATO_NF:
+                case OperationCode.BOBINA_SAIDA:
+                case OperationCode.RESET:
                     iNumOperandos = 1;
                     break;
-                case OpCode.PARALELO_INICIAL:
-                case OpCode.PARALELO_FINAL:
-                case OpCode.PARALELO_PROXIMO:
+                case OperationCode.PARALELO_INICIAL:
+                case OperationCode.PARALELO_FINAL:
+                case OperationCode.PARALELO_PROXIMO:
                     iNumOperandos = 0;
                     break;
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     iNumOperandos = 4;
 
                     setOperando(1, (Int32)0); // tipo
@@ -110,7 +101,7 @@ namespace LadderApp
                     setOperando(3, (Int32)0); // acum
 
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     iNumOperandos = 5;
 
                     setOperando(1, (Int32)0); // tipo
@@ -147,7 +138,7 @@ namespace LadderApp
 
         public void Dispose()
         {
-            setCI(OpCode.NENHUM);
+            OpCode = OperationCode.None;
         }
 
         /// <summary>
@@ -177,19 +168,19 @@ namespace LadderApp
                 
             }
 
-            switch (getCI())
+            switch (OpCode)
             {
-                case OpCode.NENHUM:
-                case OpCode.FIM_DA_LINHA:
+                case OperationCode.None:
+                case OperationCode.FIM_DA_LINHA:
                     _bValido = false;
                     break;
-                case OpCode.INICIO_DA_LINHA:
+                case OperationCode.INICIO_DA_LINHA:
                     if (_novoOperando != null)
                         if (_novoOperando.GetType().ToString() != "System.Int32")
                             _bValido = false;
                     break;
-                case OpCode.CONTATO_NA:
-                case OpCode.CONTATO_NF:
+                case OperationCode.CONTATO_NA:
+                case OperationCode.CONTATO_NF:
                     _bEndereco = true;
                     if (_end != null)
                     {
@@ -210,7 +201,7 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case OpCode.BOBINA_SAIDA:
+                case OperationCode.BOBINA_SAIDA:
                     _bEndereco = true;
                     if (_end != null)
                     {
@@ -228,7 +219,7 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     if (_end != null && _indice == 0)
                     {
                         _bEndereco = true;
@@ -257,7 +248,7 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     if (_end != null && _indice == 0)
                     {
                         _bEndereco = true;
@@ -286,12 +277,12 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case OpCode.PARALELO_INICIAL:
-                case OpCode.PARALELO_FINAL:
-                case OpCode.PARALELO_PROXIMO:
+                case OperationCode.PARALELO_INICIAL:
+                case OperationCode.PARALELO_FINAL:
+                case OperationCode.PARALELO_PROXIMO:
                     _bValido = false;
                     break;
-                case OpCode.RESET:
+                case OperationCode.RESET:
                     _bEndereco = true;
                     if (_end != null)
                     {

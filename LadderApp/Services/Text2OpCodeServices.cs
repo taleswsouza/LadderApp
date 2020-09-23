@@ -62,7 +62,7 @@ namespace LadderApp.CodigoInterpretavel
         public bool ExisteCabecalho()
         {
             if (ExisteCodigoInterpretavel())
-                if (LeCodigoInterpretavel(PosInicial) == OpCode.CABECALHO_TAMANHO)
+                if (LeCodigoInterpretavel(PosInicial) == OperationCode.CABECALHO_TAMANHO)
                 {
                     intTamanhoCabecalho = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(PosInicial + 1, 1));
                     return true;
@@ -80,7 +80,7 @@ namespace LadderApp.CodigoInterpretavel
                     for (int i = PosInicial + 2; i <= PosInicial + intTamanhoCabecalho + 2; i++)
                         switch (LeCodigoInterpretavel(i))
                         {
-                            case OpCode.CABECALHO_SENHA_0:
+                            case OperationCode.CABECALHO_SENHA_0:
                                 bSolicitarSenha = true;
                                 i++;
                                 intTamanhoSenha = LeInteiro(i);
@@ -97,12 +97,12 @@ namespace LadderApp.CodigoInterpretavel
             bCabecalhoValidado = true;
         }
 
-        public OpCode LeCodigoInterpretavel(Int32 _pos)
+        public OperationCode LeCodigoInterpretavel(Int32 _pos)
         {
             {
                 try
                 {
-                    return (OpCode)Convert.ToChar(DadosConvertidosChar.Substring(_pos, 1));
+                    return (OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(_pos, 1));
                 }
                 catch
                 {
@@ -154,63 +154,63 @@ namespace LadderApp.CodigoInterpretavel
 
             _sb = new Symbol(LeCodigoInterpretavel(_pos));
 
-            switch (_sb.getCI())
+            switch (_sb.OpCode)
             {
-                case OpCode.NENHUM:
+                case OperationCode.None:
                     break;
-                case OpCode.FIM_DA_LINHA:
+                case OperationCode.FIM_DA_LINHA:
                     break;
-                case OpCode.CONTATO_NA:
-                case OpCode.CONTATO_NF:
+                case OperationCode.CONTATO_NA:
+                case OperationCode.CONTATO_NF:
                     _tpEndLido = LeTipoEnderecamento(_pos); _pos++;
                     _iIndiceEndLido = LeInteiro(_pos); _pos++;
 
                     _endLido = enderecamento.Find(_tpEndLido, _iIndiceEndLido);
                     break;
-                case OpCode.BOBINA_SAIDA:
-                case OpCode.RESET:
+                case OperationCode.BOBINA_SAIDA:
+                case OperationCode.RESET:
                     break;
-                case OpCode.PARALELO_INICIAL:
-                case OpCode.PARALELO_FINAL:
-                case OpCode.PARALELO_PROXIMO:
+                case OperationCode.PARALELO_INICIAL:
+                case OperationCode.PARALELO_FINAL:
+                case OperationCode.PARALELO_PROXIMO:
                     break;
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     break;
             }
 
             return _endLido;
         }
 
-        public Int32 NumeroOperandos(OpCode _ci)
+        public Int32 NumeroOperandos(OperationCode _ci)
         {
             int iNumOperandos = -1;
             switch (_ci)
             {
-                case OpCode.NENHUM:
+                case OperationCode.None:
                     iNumOperandos = 0;
                     break;
-                case OpCode.FIM_DA_LINHA:
+                case OperationCode.FIM_DA_LINHA:
                     iNumOperandos = 0;
                     break;
-                case OpCode.CONTATO_NA:
-                case OpCode.CONTATO_NF:
+                case OperationCode.CONTATO_NA:
+                case OperationCode.CONTATO_NF:
                     iNumOperandos = 2;
                     break;
-                case OpCode.BOBINA_SAIDA:
-                case OpCode.RESET:
+                case OperationCode.BOBINA_SAIDA:
+                case OperationCode.RESET:
                     iNumOperandos = 2;
                     break;
-                case OpCode.PARALELO_INICIAL:
-                case OpCode.PARALELO_FINAL:
-                case OpCode.PARALELO_PROXIMO:
+                case OperationCode.PARALELO_INICIAL:
+                case OperationCode.PARALELO_FINAL:
+                case OperationCode.PARALELO_PROXIMO:
                     iNumOperandos = 0;
                     break;
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     iNumOperandos = 3;
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     iNumOperandos = 4;
                     break;
                 default:
@@ -224,7 +224,7 @@ namespace LadderApp.CodigoInterpretavel
         private LadderProgram LerExecutavel(String strNomeProjeto)
         {
             List<int> lstCodigosLidos = new List<int>();
-            OpCode guarda = OpCode.NENHUM;
+            OperationCode guarda = OperationCode.None;
 
             if (this.ExisteCodigoInterpretavel())
             {
@@ -252,19 +252,19 @@ namespace LadderApp.CodigoInterpretavel
 
                     switch (guarda)
                     {
-                        case OpCode.NENHUM:
+                        case OperationCode.None:
                             intContaFim++;
                             break;
-                        case OpCode.FIM_DA_LINHA:
+                        case OperationCode.FIM_DA_LINHA:
                             intContaFim++;
-                            if (LeCodigoInterpretavel(i + 1) != OpCode.NENHUM)
+                            if (LeCodigoInterpretavel(i + 1) != OperationCode.None)
                                 intIndiceLinha = programa.InsereLinhaNoFinal(new Line());
                             break;
-                        case OpCode.CONTATO_NA:
-                        case OpCode.CONTATO_NF:
+                        case OperationCode.CONTATO_NA:
+                        case OperationCode.CONTATO_NF:
                             intContaFim = 0;
                             {
-                                Symbol _sb = new Symbol((OpCode)guarda);
+                                Symbol _sb = new Symbol((OperationCode)guarda);
                                 _tpEndLido = LeTipoEnderecamento(i); i++;
                                 _iIndiceEndLido = LeInteiro(i); i++;
                                 _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
@@ -281,12 +281,12 @@ namespace LadderApp.CodigoInterpretavel
                                 programa.linhas[intIndiceLinha].simbolos.Add(_sb);
                             }
                             break;
-                        case OpCode.BOBINA_SAIDA:
-                        case OpCode.RESET:
+                        case OperationCode.BOBINA_SAIDA:
+                        case OperationCode.RESET:
                             intContaFim = 0;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((OpCode)guarda));
+                                _lstSB.Add(new Symbol((OperationCode)guarda));
                                 _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
@@ -303,17 +303,17 @@ namespace LadderApp.CodigoInterpretavel
                                 _lstSB.Clear();
                             }
                             break;
-                        case OpCode.PARALELO_INICIAL:
-                        case OpCode.PARALELO_FINAL:
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.PARALELO_INICIAL:
+                        case OperationCode.PARALELO_FINAL:
+                        case OperationCode.PARALELO_PROXIMO:
                             intContaFim = 0;
-                            programa.linhas[intIndiceLinha].simbolos.Add(new Symbol((OpCode)guarda));
+                            programa.linhas[intIndiceLinha].simbolos.Add(new Symbol((OperationCode)guarda));
                             break;
-                        case OpCode.CONTADOR:
+                        case OperationCode.CONTADOR:
                             intContaFim = 0;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((OpCode)guarda));
+                                _lstSB.Add(new Symbol((OperationCode)guarda));
                                 _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
@@ -325,11 +325,11 @@ namespace LadderApp.CodigoInterpretavel
                                 _lstSB.Clear();
                             }
                             break;
-                        case OpCode.TEMPORIZADOR:
+                        case OperationCode.TEMPORIZADOR:
                             intContaFim = 0;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((OpCode)guarda));
+                                _lstSB.Add(new Symbol((OperationCode)guarda));
                                 _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.BaseTempo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));

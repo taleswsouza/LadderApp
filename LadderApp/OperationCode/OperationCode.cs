@@ -4,12 +4,12 @@ using System.Text;
 
 namespace LadderApp
 {
-    public enum OpCode
+    public enum OperationCode
     {
         /// <summary>
         /// Indica que nenhum simbolo esta desenhado
         /// </summary>
-        NENHUM = 0,
+        None = 0,
         /// <summary>
         /// Usado para indicar o inicio da linha.
         /// </summary>

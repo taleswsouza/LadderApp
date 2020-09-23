@@ -8,12 +8,12 @@ namespace LadderApp
     public class Line
     {
         [XmlIgnore]
-        public Symbol simboloInicioLinha = new Symbol(OpCode.INICIO_DA_LINHA);
+        public Symbol simboloInicioLinha = new Symbol(OperationCode.INICIO_DA_LINHA);
         [XmlElement(ElementName = "Simbolo")]
         public List<Symbol> simbolos = new List<Symbol>();
         public List<Symbol> saida = new List<Symbol>();
         [XmlIgnore]
-        public Symbol simboloFimLinha = new Symbol(OpCode.FIM_DA_LINHA);
+        public Symbol simboloFimLinha = new Symbol(OperationCode.FIM_DA_LINHA);
 
         [XmlIgnore]
         public Addressing endereco = null;
@@ -54,306 +54,306 @@ namespace LadderApp
         private void InicializaDesenhosSimbolos1()
         {
             // Inicio de Linha
-            simboloInicioLinha.setCI(OpCode.INICIO_DA_LINHA);
+            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
 
             Symbol ex1 = null;
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NF);
+            ex1.OpCode = OperationCode.CONTATO_NF;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NF);
+            ex1.OpCode = OperationCode.CONTATO_NF;
             simbolos.Add(ex1);
             //
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NF);
+            ex1.OpCode = OperationCode.CONTATO_NF;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
             //
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             //teste inicio
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             // teste fim
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             //saida
             ex1 = new Symbol();
-            ex1.setCI(OpCode.BOBINA_SAIDA);
+            ex1.OpCode = OperationCode.BOBINA_SAIDA;
             saida.Add(ex1);
 
             // Fim de Linha
-            simboloFimLinha.setCI(OpCode.FIM_DA_LINHA);
+            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
         }
 
         private void InicializaDesenhosSimbolos2()
         {
             // Inicio de Linha
-            simboloInicioLinha.setCI(OpCode.INICIO_DA_LINHA);
+            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
 
             Symbol ex1 = null;
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NF);
+            ex1.OpCode = OperationCode.CONTATO_NF;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NF);
+            ex1.OpCode = OperationCode.CONTATO_NF;
             simbolos.Add(ex1);
             //
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NF);
+            ex1.OpCode = OperationCode.CONTATO_NF;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
             //
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             //ex1 = new SimboloBasico();
@@ -362,230 +362,230 @@ namespace LadderApp
             //simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             //teste inicio
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             // teste fim
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             simbolos.Add(ex1);
 
             //saida
             ex1 = new Symbol();
-            ex1.setCI(OpCode.BOBINA_SAIDA);
+            ex1.OpCode = OperationCode.BOBINA_SAIDA;
             saida.Add(ex1);
 
             // Fim de Linha
-            simboloFimLinha.setCI(OpCode.FIM_DA_LINHA);
+            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
         }
 
         private void InicializaDesenhosSimbolos3()
         {
             // Inicio de Linha
-            simboloInicioLinha.setCI(OpCode.INICIO_DA_LINHA);
+            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
 
             Symbol ex1 = null;
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             ex1.setOperando(0, endereco.lstMemoria[1]);
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NF);
+            ex1.OpCode = OperationCode.CONTATO_NF;
             ex1.setOperando(0, endereco.lstTemporizador[2]);
             simbolos.Add(ex1);
 
             
             //saida
             ex1 = new Symbol();
-            ex1.setCI(OpCode.BOBINA_SAIDA);
+            ex1.OpCode = OperationCode.BOBINA_SAIDA;
             ex1.setOperando(0, endereco.lstMemoria[1]);
             saida.Add(ex1);
 
             // Fim de Linha
-            simboloFimLinha.setCI(OpCode.FIM_DA_LINHA);
+            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
         }
 
         private void InicializaDesenhosSimbolos4()
         {
             // Inicio de Linha
-            simboloInicioLinha.setCI(OpCode.INICIO_DA_LINHA);
+            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
 
             Symbol ex1 = null;
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             saida.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.BOBINA_SAIDA);
+            ex1.OpCode = OperationCode.BOBINA_SAIDA;
             saida.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             saida.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.BOBINA_SAIDA);
+            ex1.OpCode = OperationCode.BOBINA_SAIDA;
             saida.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             saida.Add(ex1);
 
             // Fim de Linha
-            simboloFimLinha.setCI(OpCode.FIM_DA_LINHA);
+            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
         }
 
         private void InicializaDesenhosSimbolos5()
         {
             // Inicio de Linha
-            simboloInicioLinha.setCI(OpCode.INICIO_DA_LINHA);
+            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
 
             Symbol ex1 = null;
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.CONTATO_NA);
+            ex1.OpCode = OperationCode.CONTATO_NA;
             ex1.setOperando(0, endereco.lstMemoria[0]);
             endereco.lstMemoria[0].EmUso = true;
             simbolos.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_INICIAL);
+            ex1.OpCode = OperationCode.PARALELO_INICIAL;
             saida.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.BOBINA_SAIDA);
+            ex1.OpCode = OperationCode.BOBINA_SAIDA;
             saida.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             saida.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.BOBINA_SAIDA);
+            ex1.OpCode = OperationCode.BOBINA_SAIDA;
             saida.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_PROXIMO);
+            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
             saida.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.BOBINA_SAIDA);
+            ex1.OpCode = OperationCode.BOBINA_SAIDA;
             saida.Add(ex1);
 
             ex1 = new Symbol();
-            ex1.setCI(OpCode.PARALELO_FINAL);
+            ex1.OpCode = OperationCode.PARALELO_FINAL;
             saida.Add(ex1);
 
             // Fim de Linha
-            simboloFimLinha.setCI(OpCode.FIM_DA_LINHA);
+            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
             //simboloFimLinha.TabStop = false;
 
         }
@@ -593,10 +593,10 @@ namespace LadderApp
         private void InicializaDesenhosSimbolosVazio()
         {
             // Inicio de Linha
-            simboloInicioLinha.setCI(OpCode.INICIO_DA_LINHA);
+            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
 
             // Fim de Linha
-            simboloFimLinha.setCI(OpCode.FIM_DA_LINHA);
+            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
         }
 
         public void ApagaLinha()
@@ -650,32 +650,32 @@ namespace LadderApp
                         _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                         /// insere PP antes do objeto atual na linha
-                        this.saida.Insert(0, new Symbol(OpCode.PARALELO_PROXIMO));
+                        this.saida.Insert(0, new Symbol(OperationCode.PARALELO_PROXIMO));
                         /// insere PF depois do objeto atual da linha
-                        this.saida.Insert(this.saida.Count, new Symbol(OpCode.PARALELO_FINAL));
+                        this.saida.Insert(this.saida.Count, new Symbol(OperationCode.PARALELO_FINAL));
                     }
                     else
                     {
                         _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_FINALIZADO);
                         _subt2posicionaSimboloInserido = -1;
 
-                        this.saida.Insert(0, new Symbol(OpCode.PARALELO_INICIAL));
+                        this.saida.Insert(0, new Symbol(OperationCode.PARALELO_INICIAL));
                         _indiceSimbolo++;
                     }
 
                     break;
                 default:
-                    switch (this.saida[_indiceSimbolo].getCI())
+                    switch (this.saida[_indiceSimbolo].OpCode)
                     {
-                        case OpCode.PARALELO_INICIAL:
+                        case OperationCode.PARALELO_INICIAL:
                             _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
-                            this.saida[0].setCI(OpCode.PARALELO_PROXIMO);
+                            this.saida[0].OpCode = OperationCode.PARALELO_PROXIMO;
                             break;
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.PARALELO_PROXIMO:
                             _lstSB.InsereParaleloProximo();
                             break;
-                        case OpCode.PARALELO_FINAL:
+                        case OperationCode.PARALELO_FINAL:
                             _lstSB.InsereParaleloProximo();
                             break;
                         default:

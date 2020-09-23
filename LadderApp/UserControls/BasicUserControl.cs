@@ -36,22 +36,22 @@ namespace LadderApp
         {
         }
 
-        public virtual void setCI(OpCode codInterpretavelNovo)
-        {
-                codigoInterpretavel.setCI(codInterpretavelNovo);
-        }
-
         virtual public void DesenhaSimbolo()
         {
         }
 
-        public OpCode getCI()
+        public OperationCode OpCode
         {
-            if (codigoInterpretavel != null)
-                return codigoInterpretavel.getCI();
-            else
-                return OpCode.NENHUM;
+            get
+            {
+                if (codigoInterpretavel != null)
+                    return codigoInterpretavel.OpCode;
+                else
+                    return OperationCode.None;
 
+            }
+
+            set => codigoInterpretavel.OpCode = value;
         }
 
         public Object[] getOperandos()

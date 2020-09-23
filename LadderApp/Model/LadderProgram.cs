@@ -308,16 +308,16 @@ namespace LadderApp
                 op.Add(new SuporteConjunto());
                 foreach (Symbol _sb in _lc.simbolos)
                 {
-                    switch (_sb.getCI())
+                    switch (_sb.OpCode)
                     {
-                        case OpCode.PARALELO_INICIAL:
+                        case OperationCode.PARALELO_INICIAL:
                             /// cria o paralelo
                             op.Add(new SuporteConjunto());
                             /// cria o paralelo inicial
                             op.Add(new SuporteConjunto());
 
                             break;
-                        case OpCode.PARALELO_FINAL:
+                        case OperationCode.PARALELO_FINAL:
                             /// Atualiza o paralelo
                             if (op[op.Count - 2].bIniciado)
                                 op[op.Count - 2].valor = op[op.Count - 2].valor || op[op.Count - 1].valor;
@@ -340,7 +340,7 @@ namespace LadderApp
 
 
                             break;
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.PARALELO_PROXIMO:
                             /// Atualiza o paralelo
                             if (op[op.Count - 2].bIniciado)
                                 op[op.Count - 2].valor = op[op.Count - 2].valor || op[op.Count - 1].valor;
@@ -357,12 +357,12 @@ namespace LadderApp
 
                             break;
                         default:
-                            switch (_sb.getCI())
+                            switch (_sb.OpCode)
                             {
-                                case OpCode.CONTATO_NA:
+                                case OperationCode.CONTATO_NA:
                                     bAuxValor = ((Address)_sb.getOperandos(0)).Valor;
                                     break;
-                                case OpCode.CONTATO_NF:
+                                case OperationCode.CONTATO_NF:
                                     bAuxValor = !((Address)_sb.getOperandos(0)).Valor;
                                     break;
                             }
@@ -380,25 +380,25 @@ namespace LadderApp
                 /// atribui o resultado final da linha nas saidas
                 foreach (Symbol _sb in _lc.saida)
                 {
-                    switch (_sb.getCI())
+                    switch (_sb.OpCode)
                     {
-                        case OpCode.BOBINA_SAIDA:
-                        case OpCode.TEMPORIZADOR:
-                        case OpCode.CONTADOR:
-                        case OpCode.RESET:
+                        case OperationCode.BOBINA_SAIDA:
+                        case OperationCode.TEMPORIZADOR:
+                        case OperationCode.CONTADOR:
+                        case OperationCode.RESET:
 
-                            if (_sb.getCI() == OpCode.BOBINA_SAIDA)
+                            if (_sb.OpCode== OperationCode.BOBINA_SAIDA)
                                 ((Address)_sb.getOperandos(0)).Valor = (bool)op[op.Count - 1].valor;
-                            else if (_sb.getCI() == OpCode.TEMPORIZADOR)
+                            else if (_sb.OpCode== OperationCode.TEMPORIZADOR)
                             {
                                 ((Address)_sb.getOperandos(0)).Temporizador.EN = (bool)op[op.Count - 1].valor;
                             }
-                            else if (_sb.getCI() == OpCode.CONTADOR)
+                            else if (_sb.OpCode== OperationCode.CONTADOR)
                             {
                                 ((Address)_sb.getOperandos(0)).Contador.EN = (bool)op[op.Count - 1].valor;
                                 ExecutaSimuladoContadores(_sb, ((Address)_sb.getOperandos(0)));
                             }
-                            else if (_sb.getCI() == OpCode.RESET)
+                            else if (_sb.OpCode== OperationCode.RESET)
                             {
                                 if ((bool)op[op.Count - 1].valor)
                                 {
@@ -475,7 +475,7 @@ namespace LadderApp
                     else
                     {
                         txtCodigoInterpretavel.AddCabecalho();
-                        txtCodigoInterpretavel.txtCabecalho.Add(OpCode.CABECALHO_SENHA_0);
+                        txtCodigoInterpretavel.txtCabecalho.Add(OperationCode.CABECALHO_SENHA_0);
                         txtCodigoInterpretavel.txtCabecalho.Add(_strSenha.Length);
                         txtCodigoInterpretavel.txtCabecalho.Add(_strSenha);
                     }
@@ -501,7 +501,7 @@ namespace LadderApp
                 return false;
 
             //txtCodigoInterpretavel.Add("@laddermic.com");
-            txtCodigoInterpretavel.Add(OpCode.NENHUM);
+            txtCodigoInterpretavel.Add(OperationCode.None);
 
             /// caso senha para inserir senha
             /// realiza recuperação da senha
@@ -531,32 +531,32 @@ namespace LadderApp
                 linha = "";
                 foreach(Symbol _sb in _lc.simbolos)
                 {
-                    switch (_sb.getCI())
+                    switch (_sb.OpCode)
                     {
-                        case OpCode.PARALELO_INICIAL:
+                        case OperationCode.PARALELO_INICIAL:
                             if (bIniciado)
                                 linha += " && ";
 
                             bIniciado = false;
                             linha += "((";
                             break;
-                        case OpCode.PARALELO_FINAL:
+                        case OperationCode.PARALELO_FINAL:
                             linha += "))";
                             break;
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.PARALELO_PROXIMO:
                             bIniciado = false;
                             linha += ") || (";
                             break;
                         default:
                             if (bIniciado)
                                 linha += " && ";
-                            switch(_sb.getCI())
+                            switch(_sb.OpCode)
                             {
-                                case OpCode.CONTATO_NA:
+                                case OperationCode.CONTATO_NA:
                                     linha += ((Address)_sb.getOperandos(0)).Acesso;
                                     ((Address)_sb.getOperandos(0)).EmUso = true;
                                     break;
-                                case OpCode.CONTATO_NF:
+                                case OperationCode.CONTATO_NF:
                                     linha += "!" + ((Address)_sb.getOperandos(0)).Acesso;
                                     ((Address)_sb.getOperandos(0)).EmUso = true;
                                     break;
@@ -580,31 +580,31 @@ namespace LadderApp
                 OperandosSELinha.Clear();
                 foreach (Symbol _sb in _lc.saida)
                 {
-                    switch (_sb.getCI())
+                    switch (_sb.OpCode)
                     {
-                        case OpCode.BOBINA_SAIDA:
-                        case OpCode.TEMPORIZADOR:
-                        case OpCode.CONTADOR:
-                        case OpCode.RESET:
+                        case OperationCode.BOBINA_SAIDA:
+                        case OperationCode.TEMPORIZADOR:
+                        case OperationCode.CONTADOR:
+                        case OperationCode.RESET:
                             txtCodigoInterpretavel.Add(_sb);
 
-                            if (_sb.getCI() == OpCode.BOBINA_SAIDA)
+                            if (_sb.OpCode== OperationCode.BOBINA_SAIDA)
                             {
                                 OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso);
                                 ((Address)_sb.getOperandos(0)).EmUso = true;
                             }
-                            else if (_sb.getCI() == OpCode.TEMPORIZADOR)
+                            else if (_sb.OpCode== OperationCode.TEMPORIZADOR)
                             {
                                 OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso2);
                                 ((Address)_sb.getOperandos(0)).EmUso = true;
                             }
-                            else if (_sb.getCI() == OpCode.CONTADOR)
+                            else if (_sb.OpCode== OperationCode.CONTADOR)
                             {
                                 OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso2);
                                 FuncoesAposLinha += " ExecContador(&" + ((Address)_sb.getOperandos(0)).Nome + ");";
                                 ((Address)_sb.getOperandos(0)).EmUso = true;
                             }
-                            else if (_sb.getCI() == OpCode.RESET)
+                            else if (_sb.OpCode== OperationCode.RESET)
                             {
                                 OperandosSELinha.Add(((Address)_sb.getOperandos(0)).Nome + ".Reset = 1;");
                                 ((Address)_sb.getOperandos(0)).EmUso = true;
@@ -658,10 +658,10 @@ namespace LadderApp
 
                 doc += Environment.NewLine;
 
-                txtCodigoInterpretavel.Add(OpCode.FIM_DA_LINHA);
+                txtCodigoInterpretavel.Add(OperationCode.FIM_DA_LINHA);
             }
 
-            txtCodigoInterpretavel.Add(OpCode.NENHUM);
+            txtCodigoInterpretavel.Add(OperationCode.None);
 
             _result = MessageBox.Show("Do you want to generate the .C file below? " + Environment.NewLine + doc, "Confirmation: Generate .C file?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
@@ -1016,10 +1016,10 @@ namespace LadderApp
 
             if (_lst.Count > 0)
             {
-                if (!(_lst.Contains(OpCode.BOBINA_SAIDA) ||
-                    _lst.Contains(OpCode.TEMPORIZADOR) ||
-                    _lst.Contains(OpCode.CONTADOR) ||
-                    _lst.Contains(OpCode.RESET)))
+                if (!(_lst.Contains(OperationCode.BOBINA_SAIDA) ||
+                    _lst.Contains(OperationCode.TEMPORIZADOR) ||
+                    _lst.Contains(OperationCode.CONTADOR) ||
+                    _lst.Contains(OperationCode.RESET)))
                     return false;
             }
             else
@@ -1040,10 +1040,10 @@ namespace LadderApp
 
             /// 1.1 - Verifica se a linha tem simbolos validos
             if (_lst.Count > 0)
-                if (_lst.Contains(OpCode.BOBINA_SAIDA) ||
-                    _lst.Contains(OpCode.TEMPORIZADOR) ||
-                    _lst.Contains(OpCode.CONTADOR) ||
-                    _lst.Contains(OpCode.RESET))
+                if (_lst.Contains(OperationCode.BOBINA_SAIDA) ||
+                    _lst.Contains(OperationCode.TEMPORIZADOR) ||
+                    _lst.Contains(OperationCode.CONTADOR) ||
+                    _lst.Contains(OperationCode.RESET))
                     return false;
 
 
@@ -1061,14 +1061,14 @@ namespace LadderApp
             {
                 foreach (Symbol _sb in _lc.simbolos)
                 {
-                    switch (_sb.getCI())
+                    switch (_sb.OpCode)
                     {
-                        case OpCode.NENHUM:
-                        case OpCode.INICIO_DA_LINHA:
-                        case OpCode.FIM_DA_LINHA:
-                        case OpCode.PARALELO_INICIAL:
-                        case OpCode.PARALELO_FINAL:
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.None:
+                        case OperationCode.INICIO_DA_LINHA:
+                        case OperationCode.FIM_DA_LINHA:
+                        case OperationCode.PARALELO_INICIAL:
+                        case OperationCode.PARALELO_FINAL:
+                        case OperationCode.PARALELO_PROXIMO:
                             break;
                         default:
                             _sb.setOperando(0, endereco.Find((Address)_sb.getOperandos(0)));
@@ -1077,27 +1077,27 @@ namespace LadderApp
                 }
                 foreach (Symbol _sb in _lc.saida)
                 {
-                    switch (_sb.getCI())
+                    switch (_sb.OpCode)
                     {
-                        case OpCode.NENHUM:
-                        case OpCode.INICIO_DA_LINHA:
-                        case OpCode.FIM_DA_LINHA:
-                        case OpCode.PARALELO_INICIAL:
-                        case OpCode.PARALELO_FINAL:
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.None:
+                        case OperationCode.INICIO_DA_LINHA:
+                        case OperationCode.FIM_DA_LINHA:
+                        case OperationCode.PARALELO_INICIAL:
+                        case OperationCode.PARALELO_FINAL:
+                        case OperationCode.PARALELO_PROXIMO:
                             break;
                         default:
                             _sb.setOperando(0, endereco.Find((Address)_sb.getOperandos(0)));
 
                             if (_sb.getOperandos(0) != null)
                             {
-                                if (_sb.getCI() == OpCode.CONTADOR)
+                                if (_sb.OpCode== OperationCode.CONTADOR)
                                 {
                                     ((Address)_sb.getOperandos(0)).Contador.Tipo = (Int32)_sb.getOperandos(1);
                                     ((Address)_sb.getOperandos(0)).Contador.Preset = (Int32)_sb.getOperandos(2);
                                     ((Address)_sb.getOperandos(0)).Contador.Acumulado = (Int32)_sb.getOperandos(3);
                                 }
-                                else if (_sb.getCI() == OpCode.TEMPORIZADOR)
+                                else if (_sb.OpCode== OperationCode.TEMPORIZADOR)
                                 {
                                     ((Address)_sb.getOperandos(0)).Temporizador.Tipo = (Int32)_sb.getOperandos(1);
                                     ((Address)_sb.getOperandos(0)).Temporizador.Preset = (Int32)_sb.getOperandos(2);

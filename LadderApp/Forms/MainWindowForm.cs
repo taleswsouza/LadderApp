@@ -171,12 +171,12 @@ namespace LadderApp
                 if (frmProj.frmDiagLadder.ControleSelecionado != null)
                     if (!frmProj.frmDiagLadder.ControleSelecionado.IsDisposed)
                     {
-                        OpCode _cI = frmProj.frmDiagLadder.ControleSelecionado.getCI();
+                        OperationCode _cI = frmProj.frmDiagLadder.ControleSelecionado.OpCode;
                         switch (_cI)
                         {
-                            case OpCode.PARALELO_INICIAL:
-                            case OpCode.PARALELO_PROXIMO:
-                            case OpCode.PARALELO_FINAL:
+                            case OperationCode.PARALELO_INICIAL:
+                            case OperationCode.PARALELO_PROXIMO:
+                            case OperationCode.PARALELO_FINAL:
                                 _lstSB = frmProj.frmDiagLadder.VariosSelecionados(frmProj.frmDiagLadder.ControleSelecionado, frmProj.frmDiagLadder.LinhaSelecionada);
                                 break;
                             default:
@@ -314,7 +314,7 @@ namespace LadderApp
             ArrangeProjeto();
         }
 
-        private void InsereSimbolo(VisualLine.LocalInsereSimbolo _lIS, params OpCode[] _cI)
+        private void InsereSimbolo(VisualLine.LocalInsereSimbolo _lIS, params OperationCode[] _cI)
         {
             if (!IsDiagramaAberto())
                 return;
@@ -343,22 +343,22 @@ namespace LadderApp
 
         private void btnContatoNA_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OpCode.CONTATO_NA);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OperationCode.CONTATO_NA);
         }
 
         private void btnContatoNF_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OpCode.CONTATO_NF);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OperationCode.CONTATO_NF);
         }
 
         private void btnBobinaSaida_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OpCode.BOBINA_SAIDA);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.BOBINA_SAIDA);
         }
 
         private void btnParalelo_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OpCode.PARALELO_INICIAL, OpCode.PARALELO_PROXIMO, OpCode.PARALELO_FINAL);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OperationCode.PARALELO_INICIAL, OperationCode.PARALELO_PROXIMO, OperationCode.PARALELO_FINAL);
         }
 
         private void btnLinha_Click(object sender, EventArgs e)
@@ -414,12 +414,12 @@ namespace LadderApp
 
         private void btnTemporizador_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OpCode.TEMPORIZADOR);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.TEMPORIZADOR);
         }
 
         private void btnContador_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OpCode.CONTADOR);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.CONTADOR);
         }
 
         private void EditorLadder_FormClosed(object sender, FormClosedEventArgs e)
@@ -577,7 +577,7 @@ namespace LadderApp
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OpCode.RESET);
+            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.RESET);
         }
 
         private void btnSimular_CheckStateChanged(object sender, EventArgs e)
@@ -626,7 +626,7 @@ namespace LadderApp
         private void LerExecutavel(String DadosConvertidosChar, String strNomeProjeto)
         {
             List<int> lstCodigosLidos = new List<int>();
-            OpCode guarda = OpCode.NENHUM;
+            OperationCode guarda = OperationCode.None;
 
             if (DadosConvertidosChar.IndexOf("@laddermic.com") != -1)
             {
@@ -651,27 +651,27 @@ namespace LadderApp
 
                 for (int i = DadosConvertidosChar.IndexOf("@laddermic.com") + 15; i < DadosConvertidosChar.Length; i++)
                 {
-                    guarda = (OpCode)Convert.ToChar(DadosConvertidosChar.Substring(i, 1));
+                    guarda = (OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(i, 1));
 
                     switch (guarda)
                     {
-                        case OpCode.NENHUM:
+                        case OperationCode.None:
                             intContaFim++;
                             iNumOperandos = 0;
                             break;
-                        case OpCode.FIM_DA_LINHA:
+                        case OperationCode.FIM_DA_LINHA:
                             intContaFim++;
                             iNumOperandos = 0;
-                            if ((OpCode)Convert.ToChar(DadosConvertidosChar.Substring(i+1, 1)) != OpCode.NENHUM)
+                            if ((OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(i+1, 1)) != OperationCode.None)
                             intIndiceLinha = programa.InsereLinhaNoFinal(new Line());
                             break;
                         //case CodigosInterpretaveis.INICIO_DA_LINHA:
-                        case OpCode.CONTATO_NA:
-                        case OpCode.CONTATO_NF:
+                        case OperationCode.CONTATO_NA:
+                        case OperationCode.CONTATO_NF:
                             intContaFim = 0;
                             iNumOperandos = 2;
                             {
-                                Symbol _sb = new Symbol((OpCode)guarda);
+                                Symbol _sb = new Symbol((OperationCode)guarda);
 
                                 _tpEndLido =(AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
@@ -689,13 +689,13 @@ namespace LadderApp
                                 programa.linhas[intIndiceLinha].simbolos.Add(_sb);
                             }
                             break;
-                        case OpCode.BOBINA_SAIDA:
-                        case OpCode.RESET:
+                        case OperationCode.BOBINA_SAIDA:
+                        case OperationCode.RESET:
                             intContaFim = 0;
                             iNumOperandos = 2;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((OpCode)guarda));
+                                _lstSB.Add(new Symbol((OperationCode)guarda));
                                 _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i+1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i+2, 1));
                                 _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
@@ -712,19 +712,19 @@ namespace LadderApp
                                 _lstSB.Clear();
                             }
                             break;
-                        case OpCode.PARALELO_INICIAL:
-                        case OpCode.PARALELO_FINAL:
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.PARALELO_INICIAL:
+                        case OperationCode.PARALELO_FINAL:
+                        case OperationCode.PARALELO_PROXIMO:
                             intContaFim = 0;
                             iNumOperandos = 0;
-                            programa.linhas[intIndiceLinha].simbolos.Add(new Symbol((OpCode)guarda));
+                            programa.linhas[intIndiceLinha].simbolos.Add(new Symbol((OperationCode)guarda));
                             break;
-                        case OpCode.CONTADOR:
+                        case OperationCode.CONTADOR:
                             intContaFim = 0;
                             iNumOperandos = 3;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((OpCode)guarda));
+                                _lstSB.Add(new Symbol((OperationCode)guarda));
                                 _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
@@ -736,12 +736,12 @@ namespace LadderApp
                                 _lstSB.Clear();
                             }
                             break;
-                        case OpCode.TEMPORIZADOR:
+                        case OperationCode.TEMPORIZADOR:
                             intContaFim = 0;
                             iNumOperandos = 4;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((OpCode)guarda));
+                                _lstSB.Add(new Symbol((OperationCode)guarda));
                                 _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.BaseTempo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));

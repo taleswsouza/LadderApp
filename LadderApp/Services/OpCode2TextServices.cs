@@ -72,7 +72,7 @@ namespace LadderApp
                 if (txtCabecalho.Length > 0)
                 {
                     this.txtCabecalho.Insert(txtCabecalho.Length);
-                    this.txtCabecalho.Insert(OpCode.CABECALHO_TAMANHO);
+                    this.txtCabecalho.Insert(OperationCode.CABECALHO_TAMANHO);
 
                     txtInternalWithTypeCast = txtInternalWithTypeCast.Insert(this.posCabecalho2InternalWithTypeCast, txtCabecalho.ToStringInternalWithTypeCast() + ", ");
                     txtInternal = txtInternal.Insert(this.posCabecalho2Internal, txtCabecalho.ToStringInternal());
@@ -109,12 +109,12 @@ namespace LadderApp
         }
 
 
-        public void Add(OpCode _ci)
+        public void Add(OperationCode _ci)
         {
             Add((Int32)_ci);
         }
 
-        internal void Insert(OpCode _ci)
+        internal void Insert(OperationCode _ci)
         {
             Insert((Int32)_ci);
         }
@@ -127,11 +127,11 @@ namespace LadderApp
 
         public void Add(Symbol _sb)
         {
-            Add(_sb.getCI());
+            Add(_sb.OpCode);
 
-            switch (_sb.getCI())
+            switch (_sb.OpCode)
             {
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     if (_sb.iNumOperandos > 0)
                     {
                         if (_sb.getOperandos(0) != null)
@@ -143,7 +143,7 @@ namespace LadderApp
                             }
                     }
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     if (_sb.iNumOperandos > 0)
                     {
                         if (_sb.getOperandos(0) != null)

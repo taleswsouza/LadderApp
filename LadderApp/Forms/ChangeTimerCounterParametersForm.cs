@@ -10,20 +10,20 @@ namespace LadderApp.Formularios
 {
     public partial class ChangeTimerCounterParametersForm : Form
     {
-        public OpCode Funcao = OpCode.NENHUM;
+        public OperationCode Funcao = OperationCode.None;
         public Int32 Tipo = 0;
         public Int32 BaseTempo = 0;
         public Int32 Preset = 0;
         public Int32 Acumulado = 0;
 
-        public ChangeTimerCounterParametersForm(OpCode funcao)
+        public ChangeTimerCounterParametersForm(OperationCode funcao)
         {
             InitializeComponent();
 
             switch (funcao)
             {
-                case OpCode.CONTADOR:
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.CONTADOR:
+                case OperationCode.TEMPORIZADOR:
                     Funcao = funcao;
                     break;
             }
@@ -33,7 +33,7 @@ namespace LadderApp.Formularios
         {
             switch (this.Funcao)
             {
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     this.Text = this.Text.Replace("<%>", "Counter");
                     cmbBaseTempo.Visible = false;
                     lblBaseTempo.Visible = false;
@@ -41,7 +41,7 @@ namespace LadderApp.Formularios
                     cmbTipo.Items.Add("CTU");
                     cmbTipo.Items.Add("CTD");
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     this.Text = this.Text.Replace("<%>", "Timer");
                     cmbTipo.Items.Clear();
                     cmbTipo.Items.Add("TON");

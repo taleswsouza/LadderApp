@@ -54,9 +54,9 @@ namespace LadderApp
                         _maiorX = _posX + _tamX;
                 }
 
-                switch (simbAux.getCI())
+                switch (simbAux.OpCode)
                 {
-                    case OpCode.PARALELO_INICIAL:
+                    case OperationCode.PARALELO_INICIAL:
                         _tamY = lc.tamY; // restaura tamanho Y base
                         _posX = _acumTamX;
                         _tamX = lc.tamX / 3;
@@ -71,7 +71,7 @@ namespace LadderApp
 
                         _acumTamX = _posX + _tamX;
                         break;
-                    case OpCode.PARALELO_FINAL:
+                    case OperationCode.PARALELO_FINAL:
                         _tamX = lc.tamX / 3;
                         //                        _tamY = _par.ultimoVPI.Location.Y - _par.par.Location.Y + _par.ultimoVPI.Size.Height; // _ultTamY2ParaleloFinal;
                         _tamY = _par.ultimoVPI.posicaoXY.Y - _par.par.posicaoXY.Y + _par.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
@@ -104,7 +104,7 @@ namespace LadderApp
 
                         _acumTamX = _posX + _tamX;
                         break;
-                    case OpCode.PARALELO_PROXIMO:
+                    case OperationCode.PARALELO_PROXIMO:
                         _tamY = lc.tamY; // restaura tamanho Y base
                         _tamX = lc.tamX / 3; // tamanho X reduzido
 
@@ -214,7 +214,7 @@ namespace LadderApp
             foreach(Symbol auxSB in linhaFonte.simbolos)
             {
                 linhaDestinho.simbolos.Add(new FreeUserControl());
-                linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setCI(auxSB.getCI());
+                linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].OpCode = auxSB.OpCode;
                 linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setOperando(auxSB.getOperandos());
 
             }
@@ -224,7 +224,7 @@ namespace LadderApp
             foreach (Symbol auxSB in linhaFonte.saida)
             {
                 linhaDestinho.saida.Add(new FreeUserControl());
-                linhaDestinho.saida[linhaDestinho.saida.Count - 1].setCI(auxSB.getCI());
+                linhaDestinho.saida[linhaDestinho.saida.Count - 1].OpCode = auxSB.OpCode;
                 for(int i = 0; i < auxSB.getOperandos().Length; i++)
                     linhaDestinho.saida[linhaDestinho.saida.Count - 1].setOperando(i, auxSB.getOperandos(i));
 
@@ -238,7 +238,7 @@ namespace LadderApp
             foreach (FreeUserControl auxSB in linhaFonte.simbolos)
             {
                 linhaDestinho.simbolos.Add(new Symbol());
-                linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setCI(auxSB.getCI());
+                linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].OpCode = auxSB.OpCode;
                 linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setOperando(auxSB.getOperandos());
 
             }
@@ -248,7 +248,7 @@ namespace LadderApp
             foreach (FreeUserControl auxSB in linhaFonte.saida)
             {
                 linhaDestinho.saida.Add(new Symbol());
-                linhaDestinho.saida[linhaDestinho.saida.Count - 1].setCI(auxSB.getCI());
+                linhaDestinho.saida[linhaDestinho.saida.Count - 1].OpCode = auxSB.OpCode;
                 for (int i = 0; i < auxSB.getOperandos().Length; i++)
                     linhaDestinho.saida[linhaDestinho.saida.Count - 1].setOperando(i, auxSB.getOperandos(i));
 

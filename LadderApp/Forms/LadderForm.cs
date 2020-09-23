@@ -269,13 +269,13 @@ namespace LadderApp
         {
             if (e == Keys.Up)
             {
-                if ((int)sender.linhaAtual.simboloInicioLinha.getOperandos(0) != 0)
-                    sender.linhaAtual.linhaAnterior.simboloInicioLinha.Select();
+                if ((int)sender.VisualLine.simboloInicioLinha.getOperandos(0) != 0)
+                    sender.VisualLine.linhaAnterior.simboloInicioLinha.Select();
             }
             else if (e == Keys.Down)
             {
-                if ((int)sender.linhaAtual.linhaProxima.simboloInicioLinha.getOperandos(0) != 0)
-                    sender.linhaAtual.linhaProxima.simboloInicioLinha.Select();
+                if ((int)sender.VisualLine.linhaProxima.simboloInicioLinha.getOperandos(0) != 0)
+                    sender.VisualLine.linhaProxima.simboloInicioLinha.Select();
             }
         }
 
@@ -310,13 +310,13 @@ namespace LadderApp
         public void Simbolo_KeyDown(object sender, KeyEventArgs e)
         {
             FreeUserControl _cL = (FreeUserControl)sender;
-            switch (_cL.getCI())
+            switch (_cL.OpCode)
             {
-                case OpCode.NENHUM:
+                case OperationCode.None:
                     /// Tive que colocar aqui esta opcao de NENHUM para evitar que
                     /// a execucao passasse duas vezes em apagar
                     break;
-                case OpCode.INICIO_DA_LINHA:
+                case OperationCode.INICIO_DA_LINHA:
                     break;
                 default:
                     if (e.KeyCode == Keys.Delete)
@@ -324,13 +324,13 @@ namespace LadderApp
                         if (_cL != null && linhaSelecionada != null)
                             if (!_cL.IsDisposed)
                             {
-                                switch (_cL.getCI())
+                                switch (_cL.OpCode)
                                 {
-                                    case OpCode.PARALELO_INICIAL:
+                                    case OperationCode.PARALELO_INICIAL:
                                         break;
-                                    case OpCode.PARALELO_PROXIMO:
+                                    case OperationCode.PARALELO_PROXIMO:
                                         break;
-                                    case OpCode.PARALELO_FINAL:
+                                    case OperationCode.PARALELO_FINAL:
                                         break;
                                     default:
                                         break;
@@ -350,15 +350,15 @@ namespace LadderApp
 
         public List<Symbol> VariosSelecionados(FreeUserControl _cL, VisualLine _lCL)
         {
-            OpCode _cI = _cL.getCI();
+            OperationCode _cI = _cL.OpCode;
             List<Symbol> _lstSB = new List<Symbol>();
             List<FreeUserControl> _lstCL = null;
 
             switch (_cI)
             {
-                case OpCode.PARALELO_INICIAL:
-                case OpCode.PARALELO_PROXIMO:
-                case OpCode.PARALELO_FINAL:
+                case OperationCode.PARALELO_INICIAL:
+                case OperationCode.PARALELO_PROXIMO:
+                case OperationCode.PARALELO_FINAL:
                     int _indicePosInicial = 0;
                     int _indicePosFinal = 0;
 
@@ -374,7 +374,7 @@ namespace LadderApp
                     /// do controle na lista
                     _indicePosInicial = _lstCL.IndexOf(_cL);
 
-                    if (_cI == OpCode.PARALELO_FINAL)
+                    if (_cI == OperationCode.PARALELO_FINAL)
                     {
                         /// se for paralelo final, inverte a posicial inicial/final
                         _indicePosFinal = _indicePosInicial;
@@ -401,11 +401,11 @@ namespace LadderApp
 
         private void menuLimparEndereco_Click(object sender, EventArgs e)
         {
-            OpCode _cI = controleSelecionado.getCI();
+            OperationCode _cI = controleSelecionado.OpCode;
             if ((!controleSelecionado.IsDisposed) &&
-                 (_cI != OpCode.INICIO_DA_LINHA &&
-                 _cI != OpCode.PARALELO_INICIAL &&
-                 _cI != OpCode.PARALELO_FINAL))
+                 (_cI != OperationCode.INICIO_DA_LINHA &&
+                 _cI != OperationCode.PARALELO_INICIAL &&
+                 _cI != OperationCode.PARALELO_FINAL))
             {
                 controleSelecionado.setOperando(0, null);
                 controleSelecionado.Refresh();
@@ -414,13 +414,13 @@ namespace LadderApp
 
         private void menuEstenderParaleloAcima_Click(object sender, EventArgs e)
         {
-            switch (controleSelecionado.getCI())
+            switch (controleSelecionado.OpCode)
             {
-                case OpCode.PARALELO_INICIAL:
+                case OperationCode.PARALELO_INICIAL:
                     break;
-                case OpCode.PARALELO_FINAL:
+                case OperationCode.PARALELO_FINAL:
                     break;
-                case OpCode.PARALELO_PROXIMO:
+                case OperationCode.PARALELO_PROXIMO:
                     break;
             }
         }
@@ -438,7 +438,7 @@ namespace LadderApp
 
         public void ControleSelecionado_SolicitaMudarEndereco(FreeUserControl sender, Rectangle rect, Type tipo, int valorMax, int valorMin, params object[] faixa)
         {
-            ChangeTimerCounterParametersForm Altera = new ChangeTimerCounterParametersForm(sender.getCI());
+            ChangeTimerCounterParametersForm Altera = new ChangeTimerCounterParametersForm(sender.OpCode);
 
             if (sender.getOperandos(0) == null)
             {
@@ -446,15 +446,15 @@ namespace LadderApp
                 return;
             }
 
-            switch (sender.getCI())
+            switch (sender.OpCode)
             {
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     Altera.Tipo = (Int32)((Address)sender.getOperandos(0)).Temporizador.Tipo;
                     Altera.Preset = (Int32)((Address)sender.getOperandos(0)).Temporizador.Preset;
                     Altera.Acumulado = (Int32)((Address)sender.getOperandos(0)).Temporizador.Acumulado;
                     Altera.BaseTempo = (Int32)((Address)sender.getOperandos(0)).Temporizador.BaseTempo;
                     break;
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     Altera.Tipo = (Int32)((Address)sender.getOperandos(0)).Contador.Tipo;
                     Altera.Preset = (Int32)((Address)sender.getOperandos(0)).Contador.Preset;
                     Altera.Acumulado = (Int32)((Address)sender.getOperandos(0)).Contador.Acumulado;
@@ -471,9 +471,9 @@ namespace LadderApp
                 sender.setOperando(1, Altera.Tipo);
                 sender.setOperando(2, Altera.Preset);
                 sender.setOperando(3, Altera.Acumulado);
-                switch (sender.getCI())
+                switch (sender.OpCode)
                 {
-                    case OpCode.TEMPORIZADOR:
+                    case OperationCode.TEMPORIZADOR:
                         /// mantem os parametros do ci atualizados
                         sender.setOperando(4, Altera.BaseTempo);
 
@@ -488,7 +488,7 @@ namespace LadderApp
                         sender.setOperando(4, ((Address)sender.getOperandos(0)).Temporizador.BaseTempo);
 
                         break;
-                    case OpCode.CONTADOR:
+                    case OperationCode.CONTADOR:
                         ((Address)sender.getOperandos(0)).Contador.Tipo = Altera.Tipo;
                         ((Address)sender.getOperandos(0)).Contador.Preset = Altera.Preset;
                         ((Address)sender.getOperandos(0)).Contador.Acumulado = Altera.Acumulado;

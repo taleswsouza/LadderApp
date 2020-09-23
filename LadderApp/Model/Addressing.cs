@@ -70,7 +70,7 @@ namespace LadderApp
         }
 
 
-        public List<Address> ListaNomes(OpCode _ci)
+        public List<Address> ListaNomes(OperationCode _ci)
         {
             List<Address> _listaEnderecos = new List<Address>();
             List<AddressTypeEnum> tiposListados = new List<AddressTypeEnum>();
@@ -78,20 +78,20 @@ namespace LadderApp
 
             switch(_ci)
             {
-                case OpCode.CONTATO_NA:
-                case OpCode.CONTATO_NF:
+                case OperationCode.CONTATO_NA:
+                case OperationCode.CONTATO_NF:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_ENTRADA);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR);
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.TEMPORIZADOR:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR);
                     break;
-                case OpCode.CONTADOR:
+                case OperationCode.CONTADOR:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR);
                     break;
-                case OpCode.BOBINA_SAIDA:
+                case OperationCode.BOBINA_SAIDA:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_SAIDA);
                     break;
