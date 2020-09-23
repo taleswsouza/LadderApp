@@ -237,7 +237,7 @@ namespace LadderApp
         public Address auxToggleBitPulse = null;
 
 
-        public void ExecutaSimuladoContadores(Instruction _sb, Address _endContador)
+        public void ExecutaSimuladoContadores(Instruction instruction, Address _endContador)
         {
 
             switch (_endContador.Contador.Tipo)
@@ -307,18 +307,18 @@ namespace LadderApp
             {
                 /// cria a linha
                 op.Add(new SuporteConjunto());
-                foreach (Instruction _sb in _lc.simbolos)
+                foreach (Instruction instruction in _lc.instructions)
                 {
-                    switch (_sb.OpCode)
+                    switch (instruction.OpCode)
                     {
-                        case OperationCode.PARALELO_INICIAL:
+                        case OperationCode.ParallelBranchBegin:
                             /// cria o paralelo
                             op.Add(new SuporteConjunto());
                             /// cria o paralelo inicial
                             op.Add(new SuporteConjunto());
 
                             break;
-                        case OperationCode.PARALELO_FINAL:
+                        case OperationCode.ParallelBranchEnd:
                             /// Atualiza o paralelo
                             if (op[op.Count - 2].bIniciado)
                                 op[op.Count - 2].valor = op[op.Count - 2].valor || op[op.Count - 1].valor;
@@ -341,7 +341,7 @@ namespace LadderApp
 
 
                             break;
-                        case OperationCode.PARALELO_PROXIMO:
+                        case OperationCode.ParallelBranchNext:
                             /// Atualiza o paralelo
                             if (op[op.Count - 2].bIniciado)
                                 op[op.Count - 2].valor = op[op.Count - 2].valor || op[op.Count - 1].valor;
@@ -358,13 +358,13 @@ namespace LadderApp
 
                             break;
                         default:
-                            switch (_sb.OpCode)
+                            switch (instruction.OpCode)
                             {
-                                case OperationCode.CONTATO_NA:
-                                    bAuxValor = ((Address)_sb.GetOperand(0)).Valor;
+                                case OperationCode.NormallyOpenContact:
+                                    bAuxValor = ((Address)instruction.GetOperand(0)).Valor;
                                     break;
-                                case OperationCode.CONTATO_NF:
-                                    bAuxValor = !((Address)_sb.GetOperand(0)).Valor;
+                                case OperationCode.NormallyClosedContact:
+                                    bAuxValor = !((Address)instruction.GetOperand(0)).Valor;
                                     break;
                             }
 
@@ -379,39 +379,39 @@ namespace LadderApp
                 }
 
                 /// atribui o resultado final da linha nas saidas
-                foreach (Instruction _sb in _lc.saida)
+                foreach (Instruction instruction in _lc.outputs)
                 {
-                    switch (_sb.OpCode)
+                    switch (instruction.OpCode)
                     {
-                        case OperationCode.BOBINA_SAIDA:
-                        case OperationCode.TEMPORIZADOR:
-                        case OperationCode.CONTADOR:
-                        case OperationCode.RESET:
+                        case OperationCode.OutputCoil:
+                        case OperationCode.Timer:
+                        case OperationCode.Counter:
+                        case OperationCode.Reset:
 
-                            if (_sb.OpCode == OperationCode.BOBINA_SAIDA)
-                                ((Address)_sb.GetOperand(0)).Valor = (bool)op[op.Count - 1].valor;
-                            else if (_sb.OpCode == OperationCode.TEMPORIZADOR)
+                            if (instruction.OpCode == OperationCode.OutputCoil)
+                                ((Address)instruction.GetOperand(0)).Valor = (bool)op[op.Count - 1].valor;
+                            else if (instruction.OpCode == OperationCode.Timer)
                             {
-                                ((Address)_sb.GetOperand(0)).Temporizador.EN = (bool)op[op.Count - 1].valor;
+                                ((Address)instruction.GetOperand(0)).Temporizador.EN = (bool)op[op.Count - 1].valor;
                             }
-                            else if (_sb.OpCode == OperationCode.CONTADOR)
+                            else if (instruction.OpCode == OperationCode.Counter)
                             {
-                                ((Address)_sb.GetOperand(0)).Contador.EN = (bool)op[op.Count - 1].valor;
-                                ExecutaSimuladoContadores(_sb, ((Address)_sb.GetOperand(0)));
+                                ((Address)instruction.GetOperand(0)).Contador.EN = (bool)op[op.Count - 1].valor;
+                                ExecutaSimuladoContadores(instruction, ((Address)instruction.GetOperand(0)));
                             }
-                            else if (_sb.OpCode == OperationCode.RESET)
+                            else if (instruction.OpCode == OperationCode.Reset)
                             {
                                 if ((bool)op[op.Count - 1].valor)
                                 {
-                                    switch (((Address)_sb.GetOperand(0)).TpEnderecamento)
+                                    switch (((Address)instruction.GetOperand(0)).TpEnderecamento)
                                     {
                                         case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                                            ((Address)_sb.GetOperand(0)).Contador.Reset = true;
-                                            ExecutaSimuladoContadores(_sb, ((Address)_sb.GetOperand(0)));
+                                            ((Address)instruction.GetOperand(0)).Contador.Reset = true;
+                                            ExecutaSimuladoContadores(instruction, ((Address)instruction.GetOperand(0)));
                                             break;
 
                                         case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
-                                            ((Address)_sb.GetOperand(0)).Temporizador.Reset = true;
+                                            ((Address)instruction.GetOperand(0)).Temporizador.Reset = true;
                                             break;
 
                                         default:
@@ -474,7 +474,7 @@ namespace LadderApp
                     else
                     {
                         txtCodigoInterpretavel.AddCabecalho();
-                        txtCodigoInterpretavel.txtCabecalho.Add(OperationCode.CABECALHO_SENHA_0);
+                        txtCodigoInterpretavel.txtCabecalho.Add(OperationCode.HeadPassword0);
                         txtCodigoInterpretavel.txtCabecalho.Add(_strSenha.Length);
                         txtCodigoInterpretavel.txtCabecalho.Add(_strSenha);
                     }
@@ -528,43 +528,43 @@ namespace LadderApp
             foreach (Line _lc in this.linhasPrograma)
             {
                 linha = "";
-                foreach (Instruction _sb in _lc.simbolos)
+                foreach (Instruction instruction in _lc.instructions)
                 {
-                    switch (_sb.OpCode)
+                    switch (instruction.OpCode)
                     {
-                        case OperationCode.PARALELO_INICIAL:
+                        case OperationCode.ParallelBranchBegin:
                             if (bIniciado)
                                 linha += " && ";
 
                             bIniciado = false;
                             linha += "((";
                             break;
-                        case OperationCode.PARALELO_FINAL:
+                        case OperationCode.ParallelBranchEnd:
                             linha += "))";
                             break;
-                        case OperationCode.PARALELO_PROXIMO:
+                        case OperationCode.ParallelBranchNext:
                             bIniciado = false;
                             linha += ") || (";
                             break;
                         default:
                             if (bIniciado)
                                 linha += " && ";
-                            switch (_sb.OpCode)
+                            switch (instruction.OpCode)
                             {
-                                case OperationCode.CONTATO_NA:
-                                    linha += ((Address)_sb.GetOperand(0)).Acesso;
-                                    ((Address)_sb.GetOperand(0)).EmUso = true;
+                                case OperationCode.NormallyOpenContact:
+                                    linha += ((Address)instruction.GetOperand(0)).Acesso;
+                                    ((Address)instruction.GetOperand(0)).EmUso = true;
                                     break;
-                                case OperationCode.CONTATO_NF:
-                                    linha += "!" + ((Address)_sb.GetOperand(0)).Acesso;
-                                    ((Address)_sb.GetOperand(0)).EmUso = true;
+                                case OperationCode.NormallyClosedContact:
+                                    linha += "!" + ((Address)instruction.GetOperand(0)).Acesso;
+                                    ((Address)instruction.GetOperand(0)).EmUso = true;
                                     break;
                             }
                             bIniciado = true;
                             break;
                     }
 
-                    txtCodigoInterpretavel.Add(_sb);
+                    txtCodigoInterpretavel.Add(instruction);
                 }
                 bIniciado = false;
 
@@ -577,41 +577,41 @@ namespace LadderApp
 
                 OperandosLinha.Clear();
                 OperandosSELinha.Clear();
-                foreach (Instruction _sb in _lc.saida)
+                foreach (Instruction instruction in _lc.outputs)
                 {
-                    switch (_sb.OpCode)
+                    switch (instruction.OpCode)
                     {
-                        case OperationCode.BOBINA_SAIDA:
-                        case OperationCode.TEMPORIZADOR:
-                        case OperationCode.CONTADOR:
-                        case OperationCode.RESET:
-                            txtCodigoInterpretavel.Add(_sb);
+                        case OperationCode.OutputCoil:
+                        case OperationCode.Timer:
+                        case OperationCode.Counter:
+                        case OperationCode.Reset:
+                            txtCodigoInterpretavel.Add(instruction);
 
-                            if (_sb.OpCode == OperationCode.BOBINA_SAIDA)
+                            if (instruction.OpCode == OperationCode.OutputCoil)
                             {
-                                OperandosLinha.Add(((Address)_sb.GetOperand(0)).Acesso);
-                                ((Address)_sb.GetOperand(0)).EmUso = true;
+                                OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso);
+                                ((Address)instruction.GetOperand(0)).EmUso = true;
                             }
-                            else if (_sb.OpCode == OperationCode.TEMPORIZADOR)
+                            else if (instruction.OpCode == OperationCode.Timer)
                             {
-                                OperandosLinha.Add(((Address)_sb.GetOperand(0)).Acesso2);
-                                ((Address)_sb.GetOperand(0)).EmUso = true;
+                                OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso2);
+                                ((Address)instruction.GetOperand(0)).EmUso = true;
                             }
-                            else if (_sb.OpCode == OperationCode.CONTADOR)
+                            else if (instruction.OpCode == OperationCode.Counter)
                             {
-                                OperandosLinha.Add(((Address)_sb.GetOperand(0)).Acesso2);
-                                FuncoesAposLinha += " ExecContador(&" + ((Address)_sb.GetOperand(0)).Nome + ");";
-                                ((Address)_sb.GetOperand(0)).EmUso = true;
+                                OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso2);
+                                FuncoesAposLinha += " ExecContador(&" + ((Address)instruction.GetOperand(0)).Nome + ");";
+                                ((Address)instruction.GetOperand(0)).EmUso = true;
                             }
-                            else if (_sb.OpCode == OperationCode.RESET)
+                            else if (instruction.OpCode == OperationCode.Reset)
                             {
-                                OperandosSELinha.Add(((Address)_sb.GetOperand(0)).Nome + ".Reset = 1;");
-                                ((Address)_sb.GetOperand(0)).EmUso = true;
+                                OperandosSELinha.Add(((Address)instruction.GetOperand(0)).Nome + ".Reset = 1;");
+                                ((Address)instruction.GetOperand(0)).EmUso = true;
 
-                                switch (((Address)_sb.GetOperand(0)).TpEnderecamento)
+                                switch (((Address)instruction.GetOperand(0)).TpEnderecamento)
                                 {
                                     case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                                        OperandosSELinha.Add("ExecContador(&" + ((Address)_sb.GetOperand(0)).Nome + ");");
+                                        OperandosSELinha.Add("ExecContador(&" + ((Address)instruction.GetOperand(0)).Nome + ");");
                                         break;
                                     default:
                                         break;
@@ -657,7 +657,7 @@ namespace LadderApp
 
                 doc += Environment.NewLine;
 
-                txtCodigoInterpretavel.Add(OperationCode.FIM_DA_LINHA);
+                txtCodigoInterpretavel.Add(OperationCode.LineEnd);
             }
 
             txtCodigoInterpretavel.Add(OperationCode.None);
@@ -1009,16 +1009,16 @@ namespace LadderApp
 
         private bool VerificaLinha(Line _linha)
         {
-            SymbolList _lst = new SymbolList();
+            InstructionList _lst = new InstructionList();
 
-            _lst.InsertAllWithClearBefore(_linha.saida);
+            _lst.InsertAllWithClearBefore(_linha.outputs);
 
             if (_lst.Count > 0)
             {
-                if (!(_lst.Contains(OperationCode.BOBINA_SAIDA) ||
-                    _lst.Contains(OperationCode.TEMPORIZADOR) ||
-                    _lst.Contains(OperationCode.CONTADOR) ||
-                    _lst.Contains(OperationCode.RESET)))
+                if (!(_lst.Contains(OperationCode.OutputCoil) ||
+                    _lst.Contains(OperationCode.Timer) ||
+                    _lst.Contains(OperationCode.Counter) ||
+                    _lst.Contains(OperationCode.Reset)))
                     return false;
             }
             else
@@ -1035,14 +1035,14 @@ namespace LadderApp
             if (!_lst.ExisteContadorDuplicado(lstContadoresUtilizados))
                 return false;
 
-            _lst.InsertAllWithClearBefore(_linha.simbolos);
+            _lst.InsertAllWithClearBefore(_linha.instructions);
 
             /// 1.1 - Verifica se a linha tem simbolos validos
             if (_lst.Count > 0)
-                if (_lst.Contains(OperationCode.BOBINA_SAIDA) ||
-                    _lst.Contains(OperationCode.TEMPORIZADOR) ||
-                    _lst.Contains(OperationCode.CONTADOR) ||
-                    _lst.Contains(OperationCode.RESET))
+                if (_lst.Contains(OperationCode.OutputCoil) ||
+                    _lst.Contains(OperationCode.Timer) ||
+                    _lst.Contains(OperationCode.Counter) ||
+                    _lst.Contains(OperationCode.Reset))
                     return false;
 
 
@@ -1058,50 +1058,50 @@ namespace LadderApp
         {
             foreach (Line _lc in this.linhasPrograma)
             {
-                foreach (Instruction _sb in _lc.simbolos)
+                foreach (Instruction instruction in _lc.instructions)
                 {
-                    switch (_sb.OpCode)
+                    switch (instruction.OpCode)
                     {
                         case OperationCode.None:
-                        case OperationCode.INICIO_DA_LINHA:
-                        case OperationCode.FIM_DA_LINHA:
-                        case OperationCode.PARALELO_INICIAL:
-                        case OperationCode.PARALELO_FINAL:
-                        case OperationCode.PARALELO_PROXIMO:
+                        case OperationCode.LineBegin:
+                        case OperationCode.LineEnd:
+                        case OperationCode.ParallelBranchBegin:
+                        case OperationCode.ParallelBranchEnd:
+                        case OperationCode.ParallelBranchNext:
                             break;
                         default:
-                            _sb.SetOperand(0, endereco.Find((Address)_sb.GetOperand(0)));
+                            instruction.SetOperand(0, endereco.Find((Address)instruction.GetOperand(0)));
                             break;
                     }
                 }
-                foreach (Instruction _sb in _lc.saida)
+                foreach (Instruction instruction in _lc.outputs)
                 {
-                    switch (_sb.OpCode)
+                    switch (instruction.OpCode)
                     {
                         case OperationCode.None:
-                        case OperationCode.INICIO_DA_LINHA:
-                        case OperationCode.FIM_DA_LINHA:
-                        case OperationCode.PARALELO_INICIAL:
-                        case OperationCode.PARALELO_FINAL:
-                        case OperationCode.PARALELO_PROXIMO:
+                        case OperationCode.LineBegin:
+                        case OperationCode.LineEnd:
+                        case OperationCode.ParallelBranchBegin:
+                        case OperationCode.ParallelBranchEnd:
+                        case OperationCode.ParallelBranchNext:
                             break;
                         default:
-                            _sb.SetOperand(0, endereco.Find((Address)_sb.GetOperand(0)));
+                            instruction.SetOperand(0, endereco.Find((Address)instruction.GetOperand(0)));
 
-                            if (_sb.IsAllOperandsOk())
+                            if (instruction.IsAllOperandsOk())
                             {
-                                if (_sb.OpCode == OperationCode.CONTADOR)
+                                if (instruction.OpCode == OperationCode.Counter)
                                 {
-                                    ((Address)_sb.GetOperand(0)).Contador.Tipo = (Int32)_sb.GetOperand(1);
-                                    ((Address)_sb.GetOperand(0)).Contador.Preset = (Int32)_sb.GetOperand(2);
-                                    ((Address)_sb.GetOperand(0)).Contador.Acumulado = (Int32)_sb.GetOperand(3);
+                                    ((Address)instruction.GetOperand(0)).Contador.Tipo = (Int32)instruction.GetOperand(1);
+                                    ((Address)instruction.GetOperand(0)).Contador.Preset = (Int32)instruction.GetOperand(2);
+                                    ((Address)instruction.GetOperand(0)).Contador.Acumulado = (Int32)instruction.GetOperand(3);
                                 }
-                                else if (_sb.OpCode == OperationCode.TEMPORIZADOR)
+                                else if (instruction.OpCode == OperationCode.Timer)
                                 {
-                                    ((Address)_sb.GetOperand(0)).Temporizador.Tipo = (Int32)_sb.GetOperand(1);
-                                    ((Address)_sb.GetOperand(0)).Temporizador.Preset = (Int32)_sb.GetOperand(2);
-                                    ((Address)_sb.GetOperand(0)).Temporizador.Acumulado = (Int32)_sb.GetOperand(3);
-                                    ((Address)_sb.GetOperand(0)).Temporizador.BaseTempo = (Int32)_sb.GetOperand(4);
+                                    ((Address)instruction.GetOperand(0)).Temporizador.Tipo = (Int32)instruction.GetOperand(1);
+                                    ((Address)instruction.GetOperand(0)).Temporizador.Preset = (Int32)instruction.GetOperand(2);
+                                    ((Address)instruction.GetOperand(0)).Temporizador.Acumulado = (Int32)instruction.GetOperand(3);
+                                    ((Address)instruction.GetOperand(0)).Temporizador.BaseTempo = (Int32)instruction.GetOperand(4);
                                 }
                             }
                             break;

@@ -78,20 +78,20 @@ namespace LadderApp
 
             switch (_ci)
             {
-                case OperationCode.CONTATO_NA:
-                case OperationCode.CONTATO_NF:
+                case OperationCode.NormallyOpenContact:
+                case OperationCode.NormallyClosedContact:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_ENTRADA);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR);
                     break;
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR);
                     break;
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR);
                     break;
-                case OperationCode.BOBINA_SAIDA:
+                case OperationCode.OutputCoil:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_SAIDA);
                     break;

@@ -34,16 +34,14 @@ namespace LadderApp
         }
 
 
-        public List<Instruction> lstVariosSelecionados = new List<Instruction>();
-
-        public LadderForm(LadderProgram _prgBasico)
+        public LadderForm(LadderProgram program)
         {
             InitializeComponent();
 
             this.VScroll = false;
             this.HScroll = false;
 
-            prgLivre = new VisualProgram(_prgBasico, this);
+            prgLivre = new VisualProgram(program, this);
         }
 
         private void DiagramaLadder_Resize(object sender, EventArgs e)
@@ -316,7 +314,7 @@ namespace LadderApp
                     /// Tive que colocar aqui esta opcao de NENHUM para evitar que
                     /// a execucao passasse duas vezes em apagar
                     break;
-                case OperationCode.INICIO_DA_LINHA:
+                case OperationCode.LineBegin:
                     break;
                 default:
                     if (e.KeyCode == Keys.Delete)
@@ -326,11 +324,11 @@ namespace LadderApp
                             {
                                 switch (_cL.OpCode)
                                 {
-                                    case OperationCode.PARALELO_INICIAL:
+                                    case OperationCode.ParallelBranchBegin:
                                         break;
-                                    case OperationCode.PARALELO_PROXIMO:
+                                    case OperationCode.ParallelBranchNext:
                                         break;
-                                    case OperationCode.PARALELO_FINAL:
+                                    case OperationCode.ParallelBranchEnd:
                                         break;
                                     default:
                                         break;
@@ -351,14 +349,14 @@ namespace LadderApp
         public List<Instruction> VariosSelecionados(FreeUserControl _cL, VisualLine _lCL)
         {
             OperationCode _cI = _cL.OpCode;
-            List<Instruction> _lstSB = new List<Instruction>();
+            List<Instruction> instructions = new List<Instruction>();
             List<FreeUserControl> _lstCL = null;
 
             switch (_cI)
             {
-                case OperationCode.PARALELO_INICIAL:
-                case OperationCode.PARALELO_PROXIMO:
-                case OperationCode.PARALELO_FINAL:
+                case OperationCode.ParallelBranchBegin:
+                case OperationCode.ParallelBranchNext:
+                case OperationCode.ParallelBranchEnd:
                     int _indicePosInicial = 0;
                     int _indicePosFinal = 0;
 
@@ -368,13 +366,13 @@ namespace LadderApp
                     else if (LinhaSelecionada.saida.Contains(_cL))
                         _lstCL = LinhaSelecionada.saida;
                     else
-                        return _lstSB;
+                        return instructions;
 
                     /// define a posicao inicial a partir da posicao
                     /// do controle na lista
                     _indicePosInicial = _lstCL.IndexOf(_cL);
 
-                    if (_cI == OperationCode.PARALELO_FINAL)
+                    if (_cI == OperationCode.ParallelBranchEnd)
                     {
                         /// se for paralelo final, inverte a posicial inicial/final
                         _indicePosFinal = _indicePosInicial;
@@ -389,23 +387,23 @@ namespace LadderApp
                     /// pega todos os controles dentro da faixa inicial / final
                     for (int i = _indicePosInicial; i <= _indicePosFinal; i++)
                     {
-                        _lstSB.Add(_lstCL[i].SimboloBasico);
+                        instructions.Add(_lstCL[i].Instruction);
                     }
                     break;
                 default:
-                    _lstSB.Add(_cL.SimboloBasico);
+                    instructions.Add(_cL.Instruction);
                     break;
             }
-            return _lstSB;
+            return instructions;
         }
 
         private void menuLimparEndereco_Click(object sender, EventArgs e)
         {
             OperationCode _cI = controleSelecionado.OpCode;
             if ((!controleSelecionado.IsDisposed) &&
-                 (_cI != OperationCode.INICIO_DA_LINHA &&
-                 _cI != OperationCode.PARALELO_INICIAL &&
-                 _cI != OperationCode.PARALELO_FINAL))
+                 (_cI != OperationCode.LineBegin &&
+                 _cI != OperationCode.ParallelBranchBegin &&
+                 _cI != OperationCode.ParallelBranchEnd))
             {
                 controleSelecionado.SetOperand(0, null);
                 controleSelecionado.Refresh();
@@ -416,11 +414,11 @@ namespace LadderApp
         {
             switch (controleSelecionado.OpCode)
             {
-                case OperationCode.PARALELO_INICIAL:
+                case OperationCode.ParallelBranchBegin:
                     break;
-                case OperationCode.PARALELO_FINAL:
+                case OperationCode.ParallelBranchEnd:
                     break;
-                case OperationCode.PARALELO_PROXIMO:
+                case OperationCode.ParallelBranchNext:
                     break;
             }
         }
@@ -448,13 +446,13 @@ namespace LadderApp
 
             switch (sender.OpCode)
             {
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     Altera.Tipo = (Int32)((Address)sender.GetOperand(0)).Temporizador.Tipo;
                     Altera.Preset = (Int32)((Address)sender.GetOperand(0)).Temporizador.Preset;
                     Altera.Acumulado = (Int32)((Address)sender.GetOperand(0)).Temporizador.Acumulado;
                     Altera.BaseTempo = (Int32)((Address)sender.GetOperand(0)).Temporizador.BaseTempo;
                     break;
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     Altera.Tipo = (Int32)((Address)sender.GetOperand(0)).Contador.Tipo;
                     Altera.Preset = (Int32)((Address)sender.GetOperand(0)).Contador.Preset;
                     Altera.Acumulado = (Int32)((Address)sender.GetOperand(0)).Contador.Acumulado;
@@ -473,7 +471,7 @@ namespace LadderApp
                 sender.SetOperand(3, Altera.Acumulado);
                 switch (sender.OpCode)
                 {
-                    case OperationCode.TEMPORIZADOR:
+                    case OperationCode.Timer:
                         /// mantem os parametros do ci atualizados
                         sender.SetOperand(4, Altera.BaseTempo);
 
@@ -488,7 +486,7 @@ namespace LadderApp
                         sender.SetOperand(4, ((Address)sender.GetOperand(0)).Temporizador.BaseTempo);
 
                         break;
-                    case OperationCode.CONTADOR:
+                    case OperationCode.Counter:
                         ((Address)sender.GetOperand(0)).Contador.Tipo = Altera.Tipo;
                         ((Address)sender.GetOperand(0)).Contador.Preset = Altera.Preset;
                         ((Address)sender.GetOperand(0)).Contador.Acumulado = Altera.Acumulado;

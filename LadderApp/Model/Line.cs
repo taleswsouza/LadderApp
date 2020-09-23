@@ -8,632 +8,630 @@ namespace LadderApp
     public class Line
     {
         [XmlIgnore]
-        public Instruction simboloInicioLinha = new Instruction(OperationCode.INICIO_DA_LINHA);
+        public Instruction simboloInicioLinha = new Instruction(OperationCode.LineBegin);
         [XmlElement(ElementName = "Simbolo")]
-        public List<Instruction> simbolos = new List<Instruction>();
-        public List<Instruction> saida = new List<Instruction>();
+        public List<Instruction> instructions = new List<Instruction>();
+        public List<Instruction> outputs = new List<Instruction>();
         [XmlIgnore]
-        public Instruction simboloFimLinha = new Instruction(OperationCode.FIM_DA_LINHA);
+        public Instruction simboloFimLinha = new Instruction(OperationCode.LineEnd);
 
         [XmlIgnore]
         public Addressing endereco = null;
 
-        public Line(int quallinha, Addressing _endereco)
-        {
-            endereco = _endereco;
+        //public Line(int quallinha, Addressing _endereco)
+        //{
+        //    endereco = _endereco;
             
-            switch (quallinha)
-            {
-                case 1:
-                    InicializaDesenhosSimbolos1();
-                    break;
-                case 2:
-                    InicializaDesenhosSimbolos2();
-                    break;
-                case 3:
-                    InicializaDesenhosSimbolos3();
-                    break;
-                case 4:
-                    InicializaDesenhosSimbolos4();
-                    break;
-                case 5:
-                    InicializaDesenhosSimbolos5();
-                    break;
-                case 6:
-                    InicializaDesenhosSimbolosVazio();
-                    break;
-                default:
-                    break;
-            }
-        }
+        //    switch (quallinha)
+        //    {
+        //        case 1:
+        //            InicializaDesenhosSimbolos1();
+        //            break;
+        //        case 2:
+        //            InicializaDesenhosSimbolos2();
+        //            break;
+        //        case 3:
+        //            InicializaDesenhosSimbolos3();
+        //            break;
+        //        case 4:
+        //            InicializaDesenhosSimbolos4();
+        //            break;
+        //        case 5:
+        //            InicializaDesenhosSimbolos5();
+        //            break;
+        //        case 6:
+        //            InicializaDesenhosSimbolosVazio();
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
 
         public Line()
         {
         }
         
-        private void InicializaDesenhosSimbolos1()
-        {
-            // Inicio de Linha
-            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
-
-            Instruction ex1 = null;
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NF;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NF;
-            simbolos.Add(ex1);
-            //
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NF;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-            //
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            //teste inicio
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            // teste fim
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            //saida
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.BOBINA_SAIDA;
-            saida.Add(ex1);
-
-            // Fim de Linha
-            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
-        }
-
-        private void InicializaDesenhosSimbolos2()
-        {
-            // Inicio de Linha
-            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
-
-            Instruction ex1 = null;
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NF;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NF;
-            simbolos.Add(ex1);
-            //
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NF;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-            //
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            //ex1 = new SimboloBasico();
-            ////ex1.TabStop = true;
-            //ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
-            //simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            //teste inicio
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            // teste fim
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            simbolos.Add(ex1);
-
-            //saida
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.BOBINA_SAIDA;
-            saida.Add(ex1);
-
-            // Fim de Linha
-            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
-        }
-
-        private void InicializaDesenhosSimbolos3()
-        {
-            // Inicio de Linha
-            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
-
-            Instruction ex1 = null;
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            ex1.SetOperand(0, endereco.lstMemoria[1]);
-            simbolos.Add(ex1);
-
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NF;
-            ex1.SetOperand(0, endereco.lstTemporizador[2]);
-            simbolos.Add(ex1);
+        //private void InicializaDesenhosSimbolos1()
+        //{
+        //    // Inicio de Linha
+        //    simboloInicioLinha.OpCode = OperationCode.LineBegin;
+
+        //    Instruction ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyClosedContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyClosedContact;
+        //    instructions.Add(ex1);
+        //    //
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyClosedContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+        //    //
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    //teste inicio
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    // teste fim
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    //saida
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.OutputCoil;
+        //    outputs.Add(ex1);
+
+        //    // Fim de Linha
+        //    simboloFimLinha.OpCode = OperationCode.LineEnd;
+        //}
+
+        //private void InicializaDesenhosSimbolos2()
+        //{
+        //    // Inicio de Linha
+        //    simboloInicioLinha.OpCode = OperationCode.LineBegin;
+
+        //    Instruction ex1 = null;
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyClosedContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyClosedContact;
+        //    instructions.Add(ex1);
+        //    //
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyClosedContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+        //    //
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    //ex1 = new SimboloBasico();
+        //    ////ex1.TabStop = true;
+        //    //ex1.setCI(CodigosInterpretaveis.CONTATO_NA);
+        //    //simbolos.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    //teste inicio
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    // teste fim
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    instructions.Add(ex1);
+
+        //    //saida
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.OutputCoil;
+        //    outputs.Add(ex1);
+
+        //    // Fim de Linha
+        //    simboloFimLinha.OpCode = OperationCode.LineEnd;
+        //}
+
+        //private void InicializaDesenhosSimbolos3()
+        //{
+        //    // Inicio de Linha
+        //    simboloInicioLinha.OpCode = OperationCode.LineBegin;
+
+        //    Instruction ex1 = null;
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    ex1.SetOperand(0, endereco.lstMemoria[1]);
+        //    instructions.Add(ex1);
+
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyClosedContact;
+        //    ex1.SetOperand(0, endereco.lstTemporizador[2]);
+        //    instructions.Add(ex1);
 
             
-            //saida
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.BOBINA_SAIDA;
-            ex1.SetOperand(0, endereco.lstMemoria[1]);
-            saida.Add(ex1);
+        //    //saida
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.OutputCoil;
+        //    ex1.SetOperand(0, endereco.lstMemoria[1]);
+        //    outputs.Add(ex1);
 
-            // Fim de Linha
-            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
-        }
+        //    // Fim de Linha
+        //    simboloFimLinha.OpCode = OperationCode.LineEnd;
+        //}
 
-        private void InicializaDesenhosSimbolos4()
-        {
-            // Inicio de Linha
-            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
+        //private void InicializaDesenhosSimbolos4()
+        //{
+        //    // Inicio de Linha
+        //    simboloInicioLinha.OpCode = OperationCode.LineBegin;
 
-            Instruction ex1 = null;
+        //    Instruction ex1 = null;
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            simbolos.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    instructions.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    outputs.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.BOBINA_SAIDA;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.OutputCoil;
+        //    outputs.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    outputs.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.BOBINA_SAIDA;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.OutputCoil;
+        //    outputs.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    outputs.Add(ex1);
 
-            // Fim de Linha
-            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
-        }
+        //    // Fim de Linha
+        //    simboloFimLinha.OpCode = OperationCode.LineEnd;
+        //}
 
-        private void InicializaDesenhosSimbolos5()
-        {
-            // Inicio de Linha
-            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
+        //private void InicializaDesenhosSimbolos5()
+        //{
+        //    // Inicio de Linha
+        //    simboloInicioLinha.OpCode = OperationCode.LineBegin;
 
-            Instruction ex1 = null;
+        //    Instruction ex1 = null;
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.CONTATO_NA;
-            ex1.SetOperand(0, endereco.lstMemoria[0]);
-            endereco.lstMemoria[0].EmUso = true;
-            simbolos.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.NormallyOpenContact;
+        //    ex1.SetOperand(0, endereco.lstMemoria[0]);
+        //    endereco.lstMemoria[0].EmUso = true;
+        //    instructions.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_INICIAL;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchBegin;
+        //    outputs.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.BOBINA_SAIDA;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.OutputCoil;
+        //    outputs.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    outputs.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.BOBINA_SAIDA;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.OutputCoil;
+        //    outputs.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_PROXIMO;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchNext;
+        //    outputs.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.BOBINA_SAIDA;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.OutputCoil;
+        //    outputs.Add(ex1);
 
-            ex1 = new Instruction();
-            ex1.OpCode = OperationCode.PARALELO_FINAL;
-            saida.Add(ex1);
+        //    ex1 = new Instruction();
+        //    ex1.OpCode = OperationCode.ParallelBranchEnd;
+        //    outputs.Add(ex1);
 
-            // Fim de Linha
-            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
-            //simboloFimLinha.TabStop = false;
+        //    // Fim de Linha
+        //    simboloFimLinha.OpCode = OperationCode.LineEnd;
+        //    //simboloFimLinha.TabStop = false;
 
-        }
+        //}
 
-        private void InicializaDesenhosSimbolosVazio()
-        {
-            // Inicio de Linha
-            simboloInicioLinha.OpCode = OperationCode.INICIO_DA_LINHA;
+        //private void InicializaDesenhosSimbolosVazio()
+        //{
+        //    // Inicio de Linha
+        //    simboloInicioLinha.OpCode = OperationCode.LineBegin;
 
-            // Fim de Linha
-            simboloFimLinha.OpCode = OperationCode.FIM_DA_LINHA;
-        }
+        //    // Fim de Linha
+        //    simboloFimLinha.OpCode = OperationCode.LineEnd;
+        //}
 
         public void ApagaLinha()
         {
-            saida.Reverse();
-            foreach (Instruction cl in saida)
+            outputs.Reverse();
+            foreach (Instruction instruction in outputs)
             {
-                cl.Dispose();
+                instruction.Dispose();
             }
-            saida.Clear();
+            outputs.Clear();
 
-            simbolos.Reverse();
-            foreach (Instruction cl in simbolos)
+            instructions.Reverse();
+            foreach (Instruction instruction in instructions)
             {
-                cl.Dispose();
+                instruction.Dispose();
             }
-            simbolos.Clear();
+            instructions.Clear();
 
             simboloInicioLinha.Dispose();
             simboloFimLinha.Dispose();
         }
 
-        public Instruction Insere2Saida(SymbolList _lstSB)
+        public Instruction Insere2Saida(InstructionList instructions)
         {
             int _indiceSimbolo = 0;
             int _subt2posicionaSimboloInserido = 0;
 
-            switch (saida.Count)
+            switch (outputs.Count)
             {
                 case 0:
                     /// case 0: Primeiro simbolo na saida, adiciona apenas um
                     /// simbolo na saida
                     _indiceSimbolo = 0;
 
-                    if (_lstSB.Count > 1)
+                    if (instructions.Count > 1)
                     {
-                        _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_COMPLETO);
+                        instructions.InsereParalelo(InstructionList.TipoInsercaoParalelo.PARALELO_COMPLETO);
                         _subt2posicionaSimboloInserido = -1;
                     }
 
@@ -647,53 +645,53 @@ namespace LadderApp
                     if (_indiceSimbolo == 0)
                     {
                         /// prepara para inserir antes do objeto atual
-                        _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
+                        instructions.InsereParalelo(InstructionList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                         /// insere PP antes do objeto atual na linha
-                        this.saida.Insert(0, new Instruction(OperationCode.PARALELO_PROXIMO));
+                        this.outputs.Insert(0, new Instruction(OperationCode.ParallelBranchNext));
                         /// insere PF depois do objeto atual da linha
-                        this.saida.Insert(this.saida.Count, new Instruction(OperationCode.PARALELO_FINAL));
+                        this.outputs.Insert(this.outputs.Count, new Instruction(OperationCode.ParallelBranchEnd));
                     }
                     else
                     {
-                        _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_FINALIZADO);
+                        instructions.InsereParalelo(InstructionList.TipoInsercaoParalelo.PARALELO_FINALIZADO);
                         _subt2posicionaSimboloInserido = -1;
 
-                        this.saida.Insert(0, new Instruction(OperationCode.PARALELO_INICIAL));
+                        this.outputs.Insert(0, new Instruction(OperationCode.ParallelBranchBegin));
                         _indiceSimbolo++;
                     }
 
                     break;
                 default:
-                    switch (this.saida[_indiceSimbolo].OpCode)
+                    switch (this.outputs[_indiceSimbolo].OpCode)
                     {
-                        case OperationCode.PARALELO_INICIAL:
-                            _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
+                        case OperationCode.ParallelBranchBegin:
+                            instructions.InsereParalelo(InstructionList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
-                            this.saida[0].OpCode = OperationCode.PARALELO_PROXIMO;
+                            this.outputs[0].OpCode = OperationCode.ParallelBranchNext;
                             break;
-                        case OperationCode.PARALELO_PROXIMO:
-                            _lstSB.InsereParaleloProximo();
+                        case OperationCode.ParallelBranchNext:
+                            instructions.InsereParaleloProximo();
                             break;
-                        case OperationCode.PARALELO_FINAL:
-                            _lstSB.InsereParaleloProximo();
+                        case OperationCode.ParallelBranchEnd:
+                            instructions.InsereParaleloProximo();
                             break;
                         default:
-                            _lstSB.InsereParaleloProximo();
+                            instructions.InsereParaleloProximo();
                             _indiceSimbolo++;
                             break;
                     }
                     break;
             }
 
-            foreach (Instruction _sb in _lstSB)
+            foreach (Instruction _sb in instructions)
             {
-                this.saida.Insert(_indiceSimbolo, _sb);
+                this.outputs.Insert(_indiceSimbolo, _sb);
                 _indiceSimbolo++;
             }
 
             /// retorna o ultimo objeto inserido
-            return this.saida[_indiceSimbolo - 1 + _subt2posicionaSimboloInserido];
+            return this.outputs[_indiceSimbolo - 1 + _subt2posicionaSimboloInserido];
         }
 
 

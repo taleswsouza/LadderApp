@@ -56,7 +56,7 @@ namespace LadderApp
 
                 switch (simbAux.OpCode)
                 {
-                    case OperationCode.PARALELO_INICIAL:
+                    case OperationCode.ParallelBranchBegin:
                         _tamY = lc.tamY; // restaura tamanho Y base
                         _posX = _acumTamX;
                         _tamX = lc.tamX / 3;
@@ -71,7 +71,7 @@ namespace LadderApp
 
                         _acumTamX = _posX + _tamX;
                         break;
-                    case OperationCode.PARALELO_FINAL:
+                    case OperationCode.ParallelBranchEnd:
                         _tamX = lc.tamX / 3;
                         //                        _tamY = _par.ultimoVPI.Location.Y - _par.par.Location.Y + _par.ultimoVPI.Size.Height; // _ultTamY2ParaleloFinal;
                         _tamY = _par.ultimoVPI.posicaoXY.Y - _par.par.posicaoXY.Y + _par.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
@@ -104,7 +104,7 @@ namespace LadderApp
 
                         _acumTamX = _posX + _tamX;
                         break;
-                    case OperationCode.PARALELO_PROXIMO:
+                    case OperationCode.ParallelBranchNext:
                         _tamY = lc.tamY; // restaura tamanho Y base
                         _tamX = lc.tamX / 3; // tamanho X reduzido
 

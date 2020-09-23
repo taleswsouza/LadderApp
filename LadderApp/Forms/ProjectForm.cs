@@ -297,33 +297,33 @@ namespace LadderApp
             return 0;
         }
 
-        private void IndicaEnderecoEmUso(LadderProgram _pl, AddressTypeEnum _te)
+        private void IndicaEnderecoEmUso(LadderProgram program, AddressTypeEnum addressType)
         {
-            _pl.endereco.LimpaIndicacaoEmUso();
-            foreach (Line _lc in _pl.linhas)
+            program.endereco.LimpaIndicacaoEmUso();
+            foreach (Line line in program.linhas)
             {
-                _lc.simbolos.AddRange(_lc.saida);
-                foreach (Instruction _sb in _lc.simbolos)
+                line.instructions.AddRange(line.outputs);
+                foreach (Instruction instruction in line.instructions)
                 {
-                    switch (_sb.OpCode)
+                    switch (instruction.OpCode)
                     {
                         /// pporque disso aqui
-                        case OperationCode.CONTATO_NA:
-                        case OperationCode.CONTATO_NF:
-                        case OperationCode.BOBINA_SAIDA:
-                        case OperationCode.TEMPORIZADOR:
-                        case OperationCode.CONTADOR:
-                        case OperationCode.RESET:
-                            if (_sb.IsAllOperandsOk())
+                        case OperationCode.NormallyOpenContact:
+                        case OperationCode.NormallyClosedContact:
+                        case OperationCode.OutputCoil:
+                        case OperationCode.Timer:
+                        case OperationCode.Counter:
+                        case OperationCode.Reset:
+                            if (instruction.IsAllOperandsOk())
                             {
-                                Address _el = (Address)_sb.GetOperand(0);
-                                if (_el.TpEnderecamento == _te)
+                                Address _el = (Address)instruction.GetOperand(0);
+                                if (_el.TpEnderecamento == addressType)
                                     _el.EmUso = true;
                             }
                             break;
                     }
                 }
-                _lc.simbolos.RemoveRange(_lc.simbolos.Count - _lc.saida.Count, _lc.saida.Count);
+                line.instructions.RemoveRange(line.instructions.Count - line.outputs.Count, line.outputs.Count);
             }
         }
 

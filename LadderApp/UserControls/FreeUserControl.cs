@@ -64,7 +64,7 @@ namespace LadderApp
             get { return ultimoVPI; }
             set
             {
-                if (OpCode == OperationCode.PARALELO_PROXIMO)
+                if (OpCode == OperationCode.ParallelBranchNext)
                     ultimoVPI = value;
             }
         }
@@ -118,9 +118,9 @@ namespace LadderApp
             {
                 switch (OpCode)
                 {
-                    case OperationCode.PARALELO_INICIAL:
-                    case OperationCode.PARALELO_PROXIMO:
-                    case OperationCode.PARALELO_FINAL:
+                    case OperationCode.ParallelBranchBegin:
+                    case OperationCode.ParallelBranchNext:
+                    case OperationCode.ParallelBranchEnd:
                         return aponta2PI;
                     default:
                         return null;
@@ -139,9 +139,9 @@ namespace LadderApp
             {
                 switch (OpCode)
                 {
-                    case OperationCode.PARALELO_INICIAL:
-                    case OperationCode.PARALELO_PROXIMO:
-                    case OperationCode.PARALELO_FINAL:
+                    case OperationCode.ParallelBranchBegin:
+                    case OperationCode.ParallelBranchNext:
+                    case OperationCode.ParallelBranchEnd:
                         return aponta2PF;
                     default:
                         return null;
@@ -165,9 +165,9 @@ namespace LadderApp
             {
                 switch (OpCode)
                 {
-                    case OperationCode.PARALELO_INICIAL:
-                    case OperationCode.PARALELO_PROXIMO:
-                    case OperationCode.PARALELO_FINAL:
+                    case OperationCode.ParallelBranchBegin:
+                    case OperationCode.ParallelBranchNext:
+                    case OperationCode.ParallelBranchEnd:
                         return aponta2proxPP;
                     default:
                         return null;
@@ -187,10 +187,10 @@ namespace LadderApp
             this.BackColor = Color.Transparent;
         }
 
-        public FreeUserControl(Instruction _sb)
+        public FreeUserControl(Instruction intruction)
         {
             InitializeComponent();
-            instruction = _sb;
+            this.instruction = intruction;
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             this.BackColor = Color.Transparent;
         }
@@ -245,39 +245,39 @@ namespace LadderApp
             {
                 case OperationCode.None:
                     break;
-                case OperationCode.INICIO_DA_LINHA:
+                case OperationCode.LineBegin:
                     xyConexao = new Point(xDecimoHorizontal * 7, (VisualLine.tamY / 2));
                     //Selecao
                     rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
-                case OperationCode.FIM_DA_LINHA:
+                case OperationCode.LineEnd:
                     xyConexao = new Point(0, (VisualLine.tamY / 2));
                     break;
-                case OperationCode.CONTATO_NA:
+                case OperationCode.NormallyOpenContact:
                     //Selecao
                     rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
-                case OperationCode.CONTATO_NF:
+                case OperationCode.NormallyClosedContact:
                     break;
-                case OperationCode.BOBINA_SAIDA:
+                case OperationCode.OutputCoil:
                     break;
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     rectSimbolo = new Rectangle(2, 2, xTotalHorizontal - 4, yTotalVertical - 4);
                     break;
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     rectSimbolo = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
-                case OperationCode.PARALELO_INICIAL:
+                case OperationCode.ParallelBranchBegin:
                     // selecao em torno do ponto de conexao
                     rectSelecao = new Rectangle(1, (VisualLine.tamY / 4) + 3, xTotalHorizontal - 3, (VisualLine.tamY / 2) - 3);
 
                     xyConexao = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
                     break;
-                case OperationCode.PARALELO_FINAL:
+                case OperationCode.ParallelBranchEnd:
                     rectSelecao = new Rectangle(1, (VisualLine.tamY / 4) + 3, xTotalHorizontal - 3, yTotalVertical - (VisualLine.tamY / 2) - 3);
                     xyConexao = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
                     break;
-                case OperationCode.PARALELO_PROXIMO:
+                case OperationCode.ParallelBranchNext:
                     // selecao em torno do ponto de conexao
                     rectSelecao = new Rectangle(1, (VisualLine.tamY / 4) + 3, xTotalHorizontal - 3, (VisualLine.tamY / 2) - 3);
                     if (ultimoVPI)
@@ -285,7 +285,7 @@ namespace LadderApp
                     else
                         xyConexao = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
                     break;
-                case OperationCode.LINHA_DE_FUNDO:
+                case OperationCode.BackgroundLine:
                     break;
                 default:
                     break;
@@ -294,7 +294,7 @@ namespace LadderApp
 
         public void SalvaVPI2PF(List<FreeUserControl> _lstVPI)
         {
-            if (OpCode == OperationCode.PARALELO_FINAL)
+            if (OpCode == OperationCode.ParallelBranchEnd)
             {
                 if (lstVPI == null)
                     lstVPI = new List<FreeUserControl>();
@@ -313,7 +313,7 @@ namespace LadderApp
         {
             if (instruction.IsAllOperandsOk())
             {
-                if (this.OpCode == OperationCode.CONTATO_NA &&
+                if (this.OpCode == OperationCode.NormallyOpenContact &&
                 ((Address)GetOperand(0)).Valor == true)
                     Energizado();
             }
@@ -369,7 +369,7 @@ namespace LadderApp
         {
             if (IsAllOperandsOk())
             {
-                if (this.OpCode == OperationCode.CONTATO_NF &&
+                if (this.OpCode == OperationCode.NormallyClosedContact &&
                     ((Address)GetOperand(0)).Valor == false)
                     Energizado();
             }
@@ -391,7 +391,7 @@ namespace LadderApp
             if (IsAllOperandsOk())
             {
 
-                if (this.OpCode == OperationCode.BOBINA_SAIDA &&
+                if (this.OpCode == OperationCode.OutputCoil &&
                     ((Address)GetOperand(0)).Valor == true)
                     Energizado();
             }
@@ -575,7 +575,7 @@ namespace LadderApp
 
             switch (this.OpCode)
             {
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     _txtTitulo = "T";
                     if (IsAllOperandsOk())
                         switch ((Int32)((Address)GetOperand(0)).Temporizador.Tipo)
@@ -596,7 +596,7 @@ namespace LadderApp
 
                     DesenhaBaseTempo();
                     break;
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     _txtTitulo = "C";
                     if (IsAllOperandsOk())
                         switch ((Int32)((Address)GetOperand(0)).Contador.Tipo)
@@ -663,19 +663,19 @@ namespace LadderApp
                 foreach (FreeUserControl simbAux in VisualLine.simbolos)
                 {
 
-                    if (simbAux.OpCode == OperationCode.PARALELO_INICIAL ||
-                        simbAux.OpCode == OperationCode.PARALELO_PROXIMO ||
-                        simbAux.OpCode == OperationCode.PARALELO_FINAL)
+                    if (simbAux.OpCode == OperationCode.ParallelBranchBegin ||
+                        simbAux.OpCode == OperationCode.ParallelBranchNext ||
+                        simbAux.OpCode == OperationCode.ParallelBranchEnd)
                     {
                         switch (simbAux.OpCode)
                         {
-                            case OperationCode.PARALELO_INICIAL:
+                            case OperationCode.ParallelBranchBegin:
                                 _par = new VisualParallelBranch();
                                 _par.par = simbAux;
 
                                 _lst_par.Add(_par);
                                 break;
-                            case OperationCode.PARALELO_FINAL:
+                            case OperationCode.ParallelBranchEnd:
 
                                 simbAux.Refresh();
 
@@ -714,14 +714,14 @@ namespace LadderApp
                                 if (_lst_par.Count > 0)
                                     _par = _lst_par[_lst_par.Count - 1];
                                 break;
-                            case OperationCode.PARALELO_PROXIMO:
+                            case OperationCode.ParallelBranchNext:
                                 _par.lstVPI.Add(simbAux);
                                 break;
                             default:
                                 break;
                         }
 
-                        if (simbAux.OpCode != OperationCode.PARALELO_FINAL)
+                        if (simbAux.OpCode != OperationCode.ParallelBranchEnd)
                         {
                             _posX = _simbAnt2DesenhoAux.posicaoXY.X + _simbAnt2DesenhoAux.XYConexao.X;
                             _posY = _simbAnt2DesenhoAux.posicaoXY.Y + _simbAnt2DesenhoAux.XYConexao.Y;
@@ -737,7 +737,7 @@ namespace LadderApp
                         }
 
 
-                        if (_lst_par.Count > 0 && simbAux.OpCode == OperationCode.PARALELO_FINAL)
+                        if (_lst_par.Count > 0 && simbAux.OpCode == OperationCode.ParallelBranchEnd)
                             if (_par.lstVPI.Count > 0)
                                 _simbAnt2DesenhoAux = _par.lstVPI[_par.lstVPI.Count - 1];
                             else
@@ -835,8 +835,8 @@ namespace LadderApp
 
             switch (this.OpCode)
             {
-                case OperationCode.TEMPORIZADOR:
-                case OperationCode.CONTADOR:
+                case OperationCode.Timer:
+                case OperationCode.Counter:
                     _recTxtEnd = new RectangleF((float)(xMeioHorizontal / 2), (float)this.yQuintoVertical, (float)xMeioHorizontal, (float)textFont.GetHeight());
                     break;
                 default:
@@ -870,12 +870,12 @@ namespace LadderApp
 
             switch (this.OpCode)
             {
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     if (IsAllOperandsOk())
                         _intPreset = (Int32)((Address)GetOperand(0)).Contador.Preset;
                     _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     if (IsAllOperandsOk())
                         _intPreset = (Int32)((Address)GetOperand(0)).Temporizador.Preset;
                     _recTxtPreset = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
@@ -910,9 +910,9 @@ namespace LadderApp
 
             switch (this.OpCode)
             {
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     return;
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     if (IsAllOperandsOk())
                         _intBaseTempo = (Int32)((Address)GetOperand(0)).Temporizador.BaseTempo;
                     _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
@@ -968,12 +968,12 @@ namespace LadderApp
 
             switch (this.OpCode)
             {
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     if (IsAllOperandsOk())
                         _intAcum = (Int32)((Address)GetOperand(0)).Contador.Acumulado;
                     _recTxtAcum = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     if (IsAllOperandsOk())
                         _intAcum = (Int32)((Address)GetOperand(0)).Temporizador.Acumulado;
                     _recTxtAcum = new RectangleF((float)(0), (float)(4 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
@@ -1052,40 +1052,40 @@ namespace LadderApp
                     case OperationCode.None:
                         e.Clear(Color.White);
                         break;
-                    case OperationCode.INICIO_DA_LINHA:
+                    case OperationCode.LineBegin:
                         DesenhaInicioLinha();
                         break;
-                    case OperationCode.FIM_DA_LINHA:
+                    case OperationCode.LineEnd:
                         DesenhaFimLinha();
                         break;
-                    case OperationCode.CONTATO_NA:
+                    case OperationCode.NormallyOpenContact:
                         DesenhaContatoNA();
                         break;
-                    case OperationCode.CONTATO_NF:
+                    case OperationCode.NormallyClosedContact:
                         DesenhaContatoNF();
                         break;
-                    case OperationCode.BOBINA_SAIDA:
+                    case OperationCode.OutputCoil:
                         DesenhaBobinaSaida();
                         break;
-                    case OperationCode.TEMPORIZADOR:
+                    case OperationCode.Timer:
                         DesenhaQuadroSaida();
                         break;
-                    case OperationCode.CONTADOR:
+                    case OperationCode.Counter:
                         DesenhaQuadroSaida();
                         break;
-                    case OperationCode.PARALELO_INICIAL:
+                    case OperationCode.ParallelBranchBegin:
                         DesenhaParaleloInicial();
                         break;
-                    case OperationCode.PARALELO_FINAL:
+                    case OperationCode.ParallelBranchEnd:
                         DesenhaParaleloFinal();
                         break;
-                    case OperationCode.PARALELO_PROXIMO:
+                    case OperationCode.ParallelBranchNext:
                         DesenhaParaleloProximo();
                         break;
-                    case OperationCode.LINHA_DE_FUNDO:
+                    case OperationCode.BackgroundLine:
                         DesenhaFundo();
                         break;
-                    case OperationCode.RESET:
+                    case OperationCode.Reset:
                         DesenhaBobinaComString("R");
                         break;
                     default:
@@ -1116,8 +1116,8 @@ namespace LadderApp
 
         private void ControleLivre_Enter(object sender, EventArgs e)
         {
-            if (OpCode != OperationCode.LINHA_DE_FUNDO &&
-                OpCode != OperationCode.FIM_DA_LINHA)
+            if (OpCode != OperationCode.BackgroundLine &&
+                OpCode != OperationCode.LineEnd)
             {
                 this.selecionado = true;
 
@@ -1134,8 +1134,8 @@ namespace LadderApp
 
         private void ControleLivre_Leave(object sender, EventArgs e)
         {
-            if (OpCode != OperationCode.LINHA_DE_FUNDO &&
-                OpCode != OperationCode.FIM_DA_LINHA)
+            if (OpCode != OperationCode.BackgroundLine &&
+                OpCode != OperationCode.LineEnd)
             {
                 this.Refresh();
             }
@@ -1143,7 +1143,7 @@ namespace LadderApp
 
         public void NovasInsercoesLinhaHorizontal(bool bHabilita)
         {
-            if (bHabilita == true && OpCode != OperationCode.FIM_DA_LINHA)
+            if (bHabilita == true && OpCode != OperationCode.LineEnd)
             {
                 indicadorInsercao = new System.Windows.Forms.Panel();
                 indicadorInsercao.BackColor = Color.Transparent;
@@ -1155,7 +1155,7 @@ namespace LadderApp
 
                 listaIndicadores.Add(indicadorInsercao);
             }
-            else if (OpCode != OperationCode.FIM_DA_LINHA)
+            else if (OpCode != OperationCode.LineEnd)
             {
                 foreach (System.Windows.Forms.Panel ii in listaIndicadores)
                 {
@@ -1167,13 +1167,13 @@ namespace LadderApp
 
         private void ControleLivre_MouseEnter(object sender, EventArgs e)
         {
-            if (OpCode != OperationCode.FIM_DA_LINHA)
+            if (OpCode != OperationCode.LineEnd)
                 NovasInsercoesLinhaHorizontal(false); // era true
         }
 
         private void ControleLivre_MouseLeave(object sender, EventArgs e)
         {
-            if (OpCode != OperationCode.FIM_DA_LINHA)
+            if (OpCode != OperationCode.LineEnd)
                 NovasInsercoesLinhaHorizontal(false);
         }
 
@@ -1201,7 +1201,7 @@ namespace LadderApp
         private void ControleLivre_KeyDown(object sender, KeyEventArgs e)
         {
 
-            if (this.OpCode == OperationCode.INICIO_DA_LINHA)
+            if (this.OpCode == OperationCode.LineBegin)
             {
                 if (MudaLinha != null &&
                     (e.KeyData == Keys.Down || e.KeyData == Keys.Up))
@@ -1220,7 +1220,7 @@ namespace LadderApp
         /// <summary>
         /// Retorna o simbolobasico do objeto
         /// </summary>
-        public Instruction SimboloBasico
+        public Instruction Instruction
         {
             get { return instruction; }
         }
@@ -1249,15 +1249,15 @@ namespace LadderApp
 
             switch (OpCode)
             {
-                case OperationCode.CONTATO_NA:
-                case OperationCode.CONTATO_NF:
+                case OperationCode.NormallyOpenContact:
+                case OperationCode.NormallyClosedContact:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
-                case OperationCode.BOBINA_SAIDA:
+                case OperationCode.OutputCoil:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
-                case OperationCode.TEMPORIZADOR:
-                case OperationCode.CONTADOR:
+                case OperationCode.Timer:
+                case OperationCode.Counter:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
             }
@@ -1272,14 +1272,14 @@ namespace LadderApp
         {
             switch (OpCode)
             {
-                case OperationCode.CONTATO_NA:
-                case OperationCode.CONTATO_NF:
+                case OperationCode.NormallyOpenContact:
+                case OperationCode.NormallyClosedContact:
                     //                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
                     break;
-                case OperationCode.BOBINA_SAIDA:
+                case OperationCode.OutputCoil:
                     break;
-                case OperationCode.TEMPORIZADOR:
-                case OperationCode.CONTADOR:
+                case OperationCode.Timer:
+                case OperationCode.Counter:
                     SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
             }

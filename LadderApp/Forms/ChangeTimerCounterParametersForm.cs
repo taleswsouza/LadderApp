@@ -22,8 +22,8 @@ namespace LadderApp.Formularios
 
             switch (funcao)
             {
-                case OperationCode.CONTADOR:
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Counter:
+                case OperationCode.Timer:
                     Funcao = funcao;
                     break;
             }
@@ -33,7 +33,7 @@ namespace LadderApp.Formularios
         {
             switch (this.Funcao)
             {
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     this.Text = this.Text.Replace("<%>", "Counter");
                     cmbBaseTempo.Visible = false;
                     lblBaseTempo.Visible = false;
@@ -41,7 +41,7 @@ namespace LadderApp.Formularios
                     cmbTipo.Items.Add("CTU");
                     cmbTipo.Items.Add("CTD");
                     break;
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     this.Text = this.Text.Replace("<%>", "Timer");
                     cmbTipo.Items.Clear();
                     cmbTipo.Items.Add("TON");

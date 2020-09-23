@@ -73,9 +73,7 @@ namespace LadderApp
         {
             if (Operands == null || position > Operands.Length)
             {
-                /*throw new Exception("Invalid operand position: " + position)*/
-                ;
-                return null;
+                throw new Exception("Invalid operand position: " + position);
             }
             return operands[position];
         }
@@ -101,22 +99,22 @@ namespace LadderApp
             switch (OpCode)
             {
                 case OperationCode.None:
-                case OperationCode.FIM_DA_LINHA:
-                case OperationCode.PARALELO_INICIAL:
-                case OperationCode.PARALELO_FINAL:
-                case OperationCode.PARALELO_PROXIMO:
+                case OperationCode.LineEnd:
+                case OperationCode.ParallelBranchBegin:
+                case OperationCode.ParallelBranchEnd:
+                case OperationCode.ParallelBranchNext:
                     operands = null;
                     //INumOperandos = 0;
                     break;
-                case OperationCode.INICIO_DA_LINHA:
-                case OperationCode.CONTATO_NA:
-                case OperationCode.CONTATO_NF:
-                case OperationCode.BOBINA_SAIDA:
-                case OperationCode.RESET:
+                case OperationCode.LineBegin:
+                case OperationCode.NormallyOpenContact:
+                case OperationCode.NormallyClosedContact:
+                case OperationCode.OutputCoil:
+                case OperationCode.Reset:
                     operands = new Object[1];
                     //INumOperandos = 1;
                     break;
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     operands = new Object[4];
                     //INumOperandos = 4;
                     SetOperand(1, (Int32)0); // tipo
@@ -124,7 +122,7 @@ namespace LadderApp
                     SetOperand(3, (Int32)0); // acum
 
                     break;
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     operands = new Object[5];
                     //INumOperandos = 5;
 
@@ -195,16 +193,16 @@ namespace LadderApp
             switch (OpCode)
             {
                 case OperationCode.None:
-                case OperationCode.FIM_DA_LINHA:
+                case OperationCode.LineEnd:
                     _bValido = false;
                     break;
-                case OperationCode.INICIO_DA_LINHA:
+                case OperationCode.LineBegin:
                     if (_novoOperando != null)
                         if (_novoOperando.GetType().ToString() != "System.Int32")
                             _bValido = false;
                     break;
-                case OperationCode.CONTATO_NA:
-                case OperationCode.CONTATO_NF:
+                case OperationCode.NormallyOpenContact:
+                case OperationCode.NormallyClosedContact:
                     _bEndereco = true;
                     if (_end != null)
                     {
@@ -225,7 +223,7 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case OperationCode.BOBINA_SAIDA:
+                case OperationCode.OutputCoil:
                     _bEndereco = true;
                     if (_end != null)
                     {
@@ -243,7 +241,7 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     if (_end != null && _indice == 0)
                     {
                         _bEndereco = true;
@@ -272,7 +270,7 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     if (_end != null && _indice == 0)
                     {
                         _bEndereco = true;
@@ -301,12 +299,12 @@ namespace LadderApp
                     else
                         _bValido = false;
                     break;
-                case OperationCode.PARALELO_INICIAL:
-                case OperationCode.PARALELO_FINAL:
-                case OperationCode.PARALELO_PROXIMO:
+                case OperationCode.ParallelBranchBegin:
+                case OperationCode.ParallelBranchEnd:
+                case OperationCode.ParallelBranchNext:
                     _bValido = false;
                     break;
-                case OperationCode.RESET:
+                case OperationCode.Reset:
                     _bEndereco = true;
                     if (_end != null)
                     {

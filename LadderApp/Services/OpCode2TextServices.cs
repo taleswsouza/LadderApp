@@ -72,7 +72,7 @@ namespace LadderApp
                 if (txtCabecalho.Length > 0)
                 {
                     this.txtCabecalho.Insert(txtCabecalho.Length);
-                    this.txtCabecalho.Insert(OperationCode.CABECALHO_TAMANHO);
+                    this.txtCabecalho.Insert(OperationCode.HeadLenght);
 
                     txtInternalWithTypeCast = txtInternalWithTypeCast.Insert(this.posCabecalho2InternalWithTypeCast, txtCabecalho.ToStringInternalWithTypeCast() + ", ");
                     txtInternal = txtInternal.Insert(this.posCabecalho2Internal, txtCabecalho.ToStringInternal());
@@ -131,7 +131,7 @@ namespace LadderApp
 
             switch (instruction.OpCode)
             {
-                case OperationCode.CONTADOR:
+                case OperationCode.Counter:
                     if (instruction.IsAllOperandsOk())
                     {
                         if (instruction.IsAllOperandsOk())
@@ -143,7 +143,7 @@ namespace LadderApp
                             }
                     }
                     break;
-                case OperationCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     if (instruction.IsAllOperandsOk())
                     {
                         if (instruction.IsAllOperandsOk())
