@@ -6,9 +6,9 @@ using System.Drawing;
 
 namespace LadderApp
 {
-    public class BasicUserControl : UserControl, ISymbol
+    public class BasicUserControl : UserControl, IInstruction
     {
-        protected Symbol codigoInterpretavel = null;
+        protected Instruction instruction;
 
         public bool selecionado = false;
 
@@ -44,34 +44,26 @@ namespace LadderApp
         {
             get
             {
-                if (codigoInterpretavel != null)
-                    return codigoInterpretavel.OpCode;
+                if (instruction != null)
+                    return instruction.OpCode;
                 else
                     return OperationCode.None;
 
             }
 
-            set => codigoInterpretavel.OpCode = value;
+            set => instruction.OpCode = value;
         }
 
-        public Object[] getOperandos()
+        public object[] Operands { get => ((IInstruction)instruction).Operands; set => ((IInstruction)instruction).Operands = value; }
+
+        public Object GetOperand(int posicao)
         {
-            return codigoInterpretavel.getOperandos();
+            return instruction.GetOperand(posicao);
         }
 
-        public Object getOperandos(int posicao)
+        public void SetOperand(int iNumOperando, Object valor)
         {
-            return codigoInterpretavel.getOperandos(posicao);
-        }
-
-        public void setOperando(int iNumOperando, Object valor)
-        {
-            codigoInterpretavel.setOperando(iNumOperando, valor);
-        }
-
-        public void setOperando(Object[] operandos)
-        {
-            codigoInterpretavel.setOperando(operandos);
+            instruction.SetOperand(iNumOperando, valor);
         }
 
         private void InitializeComponent()
@@ -82,6 +74,16 @@ namespace LadderApp
             this.Name = "ControleBasico";
             this.ResumeLayout(false);
 
+        }
+
+        public int GetNumberOfOperands()
+        {
+            return ((IInstruction)instruction).GetNumberOfOperands();
+        }
+
+        public bool IsAllOperandsOk()
+        {
+            return ((IInstruction)instruction).IsAllOperandsOk();
         }
     }
 }

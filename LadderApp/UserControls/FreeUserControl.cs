@@ -64,7 +64,7 @@ namespace LadderApp
             get { return ultimoVPI; }
             set
             {
-                if (OpCode== OperationCode.PARALELO_PROXIMO)
+                if (OpCode == OperationCode.PARALELO_PROXIMO)
                     ultimoVPI = value;
             }
         }
@@ -182,15 +182,15 @@ namespace LadderApp
         public FreeUserControl()
         {
             InitializeComponent();
-            codigoInterpretavel = new Symbol();
+            instruction = new Instruction();
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             this.BackColor = Color.Transparent;
         }
 
-        public FreeUserControl(Symbol _sb)
+        public FreeUserControl(Instruction _sb)
         {
             InitializeComponent();
-            codigoInterpretavel = _sb;
+            instruction = _sb;
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             this.BackColor = Color.Transparent;
         }
@@ -198,7 +198,7 @@ namespace LadderApp
         public FreeUserControl(OperationCode _ci)
         {
             InitializeComponent();
-            codigoInterpretavel = new Symbol(_ci);
+            instruction = new Instruction(_ci);
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             this.BackColor = Color.Transparent;
         }
@@ -294,7 +294,7 @@ namespace LadderApp
 
         public void SalvaVPI2PF(List<FreeUserControl> _lstVPI)
         {
-            if (OpCode== OperationCode.PARALELO_FINAL)
+            if (OpCode == OperationCode.PARALELO_FINAL)
             {
                 if (lstVPI == null)
                     lstVPI = new List<FreeUserControl>();
@@ -311,11 +311,10 @@ namespace LadderApp
 
         private void DesenhaContatoNA()
         {
-            if (getOperandos(0) != null)
+            if (instruction.IsAllOperandsOk())
             {
-
-                if (this.OpCode== OperationCode.CONTATO_NA &&
-                    ((Address)getOperandos(0)).Valor == true)
+                if (this.OpCode == OperationCode.CONTATO_NA &&
+                ((Address)GetOperand(0)).Valor == true)
                     Energizado();
             }
 
@@ -368,10 +367,10 @@ namespace LadderApp
 
         private void DesenhaContatoNF()
         {
-            if (getOperandos(0) != null)
+            if (IsAllOperandsOk())
             {
-                if (this.OpCode== OperationCode.CONTATO_NF &&
-                    ((Address)getOperandos(0)).Valor == false)
+                if (this.OpCode == OperationCode.CONTATO_NF &&
+                    ((Address)GetOperand(0)).Valor == false)
                     Energizado();
             }
             else
@@ -389,11 +388,11 @@ namespace LadderApp
 
         private void DesenhaBobinaSaida()
         {
-            if (getOperandos(0) != null)
+            if (IsAllOperandsOk())
             {
 
-                if (this.OpCode== OperationCode.BOBINA_SAIDA &&
-                    ((Address)getOperandos(0)).Valor == true)
+                if (this.OpCode == OperationCode.BOBINA_SAIDA &&
+                    ((Address)GetOperand(0)).Valor == true)
                     Energizado();
             }
 
@@ -530,7 +529,7 @@ namespace LadderApp
             // Posicao numero da linha
             xy1 = new Point(xMeioHorizontal, yMeioVertical);
 
-            if (getOperandos(0) != null)
+            if (IsAllOperandsOk())
             {
                 // Endereco
                 RectangleF _recTxtLinha = new RectangleF(0F, (float)((VisualLine.tamY / 2) - textFont.Height), (float)(xDecimoHorizontal * 7), (float)(textFont.Height));
@@ -538,8 +537,8 @@ namespace LadderApp
                 _stringFormat.Alignment = StringAlignment.Center;
                 _stringFormat.LineAlignment = StringAlignment.Center;
 
-                if (getOperandos(0) != null)
-                    e.DrawString(getOperandos(0).ToString().PadLeft(4, '0'), textFont, symbolTextBrush, _recTxtLinha, _stringFormat);
+                if (GetOperand(0) != null)
+                    e.DrawString(GetOperand(0).ToString().PadLeft(4, '0'), textFont, symbolTextBrush, _recTxtLinha, _stringFormat);
             }
         }
 
@@ -578,8 +577,8 @@ namespace LadderApp
             {
                 case OperationCode.TEMPORIZADOR:
                     _txtTitulo = "T";
-                    if (getOperandos(0) != null)
-                        switch ((Int32)((Address)getOperandos(0)).Temporizador.Tipo)
+                    if (IsAllOperandsOk())
+                        switch ((Int32)((Address)GetOperand(0)).Temporizador.Tipo)
                         {
                             case 0:
                                 _txtTitulo = "TON";
@@ -599,8 +598,8 @@ namespace LadderApp
                     break;
                 case OperationCode.CONTADOR:
                     _txtTitulo = "C";
-                    if (getOperandos(0) != null)
-                        switch ((Int32)((Address)getOperandos(0)).Contador.Tipo)
+                    if (IsAllOperandsOk())
+                        switch ((Int32)((Address)GetOperand(0)).Contador.Tipo)
                         {
                             case 0:
                                 _txtTitulo = "CTU";
@@ -621,11 +620,11 @@ namespace LadderApp
             e.DrawRectangle(linePen, rectSimbolo);
 
             /// para indicar comentário no quadro de saida
-            if (getOperandos(0) != null)
-                if (((Address)getOperandos(0)).Apelido.Trim() != "")
+            if (IsAllOperandsOk())
+                if (((Address)GetOperand(0)).Apelido.Trim() != "")
                 {
                     /// será usado para apresenta um tooltip
-                    this.Tag = ((Address)getOperandos(0)).Apelido;
+                    this.Tag = ((Address)GetOperand(0)).Apelido;
                     /// para indicar comentário - desenha uma elipse no canto sup. dir.
                     e.DrawEllipse(new Pen(Color.Black), (xTotalHorizontal - 8 - 3), 3, 7, 7);
                     e.FillEllipse(new SolidBrush(Color.Yellow), (xTotalHorizontal - 8 - 3), 3, 7, 7);
@@ -664,9 +663,9 @@ namespace LadderApp
                 foreach (FreeUserControl simbAux in VisualLine.simbolos)
                 {
 
-                    if (simbAux.OpCode== OperationCode.PARALELO_INICIAL ||
-                        simbAux.OpCode== OperationCode.PARALELO_PROXIMO ||
-                        simbAux.OpCode== OperationCode.PARALELO_FINAL)
+                    if (simbAux.OpCode == OperationCode.PARALELO_INICIAL ||
+                        simbAux.OpCode == OperationCode.PARALELO_PROXIMO ||
+                        simbAux.OpCode == OperationCode.PARALELO_FINAL)
                     {
                         switch (simbAux.OpCode)
                         {
@@ -722,7 +721,7 @@ namespace LadderApp
                                 break;
                         }
 
-                        if (simbAux.OpCode!= OperationCode.PARALELO_FINAL)
+                        if (simbAux.OpCode != OperationCode.PARALELO_FINAL)
                         {
                             _posX = _simbAnt2DesenhoAux.posicaoXY.X + _simbAnt2DesenhoAux.XYConexao.X;
                             _posY = _simbAnt2DesenhoAux.posicaoXY.Y + _simbAnt2DesenhoAux.XYConexao.Y;
@@ -738,7 +737,7 @@ namespace LadderApp
                         }
 
 
-                        if (_lst_par.Count > 0 && simbAux.OpCode== OperationCode.PARALELO_FINAL)
+                        if (_lst_par.Count > 0 && simbAux.OpCode == OperationCode.PARALELO_FINAL)
                             if (_par.lstVPI.Count > 0)
                                 _simbAnt2DesenhoAux = _par.lstVPI[_par.lstVPI.Count - 1];
                             else
@@ -771,9 +770,9 @@ namespace LadderApp
             String _txtComent = "";
             RectangleF _recTxtComent;
 
-            if (getOperandos(0) != null)
+            if (IsAllOperandsOk())
             {
-                _txtComent = ((Address)getOperandos(0)).Apelido;
+                _txtComent = ((Address)GetOperand(0)).Apelido;
                 if (_txtComent.Trim() != "")
                 {
                     switch (this.OpCode)
@@ -851,9 +850,9 @@ namespace LadderApp
             _stringFormat.LineAlignment = StringAlignment.Center;
 
 
-            if (getOperandos(0) != null)
+            if (GetOperand(0) != null)
             {
-                _txtEndereco = ((Address)getOperandos(0)).Nome;
+                _txtEndereco = ((Address)GetOperand(0)).Nome;
             }
             else
                 _txtEndereco = "?";
@@ -872,13 +871,13 @@ namespace LadderApp
             switch (this.OpCode)
             {
                 case OperationCode.CONTADOR:
-                    if (getOperandos(0) != null)
-                        _intPreset = (Int32)((Address)getOperandos(0)).Contador.Preset;
+                    if (IsAllOperandsOk())
+                        _intPreset = (Int32)((Address)GetOperand(0)).Contador.Preset;
                     _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 case OperationCode.TEMPORIZADOR:
-                    if (getOperandos(0) != null)
-                        _intPreset = (Int32)((Address)getOperandos(0)).Temporizador.Preset;
+                    if (IsAllOperandsOk())
+                        _intPreset = (Int32)((Address)GetOperand(0)).Temporizador.Preset;
                     _recTxtPreset = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
@@ -914,8 +913,8 @@ namespace LadderApp
                 case OperationCode.CONTADOR:
                     return;
                 case OperationCode.TEMPORIZADOR:
-                    if (getOperandos(0) != null)
-                        _intBaseTempo = (Int32)((Address)getOperandos(0)).Temporizador.BaseTempo;
+                    if (IsAllOperandsOk())
+                        _intBaseTempo = (Int32)((Address)GetOperand(0)).Temporizador.BaseTempo;
                     _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
@@ -970,13 +969,13 @@ namespace LadderApp
             switch (this.OpCode)
             {
                 case OperationCode.CONTADOR:
-                    if (getOperandos(0) != null)
-                        _intAcum = (Int32)((Address)getOperandos(0)).Contador.Acumulado;
+                    if (IsAllOperandsOk())
+                        _intAcum = (Int32)((Address)GetOperand(0)).Contador.Acumulado;
                     _recTxtAcum = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 case OperationCode.TEMPORIZADOR:
-                    if (getOperandos(0) != null)
-                        _intAcum = (Int32)((Address)getOperandos(0)).Temporizador.Acumulado;
+                    if (IsAllOperandsOk())
+                        _intAcum = (Int32)((Address)GetOperand(0)).Temporizador.Acumulado;
                     _recTxtAcum = new RectangleF((float)(0), (float)(4 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
@@ -1102,7 +1101,7 @@ namespace LadderApp
         private void ControleLivre_Load(object sender, EventArgs e)
         {
             this.e = Graphics.FromHwnd(Handle);
-            if (OpCode!= null)
+            if (OpCode != null)
                 AtualizaVariaveisDesenho();
         }
 
@@ -1117,8 +1116,8 @@ namespace LadderApp
 
         private void ControleLivre_Enter(object sender, EventArgs e)
         {
-            if (OpCode!= OperationCode.LINHA_DE_FUNDO &&
-                OpCode!= OperationCode.FIM_DA_LINHA)
+            if (OpCode != OperationCode.LINHA_DE_FUNDO &&
+                OpCode != OperationCode.FIM_DA_LINHA)
             {
                 this.selecionado = true;
 
@@ -1135,8 +1134,8 @@ namespace LadderApp
 
         private void ControleLivre_Leave(object sender, EventArgs e)
         {
-            if (OpCode!= OperationCode.LINHA_DE_FUNDO &&
-                OpCode!= OperationCode.FIM_DA_LINHA)
+            if (OpCode != OperationCode.LINHA_DE_FUNDO &&
+                OpCode != OperationCode.FIM_DA_LINHA)
             {
                 this.Refresh();
             }
@@ -1144,7 +1143,7 @@ namespace LadderApp
 
         public void NovasInsercoesLinhaHorizontal(bool bHabilita)
         {
-            if (bHabilita == true && OpCode!= OperationCode.FIM_DA_LINHA)
+            if (bHabilita == true && OpCode != OperationCode.FIM_DA_LINHA)
             {
                 indicadorInsercao = new System.Windows.Forms.Panel();
                 indicadorInsercao.BackColor = Color.Transparent;
@@ -1156,7 +1155,7 @@ namespace LadderApp
 
                 listaIndicadores.Add(indicadorInsercao);
             }
-            else if (OpCode!= OperationCode.FIM_DA_LINHA)
+            else if (OpCode != OperationCode.FIM_DA_LINHA)
             {
                 foreach (System.Windows.Forms.Panel ii in listaIndicadores)
                 {
@@ -1168,25 +1167,25 @@ namespace LadderApp
 
         private void ControleLivre_MouseEnter(object sender, EventArgs e)
         {
-            if (OpCode!= OperationCode.FIM_DA_LINHA)
+            if (OpCode != OperationCode.FIM_DA_LINHA)
                 NovasInsercoesLinhaHorizontal(false); // era true
         }
 
         private void ControleLivre_MouseLeave(object sender, EventArgs e)
         {
-            if (OpCode!= OperationCode.FIM_DA_LINHA)
+            if (OpCode != OperationCode.FIM_DA_LINHA)
                 NovasInsercoesLinhaHorizontal(false);
         }
 
         private void ControleLivre_Resize(object sender, EventArgs e)
         {
-            if (OpCode!= null)
+            if (OpCode != null)
                 AtualizaVariaveisDesenho();
         }
 
         private void ControleLivre_SizeChanged(object sender, EventArgs e)
         {
-            if (OpCode!= null)
+            if (OpCode != null)
                 AtualizaVariaveisDesenho();
         }
 
@@ -1202,7 +1201,7 @@ namespace LadderApp
         private void ControleLivre_KeyDown(object sender, KeyEventArgs e)
         {
 
-            if (this.OpCode== OperationCode.INICIO_DA_LINHA)
+            if (this.OpCode == OperationCode.INICIO_DA_LINHA)
             {
                 if (MudaLinha != null &&
                     (e.KeyData == Keys.Down || e.KeyData == Keys.Up))
@@ -1221,9 +1220,9 @@ namespace LadderApp
         /// <summary>
         /// Retorna o simbolobasico do objeto
         /// </summary>
-        public Symbol SimboloBasico
+        public Instruction SimboloBasico
         {
-            get { return codigoInterpretavel; }
+            get { return instruction; }
         }
 
         private void ApresentaCamposTxt()

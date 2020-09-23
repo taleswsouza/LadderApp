@@ -207,53 +207,53 @@ namespace LadderApp
             lc.simboloDesenhoFundo.TabStop = false;
         }
 
-        public static void CopiaSimbolo2Livre(Line linhaFonte, VisualLine linhaDestinho)
-        {
-            /// transfere os simbolos basicos da linha
-            linhaDestinho.simbolos.Clear();
-            foreach(Symbol auxSB in linhaFonte.simbolos)
-            {
-                linhaDestinho.simbolos.Add(new FreeUserControl());
-                linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].OpCode = auxSB.OpCode;
-                linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setOperando(auxSB.getOperandos());
+        //public static void CopiaSimbolo2Livre(Line linhaFonte, VisualLine linhaDestinho)
+        //{
+        //    /// transfere os simbolos basicos da linha
+        //    linhaDestinho.simbolos.Clear();
+        //    foreach(Instruction auxSB in linhaFonte.simbolos)
+        //    {
+        //        linhaDestinho.simbolos.Add(new FreeUserControl());
+        //        linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].OpCode = auxSB.OpCode;
+        //        linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].Operands = auxSB.Operands;
 
-            }
+        //    }
 
-            /// transfere os simbolos basicos de saida
-            linhaDestinho.saida.Clear();
-            foreach (Symbol auxSB in linhaFonte.saida)
-            {
-                linhaDestinho.saida.Add(new FreeUserControl());
-                linhaDestinho.saida[linhaDestinho.saida.Count - 1].OpCode = auxSB.OpCode;
-                for(int i = 0; i < auxSB.getOperandos().Length; i++)
-                    linhaDestinho.saida[linhaDestinho.saida.Count - 1].setOperando(i, auxSB.getOperandos(i));
+        //    /// transfere os simbolos basicos de saida
+        //    linhaDestinho.saida.Clear();
+        //    foreach (Instruction auxSB in linhaFonte.saida)
+        //    {
+        //        linhaDestinho.saida.Add(new FreeUserControl());
+        //        linhaDestinho.saida[linhaDestinho.saida.Count - 1].OpCode = auxSB.OpCode;
+        //        for(int i = 0; i < auxSB.Operands.Length; i++)
+        //            linhaDestinho.saida[linhaDestinho.saida.Count - 1].SetOperand(i, auxSB.GetOperand(i));
 
-            }
-        }
+        //    }
+        //}
 
-        public static void CopiaLivre2Simbolo(VisualLine linhaFonte, Line linhaDestinho)
-        {
-            /// transfere os simbolos basicos da linha
-            linhaDestinho.simbolos.Clear();
-            foreach (FreeUserControl auxSB in linhaFonte.simbolos)
-            {
-                linhaDestinho.simbolos.Add(new Symbol());
-                linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].OpCode = auxSB.OpCode;
-                linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].setOperando(auxSB.getOperandos());
+        //public static void CopiaLivre2Simbolo(VisualLine linhaFonte, Line linhaDestinho)
+        //{
+        //    /// transfere os simbolos basicos da linha
+        //    linhaDestinho.simbolos.Clear();
+        //    foreach (FreeUserControl auxSB in linhaFonte.simbolos)
+        //    {
+        //        linhaDestinho.simbolos.Add(new Instruction());
+        //        linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].OpCode = auxSB.OpCode;
+        //        linhaDestinho.simbolos[linhaDestinho.simbolos.Count - 1].Operands = auxSB.Operands;
 
-            }
+        //    }
 
-            /// transfere os simbolos basicos de saida
-            linhaDestinho.saida.Clear();
-            foreach (FreeUserControl auxSB in linhaFonte.saida)
-            {
-                linhaDestinho.saida.Add(new Symbol());
-                linhaDestinho.saida[linhaDestinho.saida.Count - 1].OpCode = auxSB.OpCode;
-                for (int i = 0; i < auxSB.getOperandos().Length; i++)
-                    linhaDestinho.saida[linhaDestinho.saida.Count - 1].setOperando(i, auxSB.getOperandos(i));
+        //    /// transfere os simbolos basicos de saida
+        //    linhaDestinho.saida.Clear();
+        //    foreach (FreeUserControl auxSB in linhaFonte.saida)
+        //    {
+        //        linhaDestinho.saida.Add(new Instruction());
+        //        linhaDestinho.saida[linhaDestinho.saida.Count - 1].OpCode = auxSB.OpCode;
+        //        for (int i = 0; i < auxSB.Operands.Length; i++)
+        //            linhaDestinho.saida[linhaDestinho.saida.Count - 1].SetOperand(i, auxSB.GetOperand(i));
 
-            }
-        }
+        //    }
+        //}
     
     }
 }

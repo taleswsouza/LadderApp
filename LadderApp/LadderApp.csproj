@@ -129,7 +129,7 @@
       <DependentUpon>AddressingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\IOperand.cs" />
-    <Compile Include="Model\ISymbol.cs" />
+    <Compile Include="Model\IInstruction.cs" />
     <Compile Include="Model\Line.cs" />
     <Compile Include="Model\SymbolList.cs" />
     <Compile Include="Services\ManipulateLineServices.cs" />
@@ -218,7 +218,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>VisualResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Model\Symbol.cs" />
+    <Compile Include="Model\Instruction.cs" />
     <Compile Include="Model\Counter.cs" />
     <Compile Include="Model\Timer.cs" />
     <Compile Include="VisualComponents\VisualParallelBranch.cs" />

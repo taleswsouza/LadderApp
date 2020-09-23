@@ -34,7 +34,7 @@ namespace LadderApp
         }
 
 
-        public List<Symbol> lstVariosSelecionados = new List<Symbol>();
+        public List<Instruction> lstVariosSelecionados = new List<Instruction>();
 
         public LadderForm(LadderProgram _prgBasico)
         {
@@ -208,7 +208,7 @@ namespace LadderApp
             {
                 if (!LinhaSelecionada.simboloInicioLinha.IsDisposed)
                 {
-                    _linha = (int)LinhaSelecionada.simboloInicioLinha.getOperandos(0);
+                    _linha = (int)LinhaSelecionada.simboloInicioLinha.GetOperand(0);
 
                     if (_acima == false)
                         _linha++;
@@ -269,12 +269,12 @@ namespace LadderApp
         {
             if (e == Keys.Up)
             {
-                if ((int)sender.VisualLine.simboloInicioLinha.getOperandos(0) != 0)
+                if ((int)sender.VisualLine.simboloInicioLinha.GetOperand(0) != 0)
                     sender.VisualLine.linhaAnterior.simboloInicioLinha.Select();
             }
             else if (e == Keys.Down)
             {
-                if ((int)sender.VisualLine.linhaProxima.simboloInicioLinha.getOperandos(0) != 0)
+                if ((int)sender.VisualLine.linhaProxima.simboloInicioLinha.GetOperand(0) != 0)
                     sender.VisualLine.linhaProxima.simboloInicioLinha.Select();
             }
         }
@@ -348,10 +348,10 @@ namespace LadderApp
             }
         }
 
-        public List<Symbol> VariosSelecionados(FreeUserControl _cL, VisualLine _lCL)
+        public List<Instruction> VariosSelecionados(FreeUserControl _cL, VisualLine _lCL)
         {
             OperationCode _cI = _cL.OpCode;
-            List<Symbol> _lstSB = new List<Symbol>();
+            List<Instruction> _lstSB = new List<Instruction>();
             List<FreeUserControl> _lstCL = null;
 
             switch (_cI)
@@ -407,7 +407,7 @@ namespace LadderApp
                  _cI != OperationCode.PARALELO_INICIAL &&
                  _cI != OperationCode.PARALELO_FINAL))
             {
-                controleSelecionado.setOperando(0, null);
+                controleSelecionado.SetOperand(0, null);
                 controleSelecionado.Refresh();
             }
         }
@@ -431,7 +431,7 @@ namespace LadderApp
 
         private void menuToggleBit_Click(object sender, EventArgs e)
         {
-            ((Address)controleSelecionado.getOperandos(0)).Valor = ((Address)controleSelecionado.getOperandos(0)).Valor == true ? false : true;
+            ((Address)controleSelecionado.GetOperand(0)).Valor = ((Address)controleSelecionado.GetOperand(0)).Valor == true ? false : true;
             linkProjeto.programa.ExecutaLadderSimulado();
             this.Invalidate(true);
         }
@@ -440,7 +440,7 @@ namespace LadderApp
         {
             ChangeTimerCounterParametersForm Altera = new ChangeTimerCounterParametersForm(sender.OpCode);
 
-            if (sender.getOperandos(0) == null)
+            if (!sender.IsAllOperandsOk())
             {
                 MessageBox.Show("Please, assign an address first!", "Change configuration", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -449,15 +449,15 @@ namespace LadderApp
             switch (sender.OpCode)
             {
                 case OperationCode.TEMPORIZADOR:
-                    Altera.Tipo = (Int32)((Address)sender.getOperandos(0)).Temporizador.Tipo;
-                    Altera.Preset = (Int32)((Address)sender.getOperandos(0)).Temporizador.Preset;
-                    Altera.Acumulado = (Int32)((Address)sender.getOperandos(0)).Temporizador.Acumulado;
-                    Altera.BaseTempo = (Int32)((Address)sender.getOperandos(0)).Temporizador.BaseTempo;
+                    Altera.Tipo = (Int32)((Address)sender.GetOperand(0)).Temporizador.Tipo;
+                    Altera.Preset = (Int32)((Address)sender.GetOperand(0)).Temporizador.Preset;
+                    Altera.Acumulado = (Int32)((Address)sender.GetOperand(0)).Temporizador.Acumulado;
+                    Altera.BaseTempo = (Int32)((Address)sender.GetOperand(0)).Temporizador.BaseTempo;
                     break;
                 case OperationCode.CONTADOR:
-                    Altera.Tipo = (Int32)((Address)sender.getOperandos(0)).Contador.Tipo;
-                    Altera.Preset = (Int32)((Address)sender.getOperandos(0)).Contador.Preset;
-                    Altera.Acumulado = (Int32)((Address)sender.getOperandos(0)).Contador.Acumulado;
+                    Altera.Tipo = (Int32)((Address)sender.GetOperand(0)).Contador.Tipo;
+                    Altera.Preset = (Int32)((Address)sender.GetOperand(0)).Contador.Preset;
+                    Altera.Acumulado = (Int32)((Address)sender.GetOperand(0)).Contador.Acumulado;
                     break;
                 default:
                     break;
@@ -468,34 +468,34 @@ namespace LadderApp
             if (_result == DialogResult.OK)
             {
                 /// mantem os parametros do ci atualizados
-                sender.setOperando(1, Altera.Tipo);
-                sender.setOperando(2, Altera.Preset);
-                sender.setOperando(3, Altera.Acumulado);
+                sender.SetOperand(1, Altera.Tipo);
+                sender.SetOperand(2, Altera.Preset);
+                sender.SetOperand(3, Altera.Acumulado);
                 switch (sender.OpCode)
                 {
                     case OperationCode.TEMPORIZADOR:
                         /// mantem os parametros do ci atualizados
-                        sender.setOperando(4, Altera.BaseTempo);
+                        sender.SetOperand(4, Altera.BaseTempo);
 
-                        ((Address)sender.getOperandos(0)).Temporizador.Tipo = Altera.Tipo;
-                        ((Address)sender.getOperandos(0)).Temporizador.Preset = Altera.Preset;
-                        ((Address)sender.getOperandos(0)).Temporizador.Acumulado = Altera.Acumulado;
-                        ((Address)sender.getOperandos(0)).Temporizador.BaseTempo = Altera.BaseTempo;
+                        ((Address)sender.GetOperand(0)).Temporizador.Tipo = Altera.Tipo;
+                        ((Address)sender.GetOperand(0)).Temporizador.Preset = Altera.Preset;
+                        ((Address)sender.GetOperand(0)).Temporizador.Acumulado = Altera.Acumulado;
+                        ((Address)sender.GetOperand(0)).Temporizador.BaseTempo = Altera.BaseTempo;
 
-                        sender.setOperando(1, ((Address)sender.getOperandos(0)).Temporizador.Tipo);
-                        sender.setOperando(2, ((Address)sender.getOperandos(0)).Temporizador.Preset);
-                        sender.setOperando(3, ((Address)sender.getOperandos(0)).Temporizador.Acumulado);
-                        sender.setOperando(4, ((Address)sender.getOperandos(0)).Temporizador.BaseTempo);
+                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Temporizador.Tipo);
+                        sender.SetOperand(2, ((Address)sender.GetOperand(0)).Temporizador.Preset);
+                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Temporizador.Acumulado);
+                        sender.SetOperand(4, ((Address)sender.GetOperand(0)).Temporizador.BaseTempo);
 
                         break;
                     case OperationCode.CONTADOR:
-                        ((Address)sender.getOperandos(0)).Contador.Tipo = Altera.Tipo;
-                        ((Address)sender.getOperandos(0)).Contador.Preset = Altera.Preset;
-                        ((Address)sender.getOperandos(0)).Contador.Acumulado = Altera.Acumulado;
+                        ((Address)sender.GetOperand(0)).Contador.Tipo = Altera.Tipo;
+                        ((Address)sender.GetOperand(0)).Contador.Preset = Altera.Preset;
+                        ((Address)sender.GetOperand(0)).Contador.Acumulado = Altera.Acumulado;
 
-                        sender.setOperando(1, ((Address)sender.getOperandos(0)).Contador.Tipo);
-                        sender.setOperando(2, ((Address)sender.getOperandos(0)).Contador.Preset);
-                        sender.setOperando(3, ((Address)sender.getOperandos(0)).Contador.Acumulado);
+                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Contador.Tipo);
+                        sender.SetOperand(2, ((Address)sender.GetOperand(0)).Contador.Preset);
+                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Contador.Acumulado);
                         break;
                     default:
                         break;
@@ -508,7 +508,7 @@ namespace LadderApp
 
         private void menuToggleBitPulse_Click(object sender, EventArgs e)
         {
-            linkProjeto.programa.auxToggleBitPulse = ((Address)controleSelecionado.getOperandos(0));
+            linkProjeto.programa.auxToggleBitPulse = ((Address)controleSelecionado.GetOperand(0));
             linkProjeto.programa.auxToggleBitPulse.Valor = linkProjeto.programa.auxToggleBitPulse.Valor == true ? false : true;
             linkProjeto.programa.ExecutaLadderSimulado();
             this.Invalidate(true);

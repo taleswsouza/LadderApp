@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LadderApp
 {
-    public class SymbolList : List<Symbol>, IList<Symbol>
+    public class SymbolList : List<Instruction>, IList<Instruction>
     {
         /// <summary>
         /// suporte - utilizado na funcao "ProcuraCodigoInterpretavel()" - carrega
@@ -39,14 +39,14 @@ namespace LadderApp
 
         public bool ExisteTemporizadorDuplicado(List<Address> lstTemporizadoresUtilizados)
         {
-            foreach (Symbol _sb in this)
+            foreach (Instruction _sb in this)
             {
                 if (_sb.OpCode== OperationCode.TEMPORIZADOR)
                 {
-                    if (lstTemporizadoresUtilizados.Contains((Address)_sb.getOperandos(0)))
+                    if (lstTemporizadoresUtilizados.Contains((Address)_sb.GetOperand(0)))
                         return false;
                     else
-                        lstTemporizadoresUtilizados.Add((Address)_sb.getOperandos(0));
+                        lstTemporizadoresUtilizados.Add((Address)_sb.GetOperand(0));
                 }
             }
             return true;
@@ -54,14 +54,14 @@ namespace LadderApp
 
         public bool ExisteContadorDuplicado(List<Address> lstContadoresUtilizados)
         {
-            foreach (Symbol _sb in this)
+            foreach (Instruction _sb in this)
             {
                 if (_sb.OpCode== OperationCode.CONTADOR)
                 {
-                    if (lstContadoresUtilizados.Contains((Address)_sb.getOperandos(0)))
+                    if (lstContadoresUtilizados.Contains((Address)_sb.GetOperand(0)))
                         return false;
                     else
-                        lstContadoresUtilizados.Add((Address)_sb.getOperandos(0));
+                        lstContadoresUtilizados.Add((Address)_sb.GetOperand(0));
                 }
             }
             return true;
@@ -76,12 +76,12 @@ namespace LadderApp
         /// <param name="_lstSB">Lista de entrada com os simbolos que serao
         /// inseridos no objeto</param>
         /// <returns>objeto atual</returns>
-        public SymbolList InsertAllWithClearBefore(List<Symbol> _lstSB)
+        public SymbolList InsertAllWithClearBefore(List<Instruction> _lstSB)
         {
             this.Clear();
 
             if (_lstSB.Count > 0)
-                foreach (Symbol _cadaSB in _lstSB)
+                foreach (Instruction _cadaSB in _lstSB)
                 {
                     this.Add(_cadaSB);
                 }
@@ -104,7 +104,7 @@ namespace LadderApp
 
             if (_arrayCI.Length > 0)
                 foreach (OperationCode _cadaCI in _arrayCI)
-                    this.Add(new Symbol(_cadaCI));
+                    this.Add(new Instruction(_cadaCI));
 
             return this;
         }
@@ -114,7 +114,7 @@ namespace LadderApp
         {
             for(int i = (this.Count - 1); i >= 0; i--)
             {
-                this.Insert(i, new Symbol(OperationCode.PARALELO_PROXIMO));
+                this.Insert(i, new Instruction(OperationCode.PARALELO_PROXIMO));
             }
         }
 
@@ -129,23 +129,23 @@ namespace LadderApp
                     this[0].OpCode = OperationCode.PARALELO_INICIAL;
                     break;
                 case TipoInsercaoParalelo.PARALELO_FINALIZADO:
-                    this.Add(new Symbol(OperationCode.PARALELO_FINAL));
+                    this.Add(new Instruction(OperationCode.PARALELO_FINAL));
                     break;
                 case TipoInsercaoParalelo.PARALELO_COMPLETO:
                     this[0].OpCode = OperationCode.PARALELO_INICIAL;
-                    this.Add(new Symbol(OperationCode.PARALELO_FINAL));
+                    this.Add(new Instruction(OperationCode.PARALELO_FINAL));
                     break;
             }
         }
 
         public void ValidaOperandos(Addressing _ep)
         {
-            foreach(Symbol _sb in this)
+            foreach(Instruction _sb in this)
                 _sb.ValidaOperandosSimbolo(_ep);
         }
 
 
-        private bool ProcuraCodigoInterpretavel(Symbol _sb)
+        private bool ProcuraCodigoInterpretavel(Instruction _sb)
         {
             if (_sb.OpCode== ciLocal)
                 return true;
@@ -153,12 +153,12 @@ namespace LadderApp
                 return false;
         }
 
-        private static bool VerificaSeSimboloTemTodosOperandos(Symbol _sb)
+        private static bool VerificaSeSimboloTemTodosOperandos(Instruction instruction)
         {
             bool _bResult = true;
-            for (int i = 0; i < _sb.iNumOperandos; i++)
+            for (int i = 0; i < instruction.GetNumberOfOperands(); i++)
             {
-                if (_sb.getOperandos(i) == null)
+                if (instruction.GetOperand(i) == null)
                 {
                     _bResult = false;
                     break;
@@ -168,7 +168,7 @@ namespace LadderApp
         }
       
         
-        private static Symbol SimboloBasicoToSimboloBasico(Symbol _sb)
+        private static Instruction SimboloBasicoToSimboloBasico(Instruction _sb)
         {
             return (_sb);
         }

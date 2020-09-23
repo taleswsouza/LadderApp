@@ -69,7 +69,7 @@ namespace LadderApp
         {
             get { return iNumLinha;  }
             set { 
-                simboloInicioLinha.setOperando(0, value);
+                simboloInicioLinha.SetOperand(0, value);
                 iNumLinha = value;
             }
         }
@@ -517,7 +517,7 @@ namespace LadderApp
 
             _indiceSimbolo = VerificaPosicaoDeInserirSimbolo(_bApos, _controle, this.simbolos);
 
-            foreach (Symbol _sb in _lstSB)
+            foreach (Instruction _sb in _lstSB)
             {
                 linhaBase.simbolos.Insert(_indiceSimbolo, _sb);
                 InsereSimboloUnicoVisual(_indiceSimbolo, this.simbolos, _sb);
@@ -559,19 +559,19 @@ namespace LadderApp
                         _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                         /// insere PP antes do objeto atual na linha
-                        linhaBase.saida.Insert(0, new Symbol(OperationCode.PARALELO_PROXIMO));
-                        InsereSimboloUnicoVisual(0, this.saida, new Symbol(OperationCode.PARALELO_PROXIMO));
+                        linhaBase.saida.Insert(0, new Instruction(OperationCode.PARALELO_PROXIMO));
+                        InsereSimboloUnicoVisual(0, this.saida, new Instruction(OperationCode.PARALELO_PROXIMO));
                         /// insere PF depois do objeto atual da linha
-                        linhaBase.saida.Insert(this.saida.Count, new Symbol(OperationCode.PARALELO_FINAL));
-                        InsereSimboloUnicoVisual(this.saida.Count, this.saida, new Symbol(OperationCode.PARALELO_FINAL));
+                        linhaBase.saida.Insert(this.saida.Count, new Instruction(OperationCode.PARALELO_FINAL));
+                        InsereSimboloUnicoVisual(this.saida.Count, this.saida, new Instruction(OperationCode.PARALELO_FINAL));
                     }
                     else
                     {
                         _lstSB.InsereParalelo(SymbolList.TipoInsercaoParalelo.PARALELO_FINALIZADO);
                         _subt2posicionaSimboloInserido = -1;
 
-                        linhaBase.saida.Insert(0, new Symbol(OperationCode.PARALELO_INICIAL));
-                        InsereSimboloUnicoVisual(0, this.saida, new Symbol(OperationCode.PARALELO_INICIAL));
+                        linhaBase.saida.Insert(0, new Instruction(OperationCode.PARALELO_INICIAL));
+                        InsereSimboloUnicoVisual(0, this.saida, new Instruction(OperationCode.PARALELO_INICIAL));
                         _indiceSimbolo++;
                     }
 
@@ -602,7 +602,7 @@ namespace LadderApp
                     break;
             }
 
-            foreach (Symbol _sb in _lstSB)
+            foreach (Instruction _sb in _lstSB)
             {
                 linhaBase.saida.Insert(_indiceSimbolo, _sb);
                 InsereSimboloUnicoVisual(_indiceSimbolo, this.saida, _sb);
@@ -626,7 +626,7 @@ namespace LadderApp
             return _indiceSimbolo;
         }
 
-        private FreeUserControl InsereSimboloUnicoVisual(int _indiceSimbolo, List<FreeUserControl> _lstCL, Symbol _sB)
+        private FreeUserControl InsereSimboloUnicoVisual(int _indiceSimbolo, List<FreeUserControl> _lstCL, Instruction _sB)
         {
             /// Visual
             _lstCL.Insert(_indiceSimbolo, new FreeUserControl(_sB));
@@ -650,7 +650,7 @@ namespace LadderApp
 
 
 
-        public FreeUserControl InsereSimboloDireto(List<FreeUserControl> _lstCL, FreeUserControl _AposCL, List<Symbol> _lstSB)
+        public FreeUserControl InsereSimboloDireto(List<FreeUserControl> _lstCL, FreeUserControl _AposCL, List<Instruction> _lstSB)
         {
             int _indiceSimbolo = _lstCL.IndexOf(_AposCL);
 
@@ -661,7 +661,7 @@ namespace LadderApp
 
             if (_lstSB.Count > 0)
             {
-                foreach (Symbol _sb in _lstSB)
+                foreach (Instruction _sb in _lstSB)
                 {
                     InsereSimboloUnicoVisual(_indiceSimbolo, _lstCL, _sb);
                     _indiceSimbolo++;
@@ -708,7 +708,7 @@ namespace LadderApp
                         frmDiag.menuEnderecamento.Enabled = true;
                         frmDiag.menuEnderecamento.Visible = true;
 
-                        if (_cL.getOperandos(0) != null)
+                        if (_cL.IsAllOperandsOk())
                             frmDiag.menuToggleBit.Enabled = true;
                         else
                             frmDiag.menuToggleBit.Enabled = false;
@@ -741,9 +741,9 @@ namespace LadderApp
                             }
 
                             Address _end = null;
-                            if (_cL.getOperandos(0) != null)
+                            if (_cL.IsAllOperandsOk())
                             {
-                                Object obj = _cL.getOperandos(0);
+                                Object obj = _cL.GetOperand(0);
                                 if (obj.GetType().Name == Address.ClassName()) // TODO Vefiry: ==  "LadderApp1.EnderecamentoLadder")
                                 {
                                     _end = (LadderApp.Address)obj;
@@ -814,7 +814,7 @@ namespace LadderApp
             int _auxSaida = 0;
             List<FreeUserControl> _lstCLDeletar = new List<FreeUserControl>();
             List<FreeUserControl> _lstCL = null;
-            List<Symbol> _lstSB = null;
+            List<Instruction> _lstSB = null;
             FreeUserControl _cLAMudarCI = null;
 
             if (!simbolos.Contains(_aSerApagado))
@@ -910,7 +910,7 @@ namespace LadderApp
             return true;
         }
 
-        public bool ApagaSimbolo(List<FreeUserControl> _lstCL, List<Symbol> _lstSB, FreeUserControl _aSerApagado)
+        public bool ApagaSimbolo(List<FreeUserControl> _lstCL, List<Instruction> _lstSB, FreeUserControl _aSerApagado)
         {
             int _indice = 0;
 

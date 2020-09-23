@@ -7,25 +7,18 @@ using System.Xml.Serialization;
 namespace LadderApp
 {
     [XmlInclude(typeof(Address))]
-    [XmlType(TypeName="Simbolo")]
+    [XmlType(TypeName = "Simbolo")]
     [Serializable]
-    public class Symbol : ISymbol
+    public class Instruction : IInstruction
     {
-        public Symbol()
+        public Instruction()
         {
         }
 
-        public Symbol(OperationCode opCode)
+        public Instruction(OperationCode opCode)
         {
-            this.opCode = opCode;
+            this.OpCode = opCode;
         }
-        
-        [XmlIgnore]
-        public int iNumOperandos;
-
-        [XmlElement(Order = 2, IsNullable = true, ElementName = "Operando")]
-        public Object[] Operandos = new Object[5];
-
 
         private OperationCode opCode = OperationCode.None;
         [XmlElement(Order = 1, ElementName = "Instrucao")]
@@ -35,83 +28,114 @@ namespace LadderApp
             set
             {
                 this.opCode = value;
-                RealocaOperandos();
+                InitializeOperands();
             }
         }
 
-        public Object[] getOperandos()
+        private Object[] operands;
+        [XmlElement(Order = 2, IsNullable = true, ElementName = "Operando")]
+        public object[] Operands
         {
-            return Operandos;
-        }
-
-        public Object getOperandos(int posicao)
-        {
-            if (Operandos.Length > 0)
-                return Operandos[posicao];
-            else
-                return null;
-        }
-
-        public void setOperando(int iNumOperando, Object valor)
-        {
-            if (iNumOperando < iNumOperandos)
+            get => operands;
+            set
             {
-                if (ValidaEndereco(iNumOperando, valor))
-                    Operandos[iNumOperando] = valor;
+                operands = value;
             }
         }
 
-
-        public void setOperando(Object[] operandos)
+        public int GetNumberOfOperands()
         {
-            Operandos = operandos;
+            if (operands == null)
+            {
+                return 0;
+            }
+
+            return operands.Length;
         }
 
-
-        public int RealocaOperandos()
+        public bool IsAllOperandsOk()
         {
-            Operandos = null;
-            GC.Collect();
-            Operandos = new Object[5];
+            if (operands is null)
+            {
+                return false;
+            }
+            foreach (Object operand in operands)
+            {
+                if (operand is null)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
-            /// Aloca espaco para a quantidade de operandos de cada codigo interpretavel
+        public Object GetOperand(int position)
+        {
+            if (Operands == null || position > Operands.Length)
+            {
+                /*throw new Exception("Invalid operand position: " + position)*/
+                ;
+                return null;
+            }
+            return operands[position];
+        }
+
+        public void SetOperand(int position, Object value)
+        {
+            if (operands == null)
+            {
+                InitializeOperands();
+            }
+
+            if (position > operands.Length)
+            {
+                throw new Exception("Invalid operand position: " + position);
+            }
+
+            if (ValidaEndereco(position, value))
+                operands[position] = value;
+        }
+
+        private int InitializeOperands()
+        {
             switch (OpCode)
             {
                 case OperationCode.None:
                 case OperationCode.FIM_DA_LINHA:
-                    iNumOperandos = 0;
+                case OperationCode.PARALELO_INICIAL:
+                case OperationCode.PARALELO_FINAL:
+                case OperationCode.PARALELO_PROXIMO:
+                    operands = null;
+                    //INumOperandos = 0;
                     break;
                 case OperationCode.INICIO_DA_LINHA:
                 case OperationCode.CONTATO_NA:
                 case OperationCode.CONTATO_NF:
                 case OperationCode.BOBINA_SAIDA:
                 case OperationCode.RESET:
-                    iNumOperandos = 1;
-                    break;
-                case OperationCode.PARALELO_INICIAL:
-                case OperationCode.PARALELO_FINAL:
-                case OperationCode.PARALELO_PROXIMO:
-                    iNumOperandos = 0;
+                    operands = new Object[1];
+                    //INumOperandos = 1;
                     break;
                 case OperationCode.CONTADOR:
-                    iNumOperandos = 4;
-
-                    setOperando(1, (Int32)0); // tipo
-                    setOperando(2, (Int32)0); // preset
-                    setOperando(3, (Int32)0); // acum
+                    operands = new Object[4];
+                    //INumOperandos = 4;
+                    SetOperand(1, (Int32)0); // tipo
+                    SetOperand(2, (Int32)0); // preset
+                    SetOperand(3, (Int32)0); // acum
 
                     break;
                 case OperationCode.TEMPORIZADOR:
-                    iNumOperandos = 5;
+                    operands = new Object[5];
+                    //INumOperandos = 5;
 
-                    setOperando(1, (Int32)0); // tipo
-                    setOperando(2, (Int32)0); // preset
-                    setOperando(3, (Int32)0); // acum
-                    setOperando(4, (Int32)0); // Base tempo
+                    SetOperand(1, (Int32)0); // tipo
+                    SetOperand(2, (Int32)0); // preset
+                    SetOperand(3, (Int32)0); // acum
+                    SetOperand(4, (Int32)0); // Base tempo
 
                     break;
             }
-            return iNumOperandos;
+            return GetNumberOfOperands();
         }
 
         private Size TamanhoXY;
@@ -158,14 +182,14 @@ namespace LadderApp
                 if (_novoOperando.GetType().Name == Address.ClassName())
                 {
                     if (_novoOperando == null)
-                        _end = (Address)getOperandos(0);
+                        _end = (Address)GetOperand(0);
                     else
                         _end = (Address)_novoOperando;
                 }
                 else if (_novoOperando.GetType().Name == "Int32")
                 {
                 }
-                
+
             }
 
             switch (OpCode)
@@ -307,8 +331,8 @@ namespace LadderApp
 
             if (_bEndereco)
             {
-                if (getOperandos(0) != null)
-                    _atualOperando = (Address)getOperandos(0);
+                if (IsAllOperandsOk())
+                    _atualOperando = (Address)GetOperand(0);
 
                 if (_bValido)
                 {
@@ -319,13 +343,13 @@ namespace LadderApp
                 }
                 else
                     if (_novoOperando == null)
+                {
+                    if (_atualOperando != null)
                     {
-                        if (_atualOperando != null)
-                        {
-                            _atualOperando.MudouOperando -= new MudouOperandoEventHandler(Ocorreu_MudouOperando);
-                            Operandos[0] = null;
-                        }
+                        _atualOperando.MudouOperando -= new MudouOperandoEventHandler(Ocorreu_MudouOperando);
+                        operands[0] = null;
                     }
+                }
             }
 
             return _bValido;
@@ -338,34 +362,29 @@ namespace LadderApp
 
         public void ValidaOperandosSimbolo(Addressing _EndDisp)
         {
-            for(int i = 0; i < iNumOperandos; i++)
-                if (Operandos[i] != null)
-                    if (Operandos[i].GetType().Name == Address.ClassName())
+            for (int i = 0; i < GetNumberOfOperands(); i++)
+                if (operands[i] != null)
+                    if (operands[i].GetType().Name == Address.ClassName())
                     {
                         /// Verifica se o endereco atual existe na lista de enderecos
                         /// do programa atual, se existir recupera o opontamento corrigido
                         /// para o endereco
-                        Object oper = _EndDisp.Find(((Address)Operandos[i]));
+                        Object oper = _EndDisp.Find(((Address)operands[i]));
                         /// recebido o endereco corrigido valida o endereco a faz as atribui
                         /// coes necessarias
                         if (oper != null)
                         {
                             if (ValidaEndereco(i, oper))
-                                Operandos[i] = oper;
+                                operands[i] = oper;
                             else
                             {
-                                Operandos[i] = null;
-                                GC.Collect();
+                                operands[i] = null;
                             }
                         }
                         else
                         {
-                            Operandos[i] = null;
-                            GC.Collect();
+                            operands[i] = null;
                         }
-
-
-
                     }
         }
     }

@@ -150,9 +150,9 @@ namespace LadderApp.CodigoInterpretavel
             Address _endLido = null;
             AddressTypeEnum _tpEndLido;
             Int32 _iIndiceEndLido = 0;
-            Symbol _sb = null;
+            Instruction _sb = null;
 
-            _sb = new Symbol(LeCodigoInterpretavel(_pos));
+            _sb = new Instruction(LeCodigoInterpretavel(_pos));
 
             switch (_sb.OpCode)
             {
@@ -264,7 +264,7 @@ namespace LadderApp.CodigoInterpretavel
                         case OperationCode.CONTATO_NF:
                             intContaFim = 0;
                             {
-                                Symbol _sb = new Symbol((OperationCode)guarda);
+                                Instruction _sb = new Instruction((OperationCode)guarda);
                                 _tpEndLido = LeTipoEnderecamento(i); i++;
                                 _iIndiceEndLido = LeInteiro(i); i++;
                                 _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
@@ -275,7 +275,7 @@ namespace LadderApp.CodigoInterpretavel
                                     programa.endereco.AlocaEnderecamentoIO(programa.dispositivo);
                                     _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
                                 }
-                                _sb.setOperando(0, _endLido);
+                                _sb.SetOperand(0, _endLido);
 
                                 //i += 2;
                                 programa.linhas[intIndiceLinha].simbolos.Add(_sb);
@@ -286,7 +286,7 @@ namespace LadderApp.CodigoInterpretavel
                             intContaFim = 0;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((OperationCode)guarda));
+                                _lstSB.Add(new Instruction((OperationCode)guarda));
                                 _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
@@ -297,7 +297,7 @@ namespace LadderApp.CodigoInterpretavel
                                     programa.endereco.AlocaEnderecamentoIO(programa.dispositivo);
                                     _endLido = programa.endereco.Find(_tpEndLido, _iIndiceEndLido);
                                 }
-                                _lstSB[_lstSB.Count - 1].setOperando(0, _endLido);
+                                _lstSB[_lstSB.Count - 1].SetOperand(0, _endLido);
                                 i += 2;
                                 programa.linhas[intIndiceLinha].Insere2Saida(_lstSB);
                                 _lstSB.Clear();
@@ -307,19 +307,19 @@ namespace LadderApp.CodigoInterpretavel
                         case OperationCode.PARALELO_FINAL:
                         case OperationCode.PARALELO_PROXIMO:
                             intContaFim = 0;
-                            programa.linhas[intIndiceLinha].simbolos.Add(new Symbol((OperationCode)guarda));
+                            programa.linhas[intIndiceLinha].simbolos.Add(new Instruction((OperationCode)guarda));
                             break;
                         case OperationCode.CONTADOR:
                             intContaFim = 0;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((OperationCode)guarda));
-                                _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
-                                ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
+                                _lstSB.Add(new Instruction((OperationCode)guarda));
+                                _lstSB[_lstSB.Count - 1].SetOperand(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
+                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Contador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
+                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Contador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
 
-                                _lstSB[_lstSB.Count - 1].setOperando(1, ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Tipo);
-                                _lstSB[_lstSB.Count - 1].setOperando(2, ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Contador.Preset);
+                                _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Contador.Tipo);
+                                _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Contador.Preset);
                                 i += 3;
                                 programa.linhas[intIndiceLinha].Insere2Saida(_lstSB);
                                 _lstSB.Clear();
@@ -329,15 +329,15 @@ namespace LadderApp.CodigoInterpretavel
                             intContaFim = 0;
                             {
                                 SymbolList _lstSB = new SymbolList();
-                                _lstSB.Add(new Symbol((OperationCode)guarda));
-                                _lstSB[_lstSB.Count - 1].setOperando(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
-                                ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.BaseTempo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
-                                ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 4, 1));
+                                _lstSB.Add(new Instruction((OperationCode)guarda));
+                                _lstSB[_lstSB.Count - 1].SetOperand(0, programa.endereco.Find(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
+                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Temporizador.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
+                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Temporizador.BaseTempo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
+                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Temporizador.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 4, 1));
 
-                                _lstSB[_lstSB.Count - 1].setOperando(1, ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Tipo);
-                                _lstSB[_lstSB.Count - 1].setOperando(2, ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.Preset);
-                                _lstSB[_lstSB.Count - 1].setOperando(4, ((Address)_lstSB[_lstSB.Count - 1].getOperandos(0)).Temporizador.BaseTempo);
+                                _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Temporizador.Tipo);
+                                _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Temporizador.Preset);
+                                _lstSB[_lstSB.Count - 1].SetOperand(4, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Temporizador.BaseTempo);
 
                                 i += 4;
                                 programa.linhas[intIndiceLinha].Insere2Saida(_lstSB);

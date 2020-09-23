@@ -12,7 +12,7 @@ namespace LadderApp
     {
         public LadderForm frmDiagLadder = null;
 
-       // composicao do projeto ladder
+        // composicao do projeto ladder
         public LadderProgram programa = new LadderProgram();
 
         public ProjectForm()
@@ -107,7 +107,7 @@ namespace LadderApp
                     if (!ValidaDiagrama())
                     {
                         AbreDiagramaLadder();
-                    } 
+                    }
                     break;
                 case "NoDispositivo":
                     DeviceForm frmDisp = new DeviceForm(programa.dispositivo);
@@ -280,7 +280,6 @@ namespace LadderApp
                     if (!_lstE[i].EmUso)
                     {
                         _lstE[i] = null;
-                        GC.Collect();
                         _lstE.RemoveAt(i);
                     }
                     else
@@ -290,7 +289,7 @@ namespace LadderApp
 
             foreach (Address el in _lstE)
             {
-                _NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Add(el.Nome, el.Nome + ( el.Apelido == "" ? "" : " - " + el.Apelido ));
+                _NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Add(el.Nome, el.Nome + (el.Apelido == "" ? "" : " - " + el.Apelido));
                 _NoEnderecamento.Nodes[_txtNoEndereco].Nodes[el.Nome].Tag = el;
                 el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
             }
@@ -301,23 +300,23 @@ namespace LadderApp
         private void IndicaEnderecoEmUso(LadderProgram _pl, AddressTypeEnum _te)
         {
             _pl.endereco.LimpaIndicacaoEmUso();
-            foreach(Line _lc in _pl.linhas)
+            foreach (Line _lc in _pl.linhas)
             {
                 _lc.simbolos.AddRange(_lc.saida);
-                foreach (Symbol _sb in _lc.simbolos)
+                foreach (Instruction _sb in _lc.simbolos)
                 {
                     switch (_sb.OpCode)
                     {
-                            /// pporque disso aqui
+                        /// pporque disso aqui
                         case OperationCode.CONTATO_NA:
                         case OperationCode.CONTATO_NF:
                         case OperationCode.BOBINA_SAIDA:
                         case OperationCode.TEMPORIZADOR:
                         case OperationCode.CONTADOR:
                         case OperationCode.RESET:
-                            if (_sb.getOperandos(0) != null)
+                            if (_sb.IsAllOperandsOk())
                             {
-                                Address _el = (Address)_sb.getOperandos(0);
+                                Address _el = (Address)_sb.GetOperand(0);
                                 if (_el.TpEnderecamento == _te)
                                     _el.EmUso = true;
                             }
@@ -332,7 +331,7 @@ namespace LadderApp
         {
             if (!_cL.IsDisposed)
             {
-                _cL.setOperando(0, _end);
+                _cL.SetOperand(0, _end);
                 _cL.Refresh();
             }
         }

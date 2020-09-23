@@ -125,45 +125,45 @@ namespace LadderApp
             Add((int)_end.Indice);
         }
 
-        public void Add(Symbol _sb)
+        public void Add(Instruction instruction)
         {
-            Add(_sb.OpCode);
+            Add(instruction.OpCode);
 
-            switch (_sb.OpCode)
+            switch (instruction.OpCode)
             {
                 case OperationCode.CONTADOR:
-                    if (_sb.iNumOperandos > 0)
+                    if (instruction.IsAllOperandsOk())
                     {
-                        if (_sb.getOperandos(0) != null)
-                            if (_sb.getOperandos(0).GetType().Name == Address.ClassName())
+                        if (instruction.IsAllOperandsOk())
+                            if (instruction.GetOperand(0).GetType().Name == Address.ClassName())
                             {
-                                Add(((Address)_sb.getOperandos(0)).Indice);
-                                Add(((Address)_sb.getOperandos(0)).Contador.Tipo);
-                                Add(((Address)_sb.getOperandos(0)).Contador.Preset);
+                                Add(((Address)instruction.GetOperand(0)).Indice);
+                                Add(((Address)instruction.GetOperand(0)).Contador.Tipo);
+                                Add(((Address)instruction.GetOperand(0)).Contador.Preset);
                             }
                     }
                     break;
                 case OperationCode.TEMPORIZADOR:
-                    if (_sb.iNumOperandos > 0)
+                    if (instruction.IsAllOperandsOk())
                     {
-                        if (_sb.getOperandos(0) != null)
-                            if (_sb.getOperandos(0).GetType().Name == Address.ClassName())
+                        if (instruction.IsAllOperandsOk())
+                            if (instruction.GetOperand(0).GetType().Name == Address.ClassName())
                             {
-                                Add(((Address)_sb.getOperandos(0)).Indice);
-                                Add(((Address)_sb.getOperandos(0)).Temporizador.Tipo);
-                                Add(((Address)_sb.getOperandos(0)).Temporizador.BaseTempo);
-                                Add(((Address)_sb.getOperandos(0)).Temporizador.Preset);
+                                Add(((Address)instruction.GetOperand(0)).Indice);
+                                Add(((Address)instruction.GetOperand(0)).Temporizador.Tipo);
+                                Add(((Address)instruction.GetOperand(0)).Temporizador.BaseTempo);
+                                Add(((Address)instruction.GetOperand(0)).Temporizador.Preset);
                             }
                     }
                     break;
                 default:
-                    if (_sb.iNumOperandos > 0)
+                    if (instruction.IsAllOperandsOk())
                     {
-                        for (int i = 0; i < _sb.iNumOperandos; i++)
+                        for (int i = 0; i < instruction.GetNumberOfOperands(); i++)
                         {
-                            if (_sb.getOperandos(i) != null)
-                                if (_sb.getOperandos(i).GetType().Name == Address.ClassName())
-                                    Add((Address)_sb.getOperandos(i));
+                            if (instruction.GetOperand(i) != null)
+                                if (instruction.GetOperand(i).GetType().Name == Address.ClassName())
+                                    Add((Address)instruction.GetOperand(i));
                         }
                     }
                     break;

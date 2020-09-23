@@ -76,7 +76,7 @@ namespace LadderApp
             List<AddressTypeEnum> tiposListados = new List<AddressTypeEnum>();
             List<Address> _lstGenerica;
 
-            switch(_ci)
+            switch (_ci)
             {
                 case OperationCode.CONTATO_NA:
                 case OperationCode.CONTATO_NF:
@@ -256,7 +256,6 @@ namespace LadderApp
                     if (!_lstE[i].EmUso)
                     {
                         _lstE[i] = null;
-                        GC.Collect();
                         _lstE.RemoveAt(i);
                     }
                     else
