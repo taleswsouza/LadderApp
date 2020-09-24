@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LadderProgram xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <endereco>
+    <lstMemoria>
+      <Endereco>
+        <Id>1</Id>
+        <Nome>M1</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA</Tipo>
+        <Apelido />
+        <Acesso2 />
+      </Endereco>
+      <Endereco>
+        <Id>2</Id>
+        <Nome>M2</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA</Tipo>
+        <Apelido />
+        <Acesso2 />
+      </Endereco>
+      <Endereco>
+        <Id>3</Id>
+        <Nome>M3</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA</Tipo>
+        <Apelido />
+        <Acesso2 />
+      </Endereco>
+      <Endereco>
+        <Id>4</Id>
+        <Nome>M4</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA</Tipo>
+        <Apelido />
+        <Acesso2 />
+      </Endereco>
+      <Endereco>
+        <Id>5</Id>
+        <Nome>M5</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA</Tipo>
+        <Apelido />
+        <Acesso2 />
+      </Endereco>
+      <Endereco>
+        <Id>6</Id>
+        <Nome>M6</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA</Tipo>
+        <Apelido />
+        <Acesso2 />
+      </Endereco>
+      <Endereco>
+        <Id>7</Id>
+        <Nome>M7</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA</Tipo>
+        <Apelido />
+        <Acesso2 />
+      </Endereco>
+      <Endereco>
+        <Id>8</Id>
+        <Nome>M8</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA</Tipo>
+        <Apelido />
+        <Acesso2 />
+      </Endereco>
+      <Endereco>
+        <Id>9</Id>
+        <Nome>M9</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA</Tipo>
+        <Apelido />
+        <Acesso2 />
+      </Endereco>
+      <Endereco>
+        <Id>10</Id>
+        <Nome>M10</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA</Tipo>
+        <Apelido />
+        <Acesso2 />
+      </Endereco>
+    </lstMemoria>
+    <lstTemporizador>
+      <Endereco>
+        <Id>1</Id>
+        <Nome>T1</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_TEMPORIZADOR</Tipo>
+        <Apelido />
+        <Acesso2>T1.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>2</Id>
+        <Nome>T2</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_TEMPORIZADOR</Tipo>
+        <Apelido />
+        <Acesso2>T2.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>3</Id>
+        <Nome>T3</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_TEMPORIZADOR</Tipo>
+        <Apelido />
+        <Acesso2>T3.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>4</Id>
+        <Nome>T4</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_TEMPORIZADOR</Tipo>
+        <Apelido />
+        <Acesso2>T4.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>5</Id>
+        <Nome>T5</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_TEMPORIZADOR</Tipo>
+        <Apelido />
+        <Acesso2>T5.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>6</Id>
+        <Nome>T6</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_TEMPORIZADOR</Tipo>
+        <Apelido />
+        <Acesso2>T6.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>7</Id>
+        <Nome>T7</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_TEMPORIZADOR</Tipo>
+        <Apelido />
+        <Acesso2>T7.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>8</Id>
+        <Nome>T8</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_TEMPORIZADOR</Tipo>
+        <Apelido />
+        <Acesso2>T8.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>9</Id>
+        <Nome>T9</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_TEMPORIZADOR</Tipo>
+        <Apelido />
+        <Acesso2>T9.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>10</Id>
+        <Nome>T10</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_TEMPORIZADOR</Tipo>
+        <Apelido />
+        <Acesso2>T10.EN</Acesso2>
+      </Endereco>
+    </lstTemporizador>
+    <lstContador>
+      <Endereco>
+        <Id>1</Id>
+        <Nome>C1</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_CONTADOR</Tipo>
+        <Apelido />
+        <Acesso2>C1.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>2</Id>
+        <Nome>C2</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_CONTADOR</Tipo>
+        <Apelido />
+        <Acesso2>C2.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>3</Id>
+        <Nome>C3</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_CONTADOR</Tipo>
+        <Apelido />
+        <Acesso2>C3.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>4</Id>
+        <Nome>C4</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_CONTADOR</Tipo>
+        <Apelido />
+        <Acesso2>C4.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>5</Id>
+        <Nome>C5</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_CONTADOR</Tipo>
+        <Apelido />
+        <Acesso2>C5.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>6</Id>
+        <Nome>C6</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_CONTADOR</Tipo>
+        <Apelido />
+        <Acesso2>C6.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>7</Id>
+        <Nome>C7</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_CONTADOR</Tipo>
+        <Apelido />
+        <Acesso2>C7.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>8</Id>
+        <Nome>C8</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_CONTADOR</Tipo>
+        <Apelido />
+        <Acesso2>C8.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>9</Id>
+        <Nome>C9</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_CONTADOR</Tipo>
+        <Apelido />
+        <Acesso2>C9.EN</Acesso2>
+      </Endereco>
+      <Endereco>
+        <Id>10</Id>
+        <Nome>C10</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_MEMORIA_CONTADOR</Tipo>
+        <Apelido />
+        <Acesso2>C10.EN</Acesso2>
+      </Endereco>
+    </lstContador>
+    <lstIOEntrada>
+      <Endereco>
+        <Id>1</Id>
+        <Nome>E1(P1.0)</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_ENTRADA</Tipo>
+        <Apelido>STOP</Apelido>
+        <Acesso2 />
+      </Endereco>
+      <Endereco>
+        <Id>2</Id>
+        <Nome>E2(P1.1)</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_ENTRADA</Tipo>
+        <Apelido>START</Apelido>
+        <Acesso2 />
+      </Endereco>
+    </lstIOEntrada>
+    <lstIOSaida>
+      <Endereco>
+        <Id>6</Id>
+        <Nome>S6(P1.5)</Nome>
+        <BitsPorta>8</BitsPorta>
+        <Valor>false</Valor>
+        <Tipo>DIGITAL_SAIDA</Tipo>
+        <Apelido>LAMP</Apelido>
+        <Acesso2 />
+      </Endereco>
+    </lstIOSaida>
+  </endereco>
+  <dispositivo>
+    <Bit>
+      <TipoPino>IO_DIGITAL_ENTRADA_OU_SAIDA</TipoPino>
+      <TipoDefinido>DIGITAL_ENTRADA</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>IO_DIGITAL_ENTRADA_OU_SAIDA</TipoPino>
+      <TipoDefinido>DIGITAL_ENTRADA</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>IO_DIGITAL_ENTRADA_OU_SAIDA</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>IO_DIGITAL_ENTRADA_OU_SAIDA</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>IO_DIGITAL_ENTRADA_OU_SAIDA</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>IO_DIGITAL_ENTRADA_OU_SAIDA</TipoPino>
+      <TipoDefinido>DIGITAL_SAIDA</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>IO_DIGITAL_ENTRADA_OU_SAIDA</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>IO_DIGITAL_ENTRADA_OU_SAIDA</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>NENHUM</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>NENHUM</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>NENHUM</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>NENHUM</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>NENHUM</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>NENHUM</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>IO_DIGITAL_ENTRADA_OU_SAIDA</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <Bit>
+      <TipoPino>IO_DIGITAL_ENTRADA_OU_SAIDA</TipoPino>
+      <TipoDefinido>NENHUM</TipoDefinido>
+    </Bit>
+    <EnderecoPinos>
+      <Id>1</Id>
+      <Nome>E1(P1.0)</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>DIGITAL_ENTRADA</Tipo>
+      <Apelido>STOP</Apelido>
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>2</Id>
+      <Nome>E2(P1.1)</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>DIGITAL_ENTRADA</Tipo>
+      <Apelido>START</Apelido>
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>3</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>4</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>5</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>6</Id>
+      <Nome>S6(P1.5)</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>DIGITAL_SAIDA</Tipo>
+      <Apelido>LAMP</Apelido>
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>7</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>8</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>9</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>10</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>11</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>12</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>13</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>14</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>15</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <EnderecoPinos>
+      <Id>16</Id>
+      <Nome>ERROR</Nome>
+      <BitsPorta>8</BitsPorta>
+      <Valor>false</Valor>
+      <Tipo>NENHUM</Tipo>
+      <Apelido />
+      <Acesso2 />
+    </EnderecoPinos>
+    <Id>1</Id>
+    <Fabricante>Texas Instruments</Fabricante>
+    <Serie>MSP430</Serie>
+    <Modelo>MSP430F2013</Modelo>
+    <QtdPortas>2</QtdPortas>
+    <QtdBitsPorta>8</QtdBitsPorta>
+  </dispositivo>
+  <Nome>seal-in-circuit.xml</Nome>
+  <StsPrograma>SALVO</StsPrograma>
+  <linhas>
+    <Line>
+      <Simbolo>
+        <Instrucao>NormallyClosedContact</Instrucao>
+        <Operando xsi:type="Endereco">
+          <Id>1</Id>
+          <Nome>E1(P1.0)</Nome>
+          <BitsPorta>8</BitsPorta>
+          <Valor>false</Valor>
+          <Tipo>DIGITAL_ENTRADA</Tipo>
+          <Apelido>STOP</Apelido>
+          <Acesso2 />
+        </Operando>
+      </Simbolo>
+      <Simbolo>
+        <Instrucao>ParallelBranchBegin</Instrucao>
+      </Simbolo>
+      <Simbolo>
+        <Instrucao>NormallyOpenContact</Instrucao>
+        <Operando xsi:type="Endereco">
+          <Id>2</Id>
+          <Nome>E2(P1.1)</Nome>
+          <BitsPorta>8</BitsPorta>
+          <Valor>false</Valor>
+          <Tipo>DIGITAL_ENTRADA</Tipo>
+          <Apelido>START</Apelido>
+          <Acesso2 />
+        </Operando>
+      </Simbolo>
+      <Simbolo>
+        <Instrucao>ParallelBranchNext</Instrucao>
+      </Simbolo>
+      <Simbolo>
+        <Instrucao>NormallyOpenContact</Instrucao>
+        <Operando xsi:type="Endereco">
+          <Id>6</Id>
+          <Nome>S6(P1.5)</Nome>
+          <BitsPorta>8</BitsPorta>
+          <Valor>false</Valor>
+          <Tipo>DIGITAL_SAIDA</Tipo>
+          <Apelido>LAMP</Apelido>
+          <Acesso2 />
+        </Operando>
+      </Simbolo>
+      <Simbolo>
+        <Instrucao>ParallelBranchEnd</Instrucao>
+      </Simbolo>
+      <outputs>
+        <Simbolo>
+          <Instrucao>OutputCoil</Instrucao>
+          <Operando xsi:type="Endereco">
+            <Id>6</Id>
+            <Nome>S6(P1.5)</Nome>
+            <BitsPorta>8</BitsPorta>
+            <Valor>false</Valor>
+            <Tipo>DIGITAL_SAIDA</Tipo>
+            <Apelido>LAMP</Apelido>
+            <Acesso2 />
+          </Operando>
+        </Simbolo>
+      </outputs>
+    </Line>
+  </linhas>
+</LadderProgram>
