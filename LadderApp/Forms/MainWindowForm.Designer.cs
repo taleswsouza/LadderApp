@@ -520,7 +520,7 @@ namespace LadderApp
             this.mnuGravarLadderNoExecutavel,
             this.mnuSolicitarSenhaParaLerLadder});
             this.ladderToolStripMenuItem1.Name = "ladderToolStripMenuItem1";
-            this.ladderToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.ladderToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
             this.ladderToolStripMenuItem1.Text = "&Ladder";
             // 
             // mnuGravarLadderNoExecutavel
@@ -529,7 +529,7 @@ namespace LadderApp
             this.mnuGravarLadderNoExecutavel.CheckOnClick = true;
             this.mnuGravarLadderNoExecutavel.CheckState = System.Windows.Forms.CheckState.Checked;
             this.mnuGravarLadderNoExecutavel.Name = "mnuGravarLadderNoExecutavel";
-            this.mnuGravarLadderNoExecutavel.Size = new System.Drawing.Size(192, 22);
+            this.mnuGravarLadderNoExecutavel.Size = new System.Drawing.Size(186, 22);
             this.mnuGravarLadderNoExecutavel.Text = "Save";
             this.mnuGravarLadderNoExecutavel.CheckedChanged += new System.EventHandler(this.mnuGravarLadderNoExecutavel_CheckedChanged);
             // 
@@ -553,14 +553,14 @@ namespace LadderApp
             // 
             this.baixarProgramaToolStripMenuItem.Name = "baixarProgramaToolStripMenuItem";
             this.baixarProgramaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.baixarProgramaToolStripMenuItem.Text = "&Upload program";
+            this.baixarProgramaToolStripMenuItem.Text = "&Download program";
             this.baixarProgramaToolStripMenuItem.Click += new System.EventHandler(this.baixarProgramaToolStripMenuItem_Click);
             // 
             // lerProgramaToolStripMenuItem
             // 
             this.lerProgramaToolStripMenuItem.Name = "lerProgramaToolStripMenuItem";
             this.lerProgramaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.lerProgramaToolStripMenuItem.Text = "&Download program";
+            this.lerProgramaToolStripMenuItem.Text = "&Upload program";
             this.lerProgramaToolStripMenuItem.Click += new System.EventHandler(this.lerProgramaToolStripMenuItem_Click);
             // 
             // mnuGerarExecutável
@@ -587,7 +587,7 @@ namespace LadderApp
             // newWindowToolStripMenuItem
             // 
             this.newWindowToolStripMenuItem.Name = "newWindowToolStripMenuItem";
-            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.newWindowToolStripMenuItem.Text = "&New Window";
             this.newWindowToolStripMenuItem.Visible = false;
             this.newWindowToolStripMenuItem.Click += new System.EventHandler(this.ShowNewForm);
@@ -595,7 +595,7 @@ namespace LadderApp
             // cascadeToolStripMenuItem
             // 
             this.cascadeToolStripMenuItem.Name = "cascadeToolStripMenuItem";
-            this.cascadeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cascadeToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.cascadeToolStripMenuItem.Text = "&Cascade";
             this.cascadeToolStripMenuItem.Visible = false;
             this.cascadeToolStripMenuItem.Click += new System.EventHandler(this.CascadeToolStripMenuItem_Click);
@@ -603,7 +603,7 @@ namespace LadderApp
             // tileVerticalToolStripMenuItem
             // 
             this.tileVerticalToolStripMenuItem.Name = "tileVerticalToolStripMenuItem";
-            this.tileVerticalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tileVerticalToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.tileVerticalToolStripMenuItem.Text = "Tile &Vertical";
             this.tileVerticalToolStripMenuItem.Visible = false;
             this.tileVerticalToolStripMenuItem.Click += new System.EventHandler(this.TileVerticleToolStripMenuItem_Click);
@@ -611,7 +611,7 @@ namespace LadderApp
             // tileHorizontalToolStripMenuItem
             // 
             this.tileHorizontalToolStripMenuItem.Name = "tileHorizontalToolStripMenuItem";
-            this.tileHorizontalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tileHorizontalToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.tileHorizontalToolStripMenuItem.Text = "Tile &Horizontal";
             this.tileHorizontalToolStripMenuItem.Visible = false;
             this.tileHorizontalToolStripMenuItem.Click += new System.EventHandler(this.TileHorizontalToolStripMenuItem_Click);
@@ -619,14 +619,14 @@ namespace LadderApp
             // ArrangeProjetoToolStripMenuItem
             // 
             this.ArrangeProjetoToolStripMenuItem.Name = "ArrangeProjetoToolStripMenuItem";
-            this.ArrangeProjetoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ArrangeProjetoToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.ArrangeProjetoToolStripMenuItem.Text = "&Reset Windows";
             this.ArrangeProjetoToolStripMenuItem.Click += new System.EventHandler(this.ArrangeProjetoToolStripMenuItem_Click);
             // 
             // closeAllToolStripMenuItem
             // 
             this.closeAllToolStripMenuItem.Name = "closeAllToolStripMenuItem";
-            this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.closeAllToolStripMenuItem.Text = "C&lose All";
             this.closeAllToolStripMenuItem.Visible = false;
             this.closeAllToolStripMenuItem.Click += new System.EventHandler(this.CloseAllToolStripMenuItem_Click);
@@ -634,7 +634,7 @@ namespace LadderApp
             // arrangeIconsToolStripMenuItem
             // 
             this.arrangeIconsToolStripMenuItem.Name = "arrangeIconsToolStripMenuItem";
-            this.arrangeIconsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.arrangeIconsToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.arrangeIconsToolStripMenuItem.Text = "&Arrange Icons";
             this.arrangeIconsToolStripMenuItem.Visible = false;
             this.arrangeIconsToolStripMenuItem.Click += new System.EventHandler(this.ArrangeIconsToolStripMenuItem_Click);
@@ -656,7 +656,7 @@ namespace LadderApp
             this.contentsToolStripMenuItem.Enabled = false;
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.contentsToolStripMenuItem.Text = "&Contents";
             this.contentsToolStripMenuItem.Visible = false;
             this.contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
@@ -666,7 +666,7 @@ namespace LadderApp
             this.indexToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("indexToolStripMenuItem.Image")));
             this.indexToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
-            this.indexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.indexToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.indexToolStripMenuItem.Text = "&Content";
             this.indexToolStripMenuItem.Click += new System.EventHandler(this.indexToolStripMenuItem_Click);
             // 
@@ -676,19 +676,19 @@ namespace LadderApp
             this.searchToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("searchToolStripMenuItem.Image")));
             this.searchToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            this.searchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.searchToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.searchToolStripMenuItem.Text = "&Search";
             this.searchToolStripMenuItem.Visible = false;
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(165, 6);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.aboutToolStripMenuItem.Text = "&About ...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -939,7 +939,7 @@ namespace LadderApp
             this.PrintPreviewDialog1.Name = "printPreviewDialog2";
             this.PrintPreviewDialog1.Visible = false;
             // 
-            // EditorLadder
+            // MainWindowForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(843, 558);
@@ -949,7 +949,7 @@ namespace LadderApp
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "EditorLadder";
+            this.Name = "MainWindowForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Ladder to microcontrollers";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
