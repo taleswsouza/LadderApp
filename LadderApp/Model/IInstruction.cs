@@ -5,14 +5,14 @@ using System.Drawing;
 
 namespace LadderApp
 {
-    public interface ISymbol
+    public interface IInstruction
     {
-        void setCI(OpCode codigo);
-        OpCode getCI();
-        Object[] getOperandos();
-        Object getOperandos(int posicao);
-        void setOperando(int iNumOperando, Object valor);
-        void setOperando(Object[] operandos);
+        OperationCode OpCode { get; set; }
+        Object[] Operands { get; set; }
+        int GetNumberOfOperands();
+        bool IsAllOperandsOk();
+        Object GetOperand(int posicao);
+        void SetOperand(int position, Object value);
 
         Size tamanhoXY
         {

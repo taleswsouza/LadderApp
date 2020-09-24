@@ -72,7 +72,7 @@ namespace LadderApp
                 if (txtCabecalho.Length > 0)
                 {
                     this.txtCabecalho.Insert(txtCabecalho.Length);
-                    this.txtCabecalho.Insert(OpCode.CABECALHO_TAMANHO);
+                    this.txtCabecalho.Insert(OperationCode.HeadLenght);
 
                     txtInternalWithTypeCast = txtInternalWithTypeCast.Insert(this.posCabecalho2InternalWithTypeCast, txtCabecalho.ToStringInternalWithTypeCast() + ", ");
                     txtInternal = txtInternal.Insert(this.posCabecalho2Internal, txtCabecalho.ToStringInternal());
@@ -109,12 +109,12 @@ namespace LadderApp
         }
 
 
-        public void Add(OpCode _ci)
+        public void Add(OperationCode _ci)
         {
             Add((Int32)_ci);
         }
 
-        internal void Insert(OpCode _ci)
+        internal void Insert(OperationCode _ci)
         {
             Insert((Int32)_ci);
         }
@@ -125,45 +125,45 @@ namespace LadderApp
             Add((int)_end.Indice);
         }
 
-        public void Add(Symbol _sb)
+        public void Add(Instruction instruction)
         {
-            Add(_sb.getCI());
+            Add(instruction.OpCode);
 
-            switch (_sb.getCI())
+            switch (instruction.OpCode)
             {
-                case OpCode.CONTADOR:
-                    if (_sb.iNumOperandos > 0)
+                case OperationCode.Counter:
+                    if (instruction.IsAllOperandsOk())
                     {
-                        if (_sb.getOperandos(0) != null)
-                            if (_sb.getOperandos(0).GetType().Name == Address.ClassName())
+                        if (instruction.IsAllOperandsOk())
+                            if (instruction.GetOperand(0).GetType().Name == Address.ClassName())
                             {
-                                Add(((Address)_sb.getOperandos(0)).Indice);
-                                Add(((Address)_sb.getOperandos(0)).Contador.Tipo);
-                                Add(((Address)_sb.getOperandos(0)).Contador.Preset);
+                                Add(((Address)instruction.GetOperand(0)).Indice);
+                                Add(((Address)instruction.GetOperand(0)).Contador.Tipo);
+                                Add(((Address)instruction.GetOperand(0)).Contador.Preset);
                             }
                     }
                     break;
-                case OpCode.TEMPORIZADOR:
-                    if (_sb.iNumOperandos > 0)
+                case OperationCode.Timer:
+                    if (instruction.IsAllOperandsOk())
                     {
-                        if (_sb.getOperandos(0) != null)
-                            if (_sb.getOperandos(0).GetType().Name == Address.ClassName())
+                        if (instruction.IsAllOperandsOk())
+                            if (instruction.GetOperand(0).GetType().Name == Address.ClassName())
                             {
-                                Add(((Address)_sb.getOperandos(0)).Indice);
-                                Add(((Address)_sb.getOperandos(0)).Temporizador.Tipo);
-                                Add(((Address)_sb.getOperandos(0)).Temporizador.BaseTempo);
-                                Add(((Address)_sb.getOperandos(0)).Temporizador.Preset);
+                                Add(((Address)instruction.GetOperand(0)).Indice);
+                                Add(((Address)instruction.GetOperand(0)).Temporizador.Tipo);
+                                Add(((Address)instruction.GetOperand(0)).Temporizador.BaseTempo);
+                                Add(((Address)instruction.GetOperand(0)).Temporizador.Preset);
                             }
                     }
                     break;
                 default:
-                    if (_sb.iNumOperandos > 0)
+                    if (instruction.IsAllOperandsOk())
                     {
-                        for (int i = 0; i < _sb.iNumOperandos; i++)
+                        for (int i = 0; i < instruction.GetNumberOfOperands(); i++)
                         {
-                            if (_sb.getOperandos(i) != null)
-                                if (_sb.getOperandos(i).GetType().Name == Address.ClassName())
-                                    Add((Address)_sb.getOperandos(i));
+                            if (instruction.GetOperand(i) != null)
+                                if (instruction.GetOperand(i).GetType().Name == Address.ClassName())
+                                    Add((Address)instruction.GetOperand(i));
                         }
                     }
                     break;

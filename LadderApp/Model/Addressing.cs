@@ -70,28 +70,28 @@ namespace LadderApp
         }
 
 
-        public List<Address> ListaNomes(OpCode _ci)
+        public List<Address> ListaNomes(OperationCode _ci)
         {
             List<Address> _listaEnderecos = new List<Address>();
             List<AddressTypeEnum> tiposListados = new List<AddressTypeEnum>();
             List<Address> _lstGenerica;
 
-            switch(_ci)
+            switch (_ci)
             {
-                case OpCode.CONTATO_NA:
-                case OpCode.CONTATO_NF:
+                case OperationCode.NormallyOpenContact:
+                case OperationCode.NormallyClosedContact:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_ENTRADA);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR);
                     break;
-                case OpCode.TEMPORIZADOR:
+                case OperationCode.Timer:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR);
                     break;
-                case OpCode.CONTADOR:
+                case OperationCode.Counter:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR);
                     break;
-                case OpCode.BOBINA_SAIDA:
+                case OperationCode.OutputCoil:
                     tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA);
                     tiposListados.Add(AddressTypeEnum.DIGITAL_SAIDA);
                     break;
@@ -256,7 +256,6 @@ namespace LadderApp
                     if (!_lstE[i].EmUso)
                     {
                         _lstE[i] = null;
-                        GC.Collect();
                         _lstE.RemoveAt(i);
                     }
                     else

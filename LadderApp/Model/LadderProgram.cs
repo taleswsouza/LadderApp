@@ -33,7 +33,8 @@ namespace LadderApp
         }
 
         private String nomePrograma = "";
-        public String Nome{
+        public String Nome
+        {
             get
             {
                 if (PathFile == "")
@@ -229,27 +230,27 @@ namespace LadderApp
                         break;
                 } /// switch
             }
-           
+
         }
 
         [XmlIgnore]
         public Address auxToggleBitPulse = null;
 
 
-        public void ExecutaSimuladoContadores(Symbol _sb, Address _endContador)
+        public void ExecutaSimuladoContadores(Instruction instruction, Address _endContador)
         {
 
             switch (_endContador.Contador.Tipo)
-	        {
-	            case 0: // Contador Crescente
+            {
+                case 0: // Contador Crescente
                     if (_endContador.Contador.Reset == true)
-		            {
+                    {
                         _endContador.Valor = false;
                         _endContador.Contador.Acumulado = 0;
                         _endContador.Contador.Reset = false;
                     }
                     if (_endContador.Contador.EN == true && _endContador.Contador.Pulso == true)
-		            {
+                    {
                         _endContador.Contador.Pulso = false;
 
                         if (_endContador.Contador.Acumulado <= Int32.MaxValue)
@@ -260,18 +261,18 @@ namespace LadderApp
                             else
                                 _endContador.Valor = false;
                         }
-		            }
-		            break;
+                    }
+                    break;
 
-	            case 1: // Contador Decrescente
+                case 1: // Contador Decrescente
                     if (_endContador.Contador.Reset == true)
-		            {
+                    {
                         _endContador.Contador.Acumulado = _endContador.Contador.Preset;
                         _endContador.Valor = false;
                         _endContador.Contador.Reset = false;
                     }
                     if (_endContador.Contador.EN == true && _endContador.Contador.Pulso == true)
-		            {
+                    {
                         _endContador.Contador.Pulso = false;
                         if (_endContador.Contador.Acumulado > 0)
                         {
@@ -282,12 +283,12 @@ namespace LadderApp
                             else
                                 _endContador.Valor = false;
                         }
-		            }
-		            break;
+                    }
+                    break;
 
-	            default:
-		            break;
-	        }
+                default:
+                    break;
+            }
             if (_endContador.Contador.EN == false)
                 _endContador.Contador.Pulso = true;
 
@@ -306,18 +307,18 @@ namespace LadderApp
             {
                 /// cria a linha
                 op.Add(new SuporteConjunto());
-                foreach (Symbol _sb in _lc.simbolos)
+                foreach (Instruction instruction in _lc.instructions)
                 {
-                    switch (_sb.getCI())
+                    switch (instruction.OpCode)
                     {
-                        case OpCode.PARALELO_INICIAL:
+                        case OperationCode.ParallelBranchBegin:
                             /// cria o paralelo
                             op.Add(new SuporteConjunto());
                             /// cria o paralelo inicial
                             op.Add(new SuporteConjunto());
 
                             break;
-                        case OpCode.PARALELO_FINAL:
+                        case OperationCode.ParallelBranchEnd:
                             /// Atualiza o paralelo
                             if (op[op.Count - 2].bIniciado)
                                 op[op.Count - 2].valor = op[op.Count - 2].valor || op[op.Count - 1].valor;
@@ -340,7 +341,7 @@ namespace LadderApp
 
 
                             break;
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.ParallelBranchNext:
                             /// Atualiza o paralelo
                             if (op[op.Count - 2].bIniciado)
                                 op[op.Count - 2].valor = op[op.Count - 2].valor || op[op.Count - 1].valor;
@@ -357,13 +358,13 @@ namespace LadderApp
 
                             break;
                         default:
-                            switch (_sb.getCI())
+                            switch (instruction.OpCode)
                             {
-                                case OpCode.CONTATO_NA:
-                                    bAuxValor = ((Address)_sb.getOperandos(0)).Valor;
+                                case OperationCode.NormallyOpenContact:
+                                    bAuxValor = ((Address)instruction.GetOperand(0)).Valor;
                                     break;
-                                case OpCode.CONTATO_NF:
-                                    bAuxValor = !((Address)_sb.getOperandos(0)).Valor;
+                                case OperationCode.NormallyClosedContact:
+                                    bAuxValor = !((Address)instruction.GetOperand(0)).Valor;
                                     break;
                             }
 
@@ -378,46 +379,46 @@ namespace LadderApp
                 }
 
                 /// atribui o resultado final da linha nas saidas
-                foreach (Symbol _sb in _lc.saida)
+                foreach (Instruction instruction in _lc.outputs)
                 {
-                    switch (_sb.getCI())
+                    switch (instruction.OpCode)
                     {
-                        case OpCode.BOBINA_SAIDA:
-                        case OpCode.TEMPORIZADOR:
-                        case OpCode.CONTADOR:
-                        case OpCode.RESET:
+                        case OperationCode.OutputCoil:
+                        case OperationCode.Timer:
+                        case OperationCode.Counter:
+                        case OperationCode.Reset:
 
-                            if (_sb.getCI() == OpCode.BOBINA_SAIDA)
-                                ((Address)_sb.getOperandos(0)).Valor = (bool)op[op.Count - 1].valor;
-                            else if (_sb.getCI() == OpCode.TEMPORIZADOR)
+                            if (instruction.OpCode == OperationCode.OutputCoil)
+                                ((Address)instruction.GetOperand(0)).Valor = (bool)op[op.Count - 1].valor;
+                            else if (instruction.OpCode == OperationCode.Timer)
                             {
-                                ((Address)_sb.getOperandos(0)).Temporizador.EN = (bool)op[op.Count - 1].valor;
+                                ((Address)instruction.GetOperand(0)).Temporizador.EN = (bool)op[op.Count - 1].valor;
                             }
-                            else if (_sb.getCI() == OpCode.CONTADOR)
+                            else if (instruction.OpCode == OperationCode.Counter)
                             {
-                                ((Address)_sb.getOperandos(0)).Contador.EN = (bool)op[op.Count - 1].valor;
-                                ExecutaSimuladoContadores(_sb, ((Address)_sb.getOperandos(0)));
+                                ((Address)instruction.GetOperand(0)).Contador.EN = (bool)op[op.Count - 1].valor;
+                                ExecutaSimuladoContadores(instruction, ((Address)instruction.GetOperand(0)));
                             }
-                            else if (_sb.getCI() == OpCode.RESET)
+                            else if (instruction.OpCode == OperationCode.Reset)
                             {
                                 if ((bool)op[op.Count - 1].valor)
                                 {
-                                    switch (((Address)_sb.getOperandos(0)).TpEnderecamento)
+                                    switch (((Address)instruction.GetOperand(0)).TpEnderecamento)
                                     {
                                         case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                                            ((Address)_sb.getOperandos(0)).Contador.Reset = true;
-                                            ExecutaSimuladoContadores(_sb, ((Address)_sb.getOperandos(0)));
+                                            ((Address)instruction.GetOperand(0)).Contador.Reset = true;
+                                            ExecutaSimuladoContadores(instruction, ((Address)instruction.GetOperand(0)));
                                             break;
 
                                         case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
-                                            ((Address)_sb.getOperandos(0)).Temporizador.Reset = true;
+                                            ((Address)instruction.GetOperand(0)).Temporizador.Reset = true;
                                             break;
 
                                         default:
                                             break;
                                     }
                                 }
-                            } 
+                            }
                             break;
                         default:
                             break;
@@ -427,8 +428,6 @@ namespace LadderApp
 
                 op.RemoveAt(op.Count - 1);
             }
-
-            GC.Collect();
 
             if (auxToggleBitPulse != null)
             {
@@ -475,7 +474,7 @@ namespace LadderApp
                     else
                     {
                         txtCodigoInterpretavel.AddCabecalho();
-                        txtCodigoInterpretavel.txtCabecalho.Add(OpCode.CABECALHO_SENHA_0);
+                        txtCodigoInterpretavel.txtCabecalho.Add(OperationCode.HeadPassword0);
                         txtCodigoInterpretavel.txtCabecalho.Add(_strSenha.Length);
                         txtCodigoInterpretavel.txtCabecalho.Add(_strSenha);
                     }
@@ -501,7 +500,7 @@ namespace LadderApp
                 return false;
 
             //txtCodigoInterpretavel.Add("@laddermic.com");
-            txtCodigoInterpretavel.Add(OpCode.NENHUM);
+            txtCodigoInterpretavel.Add(OperationCode.None);
 
             /// caso senha para inserir senha
             /// realiza recuperação da senha
@@ -529,43 +528,43 @@ namespace LadderApp
             foreach (Line _lc in this.linhasPrograma)
             {
                 linha = "";
-                foreach(Symbol _sb in _lc.simbolos)
+                foreach (Instruction instruction in _lc.instructions)
                 {
-                    switch (_sb.getCI())
+                    switch (instruction.OpCode)
                     {
-                        case OpCode.PARALELO_INICIAL:
+                        case OperationCode.ParallelBranchBegin:
                             if (bIniciado)
                                 linha += " && ";
 
                             bIniciado = false;
                             linha += "((";
                             break;
-                        case OpCode.PARALELO_FINAL:
+                        case OperationCode.ParallelBranchEnd:
                             linha += "))";
                             break;
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.ParallelBranchNext:
                             bIniciado = false;
                             linha += ") || (";
                             break;
                         default:
                             if (bIniciado)
                                 linha += " && ";
-                            switch(_sb.getCI())
+                            switch (instruction.OpCode)
                             {
-                                case OpCode.CONTATO_NA:
-                                    linha += ((Address)_sb.getOperandos(0)).Acesso;
-                                    ((Address)_sb.getOperandos(0)).EmUso = true;
+                                case OperationCode.NormallyOpenContact:
+                                    linha += ((Address)instruction.GetOperand(0)).Acesso;
+                                    ((Address)instruction.GetOperand(0)).EmUso = true;
                                     break;
-                                case OpCode.CONTATO_NF:
-                                    linha += "!" + ((Address)_sb.getOperandos(0)).Acesso;
-                                    ((Address)_sb.getOperandos(0)).EmUso = true;
+                                case OperationCode.NormallyClosedContact:
+                                    linha += "!" + ((Address)instruction.GetOperand(0)).Acesso;
+                                    ((Address)instruction.GetOperand(0)).EmUso = true;
                                     break;
                             }
                             bIniciado = true;
                             break;
                     }
 
-                    txtCodigoInterpretavel.Add(_sb);
+                    txtCodigoInterpretavel.Add(instruction);
                 }
                 bIniciado = false;
 
@@ -578,46 +577,46 @@ namespace LadderApp
 
                 OperandosLinha.Clear();
                 OperandosSELinha.Clear();
-                foreach (Symbol _sb in _lc.saida)
+                foreach (Instruction instruction in _lc.outputs)
                 {
-                    switch (_sb.getCI())
+                    switch (instruction.OpCode)
                     {
-                        case OpCode.BOBINA_SAIDA:
-                        case OpCode.TEMPORIZADOR:
-                        case OpCode.CONTADOR:
-                        case OpCode.RESET:
-                            txtCodigoInterpretavel.Add(_sb);
+                        case OperationCode.OutputCoil:
+                        case OperationCode.Timer:
+                        case OperationCode.Counter:
+                        case OperationCode.Reset:
+                            txtCodigoInterpretavel.Add(instruction);
 
-                            if (_sb.getCI() == OpCode.BOBINA_SAIDA)
+                            if (instruction.OpCode == OperationCode.OutputCoil)
                             {
-                                OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso);
-                                ((Address)_sb.getOperandos(0)).EmUso = true;
+                                OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso);
+                                ((Address)instruction.GetOperand(0)).EmUso = true;
                             }
-                            else if (_sb.getCI() == OpCode.TEMPORIZADOR)
+                            else if (instruction.OpCode == OperationCode.Timer)
                             {
-                                OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso2);
-                                ((Address)_sb.getOperandos(0)).EmUso = true;
+                                OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso2);
+                                ((Address)instruction.GetOperand(0)).EmUso = true;
                             }
-                            else if (_sb.getCI() == OpCode.CONTADOR)
+                            else if (instruction.OpCode == OperationCode.Counter)
                             {
-                                OperandosLinha.Add(((Address)_sb.getOperandos(0)).Acesso2);
-                                FuncoesAposLinha += " ExecContador(&" + ((Address)_sb.getOperandos(0)).Nome + ");";
-                                ((Address)_sb.getOperandos(0)).EmUso = true;
+                                OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso2);
+                                FuncoesAposLinha += " ExecContador(&" + ((Address)instruction.GetOperand(0)).Nome + ");";
+                                ((Address)instruction.GetOperand(0)).EmUso = true;
                             }
-                            else if (_sb.getCI() == OpCode.RESET)
+                            else if (instruction.OpCode == OperationCode.Reset)
                             {
-                                OperandosSELinha.Add(((Address)_sb.getOperandos(0)).Nome + ".Reset = 1;");
-                                ((Address)_sb.getOperandos(0)).EmUso = true;
+                                OperandosSELinha.Add(((Address)instruction.GetOperand(0)).Nome + ".Reset = 1;");
+                                ((Address)instruction.GetOperand(0)).EmUso = true;
 
-                                switch (((Address)_sb.getOperandos(0)).TpEnderecamento)
+                                switch (((Address)instruction.GetOperand(0)).TpEnderecamento)
                                 {
                                     case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                                        OperandosSELinha.Add("ExecContador(&" + ((Address)_sb.getOperandos(0)).Nome + ");");
+                                        OperandosSELinha.Add("ExecContador(&" + ((Address)instruction.GetOperand(0)).Nome + ");");
                                         break;
                                     default:
                                         break;
                                 }
-                            } 
+                            }
                             break;
                         default:
                             break;
@@ -658,10 +657,10 @@ namespace LadderApp
 
                 doc += Environment.NewLine;
 
-                txtCodigoInterpretavel.Add(OpCode.FIM_DA_LINHA);
+                txtCodigoInterpretavel.Add(OperationCode.LineEnd);
             }
 
-            txtCodigoInterpretavel.Add(OpCode.NENHUM);
+            txtCodigoInterpretavel.Add(OperationCode.None);
 
             _result = MessageBox.Show("Do you want to generate the .C file below? " + Environment.NewLine + doc, "Confirmation: Generate .C file?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
@@ -749,14 +748,14 @@ namespace LadderApp
                     }
                 }
 
-                    /// prepara composição de parametros e declaração de variáveis
-                    foreach (Address _endCada in endereco.lstMemoria)
-                        if (_endCada.EmUso)
-                        {
-                            /// prerapara a declaração dos endereços
-                            if (!_lstEndUsados.Contains(_endCada.EnderecoRaiz))
-                                _lstEndUsados.Add(_endCada.EnderecoRaiz);
-                        }
+                /// prepara composição de parametros e declaração de variáveis
+                foreach (Address _endCada in endereco.lstMemoria)
+                    if (_endCada.EmUso)
+                    {
+                        /// prerapara a declaração dos endereços
+                        if (!_lstEndUsados.Contains(_endCada.EnderecoRaiz))
+                            _lstEndUsados.Add(_endCada.EnderecoRaiz);
+                    }
 
                 /// Prepara a lista de endereços do tipo TPort - que será declarada
                 if (_lstEndUsados.Count > 0)
@@ -767,7 +766,7 @@ namespace LadderApp
                     DadosEnderecos = DadosEnderecos.Substring(0, DadosEnderecos.Length - 2) + ";" + Environment.NewLine;
                     _lstEndUsados.Clear();
                 }
-                
+
                 /// Adiciona os parametros dos endereços usados no programa
                 DadosParametros += "// timer parameters" + Environment.NewLine;
                 foreach (Address _endCada in endereco.lstTemporizador)
@@ -953,7 +952,7 @@ namespace LadderApp
                         DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_TIPO0#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_Tipo0_funcoes);
                     else
                         DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_TIPO0#", "");
-                    
+
                     if (_lstTiposTemporizadoresUsados.Contains(1))
                         DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_TIPO1#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_Tipo1_funcoes);
                     else
@@ -966,7 +965,7 @@ namespace LadderApp
                 msp430gcc.CriaArquivo("funcoes.c", DadosArquivoFuncoesC);
                 msp430gcc.CompilaMSP430gcc("funcoes");
 
-                
+
                 /// Prepara SETUPHARDARE
                 DadosArquivoSetupHardwareC = MicrocontrollersBaseCodeFilesResource.setupHardwareC.Replace("#SETUPIO#", DadosSetupIO);
                 DadosArquivoSetupHardwareC = DadosArquivoSetupHardwareC.Replace("#LEENTRADAS#", DadosLeEntradas);
@@ -974,11 +973,11 @@ namespace LadderApp
                 msp430gcc.CriaArquivo("setuphardware.c", DadosArquivoSetupHardwareC);
                 msp430gcc.CompilaMSP430gcc("setuphardware");
 
-                
+
                 /// Prepara INTERRUPCAO
                 msp430gcc.CriaArquivo("interrupcao.c", MicrocontrollersBaseCodeFilesResource.interrupcaoC);
                 msp430gcc.CompilaMSP430gcc("interrupcao");
-                
+
                 /// CRIA ELF
                 msp430gcc.CompilaELF(this.Nome);
 
@@ -1010,16 +1009,16 @@ namespace LadderApp
 
         private bool VerificaLinha(Line _linha)
         {
-            SymbolList _lst = new SymbolList();
+            InstructionList _lst = new InstructionList();
 
-            _lst.InsertAllWithClearBefore(_linha.saida);
+            _lst.InsertAllWithClearBefore(_linha.outputs);
 
             if (_lst.Count > 0)
             {
-                if (!(_lst.Contains(OpCode.BOBINA_SAIDA) ||
-                    _lst.Contains(OpCode.TEMPORIZADOR) ||
-                    _lst.Contains(OpCode.CONTADOR) ||
-                    _lst.Contains(OpCode.RESET)))
+                if (!(_lst.Contains(OperationCode.OutputCoil) ||
+                    _lst.Contains(OperationCode.Timer) ||
+                    _lst.Contains(OperationCode.Counter) ||
+                    _lst.Contains(OperationCode.Reset)))
                     return false;
             }
             else
@@ -1036,21 +1035,21 @@ namespace LadderApp
             if (!_lst.ExisteContadorDuplicado(lstContadoresUtilizados))
                 return false;
 
-            _lst.InsertAllWithClearBefore(_linha.simbolos);
+            _lst.InsertAllWithClearBefore(_linha.instructions);
 
             /// 1.1 - Verifica se a linha tem simbolos validos
             if (_lst.Count > 0)
-                if (_lst.Contains(OpCode.BOBINA_SAIDA) ||
-                    _lst.Contains(OpCode.TEMPORIZADOR) ||
-                    _lst.Contains(OpCode.CONTADOR) ||
-                    _lst.Contains(OpCode.RESET))
+                if (_lst.Contains(OperationCode.OutputCoil) ||
+                    _lst.Contains(OperationCode.Timer) ||
+                    _lst.Contains(OperationCode.Counter) ||
+                    _lst.Contains(OperationCode.Reset))
                     return false;
 
 
             /// 2.2 - Verifica se todos os simbolos tem os operandos minimos atribuidos
             if (!_lst.ContainsAllOperandos())
                 return false;
-            
+
             return true;
         }
 
@@ -1059,50 +1058,50 @@ namespace LadderApp
         {
             foreach (Line _lc in this.linhasPrograma)
             {
-                foreach (Symbol _sb in _lc.simbolos)
+                foreach (Instruction instruction in _lc.instructions)
                 {
-                    switch (_sb.getCI())
+                    switch (instruction.OpCode)
                     {
-                        case OpCode.NENHUM:
-                        case OpCode.INICIO_DA_LINHA:
-                        case OpCode.FIM_DA_LINHA:
-                        case OpCode.PARALELO_INICIAL:
-                        case OpCode.PARALELO_FINAL:
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.None:
+                        case OperationCode.LineBegin:
+                        case OperationCode.LineEnd:
+                        case OperationCode.ParallelBranchBegin:
+                        case OperationCode.ParallelBranchEnd:
+                        case OperationCode.ParallelBranchNext:
                             break;
                         default:
-                            _sb.setOperando(0, endereco.Find((Address)_sb.getOperandos(0)));
+                            instruction.SetOperand(0, endereco.Find((Address)instruction.GetOperand(0)));
                             break;
                     }
                 }
-                foreach (Symbol _sb in _lc.saida)
+                foreach (Instruction instruction in _lc.outputs)
                 {
-                    switch (_sb.getCI())
+                    switch (instruction.OpCode)
                     {
-                        case OpCode.NENHUM:
-                        case OpCode.INICIO_DA_LINHA:
-                        case OpCode.FIM_DA_LINHA:
-                        case OpCode.PARALELO_INICIAL:
-                        case OpCode.PARALELO_FINAL:
-                        case OpCode.PARALELO_PROXIMO:
+                        case OperationCode.None:
+                        case OperationCode.LineBegin:
+                        case OperationCode.LineEnd:
+                        case OperationCode.ParallelBranchBegin:
+                        case OperationCode.ParallelBranchEnd:
+                        case OperationCode.ParallelBranchNext:
                             break;
                         default:
-                            _sb.setOperando(0, endereco.Find((Address)_sb.getOperandos(0)));
+                            instruction.SetOperand(0, endereco.Find((Address)instruction.GetOperand(0)));
 
-                            if (_sb.getOperandos(0) != null)
+                            if (instruction.IsAllOperandsOk())
                             {
-                                if (_sb.getCI() == OpCode.CONTADOR)
+                                if (instruction.OpCode == OperationCode.Counter)
                                 {
-                                    ((Address)_sb.getOperandos(0)).Contador.Tipo = (Int32)_sb.getOperandos(1);
-                                    ((Address)_sb.getOperandos(0)).Contador.Preset = (Int32)_sb.getOperandos(2);
-                                    ((Address)_sb.getOperandos(0)).Contador.Acumulado = (Int32)_sb.getOperandos(3);
+                                    ((Address)instruction.GetOperand(0)).Contador.Tipo = (Int32)instruction.GetOperand(1);
+                                    ((Address)instruction.GetOperand(0)).Contador.Preset = (Int32)instruction.GetOperand(2);
+                                    ((Address)instruction.GetOperand(0)).Contador.Acumulado = (Int32)instruction.GetOperand(3);
                                 }
-                                else if (_sb.getCI() == OpCode.TEMPORIZADOR)
+                                else if (instruction.OpCode == OperationCode.Timer)
                                 {
-                                    ((Address)_sb.getOperandos(0)).Temporizador.Tipo = (Int32)_sb.getOperandos(1);
-                                    ((Address)_sb.getOperandos(0)).Temporizador.Preset = (Int32)_sb.getOperandos(2);
-                                    ((Address)_sb.getOperandos(0)).Temporizador.Acumulado = (Int32)_sb.getOperandos(3);
-                                    ((Address)_sb.getOperandos(0)).Temporizador.BaseTempo = (Int32)_sb.getOperandos(4);
+                                    ((Address)instruction.GetOperand(0)).Temporizador.Tipo = (Int32)instruction.GetOperand(1);
+                                    ((Address)instruction.GetOperand(0)).Temporizador.Preset = (Int32)instruction.GetOperand(2);
+                                    ((Address)instruction.GetOperand(0)).Temporizador.Acumulado = (Int32)instruction.GetOperand(3);
+                                    ((Address)instruction.GetOperand(0)).Temporizador.BaseTempo = (Int32)instruction.GetOperand(4);
                                 }
                             }
                             break;

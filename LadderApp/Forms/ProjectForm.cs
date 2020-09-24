@@ -12,7 +12,7 @@ namespace LadderApp
     {
         public LadderForm frmDiagLadder = null;
 
-       // composicao do projeto ladder
+        // composicao do projeto ladder
         public LadderProgram programa = new LadderProgram();
 
         public ProjectForm()
@@ -107,7 +107,7 @@ namespace LadderApp
                     if (!ValidaDiagrama())
                     {
                         AbreDiagramaLadder();
-                    } 
+                    }
                     break;
                 case "NoDispositivo":
                     DeviceForm frmDisp = new DeviceForm(programa.dispositivo);
@@ -280,7 +280,6 @@ namespace LadderApp
                     if (!_lstE[i].EmUso)
                     {
                         _lstE[i] = null;
-                        GC.Collect();
                         _lstE.RemoveAt(i);
                     }
                     else
@@ -290,7 +289,7 @@ namespace LadderApp
 
             foreach (Address el in _lstE)
             {
-                _NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Add(el.Nome, el.Nome + ( el.Apelido == "" ? "" : " - " + el.Apelido ));
+                _NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Add(el.Nome, el.Nome + (el.Apelido == "" ? "" : " - " + el.Apelido));
                 _NoEnderecamento.Nodes[_txtNoEndereco].Nodes[el.Nome].Tag = el;
                 el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
             }
@@ -298,33 +297,33 @@ namespace LadderApp
             return 0;
         }
 
-        private void IndicaEnderecoEmUso(LadderProgram _pl, AddressTypeEnum _te)
+        private void IndicaEnderecoEmUso(LadderProgram program, AddressTypeEnum addressType)
         {
-            _pl.endereco.LimpaIndicacaoEmUso();
-            foreach(Line _lc in _pl.linhas)
+            program.endereco.LimpaIndicacaoEmUso();
+            foreach (Line line in program.linhas)
             {
-                _lc.simbolos.AddRange(_lc.saida);
-                foreach (Symbol _sb in _lc.simbolos)
+                line.instructions.AddRange(line.outputs);
+                foreach (Instruction instruction in line.instructions)
                 {
-                    switch (_sb.getCI())
+                    switch (instruction.OpCode)
                     {
-                            /// pporque disso aqui
-                        case OpCode.CONTATO_NA:
-                        case OpCode.CONTATO_NF:
-                        case OpCode.BOBINA_SAIDA:
-                        case OpCode.TEMPORIZADOR:
-                        case OpCode.CONTADOR:
-                        case OpCode.RESET:
-                            if (_sb.getOperandos(0) != null)
+                        /// pporque disso aqui
+                        case OperationCode.NormallyOpenContact:
+                        case OperationCode.NormallyClosedContact:
+                        case OperationCode.OutputCoil:
+                        case OperationCode.Timer:
+                        case OperationCode.Counter:
+                        case OperationCode.Reset:
+                            if (instruction.IsAllOperandsOk())
                             {
-                                Address _el = (Address)_sb.getOperandos(0);
-                                if (_el.TpEnderecamento == _te)
+                                Address _el = (Address)instruction.GetOperand(0);
+                                if (_el.TpEnderecamento == addressType)
                                     _el.EmUso = true;
                             }
                             break;
                     }
                 }
-                _lc.simbolos.RemoveRange(_lc.simbolos.Count - _lc.saida.Count, _lc.saida.Count);
+                line.instructions.RemoveRange(line.instructions.Count - line.outputs.Count, line.outputs.Count);
             }
         }
 
@@ -332,7 +331,7 @@ namespace LadderApp
         {
             if (!_cL.IsDisposed)
             {
-                _cL.setOperando(0, _end);
+                _cL.SetOperand(0, _end);
                 _cL.Refresh();
             }
         }

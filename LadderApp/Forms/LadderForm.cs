@@ -34,16 +34,14 @@ namespace LadderApp
         }
 
 
-        public List<Symbol> lstVariosSelecionados = new List<Symbol>();
-
-        public LadderForm(LadderProgram _prgBasico)
+        public LadderForm(LadderProgram program)
         {
             InitializeComponent();
 
             this.VScroll = false;
             this.HScroll = false;
 
-            prgLivre = new VisualProgram(_prgBasico, this);
+            prgLivre = new VisualProgram(program, this);
         }
 
         private void DiagramaLadder_Resize(object sender, EventArgs e)
@@ -208,7 +206,7 @@ namespace LadderApp
             {
                 if (!LinhaSelecionada.simboloInicioLinha.IsDisposed)
                 {
-                    _linha = (int)LinhaSelecionada.simboloInicioLinha.getOperandos(0);
+                    _linha = (int)LinhaSelecionada.simboloInicioLinha.GetOperand(0);
 
                     if (_acima == false)
                         _linha++;
@@ -269,13 +267,13 @@ namespace LadderApp
         {
             if (e == Keys.Up)
             {
-                if ((int)sender.linhaAtual.simboloInicioLinha.getOperandos(0) != 0)
-                    sender.linhaAtual.linhaAnterior.simboloInicioLinha.Select();
+                if ((int)sender.VisualLine.simboloInicioLinha.GetOperand(0) != 0)
+                    sender.VisualLine.linhaAnterior.simboloInicioLinha.Select();
             }
             else if (e == Keys.Down)
             {
-                if ((int)sender.linhaAtual.linhaProxima.simboloInicioLinha.getOperandos(0) != 0)
-                    sender.linhaAtual.linhaProxima.simboloInicioLinha.Select();
+                if ((int)sender.VisualLine.linhaProxima.simboloInicioLinha.GetOperand(0) != 0)
+                    sender.VisualLine.linhaProxima.simboloInicioLinha.Select();
             }
         }
 
@@ -310,13 +308,13 @@ namespace LadderApp
         public void Simbolo_KeyDown(object sender, KeyEventArgs e)
         {
             FreeUserControl _cL = (FreeUserControl)sender;
-            switch (_cL.getCI())
+            switch (_cL.OpCode)
             {
-                case OpCode.NENHUM:
+                case OperationCode.None:
                     /// Tive que colocar aqui esta opcao de NENHUM para evitar que
                     /// a execucao passasse duas vezes em apagar
                     break;
-                case OpCode.INICIO_DA_LINHA:
+                case OperationCode.LineBegin:
                     break;
                 default:
                     if (e.KeyCode == Keys.Delete)
@@ -324,13 +322,13 @@ namespace LadderApp
                         if (_cL != null && linhaSelecionada != null)
                             if (!_cL.IsDisposed)
                             {
-                                switch (_cL.getCI())
+                                switch (_cL.OpCode)
                                 {
-                                    case OpCode.PARALELO_INICIAL:
+                                    case OperationCode.ParallelBranchBegin:
                                         break;
-                                    case OpCode.PARALELO_PROXIMO:
+                                    case OperationCode.ParallelBranchNext:
                                         break;
-                                    case OpCode.PARALELO_FINAL:
+                                    case OperationCode.ParallelBranchEnd:
                                         break;
                                     default:
                                         break;
@@ -348,17 +346,17 @@ namespace LadderApp
             }
         }
 
-        public List<Symbol> VariosSelecionados(FreeUserControl _cL, VisualLine _lCL)
+        public List<Instruction> VariosSelecionados(FreeUserControl _cL, VisualLine _lCL)
         {
-            OpCode _cI = _cL.getCI();
-            List<Symbol> _lstSB = new List<Symbol>();
+            OperationCode _cI = _cL.OpCode;
+            List<Instruction> instructions = new List<Instruction>();
             List<FreeUserControl> _lstCL = null;
 
             switch (_cI)
             {
-                case OpCode.PARALELO_INICIAL:
-                case OpCode.PARALELO_PROXIMO:
-                case OpCode.PARALELO_FINAL:
+                case OperationCode.ParallelBranchBegin:
+                case OperationCode.ParallelBranchNext:
+                case OperationCode.ParallelBranchEnd:
                     int _indicePosInicial = 0;
                     int _indicePosFinal = 0;
 
@@ -368,13 +366,13 @@ namespace LadderApp
                     else if (LinhaSelecionada.saida.Contains(_cL))
                         _lstCL = LinhaSelecionada.saida;
                     else
-                        return _lstSB;
+                        return instructions;
 
                     /// define a posicao inicial a partir da posicao
                     /// do controle na lista
                     _indicePosInicial = _lstCL.IndexOf(_cL);
 
-                    if (_cI == OpCode.PARALELO_FINAL)
+                    if (_cI == OperationCode.ParallelBranchEnd)
                     {
                         /// se for paralelo final, inverte a posicial inicial/final
                         _indicePosFinal = _indicePosInicial;
@@ -389,38 +387,38 @@ namespace LadderApp
                     /// pega todos os controles dentro da faixa inicial / final
                     for (int i = _indicePosInicial; i <= _indicePosFinal; i++)
                     {
-                        _lstSB.Add(_lstCL[i].SimboloBasico);
+                        instructions.Add(_lstCL[i].Instruction);
                     }
                     break;
                 default:
-                    _lstSB.Add(_cL.SimboloBasico);
+                    instructions.Add(_cL.Instruction);
                     break;
             }
-            return _lstSB;
+            return instructions;
         }
 
         private void menuLimparEndereco_Click(object sender, EventArgs e)
         {
-            OpCode _cI = controleSelecionado.getCI();
+            OperationCode _cI = controleSelecionado.OpCode;
             if ((!controleSelecionado.IsDisposed) &&
-                 (_cI != OpCode.INICIO_DA_LINHA &&
-                 _cI != OpCode.PARALELO_INICIAL &&
-                 _cI != OpCode.PARALELO_FINAL))
+                 (_cI != OperationCode.LineBegin &&
+                 _cI != OperationCode.ParallelBranchBegin &&
+                 _cI != OperationCode.ParallelBranchEnd))
             {
-                controleSelecionado.setOperando(0, null);
+                controleSelecionado.SetOperand(0, null);
                 controleSelecionado.Refresh();
             }
         }
 
         private void menuEstenderParaleloAcima_Click(object sender, EventArgs e)
         {
-            switch (controleSelecionado.getCI())
+            switch (controleSelecionado.OpCode)
             {
-                case OpCode.PARALELO_INICIAL:
+                case OperationCode.ParallelBranchBegin:
                     break;
-                case OpCode.PARALELO_FINAL:
+                case OperationCode.ParallelBranchEnd:
                     break;
-                case OpCode.PARALELO_PROXIMO:
+                case OperationCode.ParallelBranchNext:
                     break;
             }
         }
@@ -431,33 +429,33 @@ namespace LadderApp
 
         private void menuToggleBit_Click(object sender, EventArgs e)
         {
-            ((Address)controleSelecionado.getOperandos(0)).Valor = ((Address)controleSelecionado.getOperandos(0)).Valor == true ? false : true;
+            ((Address)controleSelecionado.GetOperand(0)).Valor = ((Address)controleSelecionado.GetOperand(0)).Valor == true ? false : true;
             linkProjeto.programa.ExecutaLadderSimulado();
             this.Invalidate(true);
         }
 
         public void ControleSelecionado_SolicitaMudarEndereco(FreeUserControl sender, Rectangle rect, Type tipo, int valorMax, int valorMin, params object[] faixa)
         {
-            ChangeTimerCounterParametersForm Altera = new ChangeTimerCounterParametersForm(sender.getCI());
+            ChangeTimerCounterParametersForm Altera = new ChangeTimerCounterParametersForm(sender.OpCode);
 
-            if (sender.getOperandos(0) == null)
+            if (!sender.IsAllOperandsOk())
             {
                 MessageBox.Show("Please, assign an address first!", "Change configuration", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            switch (sender.getCI())
+            switch (sender.OpCode)
             {
-                case OpCode.TEMPORIZADOR:
-                    Altera.Tipo = (Int32)((Address)sender.getOperandos(0)).Temporizador.Tipo;
-                    Altera.Preset = (Int32)((Address)sender.getOperandos(0)).Temporizador.Preset;
-                    Altera.Acumulado = (Int32)((Address)sender.getOperandos(0)).Temporizador.Acumulado;
-                    Altera.BaseTempo = (Int32)((Address)sender.getOperandos(0)).Temporizador.BaseTempo;
+                case OperationCode.Timer:
+                    Altera.Tipo = (Int32)((Address)sender.GetOperand(0)).Temporizador.Tipo;
+                    Altera.Preset = (Int32)((Address)sender.GetOperand(0)).Temporizador.Preset;
+                    Altera.Acumulado = (Int32)((Address)sender.GetOperand(0)).Temporizador.Acumulado;
+                    Altera.BaseTempo = (Int32)((Address)sender.GetOperand(0)).Temporizador.BaseTempo;
                     break;
-                case OpCode.CONTADOR:
-                    Altera.Tipo = (Int32)((Address)sender.getOperandos(0)).Contador.Tipo;
-                    Altera.Preset = (Int32)((Address)sender.getOperandos(0)).Contador.Preset;
-                    Altera.Acumulado = (Int32)((Address)sender.getOperandos(0)).Contador.Acumulado;
+                case OperationCode.Counter:
+                    Altera.Tipo = (Int32)((Address)sender.GetOperand(0)).Contador.Tipo;
+                    Altera.Preset = (Int32)((Address)sender.GetOperand(0)).Contador.Preset;
+                    Altera.Acumulado = (Int32)((Address)sender.GetOperand(0)).Contador.Acumulado;
                     break;
                 default:
                     break;
@@ -468,34 +466,34 @@ namespace LadderApp
             if (_result == DialogResult.OK)
             {
                 /// mantem os parametros do ci atualizados
-                sender.setOperando(1, Altera.Tipo);
-                sender.setOperando(2, Altera.Preset);
-                sender.setOperando(3, Altera.Acumulado);
-                switch (sender.getCI())
+                sender.SetOperand(1, Altera.Tipo);
+                sender.SetOperand(2, Altera.Preset);
+                sender.SetOperand(3, Altera.Acumulado);
+                switch (sender.OpCode)
                 {
-                    case OpCode.TEMPORIZADOR:
+                    case OperationCode.Timer:
                         /// mantem os parametros do ci atualizados
-                        sender.setOperando(4, Altera.BaseTempo);
+                        sender.SetOperand(4, Altera.BaseTempo);
 
-                        ((Address)sender.getOperandos(0)).Temporizador.Tipo = Altera.Tipo;
-                        ((Address)sender.getOperandos(0)).Temporizador.Preset = Altera.Preset;
-                        ((Address)sender.getOperandos(0)).Temporizador.Acumulado = Altera.Acumulado;
-                        ((Address)sender.getOperandos(0)).Temporizador.BaseTempo = Altera.BaseTempo;
+                        ((Address)sender.GetOperand(0)).Temporizador.Tipo = Altera.Tipo;
+                        ((Address)sender.GetOperand(0)).Temporizador.Preset = Altera.Preset;
+                        ((Address)sender.GetOperand(0)).Temporizador.Acumulado = Altera.Acumulado;
+                        ((Address)sender.GetOperand(0)).Temporizador.BaseTempo = Altera.BaseTempo;
 
-                        sender.setOperando(1, ((Address)sender.getOperandos(0)).Temporizador.Tipo);
-                        sender.setOperando(2, ((Address)sender.getOperandos(0)).Temporizador.Preset);
-                        sender.setOperando(3, ((Address)sender.getOperandos(0)).Temporizador.Acumulado);
-                        sender.setOperando(4, ((Address)sender.getOperandos(0)).Temporizador.BaseTempo);
+                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Temporizador.Tipo);
+                        sender.SetOperand(2, ((Address)sender.GetOperand(0)).Temporizador.Preset);
+                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Temporizador.Acumulado);
+                        sender.SetOperand(4, ((Address)sender.GetOperand(0)).Temporizador.BaseTempo);
 
                         break;
-                    case OpCode.CONTADOR:
-                        ((Address)sender.getOperandos(0)).Contador.Tipo = Altera.Tipo;
-                        ((Address)sender.getOperandos(0)).Contador.Preset = Altera.Preset;
-                        ((Address)sender.getOperandos(0)).Contador.Acumulado = Altera.Acumulado;
+                    case OperationCode.Counter:
+                        ((Address)sender.GetOperand(0)).Contador.Tipo = Altera.Tipo;
+                        ((Address)sender.GetOperand(0)).Contador.Preset = Altera.Preset;
+                        ((Address)sender.GetOperand(0)).Contador.Acumulado = Altera.Acumulado;
 
-                        sender.setOperando(1, ((Address)sender.getOperandos(0)).Contador.Tipo);
-                        sender.setOperando(2, ((Address)sender.getOperandos(0)).Contador.Preset);
-                        sender.setOperando(3, ((Address)sender.getOperandos(0)).Contador.Acumulado);
+                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Contador.Tipo);
+                        sender.SetOperand(2, ((Address)sender.GetOperand(0)).Contador.Preset);
+                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Contador.Acumulado);
                         break;
                     default:
                         break;
@@ -508,7 +506,7 @@ namespace LadderApp
 
         private void menuToggleBitPulse_Click(object sender, EventArgs e)
         {
-            linkProjeto.programa.auxToggleBitPulse = ((Address)controleSelecionado.getOperandos(0));
+            linkProjeto.programa.auxToggleBitPulse = ((Address)controleSelecionado.GetOperand(0));
             linkProjeto.programa.auxToggleBitPulse.Valor = linkProjeto.programa.auxToggleBitPulse.Valor == true ? false : true;
             linkProjeto.programa.ExecutaLadderSimulado();
             this.Invalidate(true);
