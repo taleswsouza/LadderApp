@@ -31,16 +31,16 @@ namespace LadderApp.Formularios
             this.txtTitulo = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtAcumulado = new System.Windows.Forms.NumericUpDown();
+            this.txtAccumulated = new System.Windows.Forms.NumericUpDown();
             this.txtPreset = new System.Windows.Forms.NumericUpDown();
-            this.lblBaseTempo = new System.Windows.Forms.Label();
-            this.cmbBaseTempo = new System.Windows.Forms.ComboBox();
+            this.lblTimeBase = new System.Windows.Forms.Label();
+            this.cmbTimeBase = new System.Windows.Forms.ComboBox();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.cmbTipo = new System.Windows.Forms.ComboBox();
+            this.cmbType = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAcumulado)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAccumulated)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPreset)).BeginInit();
             this.SuspendLayout();
             // 
@@ -77,18 +77,18 @@ namespace LadderApp.Formularios
             this.label2.Text = "Accumulated (AC):";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // txtAcumulado
+            // txtAccumulated
             // 
-            this.txtAcumulado.Location = new System.Drawing.Point(121, 102);
-            this.txtAcumulado.Margin = new System.Windows.Forms.Padding(2);
-            this.txtAcumulado.Maximum = new decimal(new int[] {
+            this.txtAccumulated.Location = new System.Drawing.Point(121, 102);
+            this.txtAccumulated.Margin = new System.Windows.Forms.Padding(2);
+            this.txtAccumulated.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
-            this.txtAcumulado.Name = "txtAcumulado";
-            this.txtAcumulado.Size = new System.Drawing.Size(77, 20);
-            this.txtAcumulado.TabIndex = 4;
+            this.txtAccumulated.Name = "txtAccumulated";
+            this.txtAccumulated.Size = new System.Drawing.Size(77, 20);
+            this.txtAccumulated.TabIndex = 4;
             // 
             // txtPreset
             // 
@@ -103,31 +103,31 @@ namespace LadderApp.Formularios
             this.txtPreset.Size = new System.Drawing.Size(78, 20);
             this.txtPreset.TabIndex = 5;
             // 
-            // lblBaseTempo
+            // lblTimeBase
             // 
-            this.lblBaseTempo.AutoSize = true;
-            this.lblBaseTempo.Location = new System.Drawing.Point(34, 40);
-            this.lblBaseTempo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblBaseTempo.Name = "lblBaseTempo";
-            this.lblBaseTempo.Size = new System.Drawing.Size(82, 13);
-            this.lblBaseTempo.TabIndex = 6;
-            this.lblBaseTempo.Text = "Time base (BT):";
-            this.lblBaseTempo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblTimeBase.AutoSize = true;
+            this.lblTimeBase.Location = new System.Drawing.Point(34, 40);
+            this.lblTimeBase.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTimeBase.Name = "lblTimeBase";
+            this.lblTimeBase.Size = new System.Drawing.Size(82, 13);
+            this.lblTimeBase.TabIndex = 6;
+            this.lblTimeBase.Text = "Time base (BT):";
+            this.lblTimeBase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // cmbBaseTempo
+            // cmbTimeBase
             // 
-            this.cmbBaseTempo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBaseTempo.FormattingEnabled = true;
-            this.cmbBaseTempo.Items.AddRange(new object[] {
+            this.cmbTimeBase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTimeBase.FormattingEnabled = true;
+            this.cmbTimeBase.Items.AddRange(new object[] {
             "10 ms",
             "100 ms",
             "1 s",
             "1 m"});
-            this.cmbBaseTempo.Location = new System.Drawing.Point(119, 37);
-            this.cmbBaseTempo.Margin = new System.Windows.Forms.Padding(2);
-            this.cmbBaseTempo.Name = "cmbBaseTempo";
-            this.cmbBaseTempo.Size = new System.Drawing.Size(79, 21);
-            this.cmbBaseTempo.TabIndex = 7;
+            this.cmbTimeBase.Location = new System.Drawing.Point(119, 37);
+            this.cmbTimeBase.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbTimeBase.Name = "cmbTimeBase";
+            this.cmbTimeBase.Size = new System.Drawing.Size(79, 21);
+            this.cmbTimeBase.TabIndex = 7;
             // 
             // btnOk
             // 
@@ -153,18 +153,18 @@ namespace LadderApp.Formularios
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // cmbTipo
+            // cmbType
             // 
-            this.cmbTipo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTipo.FormattingEnabled = true;
-            this.cmbTipo.Items.AddRange(new object[] {
+            this.cmbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbType.FormattingEnabled = true;
+            this.cmbType.Items.AddRange(new object[] {
             "ON",
             "OF"});
-            this.cmbTipo.Location = new System.Drawing.Point(80, 5);
-            this.cmbTipo.Margin = new System.Windows.Forms.Padding(2);
-            this.cmbTipo.Name = "cmbTipo";
-            this.cmbTipo.Size = new System.Drawing.Size(92, 21);
-            this.cmbTipo.TabIndex = 10;
+            this.cmbType.Location = new System.Drawing.Point(80, 5);
+            this.cmbType.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbType.Name = "cmbType";
+            this.cmbType.Size = new System.Drawing.Size(92, 21);
+            this.cmbType.TabIndex = 10;
             // 
             // label4
             // 
@@ -184,20 +184,20 @@ namespace LadderApp.Formularios
             this.label5.TabIndex = 13;
             this.label5.Text = "(0...255)";
             // 
-            // AlteraTemporizadorContador
+            // ChangeTimerCounterParametersForm
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(254, 211);
-            this.Controls.Add(this.cmbTipo);
+            this.Controls.Add(this.cmbType);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
-            this.Controls.Add(this.cmbBaseTempo);
-            this.Controls.Add(this.lblBaseTempo);
+            this.Controls.Add(this.cmbTimeBase);
+            this.Controls.Add(this.lblTimeBase);
             this.Controls.Add(this.txtPreset);
-            this.Controls.Add(this.txtAcumulado);
+            this.Controls.Add(this.txtAccumulated);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtTitulo);
@@ -205,11 +205,11 @@ namespace LadderApp.Formularios
             this.Controls.Add(this.label4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "AlteraTemporizadorContador";
+            this.Name = "ChangeTimerCounterParametersForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Change <%>";
+            this.Text = "Change Timer/Counter";
             this.Load += new System.EventHandler(this.AlteraTemporizadorContador_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.txtAcumulado)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAccumulated)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPreset)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -221,13 +221,13 @@ namespace LadderApp.Formularios
         private System.Windows.Forms.Label txtTitulo;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown txtAcumulado;
+        private System.Windows.Forms.NumericUpDown txtAccumulated;
         private System.Windows.Forms.NumericUpDown txtPreset;
-        private System.Windows.Forms.Label lblBaseTempo;
-        private System.Windows.Forms.ComboBox cmbBaseTempo;
+        private System.Windows.Forms.Label lblTimeBase;
+        private System.Windows.Forms.ComboBox cmbTimeBase;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.ComboBox cmbTipo;
+        private System.Windows.Forms.ComboBox cmbType;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
     }

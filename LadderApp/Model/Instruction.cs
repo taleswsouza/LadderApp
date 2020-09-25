@@ -163,101 +163,89 @@ namespace LadderApp
             OpCode = OperationCode.None;
         }
 
-        /// <summary>
-        /// Valida o operando de acordo com o codigo interpretavel
-        /// </summary>
-        /// <param name="_novoOperando">Caso operando ainda nao atribuido verifica antes</param>
-        /// <returns></returns>
-        private bool ValidaEndereco(int _indice, Object _novoOperando)
+
+        private bool ValidaEndereco(int index, Object newOperand)
         {
-            Address _end = null;
-            Address _atualOperando = null;
-            bool _bValido = true;
             bool _bEndereco = false;
 
-            if (_novoOperando != null)
+            Address address = null;
+            if (newOperand != null)
             {
-                if (_novoOperando.GetType().Name == Address.ClassName())
+                if (newOperand is Address)
                 {
-                    if (_novoOperando == null)
-                        _end = (Address)GetOperand(0);
-                    else
-                        _end = (Address)_novoOperando;
+                    address = (Address)newOperand;
                 }
-                else if (_novoOperando.GetType().Name == "Int32")
-                {
-                }
-
             }
 
+            bool isValid = true;
             switch (OpCode)
             {
                 case OperationCode.None:
                 case OperationCode.LineEnd:
-                    _bValido = false;
+                    isValid = false;
                     break;
                 case OperationCode.LineBegin:
-                    if (_novoOperando != null)
-                        if (_novoOperando.GetType().ToString() != "System.Int32")
-                            _bValido = false;
+                    if (newOperand != null)
+                        if (newOperand.GetType().ToString() != "System.Int32")
+                            isValid = false;
                     break;
                 case OperationCode.NormallyOpenContact:
                 case OperationCode.NormallyClosedContact:
                     _bEndereco = true;
-                    if (_end != null)
+                    if (address != null)
                     {
-                        switch (_end.TpEnderecamento)
+                        switch (address.AddressType)
                         {
-                            case AddressTypeEnum.DIGITAL_MEMORIA:
-                            case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                            case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
-                            case AddressTypeEnum.DIGITAL_ENTRADA:
-                            case AddressTypeEnum.DIGITAL_SAIDA:
-                                _bValido = true;
+                            case AddressTypeEnum.DigitalMemory:
+                            case AddressTypeEnum.DigitalMemoryCounter:
+                            case AddressTypeEnum.DigitalMemoryTimer:
+                            case AddressTypeEnum.DigitalInput:
+                            case AddressTypeEnum.DigitalOutput:
+                                isValid = true;
                                 break;
                             default:
-                                _bValido = false;
+                                isValid = false;
                                 break;
                         }
                     }
                     else
-                        _bValido = false;
+                        isValid = false;
                     break;
                 case OperationCode.OutputCoil:
                     _bEndereco = true;
-                    if (_end != null)
+                    if (address != null)
                     {
-                        switch (_end.TpEnderecamento)
+                        switch (address.AddressType)
                         {
-                            case AddressTypeEnum.DIGITAL_MEMORIA:
-                            case AddressTypeEnum.DIGITAL_SAIDA:
-                                _bValido = true;
+                            case AddressTypeEnum.DigitalMemory:
+                            case AddressTypeEnum.DigitalOutput:
+                                isValid = true;
                                 break;
                             default:
-                                _bValido = false;
+                                isValid = false;
                                 break;
                         }
                     }
                     else
-                        _bValido = false;
+                        isValid = false;
                     break;
                 case OperationCode.Timer:
-                    if (_end != null && _indice == 0)
+                    if (address != null && index == 0)
                     {
                         _bEndereco = true;
-                        switch (_end.TpEnderecamento)
+                        switch (address.AddressType)
                         {
-                            case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
-                                _bValido = true;
+                            case AddressTypeEnum.DigitalMemoryTimer:
+                                isValid = true;
                                 break;
                             default:
-                                _bValido = false;
+                                isValid = false;
                                 break;
                         }
                     }
-                    else if (_indice > 0)
+                    else if (index > 0)
                     {
-                        switch (_indice)
+                        switch (index)
                         {
                             case 1:
                                 break;
@@ -268,25 +256,25 @@ namespace LadderApp
                         }
                     }
                     else
-                        _bValido = false;
+                        isValid = false;
                     break;
                 case OperationCode.Counter:
-                    if (_end != null && _indice == 0)
+                    if (address != null && index == 0)
                     {
                         _bEndereco = true;
-                        switch (_end.TpEnderecamento)
+                        switch (address.AddressType)
                         {
-                            case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                                _bValido = true;
+                            case AddressTypeEnum.DigitalMemoryCounter:
+                                isValid = true;
                                 break;
                             default:
-                                _bValido = false;
+                                isValid = false;
                                 break;
                         }
                     }
-                    else if (_indice > 0)
+                    else if (index > 0)
                     {
-                        switch (_indice)
+                        switch (index)
                         {
                             case 1:
                                 break;
@@ -297,60 +285,63 @@ namespace LadderApp
                         }
                     }
                     else
-                        _bValido = false;
+                        isValid = false;
                     break;
                 case OperationCode.ParallelBranchBegin:
                 case OperationCode.ParallelBranchEnd:
                 case OperationCode.ParallelBranchNext:
-                    _bValido = false;
+                    isValid = false;
                     break;
                 case OperationCode.Reset:
                     _bEndereco = true;
-                    if (_end != null)
+                    if (address != null)
                     {
-                        switch (_end.TpEnderecamento)
+                        switch (address.AddressType)
                         {
-                            case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                            case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
-                                _bValido = true;
+                            case AddressTypeEnum.DigitalMemoryCounter:
+                            case AddressTypeEnum.DigitalMemoryTimer:
+                                isValid = true;
                                 break;
                             default:
-                                _bValido = false;
+                                isValid = false;
                                 break;
                         }
                     }
                     else
-                        _bValido = false;
+                        isValid = false;
                     break;
                 default:
-                    _bValido = false;
+                    isValid = false;
                     break;
             }
 
             if (_bEndereco)
             {
+                Address currentOperand = null;
                 if (IsAllOperandsOk())
-                    _atualOperando = (Address)GetOperand(0);
-
-                if (_bValido)
                 {
-                    if (_atualOperando != null)
-                        _atualOperando.MudouOperando -= new MudouOperandoEventHandler(Ocorreu_MudouOperando);
+                    currentOperand = (Address)GetOperand(0);
+                }
 
-                    _end.MudouOperando += new MudouOperandoEventHandler(Ocorreu_MudouOperando);
+                if (isValid)
+                {
+                    if (currentOperand != null)
+                        currentOperand.MudouOperando -= new MudouOperandoEventHandler(Ocorreu_MudouOperando);
+
+                    address.MudouOperando += new MudouOperandoEventHandler(Ocorreu_MudouOperando);
                 }
                 else
-                    if (_novoOperando == null)
+                    if (newOperand == null)
                 {
-                    if (_atualOperando != null)
+                    if (currentOperand != null)
                     {
-                        _atualOperando.MudouOperando -= new MudouOperandoEventHandler(Ocorreu_MudouOperando);
+                        currentOperand.MudouOperando -= new MudouOperandoEventHandler(Ocorreu_MudouOperando);
                         operands[0] = null;
                     }
                 }
             }
 
-            return _bValido;
+            return isValid;
         }
 
         void Ocorreu_MudouOperando(object sender)
@@ -358,16 +349,16 @@ namespace LadderApp
             ValidaEndereco(0, null);
         }
 
-        public void ValidaOperandosSimbolo(Addressing _EndDisp)
+        public void ValidaOperandosSimbolo(Addressing addressing)
         {
             for (int i = 0; i < GetNumberOfOperands(); i++)
                 if (operands[i] != null)
-                    if (operands[i].GetType().Name == Address.ClassName())
+                    if (operands[i] is Address)
                     {
                         /// Verifica se o endereco atual existe na lista de enderecos
                         /// do programa atual, se existir recupera o opontamento corrigido
                         /// para o endereco
-                        Object oper = _EndDisp.Find(((Address)operands[i]));
+                        Object oper = addressing.Find(((Address)operands[i]));
                         /// recebido o endereco corrigido valida o endereco a faz as atribui
                         /// coes necessarias
                         if (oper != null)

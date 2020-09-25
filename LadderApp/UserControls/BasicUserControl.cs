@@ -9,8 +9,7 @@ namespace LadderApp
     public class BasicUserControl : UserControl, IInstruction
     {
         protected Instruction instruction;
-
-        public bool selecionado = false;
+        public bool Selected { get; set; } = false;
 
         protected Point xyConexao;
         public Point XYConexao

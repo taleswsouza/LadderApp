@@ -15,50 +15,41 @@ namespace LadderApp
             InitializeComponent();
         }
 
-        public AddressingForm(Addressing ep)
+        public AddressingForm(Addressing addressing)
         {
             InitializeComponent();
 
-            txtEntrada.Value = ep.lstIOEntrada.Count;
-            txtEntrada.Enabled = false;
+            txtInput.Value = addressing.ListInputAddress.Count;
+            txtInput.Enabled = false;
 
-            txtSaida.Value = ep.lstIOSaida.Count;
-            txtSaida.Enabled = false;
+            txtOutput.Value = addressing.ListOutputAddress.Count;
+            txtOutput.Enabled = false;
 
-            txtMemoria.Value = ep.lstMemoria.Count;
-            txtMemoria.Enabled = true;
+            txtMemory.Value = addressing.ListMemoryAddress.Count;
+            txtMemory.Enabled = true;
 
-            txtTemporizador.Value = ep.lstTemporizador.Count;
-            txtTemporizador.Enabled = true;
+            txtTimer.Value = addressing.ListTimerAddress.Count;
+            txtTimer.Enabled = true;
 
-            txtContador.Value = ep.lstContador.Count;
-            txtContador.Enabled = true;
+            txtCounter.Value = addressing.ListCounterAddress.Count;
+            txtCounter.Enabled = true;
         }
 
-        private int iQtdMemoria = 0;
-        public int QtdMemoria
+        public int NumberOfMemoryAddresses { get; private set; } = 0;
+        public int NumberOfTimerAddresses { get; private set; } = 0;
+        public int NumberOfCounterAddresses { get; private set; } = 0;
+
+        private void CloseWindow(object sender, EventArgs e)
         {
-            get { return iQtdMemoria; }
+            NumberOfMemoryAddresses = Decimal.ToInt32(txtMemory.Value);
+            NumberOfTimerAddresses = Decimal.ToInt32(txtTimer.Value);
+            NumberOfCounterAddresses = Decimal.ToInt32(txtCounter.Value);
+
+            this.Close();
         }
 
-        private int iQtdTemporizador = 0;
-        public int QtdTemporizador
+        private void Cancel(object sender, EventArgs e)
         {
-            get { return iQtdTemporizador; }
-        }
-
-        private int iQtdContador = 0;
-        public int QtdContador
-        {
-            get { return iQtdContador; }
-        }
-
-        private void FechaJanela(object sender, EventArgs e)
-        {
-            iQtdMemoria = (int)txtMemoria.Value;
-            iQtdTemporizador = (int)txtTemporizador.Value;
-            iQtdContador = (int)txtContador.Value;
-
             this.Close();
         }
     }

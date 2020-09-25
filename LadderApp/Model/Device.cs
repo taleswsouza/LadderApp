@@ -118,7 +118,7 @@ namespace LadderApp
         {
             for (int i = 0; i < (dispositivoQtdPortas * dispositivoQtdBitsPorta); i++)
             {
-                lstEndBitPorta[i].TpEnderecamento = lstBitPorta[i].TipoDefinido;
+                lstEndBitPorta[i].AddressType = lstBitPorta[i].TipoDefinido;
             }
         }
     }

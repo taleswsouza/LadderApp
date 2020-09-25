@@ -10,6 +10,12 @@ namespace LadderApp.Formularios
 {
     public partial class ChangeCommentForm : Form
     {
+        public ChangeCommentForm(Address address) : this()
+        {
+            txtComment.Text = address.Comment.Trim();
+            this.Text = $"Comment {address.Name}";
+        }
+
         public ChangeCommentForm()
         {
             InitializeComponent();

@@ -132,7 +132,6 @@
     <Compile Include="Model\IInstruction.cs" />
     <Compile Include="Model\Line.cs" />
     <Compile Include="Model\InstructionList.cs" />
-    <Compile Include="Services\ManipulateLineServices.cs" />
     <Compile Include="Model\Pin.cs" />
     <Compile Include="VisualComponents\VisualLine.cs">
     </Compile>
