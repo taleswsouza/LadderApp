@@ -69,11 +69,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MicrocontrollersBaseCodeFilesResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\FreeUserControl.cs">
+    <Compile Include="UserControls\VisualInstructionUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\FreeUserControl.Designer.cs">
-      <DependentUpon>FreeUserControl.cs</DependentUpon>
+    <Compile Include="UserControls\VisualInstructionUserControl.Designer.cs">
+      <DependentUpon>VisualInstructionUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\CouldNotInitializeTIUSBException.cs" />
     <Compile Include="Exceptions\NotValidOpCodeException.cs" />
@@ -144,9 +144,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>BasicUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\FreeUserControl.resx">
+    <EmbeddedResource Include="UserControls\VisualInstructionUserControl.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>FreeUserControl.cs</DependentUpon>
+      <DependentUpon>VisualInstructionUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChangeCommentForm.resx">
       <SubType>Designer</SubType>

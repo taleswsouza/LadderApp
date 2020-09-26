@@ -21,8 +21,6 @@ namespace LadderApp
         public event ControleSelecionadoEventHandler ControleSelecionado;
         public event SolicitaMudarEnderecoEventHandler SolicitaMudarEndereco;
 
-        private Boolean usoTxtIndicado = false;
-
         private List<Panel> insertionIndicatorList = new List<Panel>();
 
         private Color penColor = Color.Blue;
@@ -359,7 +357,6 @@ namespace LadderApp
             graphics.DrawLine(linePen, xy1, xy2);
 
             DesenhaEndereco();
-
             DesenhaComentario();
         }
 
@@ -765,64 +762,57 @@ namespace LadderApp
 
         private void DesenhaComentario()
         {
-            String _txtComent = "";
-            RectangleF _recTxtComent;
 
-            if (IsAllOperandsOk())
+            if (!IsAllOperandsOk() || !(GetOperand(0) is Address))
             {
-                _txtComent = ((Address)GetOperand(0)).Comment;
-                if (_txtComent.Trim() != "")
-                {
-                    switch (this.OpCode)
-                    {
-                        default:
-                            break;
-                    }
-
-                    Size _propostoSize;
-                    _propostoSize = TextRenderer.MeasureText(_txtComent, textFont);
-                    _recTxtComent = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(yFimVSimbolo + 2)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)_propostoSize.Height));
-
-                    StringFormat _stringFormat = new StringFormat();
-                    _stringFormat.Alignment = StringAlignment.Center;
-                    _stringFormat.LineAlignment = StringAlignment.Center;
-
-                    int intNumLinhas = 1;
-                    String strSegundaLinha = "";
-                    if (_propostoSize.Width > ((xTotalHorizontal - (xDecimoHorizontal / 2) - 3)) + 1)
-                    {
-                        intNumLinhas = 2;
-                        for (int i = 0; i < 20; i++)
-                        {
-                            strSegundaLinha = _txtComent.Substring(_txtComent.Length - 1, 1) + strSegundaLinha;
-                            _txtComent = _txtComent.Remove(_txtComent.Length - 1, 1);
-                            _propostoSize = TextRenderer.MeasureText(_txtComent, textFont);
-                            if (_propostoSize.Width < (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
-                            {
-                                i = 20; // sai do loop
-                                /// caso a segundo linha não permitiu coloca *** no final.
-                                _propostoSize = TextRenderer.MeasureText(strSegundaLinha, textFont);
-                                if (_propostoSize.Width > (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
-                                {
-                                    strSegundaLinha = strSegundaLinha.Substring(0, _txtComent.Length - 3) + " ...";
-                                }
-                            }
-                        }
-                        _recTxtComent.Height = (float)(textFont.Size * textFont.FontFamily.GetCellAscent(FontStyle.Regular) / textFont.FontFamily.GetEmHeight(FontStyle.Regular));
-                    }
-
-                    for (int i = 1; i <= intNumLinhas; i++)
-                    {
-                        graphics.FillRectangle(commentBrush, _recTxtComent);
-                        graphics.DrawString(_txtComent, textFont, commentTextBrush, _recTxtComent, _stringFormat);
-
-                        _recTxtComent.Y += _recTxtComent.Height;
-                        _txtComent = strSegundaLinha;
-                    }
-                }
+                return;
+            }
+            String comment = ((Address)GetOperand(0)).Comment.Trim();
+            if (comment == "")
+            {
+                return;
             }
 
 
+            int commentLinesNeeded = 1;
+            String secondLineComment = "";
+
+            Size neededSize = TextRenderer.MeasureText(comment, textFont);
+            RectangleF commentRectangle = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(yFimVSimbolo + 2)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)neededSize.Height));
+            if (neededSize.Width > ((xTotalHorizontal - (xDecimoHorizontal / 2) - 3)) + 1)
+            {
+                commentLinesNeeded = 2;
+                for (int i = 0; i < 20; i++)
+                {
+                    secondLineComment = comment.Substring(comment.Length - 1, 1) + secondLineComment;
+                    comment = comment.Remove(comment.Length - 1, 1);
+                    neededSize = TextRenderer.MeasureText(comment, textFont);
+                    if (neededSize.Width < (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
+                    {
+                        neededSize = TextRenderer.MeasureText(secondLineComment, textFont);
+                        if (neededSize.Width > (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
+                        {
+                            secondLineComment = secondLineComment.Substring(0, comment.Length - 3) + " ...";
+                        }
+                        break;
+                    }
+                }
+                commentRectangle.Height = (float)(textFont.Size * textFont.FontFamily.GetCellAscent(FontStyle.Regular) / textFont.FontFamily.GetEmHeight(FontStyle.Regular));
+            }
+
+            StringFormat commentAlignmentFormat = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+            for (int line = 1; line <= commentLinesNeeded; line++)
+            {
+                graphics.FillRectangle(commentBrush, commentRectangle);
+                graphics.DrawString(comment, textFont, commentTextBrush, commentRectangle, commentAlignmentFormat);
+
+                commentRectangle.Y += commentRectangle.Height;
+                comment = secondLineComment;
+            }
         }
 
 
