@@ -8,15 +8,15 @@ using System.Windows.Forms;
 
 namespace LadderApp.Formularios
 {
-    public partial class ChangeCommentForm : Form
+    public partial class EditCommentForm : Form
     {
-        public ChangeCommentForm(Address address) : this()
+        public EditCommentForm(Address address) : this()
         {
             txtComment.Text = address.Comment.Trim();
-            this.Text = $"Comment {address.Name}";
+            this.Text = $"Edit Comment {address.Name}";
         }
 
-        public ChangeCommentForm()
+        public EditCommentForm()
         {
             InitializeComponent();
         }

@@ -340,7 +340,7 @@ namespace LadderApp
             this.mnuEditarComentário.ShortcutKeys = System.Windows.Forms.Keys.F2;
             this.mnuEditarComentário.Size = new System.Drawing.Size(168, 22);
             this.mnuEditarComentário.Text = "&Edit comment";
-            this.mnuEditarComentário.Click += new System.EventHandler(this.mnuEditarComentário_Click);
+            this.mnuEditarComentário.Click += new System.EventHandler(this.mnuEditComment_Click);
             // 
             // viewMenu
             // 

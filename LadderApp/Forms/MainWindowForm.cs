@@ -776,7 +776,7 @@ namespace LadderApp
             aboutBox.ShowDialog();
         }
 
-        private void mnuEditarComentário_Click(object sender, EventArgs e)
+        private void mnuEditComment_Click(object sender, EventArgs e)
         {
             if (IsDiagramaAberto())
                 if (projectForm.ladderForm.ControleSelecionado != null)
@@ -787,7 +787,7 @@ namespace LadderApp
                             if (instruction.GetOperand(0) is Address)
                             {
                                 Address address = (Address)instruction.GetOperand(0);
-                                ChangeCommentForm changeCommentForm = new ChangeCommentForm(address);
+                                EditCommentForm changeCommentForm = new EditCommentForm(address);
                                 DialogResult result = changeCommentForm.ShowDialog();
                                 if (result == DialogResult.OK)
                                 {

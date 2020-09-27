@@ -1,6 +1,6 @@
 namespace LadderApp.Formularios
 {
-    partial class ChangeCommentForm
+    partial class EditCommentForm
     {
         /// <summary>
         /// Required designer variable.
@@ -85,7 +85,7 @@ namespace LadderApp.Formularios
             this.Controls.Add(this.txtComment);
             this.Name = "ChangeCommentForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Comment: #ADDRESS#";
+            this.Text = "Edit Comment: #ADDRESS#";
             this.ResumeLayout(false);
             this.PerformLayout();
 
