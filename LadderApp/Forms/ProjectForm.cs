@@ -65,8 +65,8 @@ namespace LadderApp
                 program.ReindexaEnderecos();
             }
 
-            if (!ValidaDiagrama())
-                AbreDiagramaLadder();
+            if (!CheckLadderFormIsNotNull())
+                OpenLadderForm();
         }
 
         private void AbrirArquivo()
@@ -77,7 +77,7 @@ namespace LadderApp
         {
             MainWindowForm _frmEditorLadder;
             _frmEditorLadder = (MainWindowForm)this.MdiParent;
-            _frmEditorLadder.ArrangeProjeto();
+            _frmEditorLadder.ResetWindowLayout();
         }
 
         private void ProjetoLadder_FormClosing(object sender, FormClosingEventArgs e)
@@ -103,9 +103,9 @@ namespace LadderApp
             switch (e.Node.Name)
             {
                 case "NoProgramaLadder":
-                    if (!ValidaDiagrama())
+                    if (!CheckLadderFormIsNotNull())
                     {
-                        AbreDiagramaLadder();
+                        OpenLadderForm();
                     }
                     break;
                 case "NoDispositivo":
@@ -146,17 +146,13 @@ namespace LadderApp
             }
         }
 
-        public void AbreDiagramaLadder()
+        public void OpenLadderForm()
         {
-            LadderForm childDiagramaForm = new LadderForm(this.program);
-            childDiagramaForm.projectForm = this;
-            childDiagramaForm.MdiParent = this.MdiParent;
-
-            ladderForm = childDiagramaForm;
-
-            childDiagramaForm.ReorganizandoLinhas();
-
-            childDiagramaForm.Show();
+            ladderForm = new LadderForm(program);
+            ladderForm.projectForm = this;
+            ladderForm.MdiParent = this.MdiParent;
+            ladderForm.ReorganizeLines();
+            ladderForm.Show();
         }
 
         public void AlocaEnderecamentoIO()
@@ -334,35 +330,5 @@ namespace LadderApp
                 _cL.Refresh();
             }
         }
-
-        public bool ValidaDiagrama()
-        {
-            if (ladderForm != null)
-            {
-                if (!ladderForm.IsDisposed)
-                    return true;
-            }
-
-            return false;
-        }
-
-        //private void RealocaEnderecoIOePortas()
-        //{
-        //    List<BitPortasDispositivo> _lstBitsEnderecamentoOrdenado = new List<BitPortasDispositivo>();
-        //    _lstBitsEnderecamentoOrdenado.AddRange(programa.dispositivo.lstBitPorta);
-
-        //    foreach(EnderecamentoLadder _endCada in programa.endereco.lstIOEntrada)
-        //        _lstBitsEnderecamentoOrdenado
-
-
-        //    foreach 
-
-        //    foreach (BitPortasDispositivo pd in programa.dispositivo.lstBitPorta)
-        //    {
-        //        pd.TipoDefinido = frmDisp.lstEndModificado[i];
-        //        i++;
-        //    }
-        //    programa.dispositivo.RealocaEnderecoDispositivo();
-        //}
     }
 }

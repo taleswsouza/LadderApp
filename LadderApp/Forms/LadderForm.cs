@@ -49,7 +49,7 @@ namespace LadderApp
             if (ResizingLines == false)
             {
                 ResizingLines = true;
-                ReorganizandoLinhas();
+                ReorganizeLines();
                 ResizingLines = false;
             }
         }
@@ -87,7 +87,7 @@ namespace LadderApp
                 if (this.visualProgram.linhas.Count > 0)
                     this.visualProgram.linhas[_indiceLinha - 1].LineBegin.Select();
 
-                this.ReorganizandoLinhas();
+                this.ReorganizeLines();
 
                 if (this.visualProgram.linhas.Count > 0)
                     this.visualProgram.linhas[_indiceLinha - 1].LineBegin.Refresh();
@@ -96,13 +96,13 @@ namespace LadderApp
             }
         }
 
-        public void ReorganizandoLinhas()
+        public void ReorganizeLines()
         {
-            ReorganizandoLinhas(0);
+            ReorganizeLines(0);
         }
 
 
-        public void ReorganizandoLinhas(int _numVezes)
+        public void ReorganizeLines(int numberOfTimes)
         {
             int auxY = 0;
             int iTabStop = 0;
@@ -113,7 +113,7 @@ namespace LadderApp
             {
                 if (visualProgram.linhas.Count > 0)
                 {
-                    if (_numVezes == 0)
+                    if (numberOfTimes == 0)
                     {
                         tempVertical = this.VerticalScroll.Value;
                         tempHorizontal = this.HorizontalScroll.Value;
@@ -131,7 +131,7 @@ namespace LadderApp
                     }
                     VisualLine _LinhaAnterior = visualProgram.linhas[visualProgram.linhas.Count - 1];
 
-                    if (_numVezes == 0)
+                    if (numberOfTimes == 0)
                         visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.posicaoXY = new Point(auxX, 0);
 
                     foreach (VisualLine _linhasDL in visualProgram.linhas)
@@ -165,13 +165,13 @@ namespace LadderApp
                     this.AutoScroll = true;
                 }
 
-                if (_numVezes == 0 && visualProgram.linhas.Count > 0)
+                if (numberOfTimes == 0 && visualProgram.linhas.Count > 0)
                 {
                     visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.posicaoXY = new Point(auxX, visualProgram.linhas[0].LineEnd.posicaoXY.Y);
-                    ReorganizandoLinhas(1);
+                    ReorganizeLines(1);
                 }
 
-                if (_numVezes == 1)
+                if (numberOfTimes == 1)
                 {
                     if (visualProgram.linhas.Count > 0)
                     {
@@ -218,7 +218,7 @@ namespace LadderApp
             this.SuspendLayout();
 
             _linha = visualProgram.InsereLinhaNoIndice(_linha);
-            this.ReorganizandoLinhas();
+            this.ReorganizeLines();
 
             visualProgram.linhas[_linha].LineBegin.Select();
             visualProgram.linhas[_linha].LineBegin.Refresh();
@@ -337,7 +337,7 @@ namespace LadderApp
                                 this.SuspendLayout();
                                 this.SelectNextControl(_cL, false, true, false, false);
                                 linhaSelecionada.ApagaSimbolos(_cL);
-                                this.ReorganizandoLinhas();
+                                this.ReorganizeLines();
                                 this.ResumeLayout();
                                 linhaSelecionada.BackgroundLine.Invalidate();
                             }

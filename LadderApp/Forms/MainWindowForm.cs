@@ -31,7 +31,7 @@ namespace LadderApp
 
         public delegate void UncheckBtnSimularType();
         public UncheckBtnSimularType myDelegateUncheckBtnSimular;
-        
+
         public MainWindowForm()
         {
             this.AutoScroll = false;
@@ -57,7 +57,7 @@ namespace LadderApp
             }
             else
             {
-                DialogResult _result = MessageBox.Show(VisualResources.STR_QUESTIONA_SALVAR_PROJETO.Replace("%%", projectForm.Text.Trim()).Trim(), "LadderApp",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                DialogResult _result = MessageBox.Show(VisualResources.STR_QUESTIONA_SALVAR_PROJETO.Replace("%%", projectForm.Text.Trim()).Trim(), "LadderApp", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (_result == DialogResult.Yes)
                 {
@@ -90,7 +90,7 @@ namespace LadderApp
 
                         try
                         {
-                           // Using a FileStream, create an XmlTextReader.
+                            // Using a FileStream, create an XmlTextReader.
                             Stream fs = new FileStream(FileName, FileMode.Open);
                             XmlReader reader = new XmlTextReader(fs);
                             XmlSerializer serializer = new XmlSerializer(typeof(LadderProgram));
@@ -140,7 +140,7 @@ namespace LadderApp
 
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!IsProjetoAberto())
+            if (!IsProjectFormOpen())
                 return;
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -242,7 +242,7 @@ namespace LadderApp
                         instructionsDestination.InsertAllWithClearBefore(instructionsSource);
 
                         VisualInstructionUserControl _controle = projectForm.ladderForm.LinhaSelecionada.InsereSimboloIndefinido(true, projectForm.ladderForm.ControleSelecionado, instructionsDestination);
-                        projectForm.ladderForm.ReorganizandoLinhas();
+                        projectForm.ladderForm.ReorganizeLines();
                         _controle.Select();
                     }
             }
@@ -286,32 +286,33 @@ namespace LadderApp
             }
         }
 
-        public void ArrangeProjeto()
+        public void ResetWindowLayout()
         {
-            if(this.MdiChildren.Length > 0)
+            if (!IsProjectFormOpen())
             {
-                if (IsProjetoAberto())
-                {
-                    if(!projectForm.ValidaDiagrama())
-                        projectForm.AbreDiagramaLadder();
-                }
-
-                this.LayoutMdi(MdiLayout.TileVertical);
-                int _quartoHorizontal = projectForm.Width / 2;
-
-                projectForm.Width = _quartoHorizontal - 1;
-                projectForm.Location = new Point(0, 0);
-                projectForm.ladderForm.Width = 3 * (_quartoHorizontal - 1);
-                projectForm.ladderForm.Location = new Point(projectForm.Width, projectForm.ladderForm.Location.Y);
-                projectForm.ladderForm.Activate();
-
-                projectForm.ladderForm.ReorganizandoLinhas();
+                return;
             }
+
+            if (!IsLadderFormOpen() || projectForm.ladderForm.IsDisposed)
+            {
+                projectForm.OpenLadderForm();
+            }
+
+            this.LayoutMdi(MdiLayout.TileVertical);
+            int quarterHorizontalWidth = projectForm.Width / 2 - 1;
+
+            projectForm.Width = quarterHorizontalWidth;
+            projectForm.Location = new Point(0, 0);
+            projectForm.ladderForm.Width = 3 * quarterHorizontalWidth + 1;
+            projectForm.ladderForm.Location = new Point(projectForm.Width, projectForm.ladderForm.Location.Y);
+            projectForm.ladderForm.Activate();
+
+            projectForm.ladderForm.ReorganizeLines();
         }
 
-        private void ArrangeProjetoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuWindowResetLayout_Click(object sender, EventArgs e)
         {
-            ArrangeProjeto();
+            ResetWindowLayout();
         }
 
         private void InsereSimbolo(VisualLine.LocalInsereSimbolo _lIS, params OperationCode[] _cI)
@@ -335,33 +336,33 @@ namespace LadderApp
             _controle = _linha.InsereSimbolo(_lIS, _controle, _cI);
 
             /// Redesenha linhas e fundo
-            projectForm.ladderForm.ReorganizandoLinhas();
+            projectForm.ladderForm.ReorganizeLines();
             //_linha.simboloDesenhoFundo.Invalidate();
 
             _controle.Select();
         }
 
-        private void btnContatoNA_Click(object sender, EventArgs e)
+        private void btnLadderNormallyOpenContact_Click(object sender, EventArgs e)
         {
             InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OperationCode.NormallyOpenContact);
         }
 
-        private void btnContatoNF_Click(object sender, EventArgs e)
+        private void btnLadderNormallyClosedContact_Click(object sender, EventArgs e)
         {
             InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OperationCode.NormallyClosedContact);
         }
 
-        private void btnBobinaSaida_Click(object sender, EventArgs e)
+        private void btnLadderOutputCoil_Click(object sender, EventArgs e)
         {
             InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.OutputCoil);
         }
 
-        private void btnParalelo_Click(object sender, EventArgs e)
+        private void btnLadderPararellBranch_Click(object sender, EventArgs e)
         {
             InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OperationCode.ParallelBranchBegin, OperationCode.ParallelBranchNext, OperationCode.ParallelBranchEnd);
         }
 
-        private void btnLinha_Click(object sender, EventArgs e)
+        private void btnLadderLine_Click(object sender, EventArgs e)
         {
             if (IsLadderFormOpen())
             {
@@ -382,24 +383,19 @@ namespace LadderApp
             }
         }
 
-        private Boolean IsProjetoAberto()
+        private bool IsProjectFormOpen()
         {
-            if (this.MdiChildren.Length > 0)
+            foreach (var form in MdiChildren)
             {
-                switch (this.MdiChildren.Length)
+                if (form is ProjectForm)
                 {
-                    case 0:
-                        return false;
-                    default:
-                        if (this.MdiChildren.Length > 1)
-                            return true;
-                        return false;
+                    return true;
                 }
             }
             return false;
         }
 
-        private Boolean IsLadderFormOpen()
+        private bool IsLadderFormOpen()
         {
             foreach (var form in MdiChildren)
             {
@@ -408,15 +404,15 @@ namespace LadderApp
                     return true;
                 }
             }
-                return false;
+            return false;
         }
 
-        private void btnTemporizador_Click(object sender, EventArgs e)
+        private void btnLadderOutputTimer_Click(object sender, EventArgs e)
         {
             InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.Timer);
         }
 
-        private void btnContador_Click(object sender, EventArgs e)
+        private void btnLadderOutputCounter_Click(object sender, EventArgs e)
         {
             InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.Counter);
         }
@@ -500,7 +496,7 @@ namespace LadderApp
 
             // Create image.
             Image newImage = Image.FromFile("c:\\img.bmp");
-            
+
 
             // Create rectangle for displaying image.
             Rectangle destRect = new Rectangle(100, 100, 450, 150);
@@ -523,10 +519,10 @@ namespace LadderApp
 
         private void btnSimular_Click(object sender, EventArgs e)
         {
-            if (btnSimular.Checked == true || simularToolStripMenuItem.Checked == true)
+            if (btnSimular.Checked == true || mnuLadderSimulate.Checked == true)
             {
                 btnSimular.Checked = true;
-                simularToolStripMenuItem.Checked = true;
+                mnuLadderSimulate.Checked = true;
                 newThread = new Thread(new ThreadStart(this.ExecutaSimuladorContinuo));
                 newThread.Start();
             }
@@ -574,7 +570,7 @@ namespace LadderApp
         }
 
 
-        private void btnReset_Click(object sender, EventArgs e)
+        private void btnLadderOutputReset_Click(object sender, EventArgs e)
         {
             InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.Reset);
         }
@@ -605,11 +601,11 @@ namespace LadderApp
             else
             {
                 btnSimular.Checked = false;
-                simularToolStripMenuItem.Checked = false;
+                mnuLadderSimulate.Checked = false;
             }
 
         }
-        
+
         public void InvalidateDiagramaMethod()
         {
             projectForm.ladderForm.Invalidate(true);
@@ -618,7 +614,7 @@ namespace LadderApp
         public void UncheckBtnSimularMethod()
         {
             btnSimular.Checked = false;
-            simularToolStripMenuItem.Checked = false;
+            mnuLadderSimulate.Checked = false;
         }
 
 
@@ -658,8 +654,8 @@ namespace LadderApp
                             break;
                         case OperationCode.LineEnd:
                             intContaFim++;
-                            if ((OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(i+1, 1)) != OperationCode.None)
-                            intIndiceLinha = programa.InsereLinhaNoFinal(new Line());
+                            if ((OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1)) != OperationCode.None)
+                                intIndiceLinha = programa.InsereLinhaNoFinal(new Line());
                             break;
                         case OperationCode.NormallyOpenContact:
                         case OperationCode.NormallyClosedContact:
@@ -667,7 +663,7 @@ namespace LadderApp
                             {
                                 Instruction instruction = new Instruction((OperationCode)guarda);
 
-                                _tpEndLido =(AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
+                                _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
@@ -689,8 +685,8 @@ namespace LadderApp
                             {
                                 InstructionList _lstSB = new InstructionList();
                                 _lstSB.Add(new Instruction((OperationCode)guarda));
-                                _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i+1, 1));
-                                _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i+2, 1));
+                                _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
+                                _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
                                 {
@@ -700,7 +696,7 @@ namespace LadderApp
                                     _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 }
                                 _lstSB[_lstSB.Count - 1].SetOperand(0, _endLido);
-                                i+=2;
+                                i += 2;
                                 programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
                                 _lstSB.Clear();
                             }
@@ -740,7 +736,7 @@ namespace LadderApp
                                 _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Tipo);
                                 _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Preset);
                                 _lstSB[_lstSB.Count - 1].SetOperand(4, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.BaseTempo);
-                                
+
                                 i += 4;
                                 programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
                                 _lstSB.Clear();
@@ -799,7 +795,7 @@ namespace LadderApp
 
         private void SalvarArquivo(object sender, EventArgs e)
         {
-            if (!IsProjetoAberto())
+            if (!IsProjectFormOpen())
                 return;
 
             switch (projectForm.program.StsPrograma)
@@ -845,36 +841,32 @@ namespace LadderApp
             }
         }
 
-        private void opçõesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void mnuGravarLadderNoExecutavel_Click_1(object sender, EventArgs e)
         {
-            mnuGravarLadderNoExecutavel.Checked = ((mnuGravarLadderNoExecutavel.Checked == true) ? false : true);
+            mnuMicrocontrollerLadderSaveInsideMic.Checked = ((mnuMicrocontrollerLadderSaveInsideMic.Checked == true) ? false : true);
         }
 
-        private void jTAGUSBToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuMicrocontrollerOptionsJtagUsb_Click(object sender, EventArgs e)
         {
-            jTAGUSBToolStripMenuItem.Checked = true;
-            jTAGParaleloToolStripMenuItem.Checked = false;
+            mnuMicrocontrollerOptionsJtagUsb.Checked = true;
+            mnuMicrocontrollerOptionsJtagParallel.Checked = false;
         }
 
-        private void jTAGParaleloToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuMicrocontrollerOptionsJtagParallel_Click(object sender, EventArgs e)
         {
-            jTAGUSBToolStripMenuItem.Checked = false;
-            jTAGParaleloToolStripMenuItem.Checked = true;
+            mnuMicrocontrollerOptionsJtagUsb.Checked = false;
+            mnuMicrocontrollerOptionsJtagParallel.Checked = true;
         }
 
-        private void baixarProgramaToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuMicrocontrollerCommunicationDownload_Click(object sender, EventArgs e)
         {
-            if (!IsProjetoAberto())
+            if (!IsProjectFormOpen())
                 return;
 
             try
             {
-                projectForm.program.GeraExecutavel(mnuGravarLadderNoExecutavel.Checked, mnuSolicitarSenhaParaLerLadder.Checked, true);
+                projectForm.program.GeraExecutavel(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, true);
 
                 File.Delete(Application.StartupPath + @"\" + projectForm.program.Nome.Replace(' ', '_') + ".a43");
             }
@@ -884,7 +876,7 @@ namespace LadderApp
             }
         }
 
-        private void verificarLadderToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuLadderVerify_Click(object sender, EventArgs e)
         {
             if (IsLadderFormOpen())
             {
@@ -901,19 +893,19 @@ namespace LadderApp
         {
         }
 
-        private void mnuGravarLadderNoExecutavel_CheckedChanged(object sender, EventArgs e)
+        private void mnuMicrocontrollerLadderSaveInsideMic_CheckedChanged(object sender, EventArgs e)
         {
-            if (!mnuGravarLadderNoExecutavel.Checked)
+            if (!mnuMicrocontrollerLadderSaveInsideMic.Checked)
             {
-                mnuSolicitarSenhaParaLerLadder.Checked = false;
-                mnuSolicitarSenhaParaLerLadder.Enabled = false;
+                mnuMicrocontrollerLadderAskPasswordToRead.Checked = false;
+                mnuMicrocontrollerLadderAskPasswordToRead.Enabled = false;
             }
             else
-                mnuSolicitarSenhaParaLerLadder.Enabled = true;
+                mnuMicrocontrollerLadderAskPasswordToRead.Enabled = true;
         }
 
         private bool bSimulacao = false;
-        private void Simulacao(object sender, EventArgs e)
+        private void btnLadderSimulate_Click(object sender, EventArgs e)
         {
             /// inverte condição da simulação - habilitada / desabilitada
             bSimulacao = (bSimulacao == true ? false : true);
@@ -921,25 +913,25 @@ namespace LadderApp
             if (bSimulacao)
             {
                 btnSimular.Checked = true;
-                simularToolStripMenuItem.Checked = true;
+                mnuLadderSimulate.Checked = true;
                 newThread = new Thread(new ThreadStart(this.ExecutaSimuladorContinuo));
                 newThread.Start();
             }
             else
             {
                 btnSimular.Checked = false;
-                simularToolStripMenuItem.Checked = false;
+                mnuLadderSimulate.Checked = false;
             }
         }
 
-        private void mnuGerarExecutável_Click(object sender, EventArgs e)
+        private void mnuMicrocontrollerBuild_Click(object sender, EventArgs e)
         {
-            if (!IsProjetoAberto())
+            if (!IsProjectFormOpen())
                 return;
 
             try
             {
-                projectForm.program.GeraExecutavel(mnuGravarLadderNoExecutavel.Checked, mnuSolicitarSenhaParaLerLadder.Checked, false);
+                projectForm.program.GeraExecutavel(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, false);
                 if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\" + projectForm.program.Nome.Replace(' ', '_') + ".a43"))
                     File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\" + projectForm.program.Nome.Replace(' ', '_') + ".a43");
 
@@ -951,7 +943,7 @@ namespace LadderApp
             }
         }
 
-        private void lerProgramaToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuMicrocontrollerCommunicationUpload_Click(object sender, EventArgs e)
         {
             MSP430IntegrationServices p = new MSP430IntegrationServices();
             try
