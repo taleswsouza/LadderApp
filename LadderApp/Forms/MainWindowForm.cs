@@ -166,7 +166,7 @@ namespace LadderApp
         private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<Instruction> instructions = null;
-            if (IsDiagramaAberto())
+            if (IsLadderFormOpen())
             {
                 if (projectForm.ladderForm.ControleSelecionado != null)
                     if (!projectForm.ladderForm.ControleSelecionado.IsDisposed)
@@ -212,7 +212,7 @@ namespace LadderApp
 
         private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (IsDiagramaAberto())
+            if (IsLadderFormOpen())
             {
                 if (projectForm.ladderForm.ControleSelecionado != null)
                     if (!projectForm.ladderForm.ControleSelecionado.IsDisposed)
@@ -316,7 +316,7 @@ namespace LadderApp
 
         private void InsereSimbolo(VisualLine.LocalInsereSimbolo _lIS, params OperationCode[] _cI)
         {
-            if (!IsDiagramaAberto())
+            if (!IsLadderFormOpen())
                 return;
 
             if (projectForm.ladderForm.ControleSelecionado.IsDisposed)
@@ -363,7 +363,7 @@ namespace LadderApp
 
         private void btnLinha_Click(object sender, EventArgs e)
         {
-            if (IsDiagramaAberto())
+            if (IsLadderFormOpen())
             {
                 projectForm.ladderForm.InsereLinha();
             }
@@ -371,7 +371,7 @@ namespace LadderApp
 
         private void btnVerificarLadder_Click(object sender, EventArgs e)
         {
-            if (IsDiagramaAberto())
+            if (IsLadderFormOpen())
             {
                 Boolean _bResult = projectForm.program.VerificaPrograma();
 
@@ -399,17 +399,16 @@ namespace LadderApp
             return false;
         }
 
-        private Boolean IsDiagramaAberto()
+        private Boolean IsLadderFormOpen()
         {
-            if (this.MdiChildren.Length > 0)
+            foreach (var form in MdiChildren)
             {
-                switch (this.MdiChildren.Length)
+                if (form is LadderForm)
                 {
-                    case 2:
-                        return true;
+                    return true;
                 }
             }
-            return false;
+                return false;
         }
 
         private void btnTemporizador_Click(object sender, EventArgs e)
@@ -471,7 +470,7 @@ namespace LadderApp
         private void btnPrint_Click(object sender, EventArgs e)
         {
 
-            if (IsDiagramaAberto())
+            if (IsLadderFormOpen())
 
             // Set the PrintDocument object's name to the selectedNode
             // object's  tag, which in this case contains the 
@@ -543,7 +542,7 @@ namespace LadderApp
             {
 
                 /// verifica se a janela do diagrama ladder está aberta
-                if (!IsDiagramaAberto())
+                if (!IsLadderFormOpen())
                 {
                     UncheckBtnSimular(false);
                     return;
@@ -778,7 +777,7 @@ namespace LadderApp
 
         private void mnuEditComment_Click(object sender, EventArgs e)
         {
-            if (IsDiagramaAberto())
+            if (IsLadderFormOpen())
                 if (projectForm.ladderForm.ControleSelecionado != null)
                     if (!projectForm.ladderForm.ControleSelecionado.IsDisposed)
                     {
@@ -887,7 +886,7 @@ namespace LadderApp
 
         private void verificarLadderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (IsDiagramaAberto())
+            if (IsLadderFormOpen())
             {
                 Boolean _bResult = projectForm.program.VerificaPrograma();
 
