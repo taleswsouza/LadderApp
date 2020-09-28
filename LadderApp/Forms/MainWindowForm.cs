@@ -98,7 +98,7 @@ namespace LadderApp
                             {
                                 LadderProgram program = (LadderProgram)serializer.Deserialize(reader);
 
-                                program.StsPrograma = LadderProgram.StatusPrograma.ABERTO;
+                                program.Status = LadderProgram.ProgramStatus.Open;
 
                                 projectForm = new ProjectForm(program);
                                 projectForm.program.PathFile = FileName;
@@ -374,7 +374,7 @@ namespace LadderApp
         {
             if (IsLadderFormOpen())
             {
-                Boolean _bResult = projectForm.program.VerificaPrograma();
+                Boolean _bResult = projectForm.program.VerifyProgram();
 
                 if (_bResult)
                     MessageBox.Show("OK");
@@ -540,14 +540,14 @@ namespace LadderApp
                 /// verifica se a janela do diagrama ladder está aberta
                 if (!IsLadderFormOpen())
                 {
-                    UncheckBtnSimular(false);
+                    UncheckBtnSimulateLadder(false);
                     return;
                 }
 
                 /// verifica se o programa ladder não está inconsistente
-                if (!projectForm.program.VerificaPrograma())
+                if (!projectForm.program.VerifyProgram())
                 {
-                    UncheckBtnSimular(false);
+                    UncheckBtnSimulateLadder(false);
                     return;
                 }
 
@@ -555,14 +555,14 @@ namespace LadderApp
                 projectForm.program.ExecutaSimuladoTemporizadores();
 
                 /// executa a lógica ladder
-                if (!projectForm.program.ExecutaLadderSimulado())
+                if (!projectForm.program.SimulateLadder())
                 {
-                    UncheckBtnSimular(false);
+                    UncheckBtnSimulateLadder(false);
                     return;
                 }
 
                 /// atualiza o janela do diagrama ladder
-                this.InvalidaFormulario(true);
+                this.InvalidateForm(true);
 
                 /// aguarda 100 ms
                 Thread.Sleep(100);
@@ -579,7 +579,7 @@ namespace LadderApp
         {
         }
 
-        public void InvalidaFormulario(bool bstate)
+        public void InvalidateForm(bool state)
         {
             if (projectForm.ladderForm.InvokeRequired)
             {
@@ -587,12 +587,12 @@ namespace LadderApp
             }
             else
             {
-                this.projectForm.ladderForm.Invalidate(bstate);
+                this.projectForm.ladderForm.Invalidate(state);
             }
 
         }
 
-        public void UncheckBtnSimular(bool bstate)
+        public void UncheckBtnSimulateLadder(bool state)
         {
             if (this.InvokeRequired)
             {
@@ -603,7 +603,6 @@ namespace LadderApp
                 btnSimular.Checked = false;
                 mnuLadderSimulate.Checked = false;
             }
-
         }
 
         public void InvalidateDiagramaMethod()
@@ -634,7 +633,7 @@ namespace LadderApp
 
                 /// Cria um programa novo vazio
                 LadderProgram programa = new LadderProgram();
-                programa.StsPrograma = LadderProgram.StatusPrograma.NOVO;
+                programa.Status = LadderProgram.ProgramStatus.New;
                 programa.Nome = strNomeProjeto;
                 programa.device = new Device(1);
                 programa.addressing.AlocaEnderecamentoIO(programa.device);
@@ -798,10 +797,10 @@ namespace LadderApp
             if (!IsProjectFormOpen())
                 return;
 
-            switch (projectForm.program.StsPrograma)
+            switch (projectForm.program.Status)
             {
-                case LadderProgram.StatusPrograma.ABERTO:
-                case LadderProgram.StatusPrograma.SALVO:
+                case LadderProgram.ProgramStatus.Open:
+                case LadderProgram.ProgramStatus.Saved:
                     Salvar(projectForm.program.PathFile);
                     break;
                 default:
@@ -825,7 +824,7 @@ namespace LadderApp
                 //mySerializer.Serialize(myWriter, frmProj.programa.dispositivo);
                 myWriter.Close();
                 projectForm.program.PathFile = FileName;
-                projectForm.program.StsPrograma = LadderProgram.StatusPrograma.SALVO;
+                projectForm.program.Status = LadderProgram.ProgramStatus.Saved;
                 projectForm.SetText();
             }
             catch (Exception ex)
@@ -880,7 +879,7 @@ namespace LadderApp
         {
             if (IsLadderFormOpen())
             {
-                Boolean _bResult = projectForm.program.VerificaPrograma();
+                Boolean _bResult = projectForm.program.VerifyProgram();
 
                 if (_bResult)
                     MessageBox.Show("OK");

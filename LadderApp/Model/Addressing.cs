@@ -163,7 +163,7 @@ namespace LadderApp
                 }
 
                 foreach (Address _endCada in _lstGenerica)
-                    _endCada.EmUso = false;
+                    _endCada.Used = false;
             }
         }
 
@@ -204,7 +204,7 @@ namespace LadderApp
                 }
 
                 foreach (Address _endCada in _lstGenerica)
-                    if (_endCada.EmUso == true)
+                    if (_endCada.Used == true)
                         _lstResult.Add(_endCada);
             }
 
@@ -253,7 +253,7 @@ namespace LadderApp
             {
                 for (int i = (_qtdAtual - 1); i >= qtdEnd; i--)
                 {
-                    if (!_lstE[i].EmUso)
+                    if (!_lstE[i].Used)
                     {
                         _lstE[i] = null;
                         _lstE.RemoveAt(i);

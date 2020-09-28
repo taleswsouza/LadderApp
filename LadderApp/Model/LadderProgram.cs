@@ -18,18 +18,16 @@ namespace LadderApp
 
     public class LadderProgram
     {
-        public enum StatusPrograma
+        public enum ProgramStatus
         {
-            NAOINICIADO,
-            NOVO,
-            ABERTO,
-            SALVO
-        }
-
-        private class SuporteConjunto
-        {
-            public bool valor = true;
-            public bool bIniciado = false;
+            [XmlEnum(Name = "NAOINICIADO")]
+            NotInitialized,
+            [XmlEnum(Name = "NOVO")]
+            New,
+            [XmlEnum(Name = "ABERTO")]
+            Open,
+            [XmlEnum(Name = "SALVO")]
+            Saved
         }
 
         private String nomePrograma = "";
@@ -52,12 +50,8 @@ namespace LadderApp
         [XmlIgnore]
         public String PathFile = "";
 
-        private StatusPrograma stsprg = StatusPrograma.NAOINICIADO;
-        public StatusPrograma StsPrograma
-        {
-            get { return stsprg; }
-            set { stsprg = value; }
-        }
+        [XmlElement(ElementName = "StsPrograma")]
+        public ProgramStatus Status { get; set; } = ProgramStatus.NotInitialized;
 
         public LadderProgram()
         {
@@ -74,9 +68,9 @@ namespace LadderApp
         }
 
         [XmlIgnore]
-        public List<Address> lstTemporizadoresUtilizados = new List<Address>();
+        public List<Address> usedTimers = new List<Address>();
         [XmlIgnore]
-        public List<Address> lstContadoresUtilizados = new List<Address>();
+        public List<Address> usedCounters = new List<Address>();
 
 
         /// <summary>
@@ -294,70 +288,61 @@ namespace LadderApp
 
         }
 
-
-        public Boolean ExecutaLadderSimulado()
+        private class LineStretchSummary
         {
-            if (!VerificaPrograma())
+            public bool Initiated { get; set; } = false;
+            public bool Value { get; set; } = true;
+        }
+        public bool SimulateLadder()
+        {
+            if (!VerifyProgram())
                 return false;
 
-            Boolean bAuxValor = false;
-            List<SuporteConjunto> op = new List<SuporteConjunto>();
-
-            foreach (Line _lc in this.lines)
+            List<LineStretchSummary> lineStretchSummary = new List<LineStretchSummary>();
+            foreach (Line line in this.lines)
             {
-                /// cria a linha
-                op.Add(new SuporteConjunto());
-                foreach (Instruction instruction in _lc.instructions)
+                lineStretchSummary.Add(new LineStretchSummary());
+                foreach (Instruction instruction in line.instructions)
                 {
                     switch (instruction.OpCode)
                     {
                         case OperationCode.ParallelBranchBegin:
-                            /// cria o paralelo
-                            op.Add(new SuporteConjunto());
-                            /// cria o paralelo inicial
-                            op.Add(new SuporteConjunto());
+                            lineStretchSummary.Add(new LineStretchSummary());
+                            //lineStretch.Add(new LineStretchSummary());
 
                             break;
                         case OperationCode.ParallelBranchEnd:
-                            /// Atualiza o paralelo
-                            if (op[op.Count - 2].bIniciado)
-                                op[op.Count - 2].valor = op[op.Count - 2].valor || op[op.Count - 1].valor;
-                            else
-                                op[op.Count - 2].valor = op[op.Count - 1].valor;
+                            //if (lineStretch[lineStretch.Count - 2].Initiated)
+                            //    lineStretch[lineStretch.Count - 2].Value = lineStretch[lineStretch.Count - 2].Value || lineStretch[lineStretch.Count - 1].Value;
+                            //else
+                            //    lineStretch[lineStretch.Count - 2].Value = lineStretch[lineStretch.Count - 1].Value;
 
-                            /// remove o utlimo paralelo proximo
-                            op.RemoveAt(op.Count - 1);
+                            ///// remove o utlimo paralelo proximo
+                            //lineStretch.RemoveAt(lineStretch.Count - 1);
 
                             /// Atualiza o anterior ao paralelo
-                            if (op[op.Count - 2].bIniciado)
-                                op[op.Count - 2].valor = op[op.Count - 2].valor && op[op.Count - 1].valor;
+                            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
+                                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value && lineStretchSummary[lineStretchSummary.Count - 1].Value;
                             else
-                                op[op.Count - 2].valor = op[op.Count - 1].valor;
+                                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
 
-                            op[op.Count - 2].bIniciado = true;
+                            lineStretchSummary[lineStretchSummary.Count - 2].Initiated = true;
 
-                            /// remove o paralelo
-                            op.RemoveAt(op.Count - 1);
-
-
+                            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
                             break;
                         case OperationCode.ParallelBranchNext:
-                            /// Atualiza o paralelo
-                            if (op[op.Count - 2].bIniciado)
-                                op[op.Count - 2].valor = op[op.Count - 2].valor || op[op.Count - 1].valor;
+                            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
+                                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value || lineStretchSummary[lineStretchSummary.Count - 1].Value;
                             else
-                                op[op.Count - 2].valor = op[op.Count - 1].valor;
+                                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
+                            lineStretchSummary[lineStretchSummary.Count - 2].Initiated = true;
 
-                            op[op.Count - 2].bIniciado = true;
+                            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
 
-                            /// remove o paralelo inicial ou paralelo proximo anterior
-                            op.RemoveAt(op.Count - 1);
-
-                            /// cria novo paralelo proximo
-                            op.Add(new SuporteConjunto());
-
+                            lineStretchSummary.Add(new LineStretchSummary());
                             break;
                         default:
+                            bool bAuxValor = false;
                             switch (instruction.OpCode)
                             {
                                 case OperationCode.NormallyOpenContact:
@@ -368,18 +353,17 @@ namespace LadderApp
                                     break;
                             }
 
-                            if (op[op.Count - 1].bIniciado)
-                                op[op.Count - 1].valor = op[op.Count - 1].valor && bAuxValor;
+                            if (lineStretchSummary[lineStretchSummary.Count - 1].Initiated)
+                                lineStretchSummary[lineStretchSummary.Count - 1].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value && bAuxValor;
                             else
-                                op[op.Count - 1].valor = bAuxValor;
+                                lineStretchSummary[lineStretchSummary.Count - 1].Value = bAuxValor;
 
-                            op[op.Count - 1].bIniciado = true;
+                            lineStretchSummary[lineStretchSummary.Count - 1].Initiated = true;
                             break;
                     }
                 }
 
-                /// atribui o resultado final da linha nas saidas
-                foreach (Instruction instruction in _lc.outputs)
+                foreach (Instruction instruction in line.outputs)
                 {
                     switch (instruction.OpCode)
                     {
@@ -389,19 +373,19 @@ namespace LadderApp
                         case OperationCode.Reset:
 
                             if (instruction.OpCode == OperationCode.OutputCoil)
-                                ((Address)instruction.GetOperand(0)).Valor = (bool)op[op.Count - 1].valor;
+                                ((Address)instruction.GetOperand(0)).Valor = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
                             else if (instruction.OpCode == OperationCode.Timer)
                             {
-                                ((Address)instruction.GetOperand(0)).Timer.EN = (bool)op[op.Count - 1].valor;
+                                ((Address)instruction.GetOperand(0)).Timer.EN = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
                             }
                             else if (instruction.OpCode == OperationCode.Counter)
                             {
-                                ((Address)instruction.GetOperand(0)).Counter.EN = (bool)op[op.Count - 1].valor;
+                                ((Address)instruction.GetOperand(0)).Counter.EN = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
                                 ExecutaSimuladoContadores(instruction, ((Address)instruction.GetOperand(0)));
                             }
                             else if (instruction.OpCode == OperationCode.Reset)
                             {
-                                if ((bool)op[op.Count - 1].valor)
+                                if ((bool)lineStretchSummary[lineStretchSummary.Count - 1].Value)
                                 {
                                     switch (((Address)instruction.GetOperand(0)).AddressType)
                                     {
@@ -425,8 +409,7 @@ namespace LadderApp
                     }
 
                 }
-
-                op.RemoveAt(op.Count - 1);
+                lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
             }
 
             if (auxToggleBitPulse != null)
@@ -434,7 +417,6 @@ namespace LadderApp
                 auxToggleBitPulse.Valor = auxToggleBitPulse.Valor == true ? false : true;
                 auxToggleBitPulse = null;
             }
-
             return true;
         }
 
@@ -496,7 +478,7 @@ namespace LadderApp
 
             bool bIniciado = false;
 
-            if (!VerificaPrograma())
+            if (!VerifyProgram())
                 return false;
 
             //txtCodigoInterpretavel.Add("@laddermic.com");
@@ -553,11 +535,11 @@ namespace LadderApp
                             {
                                 case OperationCode.NormallyOpenContact:
                                     linha += ((Address)instruction.GetOperand(0)).Acesso;
-                                    ((Address)instruction.GetOperand(0)).EmUso = true;
+                                    ((Address)instruction.GetOperand(0)).Used = true;
                                     break;
                                 case OperationCode.NormallyClosedContact:
                                     linha += "!" + ((Address)instruction.GetOperand(0)).Acesso;
-                                    ((Address)instruction.GetOperand(0)).EmUso = true;
+                                    ((Address)instruction.GetOperand(0)).Used = true;
                                     break;
                             }
                             bIniciado = true;
@@ -590,23 +572,23 @@ namespace LadderApp
                             if (instruction.OpCode == OperationCode.OutputCoil)
                             {
                                 OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso);
-                                ((Address)instruction.GetOperand(0)).EmUso = true;
+                                ((Address)instruction.GetOperand(0)).Used = true;
                             }
                             else if (instruction.OpCode == OperationCode.Timer)
                             {
                                 OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso2);
-                                ((Address)instruction.GetOperand(0)).EmUso = true;
+                                ((Address)instruction.GetOperand(0)).Used = true;
                             }
                             else if (instruction.OpCode == OperationCode.Counter)
                             {
                                 OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso2);
                                 FuncoesAposLinha += " ExecContador(&" + ((Address)instruction.GetOperand(0)).Name + ");";
-                                ((Address)instruction.GetOperand(0)).EmUso = true;
+                                ((Address)instruction.GetOperand(0)).Used = true;
                             }
                             else if (instruction.OpCode == OperationCode.Reset)
                             {
                                 OperandosSELinha.Add(((Address)instruction.GetOperand(0)).Name + ".Reset = 1;");
-                                ((Address)instruction.GetOperand(0)).EmUso = true;
+                                ((Address)instruction.GetOperand(0)).Used = true;
 
                                 switch (((Address)instruction.GetOperand(0)).AddressType)
                                 {
@@ -687,70 +669,70 @@ namespace LadderApp
                 bool bIndicaSaidaUsadaNoPrograma = false;
 
                 List<String> _lstEndUsados = new List<String>();
-                List<String> _lstPortasUsadas = new List<String>();
+                List<String> usedPorts = new List<String>();
                 List<Int32> _lstTiposTemporizadoresUsados = new List<Int32>();
                 List<Int32> _lstTiposContadoresUsados = new List<Int32>();
 
                 /// 1. prepara a configuração para as portas de entrada.
                 /// 2. levantamento das portas que foram usadas no programa
                 foreach (Address _endCada in addressing.ListInputAddress)
-                    if (_endCada.Parametro != "" && _endCada.EmUso == true)
+                    if (_endCada.Parametro != "" && _endCada.Used == true)
                     {
                         bIndicaEntradaUsadaNoPrograma = true;
                         /// 1.1. Adiciona os parametros dos endereços usados no programa
                         DadosParametros += "\t" + _endCada.Parametro + ";" + Environment.NewLine;
 
                         /// 2.1. prerapara a declaração dos endereços
-                        if (!_lstPortasUsadas.Contains(_endCada.EnderecoRaiz))
-                            _lstPortasUsadas.Add(_endCada.EnderecoRaiz);
+                        if (!usedPorts.Contains(_endCada.EnderecoRaiz))
+                            usedPorts.Add(_endCada.EnderecoRaiz);
                     }
                 DadosParametros += Environment.NewLine;
 
                 /// 1. prepara a configuração para as portas de saida.
                 /// 2. levantamento das portas que foram usadas no programa
                 foreach (Address _endCada in addressing.ListOutputAddress)
-                    if (_endCada.Parametro != "" && _endCada.EmUso == true)
+                    if (_endCada.Parametro != "" && _endCada.Used == true)
                     {
                         bIndicaSaidaUsadaNoPrograma = true;
                         /// 1.1. Adiciona os parametros dos endereços usados no programa
                         DadosParametros += "\t" + _endCada.Parametro + ";" + Environment.NewLine;
 
                         /// 2.1. prerapara a declaração dos endereços
-                        if (!_lstPortasUsadas.Contains(_endCada.EnderecoRaiz))
-                            _lstPortasUsadas.Add(_endCada.EnderecoRaiz);
+                        if (!usedPorts.Contains(_endCada.EnderecoRaiz))
+                            usedPorts.Add(_endCada.EnderecoRaiz);
                     }
                 DadosParametros += Environment.NewLine;
 
                 /// prepara a declaração das portas que foram usadas no programa
-                for (int i = 0; i < _lstPortasUsadas.Count; i++)
-                    _lstEndUsados.Add(_lstPortasUsadas[i] + "_IN, " + _lstPortasUsadas[i] + "_OUT, " + _lstPortasUsadas[i] + "_DIR");
+                for (int i = 0; i < usedPorts.Count; i++)
+                    _lstEndUsados.Add(usedPorts[i] + "_IN, " + usedPorts[i] + "_OUT, " + usedPorts[i] + "_DIR");
 
-                for (int i = 0; i < _lstPortasUsadas.Count; i++)
+                for (int i = 0; i < usedPorts.Count; i++)
                 {
                     /// Escreve rotina SetupIO(void)
-                    DadosSetupIO += _lstPortasUsadas[i] + "OUT = 0; // Init Output data of port" + Environment.NewLine;
-                    DadosSetupIO += _lstPortasUsadas[i] + "DIR = " + _lstPortasUsadas[i] + "_DIR.Byte; // Init of Port1 Data-Direction Reg (Out=1 / Inp=0)" + Environment.NewLine;
-                    DadosSetupIO += _lstPortasUsadas[i] + "SEL = 0; // Port-Modules:" + Environment.NewLine;
-                    DadosSetupIO += _lstPortasUsadas[i] + "IE = 0; // Interrupt Enable (0=dis 1=enabled)" + Environment.NewLine;
-                    DadosSetupIO += _lstPortasUsadas[i] + "IES = 0; // Interrupt Edge Select (0=pos 1=neg)" + Environment.NewLine;
+                    DadosSetupIO += usedPorts[i] + "OUT = 0; // Init Output data of port" + Environment.NewLine;
+                    DadosSetupIO += usedPorts[i] + "DIR = " + usedPorts[i] + "_DIR.Byte; // Init of Port1 Data-Direction Reg (Out=1 / Inp=0)" + Environment.NewLine;
+                    DadosSetupIO += usedPorts[i] + "SEL = 0; // Port-Modules:" + Environment.NewLine;
+                    DadosSetupIO += usedPorts[i] + "IE = 0; // Interrupt Enable (0=dis 1=enabled)" + Environment.NewLine;
+                    DadosSetupIO += usedPorts[i] + "IES = 0; // Interrupt Edge Select (0=pos 1=neg)" + Environment.NewLine;
                     DadosSetupIO += Environment.NewLine;
 
                     if (bIndicaEntradaUsadaNoPrograma)
                     {
                         /// Escreve rotina LeEntradas(void)
-                        DadosLeEntradas += _lstPortasUsadas[i] + "_IN.Byte = " + _lstPortasUsadas[i] + "IN;" + Environment.NewLine;
+                        DadosLeEntradas += usedPorts[i] + "_IN.Byte = " + usedPorts[i] + "IN;" + Environment.NewLine;
                     }
 
                     if (bIndicaSaidaUsadaNoPrograma)
                     {
                         /// Escreve rotina LEscreveSaidas(void)
-                        DadosEscreveSaidas += _lstPortasUsadas[i] + "OUT = " + _lstPortasUsadas[i] + "_OUT.Byte; // Write Output data of port1" + Environment.NewLine;
+                        DadosEscreveSaidas += usedPorts[i] + "OUT = " + usedPorts[i] + "_OUT.Byte; // Write Output data of port1" + Environment.NewLine;
                     }
                 }
 
                 /// prepara composição de parametros e declaração de variáveis
                 foreach (Address _endCada in addressing.ListMemoryAddress)
-                    if (_endCada.EmUso)
+                    if (_endCada.Used)
                     {
                         /// prerapara a declaração dos endereços
                         if (!_lstEndUsados.Contains(_endCada.EnderecoRaiz))
@@ -771,7 +753,7 @@ namespace LadderApp
                 DadosParametros += "// timer parameters" + Environment.NewLine;
                 foreach (Address _endCada in addressing.ListTimerAddress)
                 {
-                    if (_endCada.EmUso)
+                    if (_endCada.Used)
                     {
                         bIndicaTemporizadorNoPrograma = true;
                         DadosParametros += "\t" + _endCada.Name + ".Tipo = " + _endCada.Timer.Tipo.ToString() + ";" + Environment.NewLine;
@@ -807,7 +789,7 @@ namespace LadderApp
                 /// Adiciona os parametros dos endereços usados no programa
                 foreach (Address _endCada in addressing.ListCounterAddress)
                 {
-                    if (_endCada.EmUso)
+                    if (_endCada.Used)
                     {
                         bIndicaContadorNoPrograma = true;
                         DadosParametros += "\t" + _endCada.Name + ".Tipo = " + _endCada.Counter.Tipo.ToString() + ";" + Environment.NewLine;
@@ -991,34 +973,28 @@ namespace LadderApp
             return true;
         }
 
-        public bool VerificaPrograma()
+        public bool VerifyProgram()
         {
-            bool _bResult = true;
-            lstContadoresUtilizados.Clear();
-            lstTemporizadoresUtilizados.Clear();
-
-            /// Verifica cada linha de forma independente
-            foreach (Line _lc in this.lines)
+            usedCounters.Clear();
+            usedTimers.Clear();
+            foreach (Line line in this.lines)
             {
-                if (!this.VerificaLinha(_lc))
-                    _bResult = false;
+                if (!VerifyLine(line))
+                    return false;
             }
-
-            return _bResult;
+            return true;
         }
 
-        private bool VerificaLinha(Line _linha)
+        private bool VerifyLine(Line line)
         {
-            InstructionList _lst = new InstructionList();
-
-            _lst.InsertAllWithClearBefore(_linha.outputs);
-
-            if (_lst.Count > 0)
+            InstructionList instructions = new InstructionList();
+            instructions.InsertAllWithClearBefore(line.outputs);
+            if (instructions.Count > 0)
             {
-                if (!(_lst.Contains(OperationCode.OutputCoil) ||
-                    _lst.Contains(OperationCode.Timer) ||
-                    _lst.Contains(OperationCode.Counter) ||
-                    _lst.Contains(OperationCode.Reset)))
+                if (!(instructions.Contains(OperationCode.OutputCoil) ||
+                    instructions.Contains(OperationCode.Timer) ||
+                    instructions.Contains(OperationCode.Counter) ||
+                    instructions.Contains(OperationCode.Reset)))
                     return false;
             }
             else
@@ -1026,39 +1002,38 @@ namespace LadderApp
 
 
             /// 2.1 - Verifica se todos os simbolos tem os operandos minimos atribuidos
-            if (!_lst.ContainsAllOperandos())
+            if (!instructions.ContainsAllOperandos())
                 return false;
 
-            if (!_lst.ExisteTemporizadorDuplicado(lstTemporizadoresUtilizados))
+            if (!instructions.HasDuplicatedTimers(usedTimers))
                 return false;
 
-            if (!_lst.ExisteContadorDuplicado(lstContadoresUtilizados))
+            if (!instructions.HasDuplicatedCounters(usedCounters))
                 return false;
 
-            _lst.InsertAllWithClearBefore(_linha.instructions);
+            instructions.InsertAllWithClearBefore(line.instructions);
 
             /// 1.1 - Verifica se a linha tem simbolos validos
-            if (_lst.Count > 0)
-                if (_lst.Contains(OperationCode.OutputCoil) ||
-                    _lst.Contains(OperationCode.Timer) ||
-                    _lst.Contains(OperationCode.Counter) ||
-                    _lst.Contains(OperationCode.Reset))
+            if (instructions.Count > 0)
+                if (instructions.Contains(OperationCode.OutputCoil) ||
+                    instructions.Contains(OperationCode.Timer) ||
+                    instructions.Contains(OperationCode.Counter) ||
+                    instructions.Contains(OperationCode.Reset))
                     return false;
 
 
             /// 2.2 - Verifica se todos os simbolos tem os operandos minimos atribuidos
-            if (!_lst.ContainsAllOperandos())
+            if (!instructions.ContainsAllOperandos())
                 return false;
 
             return true;
         }
 
-        // Reindexa endrereços da logica ladder
-        public bool ReindexaEnderecos()
+        public bool ReindexAddresses()
         {
-            foreach (Line _lc in this.lines)
+            foreach (Line line in this.lines)
             {
-                foreach (Instruction instruction in _lc.instructions)
+                foreach (Instruction instruction in line.instructions)
                 {
                     switch (instruction.OpCode)
                     {
@@ -1074,7 +1049,7 @@ namespace LadderApp
                             break;
                     }
                 }
-                foreach (Instruction instruction in _lc.outputs)
+                foreach (Instruction instruction in line.outputs)
                 {
                     switch (instruction.OpCode)
                     {
@@ -1108,7 +1083,6 @@ namespace LadderApp
                     }
                 }
             }
-
             return true;
         }
     }

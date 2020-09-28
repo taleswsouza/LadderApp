@@ -11,19 +11,16 @@ namespace LadderApp
     public partial class ProjectForm : Form
     {
         public LadderForm ladderForm;
-
-        // composicao do projeto ladder
         public LadderProgram program = new LadderProgram();
+
+        public ProjectForm(LadderProgram program) : this()
+        {
+            this.program = program;
+        }
 
         public ProjectForm()
         {
             InitializeComponent();
-        }
-
-        public ProjectForm(LadderProgram program)
-        {
-            InitializeComponent();
-            this.program = program;
         }
 
         public void SetText()
@@ -39,10 +36,9 @@ namespace LadderApp
 
         private void ProjetoLadder_Load(object sender, EventArgs e)
         {
-            // Expande apenas a arvore projeto
-            ArvoreProjeto.Nodes[0].Expand();
+            ArvoreProjeto.TopNode.Expand();
 
-            if (program.StsPrograma == LadderProgram.StatusPrograma.NAOINICIADO)
+            if (program.Status == LadderProgram.ProgramStatus.NotInitialized)
             {
                 program.device = new Device(1);
 
@@ -62,29 +58,25 @@ namespace LadderApp
                 AlocaEnderecamentoMemoria(program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, program.addressing.ListTimerAddress.Count);
                 AlocaEnderecamentoMemoria(program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, program.addressing.ListCounterAddress.Count);
 
-                program.ReindexaEnderecos();
+                program.ReindexAddresses();
             }
 
-            if (!CheckLadderFormIsNotNull())
+            //if (!CheckLadderFormIsNotNull())
                 OpenLadderForm();
         }
 
-        private void AbrirArquivo()
-        {
-        }
 
         private void ProjetoLadder_Shown(object sender, EventArgs e)
         {
-            MainWindowForm _frmEditorLadder;
-            _frmEditorLadder = (MainWindowForm)this.MdiParent;
-            _frmEditorLadder.ResetWindowLayout();
+            MainWindowForm mainWindowForm = (MainWindowForm)this.MdiParent;
+            mainWindowForm.ResetWindowLayout();
         }
 
         private void ProjetoLadder_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult _result = MessageBox.Show(String.Format("Do you want to save the project {0}?", Text), "LadderApp", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show(String.Format("Do you want to save the project {0}?", Text), "LadderApp", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
-            switch (_result)
+            switch (result)
             {
                 case DialogResult.Cancel:
                     e.Cancel = true;
@@ -103,10 +95,10 @@ namespace LadderApp
             switch (e.Node.Name)
             {
                 case "NoProgramaLadder":
-                    if (!CheckLadderFormIsNotNull())
-                    {
+                    //if (!CheckLadderFormIsNotNull())
+                    //{
                         OpenLadderForm();
-                    }
+                    //}
                     break;
                 case "NoDispositivo":
                     DeviceForm frmDisp = new DeviceForm(program.device);
@@ -187,7 +179,7 @@ namespace LadderApp
                         //}
                         break;
                 }
-                el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
+                el.EditedCommentEvent += new EditedCommentEventHandler(Endereco_MudouComentario);
             }
 
         }
@@ -272,7 +264,7 @@ namespace LadderApp
             {
                 for (int i = (_qtdAtual - 1); i >= qtdEnd; i--)
                 {
-                    if (!_lstE[i].EmUso)
+                    if (!_lstE[i].Used)
                     {
                         _lstE[i] = null;
                         _lstE.RemoveAt(i);
@@ -286,7 +278,7 @@ namespace LadderApp
             {
                 _NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Add(el.Name, el.Name + (el.Comment == "" ? "" : " - " + el.Comment));
                 _NoEnderecamento.Nodes[_txtNoEndereco].Nodes[el.Name].Tag = el;
-                el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
+                el.EditedCommentEvent += new EditedCommentEventHandler(Endereco_MudouComentario);
             }
 
             return 0;
@@ -313,7 +305,7 @@ namespace LadderApp
                             {
                                 Address _el = (Address)instruction.GetOperand(0);
                                 if (_el.AddressType == addressType)
-                                    _el.EmUso = true;
+                                    _el.Used = true;
                             }
                             break;
                     }

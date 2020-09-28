@@ -36,7 +36,8 @@ namespace LadderApp.CodigoInterpretavel
 
         public Int32 PosInicial
         {
-            get {
+            get
+            {
                 if (this.ExisteCodigoInterpretavel())
                 {
                     Int32 posIncial = DadosConvertidosChar.IndexOf(IdCodigo) + IdCodigo.Length;
@@ -62,7 +63,7 @@ namespace LadderApp.CodigoInterpretavel
         public bool ExisteCabecalho()
         {
             if (ExisteCodigoInterpretavel())
-                if (LeCodigoInterpretavel(PosInicial) == OperationCode.HeadLenght)
+                if (ReadOperationCode(PosInicial) == OperationCode.HeadLenght)
                 {
                     intTamanhoCabecalho = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(PosInicial + 1, 1));
                     return true;
@@ -78,7 +79,7 @@ namespace LadderApp.CodigoInterpretavel
                 if (ExisteCabecalho())
                 {
                     for (int i = PosInicial + 2; i <= PosInicial + intTamanhoCabecalho + 2; i++)
-                        switch (LeCodigoInterpretavel(i))
+                        switch (ReadOperationCode(i))
                         {
                             case OperationCode.HeadPassword0:
                                 bSolicitarSenha = true;
@@ -97,17 +98,15 @@ namespace LadderApp.CodigoInterpretavel
             bCabecalhoValidado = true;
         }
 
-        public OperationCode LeCodigoInterpretavel(Int32 _pos)
+        public OperationCode ReadOperationCode(int position)
         {
+            try
             {
-                try
-                {
-                    return (OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(_pos, 1));
-                }
-                catch
-                {
-                    throw new NotValidOpCodeException();
-                }
+                return (OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(position, 1));
+            }
+            catch
+            {
+                throw new NotValidOpCodeException();
             }
         }
 
@@ -143,10 +142,10 @@ namespace LadderApp.CodigoInterpretavel
             }
             return -1;
         }
-        
-        public Address LeEndereco(ref Int32 position, Addressing enderecamento)
+
+        public Address ReadAddress(ref Int32 position, Addressing addressing)
         {
-            Instruction instruction = new Instruction(LeCodigoInterpretavel(position));
+            Instruction instruction = new Instruction(ReadOperationCode(position));
             switch (instruction.OpCode)
             {
                 case OperationCode.None:
@@ -159,7 +158,7 @@ namespace LadderApp.CodigoInterpretavel
                     position++;
                     Int32 addressIndex = LeInteiro(position);
                     position++;
-                    return enderecamento.Find(addressType, addressIndex); ;
+                    return addressing.Find(addressType, addressIndex); ;
                 case OperationCode.OutputCoil:
                 case OperationCode.Reset:
                     break;
@@ -175,44 +174,44 @@ namespace LadderApp.CodigoInterpretavel
             return null;
         }
 
-        public Int32 NumeroOperandos(OperationCode _ci)
-        {
-            int iNumOperandos = -1;
-            switch (_ci)
-            {
-                case OperationCode.None:
-                    iNumOperandos = 0;
-                    break;
-                case OperationCode.LineEnd:
-                    iNumOperandos = 0;
-                    break;
-                case OperationCode.NormallyOpenContact:
-                case OperationCode.NormallyClosedContact:
-                    iNumOperandos = 2;
-                    break;
-                case OperationCode.OutputCoil:
-                case OperationCode.Reset:
-                    iNumOperandos = 2;
-                    break;
-                case OperationCode.ParallelBranchBegin:
-                case OperationCode.ParallelBranchEnd:
-                case OperationCode.ParallelBranchNext:
-                    iNumOperandos = 0;
-                    break;
-                case OperationCode.Counter:
-                    iNumOperandos = 3;
-                    break;
-                case OperationCode.Timer:
-                    iNumOperandos = 4;
-                    break;
-                default:
-                    iNumOperandos = 0;
-                    break;
-            }
+        //public int NumberOfOperands(OperationCode opCode)
+        //{
+        //    int iNumOperandos = -1;
+        //    switch (opCode)
+        //    {
+        //        case OperationCode.None:
+        //            iNumOperandos = 0;
+        //            break;
+        //        case OperationCode.LineEnd:
+        //            iNumOperandos = 0;
+        //            break;
+        //        case OperationCode.NormallyOpenContact:
+        //        case OperationCode.NormallyClosedContact:
+        //            iNumOperandos = 2;
+        //            break;
+        //        case OperationCode.OutputCoil:
+        //        case OperationCode.Reset:
+        //            iNumOperandos = 2;
+        //            break;
+        //        case OperationCode.ParallelBranchBegin:
+        //        case OperationCode.ParallelBranchEnd:
+        //        case OperationCode.ParallelBranchNext:
+        //            iNumOperandos = 0;
+        //            break;
+        //        case OperationCode.Counter:
+        //            iNumOperandos = 3;
+        //            break;
+        //        case OperationCode.Timer:
+        //            iNumOperandos = 4;
+        //            break;
+        //        default:
+        //            iNumOperandos = 0;
+        //            break;
+        //    }
 
-            return iNumOperandos;
-        }
-        
+        //    return iNumOperandos;
+        //}
+
         private LadderProgram LerExecutavel(String strNomeProjeto)
         {
             List<int> lstCodigosLidos = new List<int>();
@@ -229,7 +228,7 @@ namespace LadderApp.CodigoInterpretavel
 
                 /// Cria um programa novo vazio
                 LadderProgram programa = new LadderProgram();
-                programa.StsPrograma = LadderProgram.StatusPrograma.NOVO;
+                programa.Status = LadderProgram.ProgramStatus.New;
                 programa.Nome = strNomeProjeto;
                 programa.device = new Device(1);
                 programa.addressing.AlocaEnderecamentoIO(programa.device);
@@ -240,7 +239,7 @@ namespace LadderApp.CodigoInterpretavel
 
                 for (int i = this.PosInicial; i < DadosConvertidosChar.Length; i++)
                 {
-                    guarda = LeCodigoInterpretavel(i); i++;
+                    guarda = ReadOperationCode(i); i++;
 
                     switch (guarda)
                     {
@@ -249,7 +248,7 @@ namespace LadderApp.CodigoInterpretavel
                             break;
                         case OperationCode.LineEnd:
                             intContaFim++;
-                            if (LeCodigoInterpretavel(i + 1) != OperationCode.None)
+                            if (ReadOperationCode(i + 1) != OperationCode.None)
                                 intIndiceLinha = programa.InsereLinhaNoFinal(new Line());
                             break;
                         case OperationCode.NormallyOpenContact:
@@ -354,6 +353,6 @@ namespace LadderApp.CodigoInterpretavel
             }
             return null;
         }
-    
+
     }
 }

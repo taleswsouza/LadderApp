@@ -13,4 +13,25 @@ namespace LadderApp
         DigitalMemoryTimer = 8,
         DigitalMemoryCounter = 9
     }
+    public static class AddressTypeEnumExtensions
+    {
+        public static String GetPrefix(this AddressTypeEnum addressType)
+        {
+            switch (addressType)
+            {
+                case AddressTypeEnum.DigitalInput:
+                    return "I";
+                case AddressTypeEnum.DigitalOutput:
+                    return "O";
+                case AddressTypeEnum.DigitalMemory:
+                    return "M";
+                case AddressTypeEnum.DigitalMemoryTimer:
+                    return "T";
+                case AddressTypeEnum.DigitalMemoryCounter:
+                    return "C";
+                default:
+                    return "ERROR";
+            }
+        }
+    }
 }

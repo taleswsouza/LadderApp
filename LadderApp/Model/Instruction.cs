@@ -31,35 +31,25 @@ namespace LadderApp
                 InitializeOperands();
             }
         }
-
-        private Object[] operands;
         [XmlElement(Order = 2, IsNullable = true, ElementName = "Operando")]
-        public object[] Operands
-        {
-            get => operands;
-            set
-            {
-                operands = value;
-            }
-        }
+        public object[] Operands { get; set; }
 
         public int GetNumberOfOperands()
         {
-            if (operands == null)
+            if (Operands == null)
             {
                 return 0;
             }
-
-            return operands.Length;
+            return Operands.Length;
         }
 
         public bool IsAllOperandsOk()
         {
-            if (operands is null)
+            if (Operands is null)
             {
                 return false;
             }
-            foreach (Object operand in operands)
+            foreach (Object operand in Operands)
             {
                 if (operand is null)
                 {
@@ -75,23 +65,23 @@ namespace LadderApp
             {
                 throw new Exception("Invalid operand position: " + position);
             }
-            return operands[position];
+            return Operands[position];
         }
 
         public void SetOperand(int position, Object value)
         {
-            if (operands == null)
+            if (Operands == null)
             {
                 InitializeOperands();
             }
 
-            if (position > operands.Length)
+            if (position > Operands.Length)
             {
                 throw new Exception("Invalid operand position: " + position);
             }
 
-            if (ValidaEndereco(position, value))
-                operands[position] = value;
+            if (ValidateAddress(position, value))
+                Operands[position] = value;
         }
 
         private int InitializeOperands()
@@ -103,34 +93,27 @@ namespace LadderApp
                 case OperationCode.ParallelBranchBegin:
                 case OperationCode.ParallelBranchEnd:
                 case OperationCode.ParallelBranchNext:
-                    operands = null;
-                    //INumOperandos = 0;
+                    Operands = null;
                     break;
                 case OperationCode.LineBegin:
                 case OperationCode.NormallyOpenContact:
                 case OperationCode.NormallyClosedContact:
                 case OperationCode.OutputCoil:
                 case OperationCode.Reset:
-                    operands = new Object[1];
-                    //INumOperandos = 1;
+                    Operands = new Object[1];
                     break;
                 case OperationCode.Counter:
-                    operands = new Object[4];
-                    //INumOperandos = 4;
+                    Operands = new Object[4];
                     SetOperand(1, (Int32)0); // tipo
                     SetOperand(2, (Int32)0); // preset
                     SetOperand(3, (Int32)0); // acum
-
                     break;
                 case OperationCode.Timer:
-                    operands = new Object[5];
-                    //INumOperandos = 5;
-
+                    Operands = new Object[5];
                     SetOperand(1, (Int32)0); // tipo
                     SetOperand(2, (Int32)0); // preset
                     SetOperand(3, (Int32)0); // acum
                     SetOperand(4, (Int32)0); // Base tempo
-
                     break;
             }
             return GetNumberOfOperands();
@@ -164,7 +147,7 @@ namespace LadderApp
         }
 
 
-        private bool ValidaEndereco(int index, Object newOperand)
+        private bool ValidateAddress(int index, Object newOperand)
         {
             bool _bEndereco = false;
 
@@ -326,17 +309,17 @@ namespace LadderApp
                 if (isValid)
                 {
                     if (currentOperand != null)
-                        currentOperand.MudouOperando -= new MudouOperandoEventHandler(Ocorreu_MudouOperando);
+                        currentOperand.ChangedOperandEvent -= new ChangedOperandEventHandler(Instruction_ChangedOperand);
 
-                    address.MudouOperando += new MudouOperandoEventHandler(Ocorreu_MudouOperando);
+                    address.ChangedOperandEvent += new ChangedOperandEventHandler(Instruction_ChangedOperand);
                 }
                 else
                     if (newOperand == null)
                 {
                     if (currentOperand != null)
                     {
-                        currentOperand.MudouOperando -= new MudouOperandoEventHandler(Ocorreu_MudouOperando);
-                        operands[0] = null;
+                        currentOperand.ChangedOperandEvent -= new ChangedOperandEventHandler(Instruction_ChangedOperand);
+                        Operands[0] = null;
                     }
                 }
             }
@@ -344,35 +327,35 @@ namespace LadderApp
             return isValid;
         }
 
-        void Ocorreu_MudouOperando(object sender)
+        void Instruction_ChangedOperand(object sender)
         {
-            ValidaEndereco(0, null);
+            ValidateAddress(0, null);
         }
 
-        public void ValidaOperandosSimbolo(Addressing addressing)
+        public void ValidateInstructionOperands(Addressing addressing)
         {
             for (int i = 0; i < GetNumberOfOperands(); i++)
-                if (operands[i] != null)
-                    if (operands[i] is Address)
+                if (Operands[i] != null)
+                    if (Operands[i] is Address)
                     {
                         /// Verifica se o endereco atual existe na lista de enderecos
                         /// do programa atual, se existir recupera o opontamento corrigido
                         /// para o endereco
-                        Object oper = addressing.Find(((Address)operands[i]));
+                        Object oper = addressing.Find(((Address)Operands[i]));
                         /// recebido o endereco corrigido valida o endereco a faz as atribui
                         /// coes necessarias
                         if (oper != null)
                         {
-                            if (ValidaEndereco(i, oper))
-                                operands[i] = oper;
+                            if (ValidateAddress(i, oper))
+                                Operands[i] = oper;
                             else
                             {
-                                operands[i] = null;
+                                Operands[i] = null;
                             }
                         }
                         else
                         {
-                            operands[i] = null;
+                            Operands[i] = null;
                         }
                     }
         }

@@ -6,32 +6,30 @@ using System.Xml.Serialization;
 
 namespace LadderApp
 {
-    public delegate void MudouComentarioEventHandler(Address sender);
+    public delegate void EditedCommentEventHandler(Address sender);
+
     [Serializable]
     [XmlType(TypeName = "Endereco")]
     public class Address : IOperand
     {
-        public event MudouOperandoEventHandler MudouOperando;
-        public event MudouComentarioEventHandler MudouComentario;
+        public event ChangedOperandEventHandler ChangedOperandEvent;
+        public event EditedCommentEventHandler EditedCommentEvent;
 
         public Address()
         {
         }
 
-        /// <summary>
-        /// Indice do endereco
-        /// </summary>
-        private int id = 0;
-        [XmlElement(Order = 1, ElementName = "Id")]
-        public int Id
+        public Address(AddressTypeEnum addressType, int index, Device device)
         {
-            get { return id; }
-            set { id = value; }
+            AddressType = addressType;
+            this.Id = index;
+            this.device = device;
+            BitsPorta = device.QtdBitsPorta;
         }
 
-        /// <summary>
-        /// Tipo do endereco
-        /// </summary>
+        [XmlElement(Order = 1, ElementName = "Id")]
+        public int Id { get; set; } = 0;
+
         private AddressTypeEnum addressType = AddressTypeEnum.None;
         [XmlElement(Order = 5, ElementName = "Tipo")]
         public AddressTypeEnum AddressType
@@ -50,11 +48,11 @@ namespace LadderApp
                         case AddressTypeEnum.DigitalMemory:
                             break;
                         case AddressTypeEnum.DigitalMemoryTimer:
-                            Acesso2 = "T" + id.ToString() + ".EN";
+                            Acesso2 = "T" + Id.ToString() + ".EN";
                             timer = new Timer();
                             break;
                         case AddressTypeEnum.DigitalMemoryCounter:
-                            Acesso2 = "C" + id.ToString() + ".EN";
+                            Acesso2 = "C" + Id.ToString() + ".EN";
                             counter = new Counter();
                             break;
                         default:
@@ -62,8 +60,8 @@ namespace LadderApp
                     }
                     addressType = value;
 
-                    if (MudouOperando != null)
-                        MudouOperando(this);
+                    if (ChangedOperandEvent != null)
+                        ChangedOperandEvent(this);
                 }
             }
         }
@@ -74,29 +72,14 @@ namespace LadderApp
         {
             get
             {
-                String NomeStr = "";
-                switch (this.addressType)
+                switch (addressType)
                 {
                     case AddressTypeEnum.DigitalInput:
-                        NomeStr = "E" + id.ToString() + "(P" + (((id - 1) / device.QtdBitsPorta) + 1) + "." + ((id - 1) - ((Int16)((id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta)) + ")";
-                        break;
                     case AddressTypeEnum.DigitalOutput:
-                        NomeStr = "S" + id.ToString() + "(P" + (((id - 1) / device.QtdBitsPorta) + 1) + "." + ((id - 1) - ((Int16)((id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta)) + ")";
-                        break;
-                    case AddressTypeEnum.DigitalMemory:
-                        NomeStr = "M" + id.ToString();
-                        break;
-                    case AddressTypeEnum.DigitalMemoryTimer:
-                        NomeStr = "T" + id.ToString();
-                        break;
-                    case AddressTypeEnum.DigitalMemoryCounter:
-                        NomeStr = "C" + id.ToString();
-                        break;
+                        return addressType.GetPrefix() + Id.ToString() + "(P" + (((Id - 1) / device.QtdBitsPorta) + 1) + "." + ((Id - 1) - ((Int16)((Id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta)) + ")";
                     default:
-                        NomeStr = "ERROR";
-                        break;
+                        return addressType.GetPrefix() + Id.ToString();
                 }
-                return NomeStr;
             }
             set { name = value; }
         }
@@ -109,8 +92,8 @@ namespace LadderApp
             set
             {
                 comment = value;
-                if (MudouComentario != null)
-                    MudouComentario(this);
+                if (EditedCommentEvent != null)
+                    EditedCommentEvent(this);
             }
         }
 
@@ -122,15 +105,15 @@ namespace LadderApp
                 switch (this.addressType)
                 {
                     case AddressTypeEnum.DigitalInput:
-                        return "P" + (((id - 1) / device.QtdBitsPorta) + 1);
+                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1);
                     case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((id - 1) / device.QtdBitsPorta) + 1);
+                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1);
                     case AddressTypeEnum.DigitalMemory:
-                        return "M" + ((id / BitsPorta) + 1);
+                        return "M" + ((Id / BitsPorta) + 1);
                     case AddressTypeEnum.DigitalMemoryTimer:
-                        return "T" + id.ToString();
+                        return "T" + Id.ToString();
                     case AddressTypeEnum.DigitalMemoryCounter:
-                        return "C" + id.ToString();
+                        return "C" + Id.ToString();
                     default:
                         return "ERROR";
                 }
@@ -147,9 +130,9 @@ namespace LadderApp
                 switch (this.addressType)
                 {
                     case AddressTypeEnum.DigitalInput:
-                        return "P" + (((id - 1) / device.QtdBitsPorta) + 1) + "_DIR.Bit" + ((id - 1) - ((Int16)((id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta)) + " = 0";
+                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta)) + " = 0";
                     case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((id - 1) / device.QtdBitsPorta) + 1) + "_DIR.Bit" + ((id - 1) - ((Int16)((id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta)) + " = 1";
+                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta)) + " = 1";
                     default:
                         return "ERROR";
                 }
@@ -168,67 +151,26 @@ namespace LadderApp
                 switch (this.addressType)
                 {
                     case AddressTypeEnum.DigitalInput:
-                        return "P" + (((id - 1) / device.QtdBitsPorta) + 1) + "_IN.Bit" + ((id - 1) - ((Int16)((id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta));
+                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1) + "_IN.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta));
                     case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((id - 1) / device.QtdBitsPorta) + 1) + "_OUT.Bit" + ((id - 1) - ((Int16)((id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta));
+                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1) + "_OUT.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta));
                     case AddressTypeEnum.DigitalMemory:
-                        return "M" + ((id / BitsPorta) + 1) + ".Bit" + (id - (Int16)(id / BitsPorta) * BitsPorta);
+                        return "M" + ((Id / BitsPorta) + 1) + ".Bit" + (Id - (Int16)(Id / BitsPorta) * BitsPorta);
                     case AddressTypeEnum.DigitalMemoryTimer:
-                        return "T" + id.ToString() + ".DN";
+                        return "T" + Id.ToString() + ".DN";
                     case AddressTypeEnum.DigitalMemoryCounter:
-                        return "C" + id.ToString() + ".DN";
+                        return "C" + Id.ToString() + ".DN";
                     default:
                         return "ERROR";
                 }
             }
-            //set { acesso = value; }
         }
-
-        /// <summary>
-        /// Para realizar o acesso ALTERNATIVO do endereco
-        /// </summary>
-        String acesso2 = "";
         [XmlElement(ElementName = "Acesso2", Order = 8, IsNullable = false, Type = typeof(String))]
-        public String Acesso2
-        {
-            get { return acesso2; }
-            set { acesso2 = value; }
-        }
-
-        /// <summary>
-        /// Valor do endereco
-        /// </summary>
-        Boolean valor = false;
+        public string Acesso2 { get; set; } = "";
         [XmlElement(ElementName = "Valor", Order = 4, IsNullable = false, Type = typeof(Boolean))]
-        public Boolean Valor
-        {
-            get { return valor; }
-            set { valor = value; }
-        }
-
-        /// <summary>
-        /// Indica que o endereco esta em uso no programa
-        /// </summary>
-        Boolean bEmUso = false;
+        public bool Valor { get; set; } = false;
         [XmlIgnore]
-        public Boolean EmUso
-        {
-            get { return bEmUso; }
-            set { bEmUso = value; }
-        }
-
-        /// <summary>
-        /// Construtor
-        /// </summary>
-        /// <param name="addressType">Tipo da endereco</param>
-        /// <param name="_indicePosInicial">Indice identificador do endereco no tipo</param>
-        public Address(AddressTypeEnum addressType, int index, Device device)
-        {
-            AddressType = addressType;
-            this.id = index;
-            this.device = device;
-            BitsPorta = device.QtdBitsPorta;
-        }
+        public bool Used { get; set; } = false;
 
         public override string ToString()
         {

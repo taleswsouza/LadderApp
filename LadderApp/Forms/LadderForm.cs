@@ -430,7 +430,7 @@ namespace LadderApp
         private void menuToggleBit_Click(object sender, EventArgs e)
         {
             ((Address)controleSelecionado.GetOperand(0)).Valor = ((Address)controleSelecionado.GetOperand(0)).Valor == true ? false : true;
-            projectForm.program.ExecutaLadderSimulado();
+            projectForm.program.SimulateLadder();
             this.Invalidate(true);
         }
 
@@ -506,7 +506,7 @@ namespace LadderApp
         {
             projectForm.program.auxToggleBitPulse = ((Address)controleSelecionado.GetOperand(0));
             projectForm.program.auxToggleBitPulse.Valor = projectForm.program.auxToggleBitPulse.Valor == true ? false : true;
-            projectForm.program.ExecutaLadderSimulado();
+            projectForm.program.SimulateLadder();
             this.Invalidate(true);
         }
 
