@@ -11,24 +11,7 @@ namespace LadderApp
         Object[] Operands { get; set; }
         int GetNumberOfOperands();
         bool IsAllOperandsOk();
-        Object GetOperand(int posicao);
+        Object GetOperand(int position);
         void SetOperand(int position, Object value);
-
-        Size tamanhoXY
-        {
-            get;
-            set;
-        }
-
-        Point posicaoXY
-        {
-            get;
-            set;
-        }
-
-        Point XYConexao
-        {
-            get;
-        }
     }
 }

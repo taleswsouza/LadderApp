@@ -9,7 +9,7 @@ namespace LadderApp
     {
         [XmlIgnore]
         public Instruction simboloInicioLinha = new Instruction(OperationCode.LineBegin);
-        [XmlElement(ElementName = "Simbolo")]
+        [XmlElement(ElementName = "Instruction")]
         public List<Instruction> instructions = new List<Instruction>();
         public List<Instruction> outputs = new List<Instruction>();
         [XmlIgnore]

@@ -108,18 +108,18 @@ namespace LadderApp
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnLinha = new System.Windows.Forms.ToolStripButton();
-            this.btnParalelo = new System.Windows.Forms.ToolStripButton();
-            this.btnContatoNA = new System.Windows.Forms.ToolStripButton();
-            this.btnContatoNF = new System.Windows.Forms.ToolStripButton();
+            this.btnLadderLine = new System.Windows.Forms.ToolStripButton();
+            this.btnLadderPararellBranch = new System.Windows.Forms.ToolStripButton();
+            this.btnLadderNormallyOpenContact = new System.Windows.Forms.ToolStripButton();
+            this.btnLadderNormallyClosedContact = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnBobinaSaida = new System.Windows.Forms.ToolStripButton();
-            this.btnTemporizador = new System.Windows.Forms.ToolStripButton();
-            this.btnContador = new System.Windows.Forms.ToolStripButton();
-            this.btnReset = new System.Windows.Forms.ToolStripButton();
+            this.btnLadderOutputCoil = new System.Windows.Forms.ToolStripButton();
+            this.btnLadderOutputTimer = new System.Windows.Forms.ToolStripButton();
+            this.btnLadderOutputCounter = new System.Windows.Forms.ToolStripButton();
+            this.btnLadderOutputReset = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.btnPrint = new System.Windows.Forms.ToolStripButton();
-            this.btnSimular = new System.Windows.Forms.ToolStripButton();
+            this.btnSimulateLadder = new System.Windows.Forms.ToolStripButton();
             this.PrintPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -475,7 +475,7 @@ namespace LadderApp
             this.mnuLadderSimulate.Name = "mnuLadderSimulate";
             this.mnuLadderSimulate.Size = new System.Drawing.Size(203, 22);
             this.mnuLadderSimulate.Text = "&Simulate";
-            this.mnuLadderSimulate.Click += new System.EventHandler(this.btnLadderSimulate_Click);
+            this.mnuLadderSimulate.Click += new System.EventHandler(this.btnSimulateLadder_Click);
             // 
             // mnuMicrocontroller
             // 
@@ -792,18 +792,18 @@ namespace LadderApp
             this.toolStripSeparator2,
             this.helpToolStripButton,
             this.toolStripSeparator9,
-            this.btnLinha,
-            this.btnParalelo,
-            this.btnContatoNA,
-            this.btnContatoNF,
+            this.btnLadderLine,
+            this.btnLadderPararellBranch,
+            this.btnLadderNormallyOpenContact,
+            this.btnLadderNormallyClosedContact,
             this.toolStripSeparator11,
-            this.btnBobinaSaida,
-            this.btnTemporizador,
-            this.btnContador,
-            this.btnReset,
+            this.btnLadderOutputCoil,
+            this.btnLadderOutputTimer,
+            this.btnLadderOutputCounter,
+            this.btnLadderOutputReset,
             this.toolStripSeparator10,
             this.btnPrint,
-            this.btnSimular});
+            this.btnSimulateLadder});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(843, 25);
@@ -815,90 +815,90 @@ namespace LadderApp
             this.toolStripSeparator9.Name = "toolStripSeparator9";
             this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
             // 
-            // btnLinha
+            // btnLadderLine
             // 
-            this.btnLinha.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnLinha.Image = ((System.Drawing.Image)(resources.GetObject("btnLinha.Image")));
-            this.btnLinha.ImageTransparentColor = System.Drawing.Color.White;
-            this.btnLinha.Name = "btnLinha";
-            this.btnLinha.Size = new System.Drawing.Size(23, 22);
-            this.btnLinha.Text = "Line";
-            this.btnLinha.Click += new System.EventHandler(this.btnLadderLine_Click);
+            this.btnLadderLine.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLadderLine.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderLine.Image")));
+            this.btnLadderLine.ImageTransparentColor = System.Drawing.Color.White;
+            this.btnLadderLine.Name = "btnLadderLine";
+            this.btnLadderLine.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderLine.Text = "Line";
+            this.btnLadderLine.Click += new System.EventHandler(this.btnLadderLine_Click);
             // 
-            // btnParalelo
+            // btnLadderPararellBranch
             // 
-            this.btnParalelo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnParalelo.Image = ((System.Drawing.Image)(resources.GetObject("btnParalelo.Image")));
-            this.btnParalelo.ImageTransparentColor = System.Drawing.Color.White;
-            this.btnParalelo.Name = "btnParalelo";
-            this.btnParalelo.Size = new System.Drawing.Size(23, 22);
-            this.btnParalelo.Text = "Parallel Branch";
-            this.btnParalelo.Click += new System.EventHandler(this.btnLadderPararellBranch_Click);
+            this.btnLadderPararellBranch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLadderPararellBranch.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderPararellBranch.Image")));
+            this.btnLadderPararellBranch.ImageTransparentColor = System.Drawing.Color.White;
+            this.btnLadderPararellBranch.Name = "btnLadderPararellBranch";
+            this.btnLadderPararellBranch.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderPararellBranch.Text = "Parallel Branch";
+            this.btnLadderPararellBranch.Click += new System.EventHandler(this.btnLadderPararellBranch_Click);
             // 
-            // btnContatoNA
+            // btnLadderNormallyOpenContact
             // 
-            this.btnContatoNA.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnContatoNA.Image = ((System.Drawing.Image)(resources.GetObject("btnContatoNA.Image")));
-            this.btnContatoNA.ImageTransparentColor = System.Drawing.Color.White;
-            this.btnContatoNA.Name = "btnContatoNA";
-            this.btnContatoNA.Size = new System.Drawing.Size(23, 22);
-            this.btnContatoNA.Text = "Normally open contact";
-            this.btnContatoNA.Click += new System.EventHandler(this.btnLadderNormallyOpenContact_Click);
+            this.btnLadderNormallyOpenContact.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLadderNormallyOpenContact.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderNormallyOpenContact.Image")));
+            this.btnLadderNormallyOpenContact.ImageTransparentColor = System.Drawing.Color.White;
+            this.btnLadderNormallyOpenContact.Name = "btnLadderNormallyOpenContact";
+            this.btnLadderNormallyOpenContact.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderNormallyOpenContact.Text = "Normally open contact";
+            this.btnLadderNormallyOpenContact.Click += new System.EventHandler(this.btnLadderNormallyOpenContact_Click);
             // 
-            // btnContatoNF
+            // btnLadderNormallyClosedContact
             // 
-            this.btnContatoNF.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnContatoNF.Image = ((System.Drawing.Image)(resources.GetObject("btnContatoNF.Image")));
-            this.btnContatoNF.ImageTransparentColor = System.Drawing.Color.White;
-            this.btnContatoNF.Name = "btnContatoNF";
-            this.btnContatoNF.Size = new System.Drawing.Size(23, 22);
-            this.btnContatoNF.Text = "Normally closed contact";
-            this.btnContatoNF.Click += new System.EventHandler(this.btnLadderNormallyClosedContact_Click);
+            this.btnLadderNormallyClosedContact.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLadderNormallyClosedContact.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderNormallyClosedContact.Image")));
+            this.btnLadderNormallyClosedContact.ImageTransparentColor = System.Drawing.Color.White;
+            this.btnLadderNormallyClosedContact.Name = "btnLadderNormallyClosedContact";
+            this.btnLadderNormallyClosedContact.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderNormallyClosedContact.Text = "Normally closed contact";
+            this.btnLadderNormallyClosedContact.Click += new System.EventHandler(this.btnLadderNormallyClosedContact_Click);
             // 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
             this.toolStripSeparator11.Size = new System.Drawing.Size(6, 25);
             // 
-            // btnBobinaSaida
+            // btnLadderOutputCoil
             // 
-            this.btnBobinaSaida.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnBobinaSaida.Image = ((System.Drawing.Image)(resources.GetObject("btnBobinaSaida.Image")));
-            this.btnBobinaSaida.ImageTransparentColor = System.Drawing.Color.White;
-            this.btnBobinaSaida.Name = "btnBobinaSaida";
-            this.btnBobinaSaida.Size = new System.Drawing.Size(23, 22);
-            this.btnBobinaSaida.Text = "Output coil";
-            this.btnBobinaSaida.Click += new System.EventHandler(this.btnLadderOutputCoil_Click);
+            this.btnLadderOutputCoil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLadderOutputCoil.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderOutputCoil.Image")));
+            this.btnLadderOutputCoil.ImageTransparentColor = System.Drawing.Color.White;
+            this.btnLadderOutputCoil.Name = "btnLadderOutputCoil";
+            this.btnLadderOutputCoil.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderOutputCoil.Text = "Output coil";
+            this.btnLadderOutputCoil.Click += new System.EventHandler(this.btnLadderOutputCoil_Click);
             // 
-            // btnTemporizador
+            // btnLadderOutputTimer
             // 
-            this.btnTemporizador.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnTemporizador.Image = ((System.Drawing.Image)(resources.GetObject("btnTemporizador.Image")));
-            this.btnTemporizador.ImageTransparentColor = System.Drawing.Color.White;
-            this.btnTemporizador.Name = "btnTemporizador";
-            this.btnTemporizador.Size = new System.Drawing.Size(23, 22);
-            this.btnTemporizador.Text = "Timer";
-            this.btnTemporizador.Click += new System.EventHandler(this.btnLadderOutputTimer_Click);
+            this.btnLadderOutputTimer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLadderOutputTimer.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderOutputTimer.Image")));
+            this.btnLadderOutputTimer.ImageTransparentColor = System.Drawing.Color.White;
+            this.btnLadderOutputTimer.Name = "btnLadderOutputTimer";
+            this.btnLadderOutputTimer.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderOutputTimer.Text = "Timer";
+            this.btnLadderOutputTimer.Click += new System.EventHandler(this.btnLadderOutputTimer_Click);
             // 
-            // btnContador
+            // btnLadderOutputCounter
             // 
-            this.btnContador.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnContador.Image = ((System.Drawing.Image)(resources.GetObject("btnContador.Image")));
-            this.btnContador.ImageTransparentColor = System.Drawing.Color.White;
-            this.btnContador.Name = "btnContador";
-            this.btnContador.Size = new System.Drawing.Size(23, 22);
-            this.btnContador.Text = "Counter";
-            this.btnContador.Click += new System.EventHandler(this.btnLadderOutputCounter_Click);
+            this.btnLadderOutputCounter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLadderOutputCounter.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderOutputCounter.Image")));
+            this.btnLadderOutputCounter.ImageTransparentColor = System.Drawing.Color.White;
+            this.btnLadderOutputCounter.Name = "btnLadderOutputCounter";
+            this.btnLadderOutputCounter.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderOutputCounter.Text = "Counter";
+            this.btnLadderOutputCounter.Click += new System.EventHandler(this.btnLadderOutputCounter_Click);
             // 
-            // btnReset
+            // btnLadderOutputReset
             // 
-            this.btnReset.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnReset.Image = ((System.Drawing.Image)(resources.GetObject("btnReset.Image")));
-            this.btnReset.ImageTransparentColor = System.Drawing.Color.White;
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(23, 22);
-            this.btnReset.Text = "Reset";
-            this.btnReset.Click += new System.EventHandler(this.btnLadderOutputReset_Click);
+            this.btnLadderOutputReset.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLadderOutputReset.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderOutputReset.Image")));
+            this.btnLadderOutputReset.ImageTransparentColor = System.Drawing.Color.White;
+            this.btnLadderOutputReset.Name = "btnLadderOutputReset";
+            this.btnLadderOutputReset.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderOutputReset.Text = "Reset";
+            this.btnLadderOutputReset.Click += new System.EventHandler(this.btnLadderOutputReset_Click);
             // 
             // toolStripSeparator10
             // 
@@ -917,16 +917,16 @@ namespace LadderApp
             this.btnPrint.Visible = false;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
-            // btnSimular
+            // btnSimulateLadder
             // 
-            this.btnSimular.CheckOnClick = true;
-            this.btnSimular.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnSimular.Image = ((System.Drawing.Image)(resources.GetObject("btnSimular.Image")));
-            this.btnSimular.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSimular.Name = "btnSimular";
-            this.btnSimular.Size = new System.Drawing.Size(57, 22);
-            this.btnSimular.Text = "Simulate";
-            this.btnSimular.Click += new System.EventHandler(this.btnLadderSimulate_Click);
+            this.btnSimulateLadder.CheckOnClick = true;
+            this.btnSimulateLadder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnSimulateLadder.Image = ((System.Drawing.Image)(resources.GetObject("btnSimulateLadder.Image")));
+            this.btnSimulateLadder.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSimulateLadder.Name = "btnSimulateLadder";
+            this.btnSimulateLadder.Size = new System.Drawing.Size(57, 22);
+            this.btnSimulateLadder.Text = "Simulate";
+            this.btnSimulateLadder.Click += new System.EventHandler(this.btnSimulateLadder_Click);
             // 
             // PrintPreviewDialog1
             // 
@@ -1019,19 +1019,19 @@ namespace LadderApp
         private System.Windows.Forms.ToolStripButton helpToolStripButton;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
-        private System.Windows.Forms.ToolStripButton btnContatoNA;
-        private System.Windows.Forms.ToolStripButton btnContatoNF;
-        private System.Windows.Forms.ToolStripButton btnBobinaSaida;
-        private System.Windows.Forms.ToolStripButton btnParalelo;
-        private System.Windows.Forms.ToolStripButton btnLinha;
+        private System.Windows.Forms.ToolStripButton btnLadderNormallyOpenContact;
+        private System.Windows.Forms.ToolStripButton btnLadderNormallyClosedContact;
+        private System.Windows.Forms.ToolStripButton btnLadderOutputCoil;
+        private System.Windows.Forms.ToolStripButton btnLadderPararellBranch;
+        private System.Windows.Forms.ToolStripButton btnLadderLine;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
-        private System.Windows.Forms.ToolStripButton btnTemporizador;
-        private System.Windows.Forms.ToolStripButton btnContador;
+        private System.Windows.Forms.ToolStripButton btnLadderOutputTimer;
+        private System.Windows.Forms.ToolStripButton btnLadderOutputCounter;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
         private System.Windows.Forms.ToolStripButton btnPrint;
         private System.Windows.Forms.PrintPreviewDialog PrintPreviewDialog1;
-        private System.Windows.Forms.ToolStripButton btnSimular;
-        private System.Windows.Forms.ToolStripButton btnReset;
+        private System.Windows.Forms.ToolStripButton btnSimulateLadder;
+        private System.Windows.Forms.ToolStripButton btnLadderOutputReset;
         private System.Windows.Forms.ToolStripMenuItem mnuEditComment;
         private System.Windows.Forms.ToolStripMenuItem mnuMicrocontrollerCommunication;
         private System.Windows.Forms.ToolStripMenuItem mnuMicrocontrollerCommunicationDownload;

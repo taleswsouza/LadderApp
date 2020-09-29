@@ -30,13 +30,13 @@ namespace LadderApp
 
         private void ProjetoLadder_Resize(object sender, EventArgs e)
         {
-            ArvoreProjeto.Location = new Point(0, 0);
-            ArvoreProjeto.Size = new Size(this.Size.Width, this.Size.Height);
+            tvnProjectTree.Location = new Point(0, 0);
+            tvnProjectTree.Size = new Size(this.Size.Width, this.Size.Height);
         }
 
         private void ProjetoLadder_Load(object sender, EventArgs e)
         {
-            ArvoreProjeto.TopNode.Expand();
+            tvnProjectTree.TopNode.Expand();
 
             if (program.Status == LadderProgram.ProgramStatus.NotInitialized)
             {
@@ -94,13 +94,10 @@ namespace LadderApp
         {
             switch (e.Node.Name)
             {
-                case "NoProgramaLadder":
-                    //if (!CheckLadderFormIsNotNull())
-                    //{
+                case "tvnLadderProgramNode":
                         OpenLadderForm();
-                    //}
                     break;
-                case "NoDispositivo":
+                case "tvnDeviceNode":
                     DeviceForm frmDisp = new DeviceForm(program.device);
 
                     if (frmDisp.ShowDialog() == DialogResult.OK)
@@ -116,7 +113,7 @@ namespace LadderApp
                         AlocaEnderecamentoIO();
                     }
                     break;
-                case "NoConfMemoria":
+                case "tvnAddressingConfigurationNode":
                     AddressingForm addressingForm = new AddressingForm(program.addressing);
                     addressingForm.Owner = this;
 
@@ -149,105 +146,96 @@ namespace LadderApp
 
         public void AlocaEnderecamentoIO()
         {
-            /// Atalho para o No de enderecamento
-            TreeNode _NoEnderecamento = ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
-            _NoEnderecamento.Nodes["NoEntradas"].Nodes.Clear();
-            _NoEnderecamento.Nodes["NoSaidas"].Nodes.Clear();
+            TreeNode _NoEnderecamento = tvnProjectTree.Nodes["tvnProjectNode"].Nodes["tvnAddressingNode"];
+            _NoEnderecamento.Nodes["tvnInputsNode"].Nodes.Clear();
+            _NoEnderecamento.Nodes["tvnOutputsNode"].Nodes.Clear();
             program.addressing.ListInputAddress.Clear();
             program.addressing.ListOutputAddress.Clear();
-            foreach (Address el in program.device.lstEndBitPorta)
+            foreach (Address address in program.device.lstEndBitPorta)
             {
-                el.ApontaDispositivo(program.device);
-                switch (el.AddressType)
+                address.SetDevice(program.device);
+                switch (address.AddressType)
                 {
                     case AddressTypeEnum.DigitalInput:
-                        program.addressing.ListInputAddress.Add(el);
-                        //if (!_NoEnderecamento.Nodes["NoEntradas"].Nodes.ContainsKey(el.Nome))
+                        program.addressing.ListInputAddress.Add(address);
+                        //if (!_NoEnderecamento.Nodes["tvnInputsNode"].Nodes.ContainsKey(el.Nome))
                         //{
-                        _NoEnderecamento.Nodes["NoEntradas"].Nodes.Add(el.Name, el.Name + (el.Comment == "" ? "" : " - " + el.Comment));
-                        _NoEnderecamento.Nodes["NoEntradas"].Nodes[el.Name].Tag = el;
+                        _NoEnderecamento.Nodes["tvnInputsNode"].Nodes.Add(address.Name, address.Name + (address.Comment == "" ? "" : " - " + address.Comment));
+                        _NoEnderecamento.Nodes["tvnInputsNode"].Nodes[address.Name].Tag = address;
                         //el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
                         //}
                         break;
                     case AddressTypeEnum.DigitalOutput:
-                        program.addressing.ListOutputAddress.Add(el);
-                        //if (!_NoEnderecamento.Nodes["NoSaidas"].Nodes.ContainsKey(el.Nome))
+                        program.addressing.ListOutputAddress.Add(address);
+                        //if (!_NoEnderecamento.Nodes["tvnOutputsNode"].Nodes.ContainsKey(el.Nome))
                         //{
-                        _NoEnderecamento.Nodes["NoSaidas"].Nodes.Add(el.Name, el.Name + (el.Comment == "" ? "" : " - " + el.Comment));
-                        _NoEnderecamento.Nodes["NoSaidas"].Nodes[el.Name].Tag = el;
+                        _NoEnderecamento.Nodes["tvnOutputsNode"].Nodes.Add(address.Name, address.Name + (address.Comment == "" ? "" : " - " + address.Comment));
+                        _NoEnderecamento.Nodes["tvnOutputsNode"].Nodes[address.Name].Tag = address;
                         //el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
                         //}
                         break;
                 }
-                el.EditedCommentEvent += new EditedCommentEventHandler(Endereco_MudouComentario);
+                address.EditedCommentEvent += new EditedCommentEventHandler(Address_EditedComment);
             }
 
         }
 
-        void Endereco_MudouComentario(Address sender)
+        void Address_EditedComment(Address sender)
         {
-            TreeNode _NoEnderecamento = ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
+            TreeNode _NoEnderecamento = tvnProjectTree.Nodes["tvnProjectNode"].Nodes["tvnAddressingNode"];
             int _pos = 0;
             switch (sender.AddressType)
             {
                 case AddressTypeEnum.DigitalInput:
-                    _pos = _NoEnderecamento.Nodes["NoEntradas"].Nodes.IndexOfKey(sender.Name);
+                    _pos = _NoEnderecamento.Nodes["tvnInputsNode"].Nodes.IndexOfKey(sender.Name);
 
                     if (_pos >= 0)
-                        _NoEnderecamento.Nodes["NoEntradas"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
+                        _NoEnderecamento.Nodes["tvnInputsNode"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
                     break;
                 case AddressTypeEnum.DigitalOutput:
-                    _pos = _NoEnderecamento.Nodes["NoSaidas"].Nodes.IndexOfKey(sender.Name);
+                    _pos = _NoEnderecamento.Nodes["tvnOutputsNode"].Nodes.IndexOfKey(sender.Name);
 
                     if (_pos >= 0)
-                        _NoEnderecamento.Nodes["NoSaidas"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
+                        _NoEnderecamento.Nodes["tvnOutputsNode"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
                     break;
                 case AddressTypeEnum.DigitalMemory:
-                    _pos = _NoEnderecamento.Nodes["NoMemoria"].Nodes.IndexOfKey(sender.Name);
+                    _pos = _NoEnderecamento.Nodes["tvnMemoriesNode"].Nodes.IndexOfKey(sender.Name);
 
                     if (_pos >= 0)
-                        _NoEnderecamento.Nodes["NoMemoria"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
+                        _NoEnderecamento.Nodes["tvnMemoriesNode"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
                     break;
                 case AddressTypeEnum.DigitalMemoryCounter:
-                    _pos = _NoEnderecamento.Nodes["NoContadores"].Nodes.IndexOfKey(sender.Name);
+                    _pos = _NoEnderecamento.Nodes["tvnCountersNode"].Nodes.IndexOfKey(sender.Name);
 
                     if (_pos >= 0)
-                        _NoEnderecamento.Nodes["NoContadores"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
+                        _NoEnderecamento.Nodes["tvnCountersNode"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
                     break;
                 case AddressTypeEnum.DigitalMemoryTimer:
-                    _pos = _NoEnderecamento.Nodes["NoTemporizadores"].Nodes.IndexOfKey(sender.Name);
+                    _pos = _NoEnderecamento.Nodes["tvnTimersNode"].Nodes.IndexOfKey(sender.Name);
 
                     if (_pos >= 0)
-                        _NoEnderecamento.Nodes["NoTemporizadores"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
+                        _NoEnderecamento.Nodes["tvnTimersNode"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
                     break;
             }
 
         }
 
-        /// <summary>
-        /// Aloca e realoca na No objeto de enderecamento do programa atual
-        /// uma quantidade especificada do tipo de memoria solicitado
-        /// </summary>
-        /// <param name="e">Enderecamento do programa</param>
-        /// <param name="tp">tipo de memoria a ser realocada</param>
-        /// <param name="qtdEnd">Quantidade do tipo desejada</param>
         public int AlocaEnderecamentoMemoria(List<Address> _lstE, AddressTypeEnum tp, int qtdEnd)
         {
-            /// Atalho para o No de enderecamento
-            TreeNode _NoEnderecamento = ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
+            TreeNode _NoEnderecamento = tvnProjectTree.Nodes["tvnProjectNode"].Nodes["tvnAddressingNode"];
             String _txtNoEndereco = "";
 
             int _qtdAtual = 1;
             switch (tp)
             {
                 case AddressTypeEnum.DigitalMemory:
-                    _txtNoEndereco = "NoMemoria";
+                    _txtNoEndereco = "tvnMemoriesNode";
                     break;
                 case AddressTypeEnum.DigitalMemoryCounter:
-                    _txtNoEndereco = "NoContadores";
+                    _txtNoEndereco = "tvnCountersNode";
                     break;
                 case AddressTypeEnum.DigitalMemoryTimer:
-                    _txtNoEndereco = "NoTemporizadores";
+                    _txtNoEndereco = "tvnTimersNode";
                     break;
             }
 
@@ -278,7 +266,7 @@ namespace LadderApp
             {
                 _NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Add(el.Name, el.Name + (el.Comment == "" ? "" : " - " + el.Comment));
                 _NoEnderecamento.Nodes[_txtNoEndereco].Nodes[el.Name].Tag = el;
-                el.EditedCommentEvent += new EditedCommentEventHandler(Endereco_MudouComentario);
+                el.EditedCommentEvent += new EditedCommentEventHandler(Address_EditedComment);
             }
 
             return 0;

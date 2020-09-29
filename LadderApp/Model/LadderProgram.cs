@@ -127,7 +127,7 @@ namespace LadderApp
                 if (_tmp.Timer.Reset == true)
                 {
                     _tmp.Timer.Acumulado = 0;
-                    _tmp.Valor = false;
+                    _tmp.Value = false;
                     _tmp.Timer.Reset = false;
                 }
 
@@ -144,14 +144,14 @@ namespace LadderApp
 
                                 if (_tmp.Timer.Acumulado >= _tmp.Timer.Preset)
                                 {
-                                    _tmp.Valor = true; /// DONE = true
+                                    _tmp.Value = true; /// DONE = true
                                     _tmp.Timer.Acumulado = _tmp.Timer.Preset;
                                 }
                             }
                         }
                         else
                         {
-                            _tmp.Valor = false; /// DONE = false
+                            _tmp.Value = false; /// DONE = false
                             _tmp.Timer.Acumulado = 0;
                             _tmp.Timer.AcumuladoParcial = 0;
                             _tmp.Timer.Reset = false;
@@ -161,14 +161,14 @@ namespace LadderApp
                     case 1: // TOF - Contador Decrescente
                         if (_tmp.Timer.EN || _tmp.Timer.Reset)
                         {
-                            _tmp.Valor = true; /// DONE = true
+                            _tmp.Value = true; /// DONE = true
                             _tmp.Timer.Acumulado = 0;
                             _tmp.Timer.AcumuladoParcial = 0;
                             _tmp.Timer.Reset = false;
                         }
                         else
                         {
-                            if (_tmp.Valor) // DN habilitado - temporizador contando
+                            if (_tmp.Value) // DN habilitado - temporizador contando
                                 _tmp.Timer.AcumuladoParcial++;
 
                             if (_tmp.Timer.AcumuladoParcial >= _tmp.Timer.PresetParcial)
@@ -179,7 +179,7 @@ namespace LadderApp
 
                             if (_tmp.Timer.Acumulado >= _tmp.Timer.Preset)
                             {
-                                _tmp.Valor = false; /// DONE = false
+                                _tmp.Value = false; /// DONE = false
                                 _tmp.Timer.Acumulado = 0;
                                 _tmp.Timer.AcumuladoParcial = 0;
                             }
@@ -190,7 +190,7 @@ namespace LadderApp
                     case 2: // RTO
                         if (_tmp.Timer.Reset)
                         {
-                            _tmp.Valor = false; /// DONE = false
+                            _tmp.Value = false; /// DONE = false
                             _tmp.Timer.Acumulado = 0;
                             _tmp.Timer.AcumuladoParcial = 0;
                         }
@@ -210,9 +210,9 @@ namespace LadderApp
                                         _tmp.Timer.Acumulado = _tmp.Timer.Preset;
 
                                     if (_tmp.Timer.Acumulado >= _tmp.Timer.Preset)
-                                        _tmp.Valor = true; /// DONE = true
+                                        _tmp.Value = true; /// DONE = true
                                     else
-                                        _tmp.Valor = false; /// DONE = false
+                                        _tmp.Value = false; /// DONE = false
                                 }
                             }
                         }
@@ -239,7 +239,7 @@ namespace LadderApp
                 case 0: // Contador Crescente
                     if (_endContador.Counter.Reset == true)
                     {
-                        _endContador.Valor = false;
+                        _endContador.Value = false;
                         _endContador.Counter.Acumulado = 0;
                         _endContador.Counter.Reset = false;
                     }
@@ -251,9 +251,9 @@ namespace LadderApp
                         {
                             _endContador.Counter.Acumulado++;
                             if (_endContador.Counter.Acumulado >= _endContador.Counter.Preset)
-                                _endContador.Valor = true;
+                                _endContador.Value = true;
                             else
-                                _endContador.Valor = false;
+                                _endContador.Value = false;
                         }
                     }
                     break;
@@ -262,7 +262,7 @@ namespace LadderApp
                     if (_endContador.Counter.Reset == true)
                     {
                         _endContador.Counter.Acumulado = _endContador.Counter.Preset;
-                        _endContador.Valor = false;
+                        _endContador.Value = false;
                         _endContador.Counter.Reset = false;
                     }
                     if (_endContador.Counter.EN == true && _endContador.Counter.Pulso == true)
@@ -273,9 +273,9 @@ namespace LadderApp
                             _endContador.Counter.Acumulado--;
 
                             if (_endContador.Counter.Acumulado == 0)
-                                _endContador.Valor = true;
+                                _endContador.Value = true;
                             else
-                                _endContador.Valor = false;
+                                _endContador.Value = false;
                         }
                     }
                     break;
@@ -346,10 +346,10 @@ namespace LadderApp
                             switch (instruction.OpCode)
                             {
                                 case OperationCode.NormallyOpenContact:
-                                    bAuxValor = ((Address)instruction.GetOperand(0)).Valor;
+                                    bAuxValor = ((Address)instruction.GetOperand(0)).Value;
                                     break;
                                 case OperationCode.NormallyClosedContact:
-                                    bAuxValor = !((Address)instruction.GetOperand(0)).Valor;
+                                    bAuxValor = !((Address)instruction.GetOperand(0)).Value;
                                     break;
                             }
 
@@ -373,7 +373,7 @@ namespace LadderApp
                         case OperationCode.Reset:
 
                             if (instruction.OpCode == OperationCode.OutputCoil)
-                                ((Address)instruction.GetOperand(0)).Valor = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
+                                ((Address)instruction.GetOperand(0)).Value = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
                             else if (instruction.OpCode == OperationCode.Timer)
                             {
                                 ((Address)instruction.GetOperand(0)).Timer.EN = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
@@ -414,7 +414,7 @@ namespace LadderApp
 
             if (auxToggleBitPulse != null)
             {
-                auxToggleBitPulse.Valor = auxToggleBitPulse.Valor == true ? false : true;
+                auxToggleBitPulse.Value = auxToggleBitPulse.Value == true ? false : true;
                 auxToggleBitPulse = null;
             }
             return true;

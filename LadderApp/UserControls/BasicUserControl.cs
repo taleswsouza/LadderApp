@@ -25,7 +25,7 @@ namespace LadderApp
         }
 
         protected Point PosicaoXY;
-        public Point posicaoXY
+        public Point PositionXY
         {
             get { return PosicaoXY; }
             set { PosicaoXY = value; }

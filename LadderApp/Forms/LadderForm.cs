@@ -132,7 +132,7 @@ namespace LadderApp
                     VisualLine _LinhaAnterior = visualProgram.linhas[visualProgram.linhas.Count - 1];
 
                     if (numberOfTimes == 0)
-                        visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.posicaoXY = new Point(auxX, 0);
+                        visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.PositionXY = new Point(auxX, 0);
 
                     foreach (VisualLine _linhasDL in visualProgram.linhas)
                     {
@@ -151,8 +151,8 @@ namespace LadderApp
 
                         _linhasDL.BackgroundLine.Invalidate();
 
-                        if (auxX < _linhasDL.LineEnd.posicaoXY.X)
-                            auxX = _linhasDL.LineEnd.posicaoXY.X;
+                        if (auxX < _linhasDL.LineEnd.PositionXY.X)
+                            auxX = _linhasDL.LineEnd.PositionXY.X;
 
                     }
                     _LinhaAnterior.NextLine = visualProgram.linhas[0];
@@ -167,7 +167,7 @@ namespace LadderApp
 
                 if (numberOfTimes == 0 && visualProgram.linhas.Count > 0)
                 {
-                    visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.posicaoXY = new Point(auxX, visualProgram.linhas[0].LineEnd.posicaoXY.Y);
+                    visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.PositionXY = new Point(auxX, visualProgram.linhas[0].LineEnd.PositionXY.Y);
                     ReorganizeLines(1);
                 }
 
@@ -175,7 +175,7 @@ namespace LadderApp
                 {
                     if (visualProgram.linhas.Count > 0)
                     {
-                        this.VerticalScroll.Maximum = visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.posicaoXY.Y + visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.tamanhoXY.Height;
+                        this.VerticalScroll.Maximum = visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.PositionXY.Y + visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.tamanhoXY.Height;
                         this.HorizontalScroll.Maximum = auxX;
                     }
                     else
@@ -429,7 +429,7 @@ namespace LadderApp
 
         private void menuToggleBit_Click(object sender, EventArgs e)
         {
-            ((Address)controleSelecionado.GetOperand(0)).Valor = ((Address)controleSelecionado.GetOperand(0)).Valor == true ? false : true;
+            ((Address)controleSelecionado.GetOperand(0)).Value = ((Address)controleSelecionado.GetOperand(0)).Value == true ? false : true;
             projectForm.program.SimulateLadder();
             this.Invalidate(true);
         }
@@ -505,7 +505,7 @@ namespace LadderApp
         private void menuToggleBitPulse_Click(object sender, EventArgs e)
         {
             projectForm.program.auxToggleBitPulse = ((Address)controleSelecionado.GetOperand(0));
-            projectForm.program.auxToggleBitPulse.Valor = projectForm.program.auxToggleBitPulse.Valor == true ? false : true;
+            projectForm.program.auxToggleBitPulse.Value = projectForm.program.auxToggleBitPulse.Value == true ? false : true;
             projectForm.program.SimulateLadder();
             this.Invalidate(true);
         }

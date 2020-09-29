@@ -324,9 +324,9 @@ namespace LadderApp
                 return;
 
             /// aborta a simulação quando for executar uma alteração
-            if (btnSimular.Checked)
+            if (btnSimulateLadder.Checked)
             {
-                btnSimular.Checked = false;
+                btnSimulateLadder.Checked = false;
                 Thread.Sleep(100);
             }
 
@@ -420,9 +420,9 @@ namespace LadderApp
         private void EditorLadder_FormClosed(object sender, FormClosedEventArgs e)
         {
             /// para garantir que a thread não estará executando qnd a aplicação fechar
-            if (btnSimular.Checked)
+            if (btnSimulateLadder.Checked)
             {
-                btnSimular.Checked = false;
+                btnSimulateLadder.Checked = false;
                 Thread.Sleep(200);
             }
             /// fecha a aplicação
@@ -519,9 +519,9 @@ namespace LadderApp
 
         private void btnSimular_Click(object sender, EventArgs e)
         {
-            if (btnSimular.Checked == true || mnuLadderSimulate.Checked == true)
+            if (btnSimulateLadder.Checked == true || mnuLadderSimulate.Checked == true)
             {
-                btnSimular.Checked = true;
+                btnSimulateLadder.Checked = true;
                 mnuLadderSimulate.Checked = true;
                 newThread = new Thread(new ThreadStart(this.ExecutaSimuladorContinuo));
                 newThread.Start();
@@ -534,7 +534,7 @@ namespace LadderApp
         public void ExecutaSimuladorContinuo()
         {
             /// mantém loop enquanto opção de simulação estiver ativa
-            while (btnSimular.Checked)
+            while (btnSimulateLadder.Checked)
             {
 
                 /// verifica se a janela do diagrama ladder está aberta
@@ -600,7 +600,7 @@ namespace LadderApp
             }
             else
             {
-                btnSimular.Checked = false;
+                btnSimulateLadder.Checked = false;
                 mnuLadderSimulate.Checked = false;
             }
         }
@@ -612,7 +612,7 @@ namespace LadderApp
 
         public void UncheckBtnSimularMethod()
         {
-            btnSimular.Checked = false;
+            btnSimulateLadder.Checked = false;
             mnuLadderSimulate.Checked = false;
         }
 
@@ -904,21 +904,21 @@ namespace LadderApp
         }
 
         private bool bSimulacao = false;
-        private void btnLadderSimulate_Click(object sender, EventArgs e)
+        private void btnSimulateLadder_Click(object sender, EventArgs e)
         {
             /// inverte condição da simulação - habilitada / desabilitada
             bSimulacao = (bSimulacao == true ? false : true);
 
             if (bSimulacao)
             {
-                btnSimular.Checked = true;
+                btnSimulateLadder.Checked = true;
                 mnuLadderSimulate.Checked = true;
                 newThread = new Thread(new ThreadStart(this.ExecutaSimuladorContinuo));
                 newThread.Start();
             }
             else
             {
-                btnSimular.Checked = false;
+                btnSimulateLadder.Checked = false;
                 mnuLadderSimulate.Checked = false;
             }
         }

@@ -34,26 +34,16 @@ namespace LadderApp
             }
         }
 
-        /// <summary>
-        /// Insere uma linha no programa no final das linhas
-        /// </summary>
-        /// <param name="_lc">nova linha a ser inserida</param>
-        /// <returns>indice da linha inserida</returns>
-        public int InsereLinhaNoFinal(VisualLine _lc)
+        public int InsereLinhaNoFinal(VisualLine visualLine)
         {
-            linhasPrograma.Add(_lc);
+            linhasPrograma.Add(visualLine);
             return (linhasPrograma.Count - 1);
         }
 
-        /// <summary>
-        /// Insere uma linha no programa na primeira linha (antes de todas)
-        /// </summary>
-        /// <param name="_lc">nova linha a ser inserida</param>
-        /// <returns></returns>
-        public int InsereLinhaNoInicio(VisualLine _lc)
+        public int InsereLinhaNoInicio(VisualLine visualLine)
         {
 
-            return InsereLinhaNoIndice(0, _lc);
+            return InsereLinhaNoIndice(0, visualLine);
         }
 
         public int InsereLinhaNoIndice(int linha, VisualLine _lc)

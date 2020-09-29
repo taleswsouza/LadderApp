@@ -7,7 +7,6 @@ using System.Xml.Serialization;
 namespace LadderApp
 {
     [XmlInclude(typeof(Address))]
-    [XmlType(TypeName = "Simbolo")]
     [Serializable]
     public class Instruction : IInstruction
     {
@@ -21,7 +20,7 @@ namespace LadderApp
         }
 
         private OperationCode opCode = OperationCode.None;
-        [XmlElement(Order = 1, ElementName = "Instrucao")]
+        [XmlElement(Order = 1, ElementName = "opcode")]
         public OperationCode OpCode
         {
             get => opCode;
@@ -31,7 +30,7 @@ namespace LadderApp
                 InitializeOperands();
             }
         }
-        [XmlElement(Order = 2, IsNullable = true, ElementName = "Operando")]
+        [XmlElement(Order = 2, IsNullable = true, ElementName = "operand")]
         public object[] Operands { get; set; }
 
         public int GetNumberOfOperands()
@@ -119,27 +118,23 @@ namespace LadderApp
             return GetNumberOfOperands();
         }
 
-        private Size TamanhoXY;
-        [XmlIgnore]
-        public Size tamanhoXY
-        {
-            get { return TamanhoXY; }
-            set { TamanhoXY = new Size(0, 0); }
-        }
+        //private Size TamanhoXY;
+        //[XmlIgnore]
+        //public Size tamanhoXY
+        //{
+        //    get { return TamanhoXY; }
+        //    set { TamanhoXY = new Size(0, 0); }
+        //}
 
-        private Point PosicaoXY;
-        [XmlIgnore]
-        public Point posicaoXY
-        {
-            get { return PosicaoXY; }
-            set { PosicaoXY = new Point(0, 0); }
-        }
+        //private Point positionXY;
+        //public Point PositionXY { get => positionXY; set => positionXY = new Point(0, 0); }
 
-        [XmlIgnore]
-        public Point XYConexao
-        {
-            get { return new Point(0, 0); }
-        }
+        //[XmlIgnore]
+        //public Point XYConexao
+        //{
+        //    get { return new Point(0, 0); }
+        //}
+
 
         public void Dispose()
         {

@@ -211,21 +211,20 @@ namespace LadderApp
             return _lstResult;
         }
 
-        public void AlocaEnderecamentoIO(Device dispositivo)
+        public void AlocaEnderecamentoIO(Device device)
         {
-            /// Atalho para o No de enderecamento
             this.ListInputAddress.Clear();
             this.ListOutputAddress.Clear();
-            foreach (Address el in dispositivo.lstEndBitPorta)
+            foreach (Address address in device.lstEndBitPorta)
             {
-                el.ApontaDispositivo(dispositivo);
-                switch (el.AddressType)
+                address.SetDevice(device);
+                switch (address.AddressType)
                 {
                     case AddressTypeEnum.DigitalInput:
-                        this.ListInputAddress.Add(el);
+                        this.ListInputAddress.Add(address);
                         break;
                     case AddressTypeEnum.DigitalOutput:
-                        this.ListOutputAddress.Add(el);
+                        this.ListOutputAddress.Add(address);
                         break;
                 }
             }

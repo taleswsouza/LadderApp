@@ -175,8 +175,8 @@ namespace LadderApp
                         break;
                     case OperationCode.ParallelBranchEnd:
                         _tamX = this.tamX / 3;
-                        _tamY = _par.ultimoVPI.posicaoXY.Y - _par.par.posicaoXY.Y + _par.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
-                        _posY = _par.par.posicaoXY.Y;
+                        _tamY = _par.ultimoVPI.PositionXY.Y - _par.par.PositionXY.Y + _par.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
+                        _posY = _par.par.PositionXY.Y;
 
                         if (_maiorX > _par.maiorX)
                             _par.maiorX = _maiorX;
@@ -221,7 +221,7 @@ namespace LadderApp
                             _par.maiorX = _maiorX;
                         _maiorX = 0;
 
-                        _posX = _par.par.posicaoXY.X;
+                        _posX = _par.par.PositionXY.X;
 
                         _par._yAcum = _par.maiorY;
                         _posY = _par.maiorY + (tamY * (_par.numVPITratados + 1));
@@ -238,7 +238,7 @@ namespace LadderApp
                             _ctrlLivreAux = _par.par;
                         }
 
-                        _ctrlLivreAux.tamanhoXY = new Size(_ctrlLivreAux.tamanhoXY.Width, _posY - _ctrlLivreAux.posicaoXY.Y);
+                        _ctrlLivreAux.tamanhoXY = new Size(_ctrlLivreAux.tamanhoXY.Width, _posY - _ctrlLivreAux.PositionXY.Y);
 
                         /// PARA FACILITAR A BUSCA DO PROXIMO PONTO DE PARALELO
                         _ctrlLivreAux.Aponta2proxPP = simbAux;
@@ -260,7 +260,7 @@ namespace LadderApp
                 }
 
                 // posiciona e dimensiona simbolo
-                simbAux.posicaoXY = new Point(_posX, _posY);
+                simbAux.PositionXY = new Point(_posX, _posY);
                 simbAux.tamanhoXY = new Size(_tamX, _tamY);
 
                 if ((visualOutputInstructions.Count > 0) && (_contaNumSimbolos >= (visualInstructions.Count - visualOutputInstructions.Count)))
@@ -287,7 +287,7 @@ namespace LadderApp
                 _tamY2DesenhoFundo -= posY;
 
             //--Inicio da linha
-            LineBegin.posicaoXY = new Point(posX, posY);
+            LineBegin.PositionXY = new Point(posX, posY);
             LineBegin.tamanhoXY = new Size(this.tamX, _tamY2DesenhoFundo);
             LineBegin.Location = new Point(posX, posY);
             LineBegin.Size = new Size(this.tamX, _tamY2DesenhoFundo);
@@ -297,18 +297,18 @@ namespace LadderApp
                 _acumTamX = (ladderForm.Width - this.tamX);
 
             if (PreviousLine != null)
-                if (_acumTamX < PreviousLine.LineEnd.posicaoXY.X)
-                    _acumTamX = PreviousLine.LineEnd.posicaoXY.X;
+                if (_acumTamX < PreviousLine.LineEnd.PositionXY.X)
+                    _acumTamX = PreviousLine.LineEnd.PositionXY.X;
 
             posX2primeiroSimbSaida = _acumTamX - _guardaAcumXnoPrimeiroSimbSaida - (_guardaTamSaida);
 
-            LineEnd.posicaoXY = new Point(_acumTamX, posY);
+            LineEnd.PositionXY = new Point(_acumTamX, posY);
             LineEnd.tamanhoXY = new Size(this.tamX, _tamY2DesenhoFundo);
             LineEnd.Location = new Point(_acumTamX, posY);
             LineEnd.Size = new Size(this.tamX, _tamY2DesenhoFundo);
 
             //--Desenho de fundo
-            BackgroundLine.posicaoXY = new Point(posX, posY);
+            BackgroundLine.PositionXY = new Point(posX, posY);
             BackgroundLine.tamanhoXY = new Size(_acumTamX, _tamY2DesenhoFundo);
             BackgroundLine.Location = new Point(posX, posY);
             BackgroundLine.Size = new Size(_acumTamX, _tamY2DesenhoFundo);
@@ -341,9 +341,9 @@ namespace LadderApp
                 _simbAux.Size = new Size(Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * percReducaoSimbolo), _simbAux.tamanhoXY.Height);
 
                 if (i >= indiceInsereSaida && (visualOutputInstructions.Count > 0))
-                    _simbAux.Location = new Point(_simbAux.posicaoXY.X + (_simbAux.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * percReducaoSimbolo))) / 2 + posX2primeiroSimbSaida, _simbAux.posicaoXY.Y);
+                    _simbAux.Location = new Point(_simbAux.PositionXY.X + (_simbAux.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * percReducaoSimbolo))) / 2 + posX2primeiroSimbSaida, _simbAux.PositionXY.Y);
                 else
-                    _simbAux.Location = new Point(_simbAux.posicaoXY.X + (_simbAux.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * percReducaoSimbolo))) / 2, _simbAux.posicaoXY.Y);
+                    _simbAux.Location = new Point(_simbAux.PositionXY.X + (_simbAux.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * percReducaoSimbolo))) / 2, _simbAux.PositionXY.Y);
 
                 _simbAux.Visible = true;
                 _simbAux.Invalidate();
@@ -711,7 +711,7 @@ namespace LadderApp
                         ladderForm.menuToggleBit.Enabled = false;
 
                     ProjectForm projectForm = ladderForm.projectForm;
-                    TreeNode addressingNode = projectForm.ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
+                    TreeNode addressingNode = projectForm.tvnProjectTree.Nodes["tvnProjectNode"].Nodes["tvnAddressingNode"];
                     foreach (TreeNode eachAddressTypeNode in addressingNode.Nodes)
                     {
                         ToolStripMenuItem menu = null;
