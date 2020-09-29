@@ -42,7 +42,7 @@ namespace LadderApp
             {
                 program.device = new Device(1);
 
-                AlocaEnderecamentoIO();
+                AlocateIOAddressing();
 
                 AlocaEnderecamentoMemoria(program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
                 AlocaEnderecamentoMemoria(program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
@@ -52,7 +52,7 @@ namespace LadderApp
             {
                 if (program.device == null)
                     program.device = new Device(1);
-                AlocaEnderecamentoIO();
+                AlocateIOAddressing();
 
                 AlocaEnderecamentoMemoria(program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, program.addressing.ListMemoryAddress.Count);
                 AlocaEnderecamentoMemoria(program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, program.addressing.ListTimerAddress.Count);
@@ -110,7 +110,7 @@ namespace LadderApp
                         }
                         program.device.RealocaEnderecoDispositivo();
 
-                        AlocaEnderecamentoIO();
+                        AlocateIOAddressing();
                     }
                     break;
                 case "tvnAddressingConfigurationNode":
@@ -144,11 +144,39 @@ namespace LadderApp
             ladderForm.Show();
         }
 
-        public void AlocaEnderecamentoIO()
+        private TreeNode AddressingNode => tvnProjectTree.Nodes["tvnProjectNode"].Nodes["tvnAddressingNode"];
+        private TreeNodeCollection InputsNodes => AddressingNode.Nodes["tvnInputsNode"].Nodes;
+        private TreeNodeCollection OutputsNodes => AddressingNode.Nodes["tvnOutputsNode"].Nodes;
+        private TreeNodeCollection MemoriesNodes => AddressingNode.Nodes["tvnMemoriesNode"].Nodes;
+        private TreeNodeCollection CountersNodes => AddressingNode.Nodes["tvnCountersNode"].Nodes;
+        private TreeNodeCollection TimersNodes => AddressingNode.Nodes["tvnTimersNode"].Nodes;
+
+        private TreeNodeCollection GetAddressingNodesByAddress(Address address)
         {
-            TreeNode _NoEnderecamento = tvnProjectTree.Nodes["tvnProjectNode"].Nodes["tvnAddressingNode"];
-            _NoEnderecamento.Nodes["tvnInputsNode"].Nodes.Clear();
-            _NoEnderecamento.Nodes["tvnOutputsNode"].Nodes.Clear();
+            switch (address.AddressType)
+            {
+                case AddressTypeEnum.DigitalInput:
+                    return InputsNodes;
+                case AddressTypeEnum.DigitalOutput:
+                    return OutputsNodes;
+                case AddressTypeEnum.DigitalMemory:
+                    return MemoriesNodes;
+                case AddressTypeEnum.DigitalMemoryCounter:
+                    return CountersNodes;
+                case AddressTypeEnum.DigitalMemoryTimer:
+                    return TimersNodes;
+                default:
+                    return null;
+            }
+        }
+
+        public void AlocateIOAddressing()
+        {
+            tvnProjectTree.BeginUpdate();
+
+            InputsNodes.Clear();
+            OutputsNodes.Clear();
+
             program.addressing.ListInputAddress.Clear();
             program.addressing.ListOutputAddress.Clear();
             foreach (Address address in program.device.lstEndBitPorta)
@@ -158,66 +186,28 @@ namespace LadderApp
                 {
                     case AddressTypeEnum.DigitalInput:
                         program.addressing.ListInputAddress.Add(address);
-                        //if (!_NoEnderecamento.Nodes["tvnInputsNode"].Nodes.ContainsKey(el.Nome))
-                        //{
-                        _NoEnderecamento.Nodes["tvnInputsNode"].Nodes.Add(address.Name, address.Name + (address.Comment == "" ? "" : " - " + address.Comment));
-                        _NoEnderecamento.Nodes["tvnInputsNode"].Nodes[address.Name].Tag = address;
-                        //el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
-                        //}
+                        InputsNodes.Add(address.Name, address.GetNameAndComment());
+                        InputsNodes[address.Name].Tag = address;
                         break;
                     case AddressTypeEnum.DigitalOutput:
                         program.addressing.ListOutputAddress.Add(address);
-                        //if (!_NoEnderecamento.Nodes["tvnOutputsNode"].Nodes.ContainsKey(el.Nome))
-                        //{
-                        _NoEnderecamento.Nodes["tvnOutputsNode"].Nodes.Add(address.Name, address.Name + (address.Comment == "" ? "" : " - " + address.Comment));
-                        _NoEnderecamento.Nodes["tvnOutputsNode"].Nodes[address.Name].Tag = address;
-                        //el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
-                        //}
+                        OutputsNodes.Add(address.Name, address.GetNameAndComment());
+                        OutputsNodes[address.Name].Tag = address;
                         break;
                 }
                 address.EditedCommentEvent += new EditedCommentEventHandler(Address_EditedComment);
             }
-
+            tvnProjectTree.EndUpdate();
         }
 
-        void Address_EditedComment(Address sender)
+        void Address_EditedComment(Address editedAddress)
         {
-            TreeNode _NoEnderecamento = tvnProjectTree.Nodes["tvnProjectNode"].Nodes["tvnAddressingNode"];
-            int _pos = 0;
-            switch (sender.AddressType)
-            {
-                case AddressTypeEnum.DigitalInput:
-                    _pos = _NoEnderecamento.Nodes["tvnInputsNode"].Nodes.IndexOfKey(sender.Name);
-
-                    if (_pos >= 0)
-                        _NoEnderecamento.Nodes["tvnInputsNode"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
-                    break;
-                case AddressTypeEnum.DigitalOutput:
-                    _pos = _NoEnderecamento.Nodes["tvnOutputsNode"].Nodes.IndexOfKey(sender.Name);
-
-                    if (_pos >= 0)
-                        _NoEnderecamento.Nodes["tvnOutputsNode"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
-                    break;
-                case AddressTypeEnum.DigitalMemory:
-                    _pos = _NoEnderecamento.Nodes["tvnMemoriesNode"].Nodes.IndexOfKey(sender.Name);
-
-                    if (_pos >= 0)
-                        _NoEnderecamento.Nodes["tvnMemoriesNode"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
-                    break;
-                case AddressTypeEnum.DigitalMemoryCounter:
-                    _pos = _NoEnderecamento.Nodes["tvnCountersNode"].Nodes.IndexOfKey(sender.Name);
-
-                    if (_pos >= 0)
-                        _NoEnderecamento.Nodes["tvnCountersNode"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
-                    break;
-                case AddressTypeEnum.DigitalMemoryTimer:
-                    _pos = _NoEnderecamento.Nodes["tvnTimersNode"].Nodes.IndexOfKey(sender.Name);
-
-                    if (_pos >= 0)
-                        _NoEnderecamento.Nodes["tvnTimersNode"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
-                    break;
-            }
-
+            tvnProjectTree.BeginUpdate();
+            TreeNodeCollection nodeToUpdateAddress = GetAddressingNodesByAddress(editedAddress);
+            int position = nodeToUpdateAddress.IndexOfKey(editedAddress.Name);
+            if (position >= 0)
+                nodeToUpdateAddress[position].Text = editedAddress.GetNameAndComment();
+            tvnProjectTree.EndUpdate();
         }
 
         public int AlocaEnderecamentoMemoria(List<Address> _lstE, AddressTypeEnum tp, int qtdEnd)

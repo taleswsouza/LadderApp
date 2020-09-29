@@ -192,5 +192,10 @@ namespace LadderApp
         //{
         //    return (new Address()).GetType().Name;
         //}
+
+        public String GetNameAndComment()
+        {
+            return $"{Name}{(Comment == "" ? "" : " - " + Comment)}";
+        }
     }
 }
