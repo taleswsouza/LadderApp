@@ -19,8 +19,6 @@ namespace LadderApp
         private bool bHabilitaDeletarArqIntermediarios = false;
         private String strMMCU = "";
 
-        private String strRemoveChars = " ;*@#$%\\";
-
         private String strStandardOutput = "";
         private String strStandardError = "";
 

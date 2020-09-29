@@ -10,60 +10,61 @@ namespace LadderApp.Formularios
 {
     public partial class ChangeTimerCounterParametersForm : Form
     {
-        public OperationCode Funcao = OperationCode.None;
-        public Int32 Tipo = 0;
-        public Int32 BaseTempo = 0;
-        public Int32 Preset = 0;
-        public Int32 Acumulado = 0;
+        private OperationCode opCode = OperationCode.None;
 
-        public ChangeTimerCounterParametersForm(OperationCode funcao)
+        public OperationCode OpCode { get => opCode; set => opCode = value; }
+        public int Type { get; set; } = 0;
+        public int TimeBase { get; set; } = 0;
+        public int Preset { get; set; } = 0;
+        public int Accumulated { get; set; } = 0;
+
+        public ChangeTimerCounterParametersForm(OperationCode opCode)
         {
             InitializeComponent();
-
-            switch (funcao)
+            switch (opCode)
             {
                 case OperationCode.Counter:
                 case OperationCode.Timer:
-                    Funcao = funcao;
+                    OpCode = opCode;
                     break;
+                default:
+                    throw new Exception("Not a valid opCode!");
             }
         }
 
         private void AlteraTemporizadorContador_Load(object sender, EventArgs e)
         {
-            switch (this.Funcao)
+            switch (this.OpCode)
             {
                 case OperationCode.Counter:
-                    this.Text = this.Text.Replace("<%>", "Counter");
-                    cmbBaseTempo.Visible = false;
-                    lblBaseTempo.Visible = false;
-                    cmbTipo.Items.Clear();
-                    cmbTipo.Items.Add("CTU");
-                    cmbTipo.Items.Add("CTD");
+                    Text = "Change Counter";
+                    cmbTimeBase.Visible = false;
+                    lblTimeBase.Visible = false;
+                    cmbType.Items.Clear();
+                    cmbType.Items.Add("CTU");
+                    cmbType.Items.Add("CTD");
                     break;
                 case OperationCode.Timer:
-                    this.Text = this.Text.Replace("<%>", "Timer");
-                    cmbTipo.Items.Clear();
-                    cmbTipo.Items.Add("TON");
-                    cmbTipo.Items.Add("TOF");
-                    cmbTipo.Items.Add("RTO");
-                    break;
-                default:
+                    Text = "Change Timer";
+                    cmbType.Items.Clear();
+                    cmbType.Items.Add("TON");
+                    cmbType.Items.Add("TOF");
+                    cmbType.Items.Add("RTO");
                     break;
             }
 
-            cmbTipo.SelectedIndex = this.Tipo;
-            cmbBaseTempo.SelectedIndex = this.BaseTempo;
-            txtPreset.Value = this.Preset;
-            txtAcumulado.Value = this.Acumulado;
+            cmbType.SelectedIndex = Type;
+            cmbTimeBase.SelectedIndex = TimeBase;
+            txtPreset.Value = Preset;
+            txtAccumulated.Value = Accumulated;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            this.Tipo = (int)cmbTipo.SelectedIndex;
-            this.BaseTempo = (int)cmbBaseTempo.SelectedIndex;
-            this.Preset = (int)txtPreset.Value;
-            this.Acumulado = (int)txtAcumulado.Value;
+            Type = cmbType.SelectedIndex;
+            TimeBase = cmbTimeBase.SelectedIndex;
+            Preset = decimal.ToInt32(txtPreset.Value);
+            Accumulated = decimal.ToInt32(txtAccumulated.Value);
             this.Close();
         }
 

@@ -10,7 +10,7 @@
     <RootNamespace>LadderApp</RootNamespace>
     <AssemblyName>LadderApp</AssemblyName>
     <StartupObject>LadderApp.Program</StartupObject>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -41,6 +41,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -69,19 +71,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MicrocontrollersBaseCodeFilesResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\FreeUserControl.cs">
+    <Compile Include="UserControls\VisualInstructionUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\FreeUserControl.Designer.cs">
-      <DependentUpon>FreeUserControl.cs</DependentUpon>
+    <Compile Include="UserControls\VisualInstructionUserControl.Designer.cs">
+      <DependentUpon>VisualInstructionUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\CouldNotInitializeTIUSBException.cs" />
     <Compile Include="Exceptions\NotValidOpCodeException.cs" />
-    <Compile Include="Forms\ChangeCommentForm.cs">
+    <Compile Include="Forms\EditCommentForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ChangeCommentForm.Designer.cs">
-      <DependentUpon>ChangeCommentForm.cs</DependentUpon>
+    <Compile Include="Forms\EditCommentForm.Designer.cs">
+      <DependentUpon>EditCommentForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\PasswordForm.cs">
       <SubType>Form</SubType>
@@ -132,7 +134,6 @@
     <Compile Include="Model\IInstruction.cs" />
     <Compile Include="Model\Line.cs" />
     <Compile Include="Model\InstructionList.cs" />
-    <Compile Include="Services\ManipulateLineServices.cs" />
     <Compile Include="Model\Pin.cs" />
     <Compile Include="VisualComponents\VisualLine.cs">
     </Compile>
@@ -145,13 +146,13 @@
       <SubType>Designer</SubType>
       <DependentUpon>BasicUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\FreeUserControl.resx">
+    <EmbeddedResource Include="UserControls\VisualInstructionUserControl.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>FreeUserControl.cs</DependentUpon>
+      <DependentUpon>VisualInstructionUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ChangeCommentForm.resx">
+    <EmbeddedResource Include="Forms\EditCommentForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>ChangeCommentForm.cs</DependentUpon>
+      <DependentUpon>EditCommentForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PasswordForm.resx">
       <SubType>Designer</SubType>

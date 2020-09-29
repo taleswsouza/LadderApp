@@ -1,6 +1,6 @@
 namespace LadderApp
 {
-    partial class FreeUserControl
+    partial class VisualInstructionUserControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,13 +30,13 @@ namespace LadderApp
         {
             this.SuspendLayout();
             // 
-            // FreeUserControl
+            // VisualInstructionUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "FreeUserControl";
+            this.Name = "VisualInstructionUserControl";
             this.Size = new System.Drawing.Size(98, 91);
             this.Load += new System.EventHandler(this.ControleLivre_Load);
             this.SizeChanged += new System.EventHandler(this.ControleLivre_SizeChanged);
@@ -45,8 +45,6 @@ namespace LadderApp
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ControleLivre_KeyDown);
             this.Leave += new System.EventHandler(this.ControleLivre_Leave);
             this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ControleLivre_MouseDoubleClick);
-            this.MouseEnter += new System.EventHandler(this.ControleLivre_MouseEnter);
-            this.MouseLeave += new System.EventHandler(this.ControleLivre_MouseLeave);
             this.Resize += new System.EventHandler(this.ControleLivre_Resize);
             this.ResumeLayout(false);
 

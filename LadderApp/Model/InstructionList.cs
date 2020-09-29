@@ -37,45 +37,37 @@ namespace LadderApp
         }
 
 
-        public bool ExisteTemporizadorDuplicado(List<Address> lstTemporizadoresUtilizados)
+        public bool HasDuplicatedTimers(List<Address> usedTimers)
         {
             foreach (Instruction instruction in this)
             {
                 if (instruction.OpCode== OperationCode.Timer)
                 {
-                    if (lstTemporizadoresUtilizados.Contains((Address)instruction.GetOperand(0)))
+                    if (usedTimers.Contains((Address)instruction.GetOperand(0)))
                         return false;
                     else
-                        lstTemporizadoresUtilizados.Add((Address)instruction.GetOperand(0));
+                        usedTimers.Add((Address)instruction.GetOperand(0));
                 }
             }
             return true;
         }
 
-        public bool ExisteContadorDuplicado(List<Address> lstContadoresUtilizados)
+        public bool HasDuplicatedCounters(List<Address> usedCounters)
         {
             foreach (Instruction instruction in this)
             {
                 if (instruction.OpCode== OperationCode.Counter)
                 {
-                    if (lstContadoresUtilizados.Contains((Address)instruction.GetOperand(0)))
+                    if (usedCounters.Contains((Address)instruction.GetOperand(0)))
                         return false;
                     else
-                        lstContadoresUtilizados.Add((Address)instruction.GetOperand(0));
+                        usedCounters.Add((Address)instruction.GetOperand(0));
                 }
             }
             return true;
         }
         
         
-        /// <summary>
-        /// InsertAllWithClearBefore() - Insere todos os itens SimboloBasico da lista 
-        /// do parametro de entrada na lista atual, caso ja haja itens na lista atual,
-        /// serao apagados.
-        /// </summary>
-        /// <param name="instructions">Lista de entrada com os simbolos que serao
-        /// inseridos no objeto</param>
-        /// <returns>objeto atual</returns>
         public InstructionList InsertAllWithClearBefore(List<Instruction> instructions)
         {
             this.Clear();
@@ -90,14 +82,6 @@ namespace LadderApp
         }
 
 
-        /// <summary>
-        /// InsertAllWithClearBefore() - Insere todos os itens CodigosInterpretaveis da lista 
-        /// do parametro de entrada na lista atual, caso ja haja itens na lista atual,
-        /// serao apagados.
-        /// </summary>
-        /// <param name="_lstSB">Lista de entrada com os CodigosInterpretaveis que serao
-        /// inseridos no objeto</param>
-        /// <returns>objeto atual</returns>
         public InstructionList InsertAllWithClearBefore(OperationCode [] _arrayCI)
         {
             this.Clear();
@@ -141,7 +125,7 @@ namespace LadderApp
         public void ValidaOperandos(Addressing _ep)
         {
             foreach(Instruction instruction in this)
-                instruction.ValidaOperandosSimbolo(_ep);
+                instruction.ValidateInstructionOperands(_ep);
         }
 
 

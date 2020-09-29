@@ -6,24 +6,20 @@ namespace LadderApp
 {
     public class VisualProgram
     {
-        LadderProgram prgBasico = null;
-        LadderForm frmDiag = null;
+        private LadderProgram program;
+        private LadderForm ladderForm;
 
-        /// <summary>
-        /// Construtor da classe do programa de linhas da visao (controlelivre)
-        /// </summary>
-        /// <param name="_prgBasico">link para o programa basico (simbolobasico)</param>
-        public VisualProgram(LadderProgram _prgBasico, LadderForm _frmDiag)
+        public VisualProgram(LadderProgram program, LadderForm ladderForm)
         {
-            prgBasico = _prgBasico;
-            frmDiag = _frmDiag;
+            this.program = program;
+            this.ladderForm = ladderForm;
 
-            if (prgBasico.linhas.Count > 0)
+            if (this.program.Lines.Count > 0)
             {
-                foreach (Line _lc in prgBasico.linhas)
+                foreach (Line line in this.program.Lines)
                 {
-                    VisualLine _lcL = PreparaLinhaQueSeraCriada(_lc);
-                    InsereLinhaNoFinal(_lcL);
+                    VisualLine visualLine = CreateVisualLine(line);
+                    InsereLinhaNoFinal(visualLine);
                 }
             }
         }
@@ -74,9 +70,9 @@ namespace LadderApp
 
         public int InsereLinhaNoIndice(int linha)
         {
-            linha = prgBasico.InsereLinhaNoIndice(linha, new Line());
+            linha = program.InsereLinhaNoIndice(linha, new Line());
 
-            VisualLine _lc = PreparaLinhaQueSeraCriada(prgBasico.linhas[linha]);
+            VisualLine _lc = CreateVisualLine(program.Lines[linha]);
 
             return InsereLinhaNoIndice(linha, _lc);
         }
@@ -84,9 +80,9 @@ namespace LadderApp
 
         public int InsereLinhaNoFinal()
         {
-            int linha = prgBasico.InsereLinhaNoFinal(new Line());
+            int linha = program.InsereLinhaNoFinal(new Line());
 
-            VisualLine _lc = PreparaLinhaQueSeraCriada(prgBasico.linhas[linha]);
+            VisualLine _lc = CreateVisualLine(program.Lines[linha]);
 
             return InsereLinhaNoFinal(_lc);
         }
@@ -97,19 +93,19 @@ namespace LadderApp
             linhasPrograma[linha].ApagaLinha();
             linhasPrograma.RemoveAt(linha);
 
-            prgBasico.ApagaLinha(linha);
+            program.ApagaLinha(linha);
         }
 
         /// <summary>
         /// Insere linha abaixo ou acima da linha selecionada
         /// </summary>
         /// <param name="_acima">true - acima / false - abaixo</param>
-        public VisualLine PreparaLinhaQueSeraCriada(Line _linhaBasica)
+        public VisualLine CreateVisualLine(Line line)
         {
-            VisualLine _novaLinhaTela = new VisualLine(frmDiag, _linhaBasica);
-            _novaLinhaTela.simboloInicioLinha.MudaLinha += new MudaLinhaEventHandler(frmDiag.simboloInicioLinha_MudaLinha);
+            VisualLine visualLine = new VisualLine(ladderForm, line);
+            visualLine.LineBegin.MudaLinha += new MudaLinhaEventHandler(ladderForm.simboloInicioLinha_MudaLinha);
 
-            return _novaLinhaTela;
+            return visualLine;
         }
     }
 }

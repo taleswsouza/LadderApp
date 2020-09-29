@@ -15,14 +15,14 @@ namespace LadderApp
         private int tempVertical = 0;
         private int tempHorizontal = 0;
 
-        public ProjectForm linkProjeto = null;
+        public ProjectForm projectForm;
 
-        public VisualProgram prgLivre = null;
+        public VisualProgram visualProgram;
 
-        private Boolean RedimencionandoLinhas = false;
+        private Boolean ResizingLines = false;
 
-        private FreeUserControl controleSelecionado = null;
-        public FreeUserControl ControleSelecionado
+        private VisualInstructionUserControl controleSelecionado = null;
+        public VisualInstructionUserControl ControleSelecionado
         {
             get { return controleSelecionado; }
         }
@@ -41,16 +41,16 @@ namespace LadderApp
             this.VScroll = false;
             this.HScroll = false;
 
-            prgLivre = new VisualProgram(program, this);
+            visualProgram = new VisualProgram(program, this);
         }
 
         private void DiagramaLadder_Resize(object sender, EventArgs e)
         {
-            if (RedimencionandoLinhas == false)
+            if (ResizingLines == false)
             {
-                RedimencionandoLinhas = true;
-                ReorganizandoLinhas();
-                RedimencionandoLinhas = false;
+                ResizingLines = true;
+                ReorganizeLines();
+                ResizingLines = false;
             }
         }
 
@@ -61,14 +61,14 @@ namespace LadderApp
 
         public void ApagaLinhasSimbolos()
         {
-            foreach (VisualLine lcl in prgLivre.linhas)
+            foreach (VisualLine lcl in visualProgram.linhas)
             {
             }
         }
 
         public void DeletaLinha(VisualLine sender)
         {
-            int _indiceLinhaDeletar = this.prgLivre.linhas.IndexOf(sender);
+            int _indiceLinhaDeletar = this.visualProgram.linhas.IndexOf(sender);
             int _indiceLinha = _indiceLinhaDeletar;
 
             if (_indiceLinha >= 0)
@@ -79,41 +79,41 @@ namespace LadderApp
                 /// desconsiderar a linha a ser deleta
                 /// OBS.: Isto garante um melhor agilidade
                 ///     no desenho da tela.
-                this.prgLivre.ApagaLinha(_indiceLinha);
+                this.visualProgram.ApagaLinha(_indiceLinha);
 
                 if (_indiceLinha == 0)
                     _indiceLinha = 1;
 
-                if (this.prgLivre.linhas.Count > 0)
-                    this.prgLivre.linhas[_indiceLinha - 1].simboloInicioLinha.Select();
+                if (this.visualProgram.linhas.Count > 0)
+                    this.visualProgram.linhas[_indiceLinha - 1].LineBegin.Select();
 
-                this.ReorganizandoLinhas();
+                this.ReorganizeLines();
 
-                if (this.prgLivre.linhas.Count > 0)
-                    this.prgLivre.linhas[_indiceLinha - 1].simboloInicioLinha.Refresh();
+                if (this.visualProgram.linhas.Count > 0)
+                    this.visualProgram.linhas[_indiceLinha - 1].LineBegin.Refresh();
 
                 this.ResumeLayout();
             }
         }
 
-        public void ReorganizandoLinhas()
+        public void ReorganizeLines()
         {
-            ReorganizandoLinhas(0);
+            ReorganizeLines(0);
         }
 
 
-        public void ReorganizandoLinhas(int _numVezes)
+        public void ReorganizeLines(int numberOfTimes)
         {
             int auxY = 0;
             int iTabStop = 0;
             int iLinha = 0;
             int auxX = 0;
 
-            if (prgLivre != null)
+            if (visualProgram != null)
             {
-                if (prgLivre.linhas.Count > 0)
+                if (visualProgram.linhas.Count > 0)
                 {
-                    if (_numVezes == 0)
+                    if (numberOfTimes == 0)
                     {
                         tempVertical = this.VerticalScroll.Value;
                         tempHorizontal = this.HorizontalScroll.Value;
@@ -129,33 +129,33 @@ namespace LadderApp
                     {
                         SetMessage(ex.Message);
                     }
-                    VisualLine _LinhaAnterior = prgLivre.linhas[prgLivre.linhas.Count - 1];
+                    VisualLine _LinhaAnterior = visualProgram.linhas[visualProgram.linhas.Count - 1];
 
-                    if (_numVezes == 0)
-                        prgLivre.linhas[prgLivre.linhas.Count - 1].simboloFimLinha.posicaoXY = new Point(auxX, 0);
+                    if (numberOfTimes == 0)
+                        visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.posicaoXY = new Point(auxX, 0);
 
-                    foreach (VisualLine _linhasDL in prgLivre.linhas)
+                    foreach (VisualLine _linhasDL in visualProgram.linhas)
                     {
                         if (_LinhaAnterior != null)
-                            _LinhaAnterior.linhaProxima = _linhasDL;
-                        _linhasDL.linhaAnterior = _LinhaAnterior;
+                            _LinhaAnterior.NextLine = _linhasDL;
+                        _linhasDL.PreviousLine = _LinhaAnterior;
                         _linhasDL.iTabStop = iTabStop;
                         _linhasDL.posY = auxY;
                         _linhasDL.NumLinha = iLinha;
-                        _linhasDL.simboloInicioLinha.Invalidate();
+                        _linhasDL.LineBegin.Invalidate();
                         _linhasDL.AjustaPosicionamento();
-                        auxY += _linhasDL.simboloDesenhoFundo.tamanhoXY.Height;
+                        auxY += _linhasDL.BackgroundLine.tamanhoXY.Height;
                         iTabStop = _linhasDL.iTabStop;
                         iLinha++;
                         _LinhaAnterior = _linhasDL;
 
-                        _linhasDL.simboloDesenhoFundo.Invalidate();
+                        _linhasDL.BackgroundLine.Invalidate();
 
-                        if (auxX < _linhasDL.simboloFimLinha.posicaoXY.X)
-                            auxX = _linhasDL.simboloFimLinha.posicaoXY.X;
+                        if (auxX < _linhasDL.LineEnd.posicaoXY.X)
+                            auxX = _linhasDL.LineEnd.posicaoXY.X;
 
                     }
-                    _LinhaAnterior.linhaProxima = prgLivre.linhas[0];
+                    _LinhaAnterior.NextLine = visualProgram.linhas[0];
 
                     if (tempVertical > 0 || tempHorizontal > 0)
                     {
@@ -165,17 +165,17 @@ namespace LadderApp
                     this.AutoScroll = true;
                 }
 
-                if (_numVezes == 0 && prgLivre.linhas.Count > 0)
+                if (numberOfTimes == 0 && visualProgram.linhas.Count > 0)
                 {
-                    prgLivre.linhas[prgLivre.linhas.Count - 1].simboloFimLinha.posicaoXY = new Point(auxX, prgLivre.linhas[0].simboloFimLinha.posicaoXY.Y);
-                    ReorganizandoLinhas(1);
+                    visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.posicaoXY = new Point(auxX, visualProgram.linhas[0].LineEnd.posicaoXY.Y);
+                    ReorganizeLines(1);
                 }
 
-                if (_numVezes == 1)
+                if (numberOfTimes == 1)
                 {
-                    if (prgLivre.linhas.Count > 0)
+                    if (visualProgram.linhas.Count > 0)
                     {
-                        this.VerticalScroll.Maximum = prgLivre.linhas[prgLivre.linhas.Count - 1].simboloFimLinha.posicaoXY.Y + prgLivre.linhas[prgLivre.linhas.Count - 1].simboloFimLinha.tamanhoXY.Height;
+                        this.VerticalScroll.Maximum = visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.posicaoXY.Y + visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.tamanhoXY.Height;
                         this.HorizontalScroll.Maximum = auxX;
                     }
                     else
@@ -204,9 +204,9 @@ namespace LadderApp
             int _linha = 0;
             if (LinhaSelecionada != null)
             {
-                if (!LinhaSelecionada.simboloInicioLinha.IsDisposed)
+                if (!LinhaSelecionada.LineBegin.IsDisposed)
                 {
-                    _linha = (int)LinhaSelecionada.simboloInicioLinha.GetOperand(0);
+                    _linha = (int)LinhaSelecionada.LineBegin.GetOperand(0);
 
                     if (_acima == false)
                         _linha++;
@@ -217,11 +217,11 @@ namespace LadderApp
 
             this.SuspendLayout();
 
-            _linha = prgLivre.InsereLinhaNoIndice(_linha);
-            this.ReorganizandoLinhas();
+            _linha = visualProgram.InsereLinhaNoIndice(_linha);
+            this.ReorganizeLines();
 
-            prgLivre.linhas[_linha].simboloInicioLinha.Select();
-            prgLivre.linhas[_linha].simboloInicioLinha.Refresh();
+            visualProgram.linhas[_linha].LineBegin.Select();
+            visualProgram.linhas[_linha].LineBegin.Refresh();
 
 
             this.ResumeLayout();
@@ -263,27 +263,27 @@ namespace LadderApp
             }
         }
 
-        public void simboloInicioLinha_MudaLinha(FreeUserControl sender, Keys e)
+        public void simboloInicioLinha_MudaLinha(VisualInstructionUserControl sender, Keys e)
         {
             if (e == Keys.Up)
             {
-                if ((int)sender.VisualLine.simboloInicioLinha.GetOperand(0) != 0)
-                    sender.VisualLine.linhaAnterior.simboloInicioLinha.Select();
+                if ((int)sender.VisualLine.LineBegin.GetOperand(0) != 0)
+                    sender.VisualLine.PreviousLine.LineBegin.Select();
             }
             else if (e == Keys.Down)
             {
-                if ((int)sender.VisualLine.linhaProxima.simboloInicioLinha.GetOperand(0) != 0)
-                    sender.VisualLine.linhaProxima.simboloInicioLinha.Select();
+                if ((int)sender.VisualLine.NextLine.LineBegin.GetOperand(0) != 0)
+                    sender.VisualLine.NextLine.LineBegin.Select();
             }
         }
 
-        public void Simbolo_ControleSelecionado(FreeUserControl sender, VisualLine lCL)
+        public void Simbolo_ControleSelecionado(VisualInstructionUserControl sender, VisualLine lCL)
         {
             if (controleSelecionado != null)
                 if (!controleSelecionado.IsDisposed)
                     if(!controleSelecionado.Equals(sender))
                     {
-                        controleSelecionado.selecionado = false;
+                        controleSelecionado.Selected = false;
                         controleSelecionado.Refresh();
                     }
             //cmbOpcoes.Visible = false;
@@ -299,15 +299,15 @@ namespace LadderApp
         {
             /// o objeto .Tag e atribuido na função DesenhaQuadroSaida() da
             /// ControleLivre
-            if (((FreeUserControl)sender).Tag != null)
-                if (((String)((FreeUserControl)sender).Tag) != "")
-                    toolTipQuadrosSaida.Show((String)((FreeUserControl)sender).Tag, ((FreeUserControl)sender), 3000);
+            if (((VisualInstructionUserControl)sender).Tag != null)
+                if (((String)((VisualInstructionUserControl)sender).Tag) != "")
+                    toolTipQuadrosSaida.Show((String)((VisualInstructionUserControl)sender).Tag, ((VisualInstructionUserControl)sender), 3000);
         }
 
 
         public void Simbolo_KeyDown(object sender, KeyEventArgs e)
         {
-            FreeUserControl _cL = (FreeUserControl)sender;
+            VisualInstructionUserControl _cL = (VisualInstructionUserControl)sender;
             switch (_cL.OpCode)
             {
                 case OperationCode.None:
@@ -337,20 +337,20 @@ namespace LadderApp
                                 this.SuspendLayout();
                                 this.SelectNextControl(_cL, false, true, false, false);
                                 linhaSelecionada.ApagaSimbolos(_cL);
-                                this.ReorganizandoLinhas();
+                                this.ReorganizeLines();
                                 this.ResumeLayout();
-                                linhaSelecionada.simboloDesenhoFundo.Invalidate();
+                                linhaSelecionada.BackgroundLine.Invalidate();
                             }
                     }
                     break;
             }
         }
 
-        public List<Instruction> VariosSelecionados(FreeUserControl _cL, VisualLine _lCL)
+        public List<Instruction> VariosSelecionados(VisualInstructionUserControl _cL, VisualLine _lCL)
         {
             OperationCode _cI = _cL.OpCode;
             List<Instruction> instructions = new List<Instruction>();
-            List<FreeUserControl> _lstCL = null;
+            List<VisualInstructionUserControl> _lstCL = null;
 
             switch (_cI)
             {
@@ -361,10 +361,10 @@ namespace LadderApp
                     int _indicePosFinal = 0;
 
                     /// verifica em qual lista o controle esta presente (simbolos/saida)
-                    if (LinhaSelecionada.simbolos.Contains(_cL))
-                        _lstCL = LinhaSelecionada.simbolos;
-                    else if (LinhaSelecionada.saida.Contains(_cL))
-                        _lstCL = LinhaSelecionada.saida;
+                    if (LinhaSelecionada.visualInstructions.Contains(_cL))
+                        _lstCL = LinhaSelecionada.visualInstructions;
+                    else if (LinhaSelecionada.visualOutputInstructions.Contains(_cL))
+                        _lstCL = LinhaSelecionada.visualOutputInstructions;
                     else
                         return instructions;
 
@@ -430,70 +430,68 @@ namespace LadderApp
         private void menuToggleBit_Click(object sender, EventArgs e)
         {
             ((Address)controleSelecionado.GetOperand(0)).Valor = ((Address)controleSelecionado.GetOperand(0)).Valor == true ? false : true;
-            linkProjeto.programa.ExecutaLadderSimulado();
+            projectForm.program.SimulateLadder();
             this.Invalidate(true);
         }
 
-        public void ControleSelecionado_SolicitaMudarEndereco(FreeUserControl sender, Rectangle rect, Type tipo, int valorMax, int valorMin, params object[] faixa)
+        public void ControleSelecionado_SolicitaMudarEndereco(VisualInstructionUserControl sender, Rectangle rect, Type tipo, int valorMax, int valorMin, params object[] faixa)
         {
-            ChangeTimerCounterParametersForm Altera = new ChangeTimerCounterParametersForm(sender.OpCode);
-
             if (!sender.IsAllOperandsOk())
             {
                 MessageBox.Show("Please, assign an address first!", "Change configuration", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
+            ChangeTimerCounterParametersForm changeTimerCounterParametersForm = new ChangeTimerCounterParametersForm(sender.OpCode);
             switch (sender.OpCode)
             {
                 case OperationCode.Timer:
-                    Altera.Tipo = (Int32)((Address)sender.GetOperand(0)).Temporizador.Tipo;
-                    Altera.Preset = (Int32)((Address)sender.GetOperand(0)).Temporizador.Preset;
-                    Altera.Acumulado = (Int32)((Address)sender.GetOperand(0)).Temporizador.Acumulado;
-                    Altera.BaseTempo = (Int32)((Address)sender.GetOperand(0)).Temporizador.BaseTempo;
+                    changeTimerCounterParametersForm.Type = (Int32)((Address)sender.GetOperand(0)).Timer.Tipo;
+                    changeTimerCounterParametersForm.Preset = (Int32)((Address)sender.GetOperand(0)).Timer.Preset;
+                    changeTimerCounterParametersForm.Accumulated = (Int32)((Address)sender.GetOperand(0)).Timer.Acumulado;
+                    changeTimerCounterParametersForm.TimeBase = (Int32)((Address)sender.GetOperand(0)).Timer.BaseTempo;
                     break;
                 case OperationCode.Counter:
-                    Altera.Tipo = (Int32)((Address)sender.GetOperand(0)).Contador.Tipo;
-                    Altera.Preset = (Int32)((Address)sender.GetOperand(0)).Contador.Preset;
-                    Altera.Acumulado = (Int32)((Address)sender.GetOperand(0)).Contador.Acumulado;
+                    changeTimerCounterParametersForm.Type = (Int32)((Address)sender.GetOperand(0)).Counter.Tipo;
+                    changeTimerCounterParametersForm.Preset = (Int32)((Address)sender.GetOperand(0)).Counter.Preset;
+                    changeTimerCounterParametersForm.Accumulated = (Int32)((Address)sender.GetOperand(0)).Counter.Acumulado;
                     break;
                 default:
                     break;
             }
+            DialogResult result = changeTimerCounterParametersForm.ShowDialog();
 
-            DialogResult _result = Altera.ShowDialog();
-
-            if (_result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 /// mantem os parametros do ci atualizados
-                sender.SetOperand(1, Altera.Tipo);
-                sender.SetOperand(2, Altera.Preset);
-                sender.SetOperand(3, Altera.Acumulado);
+                sender.SetOperand(1, changeTimerCounterParametersForm.Type);
+                sender.SetOperand(2, changeTimerCounterParametersForm.Preset);
+                sender.SetOperand(3, changeTimerCounterParametersForm.Accumulated);
                 switch (sender.OpCode)
                 {
                     case OperationCode.Timer:
                         /// mantem os parametros do ci atualizados
-                        sender.SetOperand(4, Altera.BaseTempo);
+                        sender.SetOperand(4, changeTimerCounterParametersForm.TimeBase);
 
-                        ((Address)sender.GetOperand(0)).Temporizador.Tipo = Altera.Tipo;
-                        ((Address)sender.GetOperand(0)).Temporizador.Preset = Altera.Preset;
-                        ((Address)sender.GetOperand(0)).Temporizador.Acumulado = Altera.Acumulado;
-                        ((Address)sender.GetOperand(0)).Temporizador.BaseTempo = Altera.BaseTempo;
+                        ((Address)sender.GetOperand(0)).Timer.Tipo = changeTimerCounterParametersForm.Type;
+                        ((Address)sender.GetOperand(0)).Timer.Preset = changeTimerCounterParametersForm.Preset;
+                        ((Address)sender.GetOperand(0)).Timer.Acumulado = changeTimerCounterParametersForm.Accumulated;
+                        ((Address)sender.GetOperand(0)).Timer.BaseTempo = changeTimerCounterParametersForm.TimeBase;
 
-                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Temporizador.Tipo);
-                        sender.SetOperand(2, ((Address)sender.GetOperand(0)).Temporizador.Preset);
-                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Temporizador.Acumulado);
-                        sender.SetOperand(4, ((Address)sender.GetOperand(0)).Temporizador.BaseTempo);
+                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Timer.Tipo);
+                        sender.SetOperand(2, ((Address)sender.GetOperand(0)).Timer.Preset);
+                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Timer.Acumulado);
+                        sender.SetOperand(4, ((Address)sender.GetOperand(0)).Timer.BaseTempo);
 
                         break;
                     case OperationCode.Counter:
-                        ((Address)sender.GetOperand(0)).Contador.Tipo = Altera.Tipo;
-                        ((Address)sender.GetOperand(0)).Contador.Preset = Altera.Preset;
-                        ((Address)sender.GetOperand(0)).Contador.Acumulado = Altera.Acumulado;
+                        ((Address)sender.GetOperand(0)).Counter.Tipo = changeTimerCounterParametersForm.Type;
+                        ((Address)sender.GetOperand(0)).Counter.Preset = changeTimerCounterParametersForm.Preset;
+                        ((Address)sender.GetOperand(0)).Counter.Acumulado = changeTimerCounterParametersForm.Accumulated;
 
-                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Contador.Tipo);
-                        sender.SetOperand(2, ((Address)sender.GetOperand(0)).Contador.Preset);
-                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Contador.Acumulado);
+                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Counter.Tipo);
+                        sender.SetOperand(2, ((Address)sender.GetOperand(0)).Counter.Preset);
+                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Counter.Acumulado);
                         break;
                     default:
                         break;
@@ -506,9 +504,9 @@ namespace LadderApp
 
         private void menuToggleBitPulse_Click(object sender, EventArgs e)
         {
-            linkProjeto.programa.auxToggleBitPulse = ((Address)controleSelecionado.GetOperand(0));
-            linkProjeto.programa.auxToggleBitPulse.Valor = linkProjeto.programa.auxToggleBitPulse.Valor == true ? false : true;
-            linkProjeto.programa.ExecutaLadderSimulado();
+            projectForm.program.auxToggleBitPulse = ((Address)controleSelecionado.GetOperand(0));
+            projectForm.program.auxToggleBitPulse.Valor = projectForm.program.auxToggleBitPulse.Valor == true ? false : true;
+            projectForm.program.SimulateLadder();
             this.Invalidate(true);
         }
 

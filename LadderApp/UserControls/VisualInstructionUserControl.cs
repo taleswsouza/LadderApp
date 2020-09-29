@@ -8,12 +8,12 @@ using System.Windows.Forms;
 
 namespace LadderApp
 {
-    public delegate void MudaLinhaEventHandler(FreeUserControl sender, System.Windows.Forms.Keys e);
+    public delegate void MudaLinhaEventHandler(VisualInstructionUserControl sender, System.Windows.Forms.Keys e);
     public delegate void DeletaLinhaEventHandler(VisualLine sender);
-    public delegate void ControleSelecionadoEventHandler(FreeUserControl sender, VisualLine lCL);
-    public delegate void SolicitaMudarEnderecoEventHandler(FreeUserControl sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object[] faixa);
+    public delegate void ControleSelecionadoEventHandler(VisualInstructionUserControl sender, VisualLine lCL);
+    public delegate void SolicitaMudarEnderecoEventHandler(VisualInstructionUserControl sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object[] faixa);
 
-    public partial class FreeUserControl : BasicUserControl
+    public partial class VisualInstructionUserControl : BasicUserControl
 
     {
         public event MudaLinhaEventHandler MudaLinha;
@@ -21,11 +21,7 @@ namespace LadderApp
         public event ControleSelecionadoEventHandler ControleSelecionado;
         public event SolicitaMudarEnderecoEventHandler SolicitaMudarEndereco;
 
-        private Boolean usoTxtIndicado = false;
-
-        // indicador de insercao
-        List<System.Windows.Forms.Panel> listaIndicadores = new List<System.Windows.Forms.Panel>();
-        System.Windows.Forms.Panel indicadorInsercao = null;
+        private List<Panel> insertionIndicatorList = new List<Panel>();
 
         private Color penColor = Color.Blue;
         private Pen linePen = new Pen(Color.Blue, 1);
@@ -50,13 +46,13 @@ namespace LadderApp
             Borda = 2
         };
 
-        private Graphics e;
+        private Graphics graphics;
 
         private VisualLine visualLine;
         public VisualLine VisualLine { get => visualLine; set => visualLine = value; }
 
 
-        List<FreeUserControl> lstVPI;
+        List<VisualInstructionUserControl> lstVPI;
 
         private bool ultimoVPI = false;
         public bool UltimoVPI
@@ -111,8 +107,8 @@ namespace LadderApp
         Point xy2;
         Point xy3;
 
-        private FreeUserControl aponta2PI = null;
-        public FreeUserControl Aponta2PI
+        private VisualInstructionUserControl aponta2PI = null;
+        public VisualInstructionUserControl Aponta2PI
         {
             get
             {
@@ -132,8 +128,8 @@ namespace LadderApp
             }
         }
 
-        private FreeUserControl aponta2PF = null;
-        public FreeUserControl Aponta2PF
+        private VisualInstructionUserControl aponta2PF = null;
+        public VisualInstructionUserControl Aponta2PF
         {
             get
             {
@@ -158,8 +154,8 @@ namespace LadderApp
         /// se e PI o proximo e o VPI se e VPI o proximo e
         /// VPI ou PF
         /// </summary>
-        private FreeUserControl aponta2proxPP = null;
-        public FreeUserControl Aponta2proxPP
+        private VisualInstructionUserControl aponta2proxPP = null;
+        public VisualInstructionUserControl Aponta2proxPP
         {
             get
             {
@@ -179,7 +175,7 @@ namespace LadderApp
             }
         }
 
-        public FreeUserControl()
+        public VisualInstructionUserControl()
         {
             InitializeComponent();
             instruction = new Instruction();
@@ -187,7 +183,7 @@ namespace LadderApp
             this.BackColor = Color.Transparent;
         }
 
-        public FreeUserControl(Instruction intruction)
+        public VisualInstructionUserControl(Instruction intruction)
         {
             InitializeComponent();
             this.instruction = intruction;
@@ -195,7 +191,7 @@ namespace LadderApp
             this.BackColor = Color.Transparent;
         }
 
-        public FreeUserControl(OperationCode _ci)
+        public VisualInstructionUserControl(OperationCode _ci)
         {
             InitializeComponent();
             instruction = new Instruction(_ci);
@@ -292,17 +288,17 @@ namespace LadderApp
             }
         }
 
-        public void SalvaVPI2PF(List<FreeUserControl> _lstVPI)
+        public void SalvaVPI2PF(List<VisualInstructionUserControl> _lstVPI)
         {
             if (OpCode == OperationCode.ParallelBranchEnd)
             {
                 if (lstVPI == null)
-                    lstVPI = new List<FreeUserControl>();
+                    lstVPI = new List<VisualInstructionUserControl>();
                 else
                     lstVPI.Clear();
 
 
-                foreach (FreeUserControl _simbAux in _lstVPI)
+                foreach (VisualInstructionUserControl _simbAux in _lstVPI)
                 {
                     lstVPI.Add(_simbAux);
                 }
@@ -321,47 +317,46 @@ namespace LadderApp
             // -| Linha horizontal anterior ao simbolo
             xy1 = new Point(0, yMeioVertical);
             xy2 = new Point(xInicioHSimbolo, yMeioVertical);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // |- Linha horizontal posterior ao simbolo
             xy1 = new Point(xFimHSimbolo, yMeioVertical);
             xy2 = new Point(this.Width, yMeioVertical);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             ///////////////////////////////
             // -| Primeiro barra do simbolo
             xy1 = new Point(xInicioHSimbolo, yInicioVSimbolo);
             xy2 = new Point(xInicioHSimbolo, yFimVSimbolo);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // para compor a primeira barra estilo colchete (barra horizontal superior)
             xy1 = new Point(xInicioHSimbolo - xDecimoHorizontal, yInicioVSimbolo);
             xy2 = new Point(xInicioHSimbolo, yInicioVSimbolo);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // para compor a primeira barra estilo colchete (barra horizontal inferior)
             xy1 = new Point(xInicioHSimbolo - xDecimoHorizontal, yFimVSimbolo);
             xy2 = new Point(xInicioHSimbolo, yFimVSimbolo);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             //////////////////////////////
             // |- Segunda barra do simbolo
             xy1 = new Point(xFimHSimbolo, yInicioVSimbolo);
             xy2 = new Point(xFimHSimbolo, yFimVSimbolo);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // para compor a segunda barra estilo colchete (barra horizontal superior)
             xy1 = new Point(xFimHSimbolo + xDecimoHorizontal, yInicioVSimbolo);
             xy2 = new Point(xFimHSimbolo, yInicioVSimbolo);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // para compor a segunda barra estilo colchete (barra horizontal inferior)
             xy1 = new Point(xFimHSimbolo + xDecimoHorizontal, yFimVSimbolo);
             xy2 = new Point(xFimHSimbolo, yFimVSimbolo);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             DesenhaEndereco();
-
             DesenhaComentario();
         }
 
@@ -383,7 +378,7 @@ namespace LadderApp
             // barra do NF
             xy1 = new Point(xInicioHSimbolo - xDecimoHorizontal, yFimVSimbolo);
             xy2 = new Point(xFimHSimbolo + xDecimoHorizontal, yInicioVSimbolo);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
         }
 
         private void DesenhaBobinaSaida()
@@ -401,12 +396,12 @@ namespace LadderApp
             // Linha horizontal anterior ao simbolo
             xy1 = new Point(0, yMeioVertical);
             xy2 = new Point(xInicioHSimboloBobina, yMeioVertical);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal posterior ao simbolo
             xy1 = new Point(xFimHSimboloBobina, yMeioVertical);
             xy2 = new Point(this.Width, yMeioVertical);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // ( do simbolo
             xy1 = new Point(xInicioHSimboloBobina + xDecimoHorizontal, yInicioVSimbolo);
@@ -415,7 +410,7 @@ namespace LadderApp
             pontosCurva[0] = xy1;
             pontosCurva[1] = xy2;
             pontosCurva[2] = xy3;
-            e.DrawCurve(linePen, pontosCurva, 0.7F);
+            graphics.DrawCurve(linePen, pontosCurva, 0.7F);
 
             // ) do simbolo
             xy1 = new Point(xFimHSimboloBobina - xDecimoHorizontal, yInicioVSimbolo);
@@ -424,7 +419,7 @@ namespace LadderApp
             pontosCurva[0] = xy1;
             pontosCurva[1] = xy2;
             pontosCurva[2] = xy3;
-            e.DrawCurve(linePen, pontosCurva, 0.7F);
+            graphics.DrawCurve(linePen, pontosCurva, 0.7F);
 
             DesenhaEndereco();
             DesenhaComentario();
@@ -435,7 +430,7 @@ namespace LadderApp
             DesenhaBobinaSaida();
 
             xy1 = new Point(xMeioHorizontal - (int)(textFont.Size / 2.0F), yMeioVertical - (int)(textFont.Size / 2.0F));
-            e.DrawString(Texto, textFont, symbolTextBrush, xy1.X, xy1.Y);
+            graphics.DrawString(Texto, textFont, symbolTextBrush, xy1.X, xy1.Y);
         }
 
 
@@ -444,12 +439,12 @@ namespace LadderApp
             // Linha vertical
             xy1 = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
             xy2 = new Point(xMeioHorizontal, yTotalVertical);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal
             xy1 = new Point(0, (VisualLine.tamY / 2));
             xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
         }
 
         private void DesenhaParaleloFinal()
@@ -457,28 +452,28 @@ namespace LadderApp
             // Linha vertical
             xy1 = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
             xy2 = new Point(xMeioHorizontal, (yTotalVertical - (VisualLine.tamY / 2)));
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal 1
             xy1 = new Point(0, (VisualLine.tamY / 2));
             xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal 2
             xy1 = new Point(0, (yTotalVertical - (VisualLine.tamY / 2)));
             xy2 = new Point(xMeioHorizontal, (yTotalVertical - (VisualLine.tamY / 2)));
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             if (lstVPI != null)
             {
-                foreach (FreeUserControl _simbAux in lstVPI)
+                foreach (VisualInstructionUserControl _simbAux in lstVPI)
                 {
 
                     //?? talvez passar xy3 para _xyConexao
                     xy3 = _simbAux.xyConexao;
                     xy1 = new Point(0, ((_simbAux.posicaoXY.Y + xy3.Y) - this.posicaoXY.Y));
                     xy2 = new Point(xMeioHorizontal, ((_simbAux.posicaoXY.Y + xy3.Y) - this.posicaoXY.Y));
-                    e.DrawLine(linePen, xy1, xy2);
+                    graphics.DrawLine(linePen, xy1, xy2);
                 }
             }
         }
@@ -490,12 +485,12 @@ namespace LadderApp
                 // Linha | do L
                 xy1 = new Point(xMeioHorizontal, 0);
                 xy2 = new Point(xMeioHorizontal, yMeioVertical);
-                e.DrawLine(linePen, xy1, xy2);
+                graphics.DrawLine(linePen, xy1, xy2);
 
                 // Linha _ do L
                 xy1 = new Point(xMeioHorizontal, yMeioVertical);
                 xy2 = new Point(xTotalHorizontal, yMeioVertical);
-                e.DrawLine(linePen, xy1, xy2);
+                graphics.DrawLine(linePen, xy1, xy2);
 
             }
             else
@@ -503,12 +498,12 @@ namespace LadderApp
                 // Linha | do L
                 xy1 = new Point(xMeioHorizontal, 0);
                 xy2 = new Point(xMeioHorizontal, yTotalVertical);
-                e.DrawLine(linePen, xy1, xy2);
+                graphics.DrawLine(linePen, xy1, xy2);
 
                 // Linha horizontal
                 xy1 = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
                 xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
-                e.DrawLine(linePen, xy1, xy2);
+                graphics.DrawLine(linePen, xy1, xy2);
             }
         }
 
@@ -519,12 +514,12 @@ namespace LadderApp
             // Linha vertical
             xy1 = new Point(xDecimoHorizontal * 7, 0);
             xy2 = new Point(xDecimoHorizontal * 7, yTotalVertical);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha |-
             xy1 = new Point(xDecimoHorizontal * 7, (VisualLine.tamY / 2));
             xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // Posicao numero da linha
             xy1 = new Point(xMeioHorizontal, yMeioVertical);
@@ -538,7 +533,7 @@ namespace LadderApp
                 _stringFormat.LineAlignment = StringAlignment.Center;
 
                 if (GetOperand(0) != null)
-                    e.DrawString(GetOperand(0).ToString().PadLeft(4, '0'), textFont, symbolTextBrush, _recTxtLinha, _stringFormat);
+                    graphics.DrawString(GetOperand(0).ToString().PadLeft(4, '0'), textFont, symbolTextBrush, _recTxtLinha, _stringFormat);
             }
         }
 
@@ -547,12 +542,12 @@ namespace LadderApp
             // Linha vertical
             xy1 = new Point(xDecimoHorizontal, 0);
             xy2 = new Point(xDecimoHorizontal, yTotalVertical);
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha |-
             xy1 = new Point(0, (VisualLine.tamY / 2));
             xy2 = new Point(xDecimoHorizontal, (VisualLine.tamY / 2));
-            e.DrawLine(linePen, xy1, xy2);
+            graphics.DrawLine(linePen, xy1, xy2);
         }
 
 
@@ -578,7 +573,7 @@ namespace LadderApp
                 case OperationCode.Timer:
                     _txtTitulo = "T";
                     if (IsAllOperandsOk())
-                        switch ((Int32)((Address)GetOperand(0)).Temporizador.Tipo)
+                        switch ((Int32)((Address)GetOperand(0)).Timer.Tipo)
                         {
                             case 0:
                                 _txtTitulo = "TON";
@@ -599,7 +594,7 @@ namespace LadderApp
                 case OperationCode.Counter:
                     _txtTitulo = "C";
                     if (IsAllOperandsOk())
-                        switch ((Int32)((Address)GetOperand(0)).Contador.Tipo)
+                        switch ((Int32)((Address)GetOperand(0)).Counter.Tipo)
                         {
                             case 0:
                                 _txtTitulo = "CTU";
@@ -616,18 +611,18 @@ namespace LadderApp
 
 
 
-            e.DrawString(_txtTitulo, textFont, symbolTextBrush, _recTxtTitulo, _stringFormat);
-            e.DrawRectangle(linePen, rectSimbolo);
+            graphics.DrawString(_txtTitulo, textFont, symbolTextBrush, _recTxtTitulo, _stringFormat);
+            graphics.DrawRectangle(linePen, rectSimbolo);
 
             /// para indicar comentário no quadro de saida
             if (IsAllOperandsOk())
-                if (((Address)GetOperand(0)).Apelido.Trim() != "")
+                if (((Address)GetOperand(0)).Comment.Trim() != "")
                 {
                     /// será usado para apresenta um tooltip
-                    this.Tag = ((Address)GetOperand(0)).Apelido;
+                    this.Tag = ((Address)GetOperand(0)).Comment;
                     /// para indicar comentário - desenha uma elipse no canto sup. dir.
-                    e.DrawEllipse(new Pen(Color.Black), (xTotalHorizontal - 8 - 3), 3, 7, 7);
-                    e.FillEllipse(new SolidBrush(Color.Yellow), (xTotalHorizontal - 8 - 3), 3, 7, 7);
+                    graphics.DrawEllipse(new Pen(Color.Black), (xTotalHorizontal - 8 - 3), 3, 7, 7);
+                    graphics.FillEllipse(new SolidBrush(Color.Yellow), (xTotalHorizontal - 8 - 3), 3, 7, 7);
                 }
                 else
                 {
@@ -652,15 +647,15 @@ namespace LadderApp
             VisualParallelBranch _par = null;
             List<VisualParallelBranch> _lst_par = new List<VisualParallelBranch>();
 
-            FreeUserControl _simbAntAux = null;
-            FreeUserControl _simbAnt2DesenhoAux = null;
+            VisualInstructionUserControl _simbAntAux = null;
+            VisualInstructionUserControl _simbAnt2DesenhoAux = null;
 
-            _simbAnt2DesenhoAux = VisualLine.simboloInicioLinha;
+            _simbAnt2DesenhoAux = VisualLine.LineBegin;
 
-            e.Clear(Color.White);
-            if (VisualLine.simbolos.Count > 0)
+            graphics.Clear(Color.White);
+            if (VisualLine.visualInstructions.Count > 0)
             {
-                foreach (FreeUserControl simbAux in VisualLine.simbolos)
+                foreach (VisualInstructionUserControl simbAux in VisualLine.visualInstructions)
                 {
 
                     if (simbAux.OpCode == OperationCode.ParallelBranchBegin ||
@@ -681,7 +676,7 @@ namespace LadderApp
 
                                 _par.lstVPI.Insert(0, _par.par);
 
-                                foreach (FreeUserControl _simb2PF in _par.lstVPI)
+                                foreach (VisualInstructionUserControl _simb2PF in _par.lstVPI)
                                 {
                                     _posX = _simb2PF.posicaoXY.X + _simb2PF.XYConexao.X;
                                     _posY = _simb2PF.posicaoXY.Y + _simb2PF.XYConexao.Y;
@@ -693,7 +688,7 @@ namespace LadderApp
                                     _posY -= _posYOriginal;
                                     xy2 = new Point(_posX, _posY);
 
-                                    e.DrawLine(pen, xy1, xy2);
+                                    graphics.DrawLine(pen, xy1, xy2);
                                 }
 
                                 _posX = simbAux.posicaoXY.X + simbAux.XYConexao.X;
@@ -706,7 +701,7 @@ namespace LadderApp
                                 _posY -= _posYOriginal;
                                 xy2 = new Point(_posX, _posY);
 
-                                e.DrawLine(pen, xy1, xy2);
+                                graphics.DrawLine(pen, xy1, xy2);
 
                                 _par = null;
                                 _lst_par.RemoveAt(_lst_par.Count - 1);
@@ -733,7 +728,7 @@ namespace LadderApp
                             _posY -= _posYOriginal;
                             xy2 = new Point(_posX, _posY);
 
-                            e.DrawLine(pen, xy1, xy2);
+                            graphics.DrawLine(pen, xy1, xy2);
                         }
 
 
@@ -757,74 +752,67 @@ namespace LadderApp
 
             xy1 = new Point(_posX, _posY);
 
-            _posX = VisualLine.simboloFimLinha.posicaoXY.X + VisualLine.simboloFimLinha.XYConexao.X;
-            _posY = VisualLine.simboloFimLinha.posicaoXY.Y + VisualLine.simboloFimLinha.XYConexao.Y;
+            _posX = VisualLine.LineEnd.posicaoXY.X + VisualLine.LineEnd.XYConexao.X;
+            _posY = VisualLine.LineEnd.posicaoXY.Y + VisualLine.LineEnd.XYConexao.Y;
             _posY -= _posYOriginal;
             xy2 = new Point(_posX, _posY);
 
-            e.DrawLine(pen, xy1, xy2);
+            graphics.DrawLine(pen, xy1, xy2);
         }
 
         private void DesenhaComentario()
         {
-            String _txtComent = "";
-            RectangleF _recTxtComent;
 
-            if (IsAllOperandsOk())
+            if (!IsAllOperandsOk() || !(GetOperand(0) is Address))
             {
-                _txtComent = ((Address)GetOperand(0)).Apelido;
-                if (_txtComent.Trim() != "")
-                {
-                    switch (this.OpCode)
-                    {
-                        default:
-                            break;
-                    }
-
-                    Size _propostoSize;
-                    _propostoSize = TextRenderer.MeasureText(_txtComent, textFont);
-                    _recTxtComent = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(yFimVSimbolo + 2)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)_propostoSize.Height));
-
-                    StringFormat _stringFormat = new StringFormat();
-                    _stringFormat.Alignment = StringAlignment.Center;
-                    _stringFormat.LineAlignment = StringAlignment.Center;
-
-                    int intNumLinhas = 1;
-                    String strSegundaLinha = "";
-                    if (_propostoSize.Width > ((xTotalHorizontal - (xDecimoHorizontal / 2) - 3)) + 1)
-                    {
-                        intNumLinhas = 2;
-                        for (int i = 0; i < 20; i++)
-                        {
-                            strSegundaLinha = _txtComent.Substring(_txtComent.Length - 1, 1) + strSegundaLinha;
-                            _txtComent = _txtComent.Remove(_txtComent.Length - 1, 1);
-                            _propostoSize = TextRenderer.MeasureText(_txtComent, textFont);
-                            if (_propostoSize.Width < (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
-                            {
-                                i = 20; // sai do loop
-                                /// caso a segundo linha não permitiu coloca *** no final.
-                                _propostoSize = TextRenderer.MeasureText(strSegundaLinha, textFont);
-                                if (_propostoSize.Width > (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
-                                {
-                                    strSegundaLinha = strSegundaLinha.Substring(0, _txtComent.Length - 3) + " ...";
-                                }
-                            }
-                        }
-                        _recTxtComent.Height = (float)(textFont.Size * textFont.FontFamily.GetCellAscent(FontStyle.Regular) / textFont.FontFamily.GetEmHeight(FontStyle.Regular));
-                    }
-
-                    for (int i = 1; i <= intNumLinhas; i++)
-                    {
-                        e.FillRectangle(commentBrush, _recTxtComent);
-                        e.DrawString(_txtComent, textFont, commentTextBrush, _recTxtComent, _stringFormat);
-
-                        _recTxtComent.Y += _recTxtComent.Height;
-                        _txtComent = strSegundaLinha;
-                    }
-                }
+                return;
+            }
+            String comment = ((Address)GetOperand(0)).Comment.Trim();
+            if (comment == "")
+            {
+                return;
             }
 
 
+            int commentLinesNeeded = 1;
+            String secondLineComment = "";
+
+            Size neededSize = TextRenderer.MeasureText(comment, textFont);
+            RectangleF commentRectangle = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(yFimVSimbolo + 2)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)neededSize.Height));
+            if (neededSize.Width > ((xTotalHorizontal - (xDecimoHorizontal / 2) - 3)) + 1)
+            {
+                commentLinesNeeded = 2;
+                for (int i = 0; i < 20; i++)
+                {
+                    secondLineComment = comment.Substring(comment.Length - 1, 1) + secondLineComment;
+                    comment = comment.Remove(comment.Length - 1, 1);
+                    neededSize = TextRenderer.MeasureText(comment, textFont);
+                    if (neededSize.Width < (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
+                    {
+                        neededSize = TextRenderer.MeasureText(secondLineComment, textFont);
+                        if (neededSize.Width > (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
+                        {
+                            secondLineComment = secondLineComment.Substring(0, comment.Length - 3) + " ...";
+                        }
+                        break;
+                    }
+                }
+                commentRectangle.Height = (float)(textFont.Size * textFont.FontFamily.GetCellAscent(FontStyle.Regular) / textFont.FontFamily.GetEmHeight(FontStyle.Regular));
+            }
+
+            StringFormat commentAlignmentFormat = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+            for (int line = 1; line <= commentLinesNeeded; line++)
+            {
+                graphics.FillRectangle(commentBrush, commentRectangle);
+                graphics.DrawString(comment, textFont, commentTextBrush, commentRectangle, commentAlignmentFormat);
+
+                commentRectangle.Y += commentRectangle.Height;
+                comment = secondLineComment;
+            }
         }
 
 
@@ -852,13 +840,13 @@ namespace LadderApp
 
             if (GetOperand(0) != null)
             {
-                _txtEndereco = ((Address)GetOperand(0)).Nome;
+                _txtEndereco = ((Address)GetOperand(0)).Name;
             }
             else
                 _txtEndereco = "?";
 
 
-            e.DrawString(_txtEndereco, textFont, symbolTextBrush, _recTxtEnd, _stringFormat);
+            graphics.DrawString(_txtEndereco, textFont, symbolTextBrush, _recTxtEnd, _stringFormat);
 
         }
 
@@ -872,12 +860,12 @@ namespace LadderApp
             {
                 case OperationCode.Counter:
                     if (IsAllOperandsOk())
-                        _intPreset = (Int32)((Address)GetOperand(0)).Contador.Preset;
+                        _intPreset = (Int32)((Address)GetOperand(0)).Counter.Preset;
                     _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
-                        _intPreset = (Int32)((Address)GetOperand(0)).Temporizador.Preset;
+                        _intPreset = (Int32)((Address)GetOperand(0)).Timer.Preset;
                     _recTxtPreset = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
@@ -898,7 +886,7 @@ namespace LadderApp
             else
                 _txtPreset = "PR: ?";
 
-            e.DrawString(_txtPreset, textFont, symbolTextBrush, _recTxtPreset, _stringFormat);
+            graphics.DrawString(_txtPreset, textFont, symbolTextBrush, _recTxtPreset, _stringFormat);
 
         }
 
@@ -914,7 +902,7 @@ namespace LadderApp
                     return;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
-                        _intBaseTempo = (Int32)((Address)GetOperand(0)).Temporizador.BaseTempo;
+                        _intBaseTempo = (Int32)((Address)GetOperand(0)).Timer.BaseTempo;
                     _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
@@ -953,7 +941,7 @@ namespace LadderApp
             else
                 _txtBaseTempo = "BT: ?";
 
-            e.DrawString(_txtBaseTempo, textFont, symbolTextBrush, _recTxtBaseTempo, _stringFormat);
+            graphics.DrawString(_txtBaseTempo, textFont, symbolTextBrush, _recTxtBaseTempo, _stringFormat);
         }
 
         /// <summary>
@@ -970,12 +958,12 @@ namespace LadderApp
             {
                 case OperationCode.Counter:
                     if (IsAllOperandsOk())
-                        _intAcum = (Int32)((Address)GetOperand(0)).Contador.Acumulado;
+                        _intAcum = (Int32)((Address)GetOperand(0)).Counter.Acumulado;
                     _recTxtAcum = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
-                        _intAcum = (Int32)((Address)GetOperand(0)).Temporizador.Acumulado;
+                        _intAcum = (Int32)((Address)GetOperand(0)).Timer.Acumulado;
                     _recTxtAcum = new RectangleF((float)(0), (float)(4 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
@@ -996,7 +984,7 @@ namespace LadderApp
             else
                 _txtAcum = "AC: ?";
 
-            e.DrawString(_txtAcum, textFont, symbolTextBrush, _recTxtAcum, _stringFormat);
+            graphics.DrawString(_txtAcum, textFont, symbolTextBrush, _recTxtAcum, _stringFormat);
 
         }
 
@@ -1006,14 +994,14 @@ namespace LadderApp
             switch (tipoSelecao)
             {
                 case TipoSelecaoFlag.Borda:
-                    e.DrawRectangle(selectionPen, rectSelecao);
+                    graphics.DrawRectangle(selectionPen, rectSelecao);
                     break;
                 case TipoSelecaoFlag.Fundo:
-                    e.FillRectangle(selectionBrush, rectSelecao);
+                    graphics.FillRectangle(selectionBrush, rectSelecao);
                     break;
                 default:
-                    e.FillRectangle(selectionBrush, rectSelecao);
-                    e.DrawRectangle(selectionPen, rectSelecao);
+                    graphics.FillRectangle(selectionBrush, rectSelecao);
+                    graphics.DrawRectangle(selectionPen, rectSelecao);
                     break;
             }
         }
@@ -1023,11 +1011,11 @@ namespace LadderApp
         {
             // Sobre a linha horizontal antes do simbolo
             rectEnergizado = new Rectangle(Convert.ToInt32(selectionPen.Width), (yTotalVertical - ySextoVertical) / 2, xInicioHSimbolo - Convert.ToInt32(selectionPen.Width), ySextoVertical);
-            e.FillRectangle(energizedBrush, rectEnergizado);
+            graphics.FillRectangle(energizedBrush, rectEnergizado);
 
             // Sobre a linha horizontal depois do simbolo
             rectEnergizado = new Rectangle(xFimHSimbolo, (yTotalVertical - ySextoVertical) / 2, xTotalHorizontal - xFimHSimbolo - Convert.ToInt32(selectionPen.Width), ySextoVertical);
-            e.FillRectangle(energizedBrush, rectEnergizado);
+            graphics.FillRectangle(energizedBrush, rectEnergizado);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -1037,79 +1025,77 @@ namespace LadderApp
 
         public override void DesenhaSimbolo()
         {
-            if (this.e != null)
+            if (graphics == null)
             {
-                if (this.selecionado)
-                    SelecaoSimbolo(TipoSelecaoFlag.Fundo);
-                else
-                    e.Clear(Color.White);
-
-                if (!usoTxtIndicado)
-                    ApresentaCamposTxt();
-
-                switch (OpCode)
-                {
-                    case OperationCode.None:
-                        e.Clear(Color.White);
-                        break;
-                    case OperationCode.LineBegin:
-                        DesenhaInicioLinha();
-                        break;
-                    case OperationCode.LineEnd:
-                        DesenhaFimLinha();
-                        break;
-                    case OperationCode.NormallyOpenContact:
-                        DesenhaContatoNA();
-                        break;
-                    case OperationCode.NormallyClosedContact:
-                        DesenhaContatoNF();
-                        break;
-                    case OperationCode.OutputCoil:
-                        DesenhaBobinaSaida();
-                        break;
-                    case OperationCode.Timer:
-                        DesenhaQuadroSaida();
-                        break;
-                    case OperationCode.Counter:
-                        DesenhaQuadroSaida();
-                        break;
-                    case OperationCode.ParallelBranchBegin:
-                        DesenhaParaleloInicial();
-                        break;
-                    case OperationCode.ParallelBranchEnd:
-                        DesenhaParaleloFinal();
-                        break;
-                    case OperationCode.ParallelBranchNext:
-                        DesenhaParaleloProximo();
-                        break;
-                    case OperationCode.BackgroundLine:
-                        DesenhaFundo();
-                        break;
-                    case OperationCode.Reset:
-                        DesenhaBobinaComString("R");
-                        break;
-                    default:
-                        break;
-                }
-
-                if (this.selecionado)
-                    SelecaoSimbolo(TipoSelecaoFlag.Borda);
-
+                return;
             }
+
+            if (Selected)
+                SelecaoSimbolo(TipoSelecaoFlag.Fundo);
+            else
+                graphics.Clear(Color.White);
+
+            switch (OpCode)
+            {
+                case OperationCode.None:
+                    graphics.Clear(Color.White);
+                    break;
+                case OperationCode.LineBegin:
+                    DesenhaInicioLinha();
+                    break;
+                case OperationCode.LineEnd:
+                    DesenhaFimLinha();
+                    break;
+                case OperationCode.NormallyOpenContact:
+                    DesenhaContatoNA();
+                    break;
+                case OperationCode.NormallyClosedContact:
+                    DesenhaContatoNF();
+                    break;
+                case OperationCode.OutputCoil:
+                    DesenhaBobinaSaida();
+                    break;
+                case OperationCode.Timer:
+                    DesenhaQuadroSaida();
+                    break;
+                case OperationCode.Counter:
+                    DesenhaQuadroSaida();
+                    break;
+                case OperationCode.ParallelBranchBegin:
+                    DesenhaParaleloInicial();
+                    break;
+                case OperationCode.ParallelBranchEnd:
+                    DesenhaParaleloFinal();
+                    break;
+                case OperationCode.ParallelBranchNext:
+                    DesenhaParaleloProximo();
+                    break;
+                case OperationCode.BackgroundLine:
+                    DesenhaFundo();
+                    break;
+                case OperationCode.Reset:
+                    DesenhaBobinaComString("R");
+                    break;
+                default:
+                    break;
+            }
+
+            if (this.Selected)
+                SelecaoSimbolo(TipoSelecaoFlag.Borda);
+
         }
 
         private void ControleLivre_Load(object sender, EventArgs e)
         {
-            this.e = Graphics.FromHwnd(Handle);
-            if (OpCode != null)
-                AtualizaVariaveisDesenho();
+            graphics = Graphics.FromHwnd(Handle);
+            AtualizaVariaveisDesenho();
         }
 
         private void ControleLivre_Paint(object sender, PaintEventArgs e)
         {
-            if (this.e != null && VisualLine.tamY > 0)
+            if (this.graphics != null && VisualLine.tamY > 0)
             {
-                this.e = e.Graphics;
+                this.graphics = e.Graphics;
                 DesenhaSimbolo();
             }
         }
@@ -1119,7 +1105,7 @@ namespace LadderApp
             if (OpCode != OperationCode.BackgroundLine &&
                 OpCode != OperationCode.LineEnd)
             {
-                this.selecionado = true;
+                this.Selected = true;
 
                 if (ControleSelecionado != null)
                     ControleSelecionado(this, VisualLine);
@@ -1141,52 +1127,14 @@ namespace LadderApp
             }
         }
 
-        public void NovasInsercoesLinhaHorizontal(bool bHabilita)
-        {
-            if (bHabilita == true && OpCode != OperationCode.LineEnd)
-            {
-                indicadorInsercao = new System.Windows.Forms.Panel();
-                indicadorInsercao.BackColor = Color.Transparent;
-                indicadorInsercao.Size = new Size(15, 15);
-                indicadorInsercao.Location = new Point(this.Size.Width - 15, (this.Location.Y + (this.Size.Height / 2) - (indicadorInsercao.Size.Height / 2)));
-                indicadorInsercao.Parent = this;
-                indicadorInsercao.BringToFront();
-                indicadorInsercao.CreateControl();
-
-                listaIndicadores.Add(indicadorInsercao);
-            }
-            else if (OpCode != OperationCode.LineEnd)
-            {
-                foreach (System.Windows.Forms.Panel ii in listaIndicadores)
-                {
-                    ii.Dispose();
-                }
-                listaIndicadores.Clear();
-            }
-        }
-
-        private void ControleLivre_MouseEnter(object sender, EventArgs e)
-        {
-            if (OpCode != OperationCode.LineEnd)
-                NovasInsercoesLinhaHorizontal(false); // era true
-        }
-
-        private void ControleLivre_MouseLeave(object sender, EventArgs e)
-        {
-            if (OpCode != OperationCode.LineEnd)
-                NovasInsercoesLinhaHorizontal(false);
-        }
-
         private void ControleLivre_Resize(object sender, EventArgs e)
         {
-            if (OpCode != null)
-                AtualizaVariaveisDesenho();
+            AtualizaVariaveisDesenho();
         }
 
         private void ControleLivre_SizeChanged(object sender, EventArgs e)
         {
-            if (OpCode != null)
-                AtualizaVariaveisDesenho();
+            AtualizaVariaveisDesenho();
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -1223,10 +1171,6 @@ namespace LadderApp
         public Instruction Instruction
         {
             get { return instruction; }
-        }
-
-        private void ApresentaCamposTxt()
-        {
         }
 
         private void txtGeral_Enter(object sender, EventArgs e)

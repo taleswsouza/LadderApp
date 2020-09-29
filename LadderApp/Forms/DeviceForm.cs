@@ -41,17 +41,17 @@ namespace LadderApp
                 switch (pd.TipoPino)
                 {
                     case PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA:
-                        if (pd.TipoDefinido == AddressTypeEnum.NENHUM)
+                        if (pd.TipoDefinido == AddressTypeEnum.None)
                         {
                             _txtPino += "-Not Used";
                             _cor = corPinoIndefinida;
                         }
-                        else if (pd.TipoDefinido == AddressTypeEnum.DIGITAL_ENTRADA)
+                        else if (pd.TipoDefinido == AddressTypeEnum.DigitalInput)
                         {
                             _txtPino += "-Input";
                             _cor = corPinoDefinida;
                         }
-                        else if (pd.TipoDefinido == AddressTypeEnum.DIGITAL_SAIDA)
+                        else if (pd.TipoDefinido == AddressTypeEnum.DigitalOutput)
                         {
                             _txtPino += "-Output";
                             _cor = corPinoDefinida;
@@ -115,13 +115,13 @@ namespace LadderApp
 
                         switch (lstEndModificado[e.Index])
                         {
-                            case AddressTypeEnum.NENHUM:
+                            case AddressTypeEnum.None:
                                 rbEntradaOuSaida.Checked = true;
                                 break;
-                            case AddressTypeEnum.DIGITAL_ENTRADA:
+                            case AddressTypeEnum.DigitalInput:
                                 rbEntrada.Checked = true;
                                 break;
-                            case AddressTypeEnum.DIGITAL_SAIDA:
+                            case AddressTypeEnum.DigitalOutput:
                                 rbSaida.Checked = true;
                                 break;
                         }
@@ -166,18 +166,18 @@ namespace LadderApp
                         _cor = corPinoDefinida;
                         if (rbEntradaOuSaida.Checked == true)
                         {
-                            lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.NENHUM;
+                            lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.None;
                             _txtPino += "-Not Used";
                             _cor = corPinoIndefinida;
                         }
                         else if (rbEntrada.Checked == true)
                         {
-                            lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DIGITAL_ENTRADA;
+                            lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DigitalInput;
                             _txtPino += "-Input";
                         }
                         else if (rbSaida.Checked == true)
                         {
-                            lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DIGITAL_SAIDA;
+                            lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DigitalOutput;
                             _txtPino += "-Output";
                         }
                         ///rbEntradaOuSaida.Checked = true;
@@ -185,17 +185,17 @@ namespace LadderApp
                     case PinTypeEnum.IO_DIGITAL_ENTRADA:
                         _txtPino += "-Input";
                         _cor = corPinoDefinida;
-                        lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DIGITAL_ENTRADA;
+                        lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DigitalInput;
                         //rbEntrada.Checked = true;
                         break;
                     case PinTypeEnum.IO_DIGITAL_SAIDA:
                         _txtPino += "-Output";
                         _cor = corPinoDefinida;
-                        lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DIGITAL_SAIDA;
+                        lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DigitalOutput;
                         //rbSaida.Checked = true;
                         break;
                     default:
-                        lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.NENHUM;
+                        lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.None;
                         //rbOutro.Checked = true;
                         break;
                 }

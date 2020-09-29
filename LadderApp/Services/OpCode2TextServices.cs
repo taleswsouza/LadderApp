@@ -121,8 +121,8 @@ namespace LadderApp
 
         private void Add(Address _end)
         {
-            Add((int)_end.TpEnderecamento);
-            Add((int)_end.Indice);
+            Add((int)_end.AddressType);
+            Add((int)_end.Id);
         }
 
         public void Add(Instruction instruction)
@@ -135,11 +135,12 @@ namespace LadderApp
                     if (instruction.IsAllOperandsOk())
                     {
                         if (instruction.IsAllOperandsOk())
-                            if (instruction.GetOperand(0).GetType().Name == Address.ClassName())
+                            if (instruction.GetOperand(0) is Address)
                             {
-                                Add(((Address)instruction.GetOperand(0)).Indice);
-                                Add(((Address)instruction.GetOperand(0)).Contador.Tipo);
-                                Add(((Address)instruction.GetOperand(0)).Contador.Preset);
+                                Address address = (Address)instruction.GetOperand(0);
+                                Add(address.Id);
+                                Add(address.Counter.Tipo);
+                                Add(address.Counter.Preset);
                             }
                     }
                     break;
@@ -147,12 +148,13 @@ namespace LadderApp
                     if (instruction.IsAllOperandsOk())
                     {
                         if (instruction.IsAllOperandsOk())
-                            if (instruction.GetOperand(0).GetType().Name == Address.ClassName())
+                            if (instruction.GetOperand(0) is Address)
                             {
-                                Add(((Address)instruction.GetOperand(0)).Indice);
-                                Add(((Address)instruction.GetOperand(0)).Temporizador.Tipo);
-                                Add(((Address)instruction.GetOperand(0)).Temporizador.BaseTempo);
-                                Add(((Address)instruction.GetOperand(0)).Temporizador.Preset);
+                                Address address = (Address)instruction.GetOperand(0);
+                                Add(address.Id);
+                                Add(address.Timer.Tipo);
+                                Add(address.Timer.BaseTempo);
+                                Add(address.Timer.Preset);
                             }
                     }
                     break;
@@ -162,7 +164,7 @@ namespace LadderApp
                         for (int i = 0; i < instruction.GetNumberOfOperands(); i++)
                         {
                             if (instruction.GetOperand(i) != null)
-                                if (instruction.GetOperand(i).GetType().Name == Address.ClassName())
+                                if (instruction.GetOperand(i) is Address)
                                     Add((Address)instruction.GetOperand(i));
                         }
                     }

@@ -11,11 +11,11 @@ namespace LadderApp
     [Serializable]
     public class Addressing
     {
-        public List<Address> lstMemoria = new List<Address>();
-        public List<Address> lstTemporizador = new List<Address>();
-        public List<Address> lstContador = new List<Address>();
-        public List<Address> lstIOEntrada = new List<Address>();
-        public List<Address> lstIOSaida = new List<Address>();
+        public List<Address> ListMemoryAddress = new List<Address>();
+        public List<Address> ListTimerAddress = new List<Address>();
+        public List<Address> ListCounterAddress = new List<Address>();
+        public List<Address> ListInputAddress = new List<Address>();
+        public List<Address> ListOutputAddress = new List<Address>();
 
         public Addressing()
         {
@@ -30,7 +30,7 @@ namespace LadderApp
         /// endereco das listas encontrado. caso contrario retorna null</returns>
         public Address Find(Address _end)
         {
-            return Find(_end.TpEnderecamento, _end.Indice);
+            return Find(_end.AddressType, _end.Id);
         }
 
         public Address Find(AddressTypeEnum tpEnderecamento, Int32 indice)
@@ -38,20 +38,20 @@ namespace LadderApp
             List<Address> _lstGenerica;
             switch (tpEnderecamento)
             {
-                case AddressTypeEnum.DIGITAL_MEMORIA:
-                    _lstGenerica = lstMemoria;
+                case AddressTypeEnum.DigitalMemory:
+                    _lstGenerica = ListMemoryAddress;
                     break;
-                case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                    _lstGenerica = lstContador;
+                case AddressTypeEnum.DigitalMemoryCounter:
+                    _lstGenerica = ListCounterAddress;
                     break;
-                case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
-                    _lstGenerica = lstTemporizador;
+                case AddressTypeEnum.DigitalMemoryTimer:
+                    _lstGenerica = ListTimerAddress;
                     break;
-                case AddressTypeEnum.DIGITAL_ENTRADA:
-                    _lstGenerica = lstIOEntrada;
+                case AddressTypeEnum.DigitalInput:
+                    _lstGenerica = ListInputAddress;
                     break;
-                case AddressTypeEnum.DIGITAL_SAIDA:
-                    _lstGenerica = lstIOSaida;
+                case AddressTypeEnum.DigitalOutput:
+                    _lstGenerica = ListOutputAddress;
                     break;
                 default:
                     return null;
@@ -59,8 +59,8 @@ namespace LadderApp
 
             foreach (Address _endCada in _lstGenerica)
             {
-                if (_endCada.TpEnderecamento == tpEnderecamento &&
-                    _endCada.Indice == indice)
+                if (_endCada.AddressType == tpEnderecamento &&
+                    _endCada.Id == indice)
                 {
                     return _endCada;
                 }
@@ -80,20 +80,20 @@ namespace LadderApp
             {
                 case OperationCode.NormallyOpenContact:
                 case OperationCode.NormallyClosedContact:
-                    tiposListados.Add(AddressTypeEnum.DIGITAL_ENTRADA);
-                    tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA);
-                    tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR);
-                    tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR);
+                    tiposListados.Add(AddressTypeEnum.DigitalInput);
+                    tiposListados.Add(AddressTypeEnum.DigitalMemory);
+                    tiposListados.Add(AddressTypeEnum.DigitalMemoryCounter);
+                    tiposListados.Add(AddressTypeEnum.DigitalMemoryTimer);
                     break;
                 case OperationCode.Timer:
-                    tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR);
+                    tiposListados.Add(AddressTypeEnum.DigitalMemoryTimer);
                     break;
                 case OperationCode.Counter:
-                    tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR);
+                    tiposListados.Add(AddressTypeEnum.DigitalMemoryCounter);
                     break;
                 case OperationCode.OutputCoil:
-                    tiposListados.Add(AddressTypeEnum.DIGITAL_MEMORIA);
-                    tiposListados.Add(AddressTypeEnum.DIGITAL_SAIDA);
+                    tiposListados.Add(AddressTypeEnum.DigitalMemory);
+                    tiposListados.Add(AddressTypeEnum.DigitalOutput);
                     break;
             }
 
@@ -101,20 +101,20 @@ namespace LadderApp
             {
                 switch (_cadaTipo)
                 {
-                    case AddressTypeEnum.DIGITAL_MEMORIA:
-                        _lstGenerica = lstMemoria;
+                    case AddressTypeEnum.DigitalMemory:
+                        _lstGenerica = ListMemoryAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                        _lstGenerica = lstContador;
+                    case AddressTypeEnum.DigitalMemoryCounter:
+                        _lstGenerica = ListCounterAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
-                        _lstGenerica = lstTemporizador;
+                    case AddressTypeEnum.DigitalMemoryTimer:
+                        _lstGenerica = ListTimerAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_ENTRADA:
-                        _lstGenerica = lstIOEntrada;
+                    case AddressTypeEnum.DigitalInput:
+                        _lstGenerica = ListInputAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_SAIDA:
-                        _lstGenerica = lstIOSaida;
+                    case AddressTypeEnum.DigitalOutput:
+                        _lstGenerica = ListOutputAddress;
                         break;
                     default:
                         return null;
@@ -132,38 +132,38 @@ namespace LadderApp
             List<Address> _lstGenerica;
             List<AddressTypeEnum> _lstTpEnd = new List<AddressTypeEnum>();
 
-            _lstTpEnd.Add(AddressTypeEnum.DIGITAL_MEMORIA);
-            _lstTpEnd.Add(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR);
-            _lstTpEnd.Add(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR);
-            _lstTpEnd.Add(AddressTypeEnum.DIGITAL_ENTRADA);
-            _lstTpEnd.Add(AddressTypeEnum.DIGITAL_SAIDA);
+            _lstTpEnd.Add(AddressTypeEnum.DigitalMemory);
+            _lstTpEnd.Add(AddressTypeEnum.DigitalMemoryCounter);
+            _lstTpEnd.Add(AddressTypeEnum.DigitalMemoryTimer);
+            _lstTpEnd.Add(AddressTypeEnum.DigitalInput);
+            _lstTpEnd.Add(AddressTypeEnum.DigitalOutput);
 
             foreach (AddressTypeEnum _tp in _lstTpEnd)
             {
 
                 switch (_tp)
                 {
-                    case AddressTypeEnum.DIGITAL_MEMORIA:
-                        _lstGenerica = lstMemoria;
+                    case AddressTypeEnum.DigitalMemory:
+                        _lstGenerica = ListMemoryAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                        _lstGenerica = lstContador;
+                    case AddressTypeEnum.DigitalMemoryCounter:
+                        _lstGenerica = ListCounterAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
-                        _lstGenerica = lstTemporizador;
+                    case AddressTypeEnum.DigitalMemoryTimer:
+                        _lstGenerica = ListTimerAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_ENTRADA:
-                        _lstGenerica = lstIOEntrada;
+                    case AddressTypeEnum.DigitalInput:
+                        _lstGenerica = ListInputAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_SAIDA:
-                        _lstGenerica = lstIOSaida;
+                    case AddressTypeEnum.DigitalOutput:
+                        _lstGenerica = ListOutputAddress;
                         break;
                     default:
                         return;
                 }
 
                 foreach (Address _endCada in _lstGenerica)
-                    _endCada.EmUso = false;
+                    _endCada.Used = false;
             }
         }
 
@@ -173,38 +173,38 @@ namespace LadderApp
             List<AddressTypeEnum> _lstTpEnd = new List<AddressTypeEnum>();
             List<Address> _lstResult = new List<Address>();
 
-            _lstTpEnd.Add(AddressTypeEnum.DIGITAL_MEMORIA);
-            _lstTpEnd.Add(AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR);
-            _lstTpEnd.Add(AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR);
-            _lstTpEnd.Add(AddressTypeEnum.DIGITAL_ENTRADA);
-            _lstTpEnd.Add(AddressTypeEnum.DIGITAL_SAIDA);
+            _lstTpEnd.Add(AddressTypeEnum.DigitalMemory);
+            _lstTpEnd.Add(AddressTypeEnum.DigitalMemoryCounter);
+            _lstTpEnd.Add(AddressTypeEnum.DigitalMemoryTimer);
+            _lstTpEnd.Add(AddressTypeEnum.DigitalInput);
+            _lstTpEnd.Add(AddressTypeEnum.DigitalOutput);
 
             foreach (AddressTypeEnum _tp in _lstTpEnd)
             {
 
                 switch (_tp)
                 {
-                    case AddressTypeEnum.DIGITAL_MEMORIA:
-                        _lstGenerica = lstMemoria;
+                    case AddressTypeEnum.DigitalMemory:
+                        _lstGenerica = ListMemoryAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_MEMORIA_CONTADOR:
-                        _lstGenerica = lstContador;
+                    case AddressTypeEnum.DigitalMemoryCounter:
+                        _lstGenerica = ListCounterAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_MEMORIA_TEMPORIZADOR:
-                        _lstGenerica = lstTemporizador;
+                    case AddressTypeEnum.DigitalMemoryTimer:
+                        _lstGenerica = ListTimerAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_ENTRADA:
-                        _lstGenerica = lstIOEntrada;
+                    case AddressTypeEnum.DigitalInput:
+                        _lstGenerica = ListInputAddress;
                         break;
-                    case AddressTypeEnum.DIGITAL_SAIDA:
-                        _lstGenerica = lstIOSaida;
+                    case AddressTypeEnum.DigitalOutput:
+                        _lstGenerica = ListOutputAddress;
                         break;
                     default:
                         return _lstResult;
                 }
 
                 foreach (Address _endCada in _lstGenerica)
-                    if (_endCada.EmUso == true)
+                    if (_endCada.Used == true)
                         _lstResult.Add(_endCada);
             }
 
@@ -214,18 +214,18 @@ namespace LadderApp
         public void AlocaEnderecamentoIO(Device dispositivo)
         {
             /// Atalho para o No de enderecamento
-            this.lstIOEntrada.Clear();
-            this.lstIOSaida.Clear();
+            this.ListInputAddress.Clear();
+            this.ListOutputAddress.Clear();
             foreach (Address el in dispositivo.lstEndBitPorta)
             {
                 el.ApontaDispositivo(dispositivo);
-                switch (el.TpEnderecamento)
+                switch (el.AddressType)
                 {
-                    case AddressTypeEnum.DIGITAL_ENTRADA:
-                        this.lstIOEntrada.Add(el);
+                    case AddressTypeEnum.DigitalInput:
+                        this.ListInputAddress.Add(el);
                         break;
-                    case AddressTypeEnum.DIGITAL_SAIDA:
-                        this.lstIOSaida.Add(el);
+                    case AddressTypeEnum.DigitalOutput:
+                        this.ListOutputAddress.Add(el);
                         break;
                 }
             }
@@ -253,7 +253,7 @@ namespace LadderApp
             {
                 for (int i = (_qtdAtual - 1); i >= qtdEnd; i--)
                 {
-                    if (!_lstE[i].EmUso)
+                    if (!_lstE[i].Used)
                     {
                         _lstE[i] = null;
                         _lstE.RemoveAt(i);

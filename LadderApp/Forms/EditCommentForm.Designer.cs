@@ -1,6 +1,6 @@
 namespace LadderApp.Formularios
 {
-    partial class ChangeCommentForm
+    partial class EditCommentForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,19 +28,19 @@ namespace LadderApp.Formularios
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtComentario = new System.Windows.Forms.TextBox();
+            this.txtComment = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // txtComentario
+            // txtComment
             // 
-            this.txtComentario.Location = new System.Drawing.Point(12, 28);
-            this.txtComentario.MaxLength = 30;
-            this.txtComentario.Name = "txtComentario";
-            this.txtComentario.Size = new System.Drawing.Size(323, 20);
-            this.txtComentario.TabIndex = 0;
+            this.txtComment.Location = new System.Drawing.Point(12, 28);
+            this.txtComment.MaxLength = 30;
+            this.txtComment.Name = "txtComment";
+            this.txtComment.Size = new System.Drawing.Size(323, 20);
+            this.txtComment.TabIndex = 0;
             // 
             // label1
             // 
@@ -72,7 +72,7 @@ namespace LadderApp.Formularios
             this.btnCancel.Text = "Cancelar";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
-            // frmAlteraComentario
+            // ChangeCommentForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -82,10 +82,10 @@ namespace LadderApp.Formularios
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtComentario);
-            this.Name = "frmAlteraComentario";
+            this.Controls.Add(this.txtComment);
+            this.Name = "ChangeCommentForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Comment: #ENDERECO#";
+            this.Text = "Edit Comment: #ADDRESS#";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -96,6 +96,6 @@ namespace LadderApp.Formularios
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
-        public System.Windows.Forms.TextBox txtComentario;
+        public System.Windows.Forms.TextBox txtComment;
     }
 }
