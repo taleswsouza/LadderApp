@@ -39,7 +39,7 @@ namespace LadderApp
             this.HScroll = false;
             InitializeComponent();
 
-            myDelegateInvalidateDiagrama = new InvalidateDiagrama(InvalidateDiagramaMethod);
+            myDelegateInvalidateDiagrama = new InvalidateDiagrama(InvalidateLadderForm);
 
             myDelegateUncheckBtnSimular = new UncheckBtnSimularType(UncheckBtnSimularMethod);
 
@@ -168,19 +168,19 @@ namespace LadderApp
             List<Instruction> instructions = null;
             if (IsLadderFormOpen())
             {
-                if (projectForm.ladderForm.ControleSelecionado != null)
-                    if (!projectForm.ladderForm.ControleSelecionado.IsDisposed)
+                if (projectForm.ladderForm.VisualInstruction != null)
+                    if (!projectForm.ladderForm.VisualInstruction.IsDisposed)
                     {
-                        OperationCode _cI = projectForm.ladderForm.ControleSelecionado.OpCode;
+                        OperationCode _cI = projectForm.ladderForm.VisualInstruction.OpCode;
                         switch (_cI)
                         {
                             case OperationCode.ParallelBranchBegin:
                             case OperationCode.ParallelBranchNext:
                             case OperationCode.ParallelBranchEnd:
-                                instructions = projectForm.ladderForm.VariosSelecionados(projectForm.ladderForm.ControleSelecionado, projectForm.ladderForm.LinhaSelecionada);
+                                instructions = projectForm.ladderForm.VariosSelecionados(projectForm.ladderForm.VisualInstruction, projectForm.ladderForm.SelectedVisualLine);
                                 break;
                             default:
-                                instructions = projectForm.ladderForm.VariosSelecionados(projectForm.ladderForm.ControleSelecionado, projectForm.ladderForm.LinhaSelecionada);
+                                instructions = projectForm.ladderForm.VariosSelecionados(projectForm.ladderForm.VisualInstruction, projectForm.ladderForm.SelectedVisualLine);
                                 break;
                         }
 
@@ -214,8 +214,8 @@ namespace LadderApp
         {
             if (IsLadderFormOpen())
             {
-                if (projectForm.ladderForm.ControleSelecionado != null)
-                    if (!projectForm.ladderForm.ControleSelecionado.IsDisposed)
+                if (projectForm.ladderForm.VisualInstruction != null)
+                    if (!projectForm.ladderForm.VisualInstruction.IsDisposed)
                     {
                         DataFormats.Format myFormat = DataFormats.GetFormat("List<SimboloBasico>");
                         Object returnObject = null;
@@ -241,7 +241,7 @@ namespace LadderApp
 
                         instructionsDestination.InsertAllWithClearBefore(instructionsSource);
 
-                        VisualInstructionUserControl _controle = projectForm.ladderForm.LinhaSelecionada.InsereSimboloIndefinido(true, projectForm.ladderForm.ControleSelecionado, instructionsDestination);
+                        VisualInstructionUserControl _controle = projectForm.ladderForm.SelectedVisualLine.InsertInstructionAtLocalToBeDefined(true, projectForm.ladderForm.VisualInstruction, instructionsDestination);
                         projectForm.ladderForm.ReorganizeLines();
                         _controle.Select();
                     }
@@ -315,12 +315,12 @@ namespace LadderApp
             ResetWindowLayout();
         }
 
-        private void InsereSimbolo(VisualLine.LocalInsereSimbolo _lIS, params OperationCode[] _cI)
+        private void InsertInstruction(VisualLine.LocalToInsertInstruction _lIS, params OperationCode[] _cI)
         {
             if (!IsLadderFormOpen())
                 return;
 
-            if (projectForm.ladderForm.ControleSelecionado.IsDisposed)
+            if (projectForm.ladderForm.VisualInstruction.IsDisposed)
                 return;
 
             /// aborta a simulação quando for executar uma alteração
@@ -330,10 +330,10 @@ namespace LadderApp
                 Thread.Sleep(100);
             }
 
-            VisualInstructionUserControl _controle = projectForm.ladderForm.ControleSelecionado;
-            VisualLine _linha = projectForm.ladderForm.LinhaSelecionada;
+            VisualInstructionUserControl _controle = projectForm.ladderForm.VisualInstruction;
+            VisualLine _linha = projectForm.ladderForm.SelectedVisualLine;
 
-            _controle = _linha.InsereSimbolo(_lIS, _controle, _cI);
+            _controle = _linha.InsertInstruction(_lIS, _controle, _cI);
 
             /// Redesenha linhas e fundo
             projectForm.ladderForm.ReorganizeLines();
@@ -344,29 +344,29 @@ namespace LadderApp
 
         private void btnLadderNormallyOpenContact_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OperationCode.NormallyOpenContact);
+            InsertInstruction(VisualLine.LocalToInsertInstruction.ConditionsAtLeft, OperationCode.NormallyOpenContact);
         }
 
         private void btnLadderNormallyClosedContact_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OperationCode.NormallyClosedContact);
+            InsertInstruction(VisualLine.LocalToInsertInstruction.ConditionsAtLeft, OperationCode.NormallyClosedContact);
         }
 
         private void btnLadderOutputCoil_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.OutputCoil);
+            InsertInstruction(VisualLine.LocalToInsertInstruction.OutputsAtRight, OperationCode.OutputCoil);
         }
 
         private void btnLadderPararellBranch_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SIMBOLOS, OperationCode.ParallelBranchBegin, OperationCode.ParallelBranchNext, OperationCode.ParallelBranchEnd);
+            InsertInstruction(VisualLine.LocalToInsertInstruction.ConditionsAtLeft, OperationCode.ParallelBranchBegin, OperationCode.ParallelBranchNext, OperationCode.ParallelBranchEnd);
         }
 
         private void btnLadderLine_Click(object sender, EventArgs e)
         {
             if (IsLadderFormOpen())
             {
-                projectForm.ladderForm.InsereLinha();
+                projectForm.ladderForm.InsertLine();
             }
         }
 
@@ -409,12 +409,12 @@ namespace LadderApp
 
         private void btnLadderOutputTimer_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.Timer);
+            InsertInstruction(VisualLine.LocalToInsertInstruction.OutputsAtRight, OperationCode.Timer);
         }
 
         private void btnLadderOutputCounter_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.Counter);
+            InsertInstruction(VisualLine.LocalToInsertInstruction.OutputsAtRight, OperationCode.Counter);
         }
 
         private void EditorLadder_FormClosed(object sender, FormClosedEventArgs e)
@@ -523,48 +523,37 @@ namespace LadderApp
             {
                 btnSimulateLadder.Checked = true;
                 mnuLadderSimulate.Checked = true;
-                newThread = new Thread(new ThreadStart(this.ExecutaSimuladorContinuo));
+                newThread = new Thread(new ThreadStart(this.ContinuousSimulationExecution));
                 newThread.Start();
             }
         }
 
-        /// <summary>
-        /// Thread - executa continuamente enquanto a opção de simulação estiver ativa
-        /// </summary>
-        public void ExecutaSimuladorContinuo()
+        public void ContinuousSimulationExecution()
         {
-            /// mantém loop enquanto opção de simulação estiver ativa
             while (btnSimulateLadder.Checked)
             {
-
-                /// verifica se a janela do diagrama ladder está aberta
                 if (!IsLadderFormOpen())
                 {
                     UncheckBtnSimulateLadder(false);
                     return;
                 }
 
-                /// verifica se o programa ladder não está inconsistente
                 if (!projectForm.program.VerifyProgram())
                 {
                     UncheckBtnSimulateLadder(false);
                     return;
                 }
 
-                /// executa a função dos temporizadores
-                projectForm.program.ExecutaSimuladoTemporizadores();
+                projectForm.program.SimulateTimers();
 
-                /// executa a lógica ladder
                 if (!projectForm.program.SimulateLadder())
                 {
                     UncheckBtnSimulateLadder(false);
                     return;
                 }
 
-                /// atualiza o janela do diagrama ladder
                 this.InvalidateForm(true);
 
-                /// aguarda 100 ms
                 Thread.Sleep(100);
             }
         }
@@ -572,11 +561,7 @@ namespace LadderApp
 
         private void btnLadderOutputReset_Click(object sender, EventArgs e)
         {
-            InsereSimbolo(VisualLine.LocalInsereSimbolo.SAIDA, OperationCode.Reset);
-        }
-
-        private void btnSimular_CheckStateChanged(object sender, EventArgs e)
-        {
+            InsertInstruction(VisualLine.LocalToInsertInstruction.OutputsAtRight, OperationCode.Reset);
         }
 
         public void InvalidateForm(bool state)
@@ -605,7 +590,7 @@ namespace LadderApp
             }
         }
 
-        public void InvalidateDiagramaMethod()
+        public void InvalidateLadderForm()
         {
             projectForm.ladderForm.Invalidate(true);
         }
@@ -667,7 +652,7 @@ namespace LadderApp
                                 _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
                                 {
-                                    programa.device.lstBitPorta[_iIndiceEndLido - 1].TipoDefinido = _tpEndLido;
+                                    programa.device.pins[_iIndiceEndLido - 1].Type = _tpEndLido;
                                     programa.device.RealocaEnderecoDispositivo();
                                     programa.addressing.AlocaEnderecamentoIO(programa.device);
                                     _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
@@ -689,7 +674,7 @@ namespace LadderApp
                                 _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
                                 {
-                                    programa.device.lstBitPorta[_iIndiceEndLido - 1].TipoDefinido = _tpEndLido;
+                                    programa.device.pins[_iIndiceEndLido - 1].Type = _tpEndLido;
                                     programa.device.RealocaEnderecoDispositivo();
                                     programa.addressing.AlocaEnderecamentoIO(programa.device);
                                     _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
@@ -773,10 +758,10 @@ namespace LadderApp
         private void mnuEditComment_Click(object sender, EventArgs e)
         {
             if (IsLadderFormOpen())
-                if (projectForm.ladderForm.ControleSelecionado != null)
-                    if (!projectForm.ladderForm.ControleSelecionado.IsDisposed)
+                if (projectForm.ladderForm.VisualInstruction != null)
+                    if (!projectForm.ladderForm.VisualInstruction.IsDisposed)
                     {
-                        Instruction instruction = projectForm.ladderForm.ControleSelecionado.Instruction;
+                        Instruction instruction = projectForm.ladderForm.VisualInstruction.Instruction;
                         if (instruction.IsAllOperandsOk())
                             if (instruction.GetOperand(0) is Address)
                             {
@@ -913,7 +898,7 @@ namespace LadderApp
             {
                 btnSimulateLadder.Checked = true;
                 mnuLadderSimulate.Checked = true;
-                newThread = new Thread(new ThreadStart(this.ExecutaSimuladorContinuo));
+                newThread = new Thread(new ThreadStart(this.ContinuousSimulationExecution));
                 newThread.Start();
             }
             else

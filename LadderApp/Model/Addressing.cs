@@ -215,7 +215,7 @@ namespace LadderApp
         {
             this.ListInputAddress.Clear();
             this.ListOutputAddress.Clear();
-            foreach (Address address in device.lstEndBitPorta)
+            foreach (Address address in device.addressesToEachPinList)
             {
                 address.SetDevice(device);
                 switch (address.AddressType)

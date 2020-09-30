@@ -21,17 +21,8 @@ namespace LadderApp
 
         private Boolean ResizingLines = false;
 
-        private VisualInstructionUserControl controleSelecionado = null;
-        public VisualInstructionUserControl ControleSelecionado
-        {
-            get { return controleSelecionado; }
-        }
-
-        private VisualLine linhaSelecionada = null;
-        public VisualLine LinhaSelecionada
-        {
-            get { return linhaSelecionada; }
-        }
+        public VisualInstructionUserControl VisualInstruction { get; private set; } = null;
+        public VisualLine SelectedVisualLine { get; private set; } = null;
 
 
         public LadderForm(LadderProgram program)
@@ -66,7 +57,7 @@ namespace LadderApp
             }
         }
 
-        public void DeletaLinha(VisualLine sender)
+        public void LineBeginVisualInstruction_DeleteLine(VisualLine sender)
         {
             int _indiceLinhaDeletar = this.visualProgram.linhas.IndexOf(sender);
             int _indiceLinha = _indiceLinhaDeletar;
@@ -139,13 +130,13 @@ namespace LadderApp
                         if (_LinhaAnterior != null)
                             _LinhaAnterior.NextLine = _linhasDL;
                         _linhasDL.PreviousLine = _LinhaAnterior;
-                        _linhasDL.iTabStop = iTabStop;
-                        _linhasDL.posY = auxY;
+                        _linhasDL.tabStop = iTabStop;
+                        _linhasDL.YPosition = auxY;
                         _linhasDL.NumLinha = iLinha;
                         _linhasDL.LineBegin.Invalidate();
-                        _linhasDL.AjustaPosicionamento();
+                        _linhasDL.AdjustPositioning();
                         auxY += _linhasDL.BackgroundLine.tamanhoXY.Height;
-                        iTabStop = _linhasDL.iTabStop;
+                        iTabStop = _linhasDL.tabStop;
                         iLinha++;
                         _LinhaAnterior = _linhasDL;
 
@@ -187,83 +178,76 @@ namespace LadderApp
             }
         }
 
-        /// <summary>
-        /// Insere linha abaixo da linha selecionada
-        /// </summary>
-        public int InsereLinha()
+        public int InsertLine()
         {
-            return InsereLinha(false);
+            return InsertLine(false);
         }
 
-        /// <summary>
-        /// Insere linha abaixo ou acima da linha selecionada
-        /// </summary>
-        /// <param name="_acima">true - acima / false - abaixo</param>
-        public int InsereLinha(Boolean _acima)
+        public int InsertLine(bool above)
         {
-            int _linha = 0;
-            if (LinhaSelecionada != null)
+            int lineIndex = 0;
+            if (SelectedVisualLine != null)
             {
-                if (!LinhaSelecionada.LineBegin.IsDisposed)
+                if (!SelectedVisualLine.LineBegin.IsDisposed)
                 {
-                    _linha = (int)LinhaSelecionada.LineBegin.GetOperand(0);
+                    lineIndex = (int)SelectedVisualLine.LineBegin.GetOperand(0);
 
-                    if (_acima == false)
-                        _linha++;
+                    if (above == false)
+                        lineIndex++;
                 }
                 else
-                    _linha = 0;
+                    lineIndex = 0;
             }
 
             this.SuspendLayout();
 
-            _linha = visualProgram.InsereLinhaNoIndice(_linha);
+            lineIndex = visualProgram.InsereLinhaNoIndice(lineIndex);
             this.ReorganizeLines();
 
-            visualProgram.linhas[_linha].LineBegin.Select();
-            visualProgram.linhas[_linha].LineBegin.Refresh();
+            visualProgram.linhas[lineIndex].LineBegin.Select();
+            visualProgram.linhas[lineIndex].LineBegin.Refresh();
 
 
             this.ResumeLayout();
 
-            return _linha;
+            return lineIndex;
         }
 
-        private void menuInsereLinhaAbaixo_Click(object sender, EventArgs e)
+        private void mnuInsertLadderLineBelow_Click(object sender, EventArgs e)
         {
-            this.InsereLinha();
+            this.InsertLine();
         }
 
-        private void menuInsereLinhaAcima_Click(object sender, EventArgs e)
+        private void mnuInsertLadderLineAbove_Click(object sender, EventArgs e)
         {
-            this.InsereLinha(true);
+            this.InsertLine(true);
         }
 
-        private void DiagramaLadder_MouseClick(object sender, MouseEventArgs e)
+        private void LadderForm_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
                 /// Enderecamentos e somente sobre controleslivres
-                this.menuEnderecamento.Enabled = false;
-                this.menuEnderecamento.Visible = false;
+                this.mnuAddressing.Enabled = false;
+                this.mnuAddressing.Visible = false;
 
                 /// Manipular linhas
-                this.menuInsereLinha.Enabled = true;
+                this.mnuInsertLadderLine.Enabled = true;
 
                 /// Extensao de paralelo - acima/abaixo
                 ///    somente sobre simbolos de paralelo
-                this.menuEstenderParaleloAcima.Enabled = false;
-                this.menuEstenderParaleloAcima.Visible = false;
-                this.menuEstenderParaleloAbaixo.Enabled = false;
-                this.menuEstenderParaleloAbaixo.Visible = false;
+                this.mnuExtendParallelBranchAbove.Enabled = false;
+                this.mnuExtendParallelBranchAbove.Visible = false;
+                this.mnuExtendParallelBranchBelow.Enabled = false;
+                this.mnuExtendParallelBranchBelow.Visible = false;
 
-                this.menuToggleBit.Enabled = false;
+                this.mnuToggleBit.Enabled = false;
 
-                this.menuControle.Show(this.PointToScreen(e.Location));
+                this.mnuContextAtInstruction.Show(this.PointToScreen(e.Location));
             }
         }
 
-        public void simboloInicioLinha_MudaLinha(VisualInstructionUserControl sender, Keys e)
+        public void LineBeginVisualInstruction_ChangeLine(VisualInstructionUserControl sender, Keys e)
         {
             if (e == Keys.Up)
             {
@@ -277,38 +261,31 @@ namespace LadderApp
             }
         }
 
-        public void Simbolo_ControleSelecionado(VisualInstructionUserControl sender, VisualLine lCL)
+        public void VisualInstruction_Selected(VisualInstructionUserControl visualInstruction, VisualLine visualLine)
         {
-            if (controleSelecionado != null)
-                if (!controleSelecionado.IsDisposed)
-                    if(!controleSelecionado.Equals(sender))
+            if (VisualInstruction != null)
+                if (!VisualInstruction.IsDisposed)
+                    if (!VisualInstruction.Equals(visualInstruction))
                     {
-                        controleSelecionado.Selected = false;
-                        controleSelecionado.Refresh();
+                        VisualInstruction.Selected = false;
+                        VisualInstruction.Refresh();
                     }
-            //cmbOpcoes.Visible = false;
-            controleSelecionado = sender;
-            linhaSelecionada = lCL;
+            VisualInstruction = visualInstruction;
+            SelectedVisualLine = visualLine;
         }
 
-        /// <summary>
-        /// Tratamento de evento para indicar comentário nos quadros de saida
-        /// temporizador / contador via tooltip.
-        /// </summary>
-        public void SimboloQuadroSaida_MouseHover(object sender, EventArgs e)
+        public void OutputTypeBox_MouseHover(object sender, EventArgs e)
         {
-            /// o objeto .Tag e atribuido na função DesenhaQuadroSaida() da
-            /// ControleLivre
-            if (((VisualInstructionUserControl)sender).Tag != null)
-                if (((String)((VisualInstructionUserControl)sender).Tag) != "")
-                    toolTipQuadrosSaida.Show((String)((VisualInstructionUserControl)sender).Tag, ((VisualInstructionUserControl)sender), 3000);
+            VisualInstructionUserControl visualInstruction = (VisualInstructionUserControl)sender;
+            if (visualInstruction.Tag != null && (String)visualInstruction.Tag != "")
+                toolTipOutputBox.Show((String)visualInstruction.Tag, visualInstruction, 3000);
         }
 
 
-        public void Simbolo_KeyDown(object sender, KeyEventArgs e)
+        public void VisualInstruction_KeyDown(object sender, KeyEventArgs e)
         {
-            VisualInstructionUserControl _cL = (VisualInstructionUserControl)sender;
-            switch (_cL.OpCode)
+            VisualInstructionUserControl visualInstruction = (VisualInstructionUserControl)sender;
+            switch (visualInstruction.OpCode)
             {
                 case OperationCode.None:
                     /// Tive que colocar aqui esta opcao de NENHUM para evitar que
@@ -319,27 +296,15 @@ namespace LadderApp
                 default:
                     if (e.KeyCode == Keys.Delete)
                     {
-                        if (_cL != null && linhaSelecionada != null)
-                            if (!_cL.IsDisposed)
+                        if (visualInstruction != null && SelectedVisualLine != null)
+                            if (!visualInstruction.IsDisposed)
                             {
-                                switch (_cL.OpCode)
-                                {
-                                    case OperationCode.ParallelBranchBegin:
-                                        break;
-                                    case OperationCode.ParallelBranchNext:
-                                        break;
-                                    case OperationCode.ParallelBranchEnd:
-                                        break;
-                                    default:
-                                        break;
-                                }
-
                                 this.SuspendLayout();
-                                this.SelectNextControl(_cL, false, true, false, false);
-                                linhaSelecionada.ApagaSimbolos(_cL);
+                                this.SelectNextControl(visualInstruction, false, true, false, false);
+                                SelectedVisualLine.RemoveVisualInstruction(visualInstruction);
                                 this.ReorganizeLines();
                                 this.ResumeLayout();
-                                linhaSelecionada.BackgroundLine.Invalidate();
+                                SelectedVisualLine.BackgroundLine.Invalidate();
                             }
                     }
                     break;
@@ -361,10 +326,10 @@ namespace LadderApp
                     int _indicePosFinal = 0;
 
                     /// verifica em qual lista o controle esta presente (simbolos/saida)
-                    if (LinhaSelecionada.visualInstructions.Contains(_cL))
-                        _lstCL = LinhaSelecionada.visualInstructions;
-                    else if (LinhaSelecionada.visualOutputInstructions.Contains(_cL))
-                        _lstCL = LinhaSelecionada.visualOutputInstructions;
+                    if (SelectedVisualLine.visualInstructions.Contains(_cL))
+                        _lstCL = SelectedVisualLine.visualInstructions;
+                    else if (SelectedVisualLine.visualOutputInstructions.Contains(_cL))
+                        _lstCL = SelectedVisualLine.visualOutputInstructions;
                     else
                         return instructions;
 
@@ -397,39 +362,26 @@ namespace LadderApp
             return instructions;
         }
 
-        private void menuLimparEndereco_Click(object sender, EventArgs e)
+        private void mnuClearAddress_Click(object sender, EventArgs e)
         {
-            OperationCode _cI = controleSelecionado.OpCode;
-            if ((!controleSelecionado.IsDisposed) &&
+            OperationCode _cI = VisualInstruction.OpCode;
+            if ((!VisualInstruction.IsDisposed) &&
                  (_cI != OperationCode.LineBegin &&
                  _cI != OperationCode.ParallelBranchBegin &&
                  _cI != OperationCode.ParallelBranchEnd))
             {
-                controleSelecionado.SetOperand(0, null);
-                controleSelecionado.Refresh();
+                VisualInstruction.SetOperand(0, null);
+                VisualInstruction.Refresh();
             }
         }
 
-        private void menuEstenderParaleloAcima_Click(object sender, EventArgs e)
-        {
-            switch (controleSelecionado.OpCode)
-            {
-                case OperationCode.ParallelBranchBegin:
-                    break;
-                case OperationCode.ParallelBranchEnd:
-                    break;
-                case OperationCode.ParallelBranchNext:
-                    break;
-            }
-        }
-
-        private void DiagramaLadder_Scroll(object sender, ScrollEventArgs e)
+        private void LadderForm_Scroll(object sender, ScrollEventArgs e)
         {
         }
 
-        private void menuToggleBit_Click(object sender, EventArgs e)
+        private void mnuToggleBit_Click(object sender, EventArgs e)
         {
-            ((Address)controleSelecionado.GetOperand(0)).Value = ((Address)controleSelecionado.GetOperand(0)).Value == true ? false : true;
+            ((Address)VisualInstruction.GetOperand(0)).Value = ((Address)VisualInstruction.GetOperand(0)).Value == true ? false : true;
             projectForm.program.SimulateLadder();
             this.Invalidate(true);
         }
@@ -499,12 +451,12 @@ namespace LadderApp
 
                 sender.Invalidate();
             }
-            
+
         }
 
-        private void menuToggleBitPulse_Click(object sender, EventArgs e)
+        private void mnuToggleBitPulse_Click(object sender, EventArgs e)
         {
-            projectForm.program.auxToggleBitPulse = ((Address)controleSelecionado.GetOperand(0));
+            projectForm.program.auxToggleBitPulse = ((Address)VisualInstruction.GetOperand(0));
             projectForm.program.auxToggleBitPulse.Value = projectForm.program.auxToggleBitPulse.Value == true ? false : true;
             projectForm.program.SimulateLadder();
             this.Invalidate(true);

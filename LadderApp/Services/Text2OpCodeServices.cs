@@ -261,7 +261,7 @@ namespace LadderApp.CodigoInterpretavel
                                 _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
                                 {
-                                    programa.device.lstBitPorta[_iIndiceEndLido - 1].TipoDefinido = _tpEndLido;
+                                    programa.device.pins[_iIndiceEndLido - 1].Type = _tpEndLido;
                                     programa.device.RealocaEnderecoDispositivo();
                                     programa.addressing.AlocaEnderecamentoIO(programa.device);
                                     _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
@@ -283,7 +283,7 @@ namespace LadderApp.CodigoInterpretavel
                                 _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
                                 {
-                                    programa.device.lstBitPorta[_iIndiceEndLido - 1].TipoDefinido = _tpEndLido;
+                                    programa.device.pins[_iIndiceEndLido - 1].Type = _tpEndLido;
                                     programa.device.RealocaEnderecoDispositivo();
                                     programa.addressing.AlocaEnderecamentoIO(programa.device);
                                     _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);

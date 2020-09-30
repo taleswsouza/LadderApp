@@ -115,7 +115,7 @@ namespace LadderApp
         /// <summary>
         /// Lógica dos temporizadores
         /// </summary>
-        public void ExecutaSimuladoTemporizadores()
+        public void SimulateTimers()
         {
             /// faz a função de um preset parcial para acumular na base de tempo
             /// programada para o temporizador, utilizando a base de tempo da thread (100ms)
@@ -308,55 +308,31 @@ namespace LadderApp
                     {
                         case OperationCode.ParallelBranchBegin:
                             lineStretchSummary.Add(new LineStretchSummary());
-                            //lineStretch.Add(new LineStretchSummary());
-
                             break;
                         case OperationCode.ParallelBranchEnd:
-                            //if (lineStretch[lineStretch.Count - 2].Initiated)
-                            //    lineStretch[lineStretch.Count - 2].Value = lineStretch[lineStretch.Count - 2].Value || lineStretch[lineStretch.Count - 1].Value;
-                            //else
-                            //    lineStretch[lineStretch.Count - 2].Value = lineStretch[lineStretch.Count - 1].Value;
+                            MakeOrLogicOverParallelBranchTwoLastLineStretchAndRemoveLastOne(lineStretchSummary);
 
-                            ///// remove o utlimo paralelo proximo
-                            //lineStretch.RemoveAt(lineStretch.Count - 1);
-
-                            /// Atualiza o anterior ao paralelo
-                            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
-                                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value && lineStretchSummary[lineStretchSummary.Count - 1].Value;
-                            else
-                                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
-
-                            lineStretchSummary[lineStretchSummary.Count - 2].Initiated = true;
-
-                            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
+                            MakeAndLogicOverTwoLastLineStreatchAndRemoveLastOne(lineStretchSummary);
                             break;
                         case OperationCode.ParallelBranchNext:
-                            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
-                                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value || lineStretchSummary[lineStretchSummary.Count - 1].Value;
-                            else
-                                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
-                            lineStretchSummary[lineStretchSummary.Count - 2].Initiated = true;
-
-                            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
-
                             lineStretchSummary.Add(new LineStretchSummary());
                             break;
                         default:
-                            bool bAuxValor = false;
+                            bool value = false;
                             switch (instruction.OpCode)
                             {
                                 case OperationCode.NormallyOpenContact:
-                                    bAuxValor = ((Address)instruction.GetOperand(0)).Value;
+                                    value = ((Address)instruction.GetOperand(0)).Value;
                                     break;
                                 case OperationCode.NormallyClosedContact:
-                                    bAuxValor = !((Address)instruction.GetOperand(0)).Value;
+                                    value = !((Address)instruction.GetOperand(0)).Value;
                                     break;
                             }
 
                             if (lineStretchSummary[lineStretchSummary.Count - 1].Initiated)
-                                lineStretchSummary[lineStretchSummary.Count - 1].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value && bAuxValor;
+                                lineStretchSummary[lineStretchSummary.Count - 1].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value && value;
                             else
-                                lineStretchSummary[lineStretchSummary.Count - 1].Value = bAuxValor;
+                                lineStretchSummary[lineStretchSummary.Count - 1].Value = value;
 
                             lineStretchSummary[lineStretchSummary.Count - 1].Initiated = true;
                             break;
@@ -418,6 +394,25 @@ namespace LadderApp
                 auxToggleBitPulse = null;
             }
             return true;
+        }
+
+        private static void MakeAndLogicOverTwoLastLineStreatchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
+        {
+            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
+                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value && lineStretchSummary[lineStretchSummary.Count - 1].Value;
+            else
+                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
+            lineStretchSummary[lineStretchSummary.Count - 2].Initiated = true;
+            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
+        }
+
+        private static void MakeOrLogicOverParallelBranchTwoLastLineStretchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
+        {
+            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
+                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value || lineStretchSummary[lineStretchSummary.Count - 1].Value;
+            else
+                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
+            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
         }
 
         private bool GravaSenhaNoLadder(ref OpCode2TextServices txtCodigoInterpretavel)

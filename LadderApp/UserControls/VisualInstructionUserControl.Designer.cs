@@ -41,11 +41,11 @@ namespace LadderApp
             this.Load += new System.EventHandler(this.ControleLivre_Load);
             this.SizeChanged += new System.EventHandler(this.ControleLivre_SizeChanged);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ControleLivre_Paint);
-            this.Enter += new System.EventHandler(this.ControleLivre_Enter);
+            this.Enter += new System.EventHandler(this.VisualInstruction_Enter);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ControleLivre_KeyDown);
-            this.Leave += new System.EventHandler(this.ControleLivre_Leave);
+            this.Leave += new System.EventHandler(this.VisualInstruction_Leave);
             this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ControleLivre_MouseDoubleClick);
-            this.Resize += new System.EventHandler(this.ControleLivre_Resize);
+            this.Resize += new System.EventHandler(this.VisualInstruction_Resize);
             this.ResumeLayout(false);
 
         }

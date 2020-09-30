@@ -34,24 +34,24 @@ namespace LadderApp
 
             int i = 1;
             int j = 0;
-            foreach(Pin pd in dl.lstBitPorta)
+            foreach(Pin pd in dl.pins)
             {
                 //_txtPino = "Pino " + i.ToString().PadLeft(2,'0');
                 _txtPino = "(P" + (((i - 1) / dl.QtdBitsPorta) + 1) + "." + ((i - 1) - ((Int16)((i - 1) / dl.QtdBitsPorta) * dl.QtdBitsPorta)) + ")";
-                switch (pd.TipoPino)
+                switch (pd.PinType)
                 {
                     case PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA:
-                        if (pd.TipoDefinido == AddressTypeEnum.None)
+                        if (pd.Type == AddressTypeEnum.None)
                         {
                             _txtPino += "-Not Used";
                             _cor = corPinoIndefinida;
                         }
-                        else if (pd.TipoDefinido == AddressTypeEnum.DigitalInput)
+                        else if (pd.Type == AddressTypeEnum.DigitalInput)
                         {
                             _txtPino += "-Input";
                             _cor = corPinoDefinida;
                         }
-                        else if (pd.TipoDefinido == AddressTypeEnum.DigitalOutput)
+                        else if (pd.Type == AddressTypeEnum.DigitalOutput)
                         {
                             _txtPino += "-Output";
                             _cor = corPinoDefinida;
@@ -71,8 +71,8 @@ namespace LadderApp
                 //{
                     ArvorePinos.Nodes[0].Nodes.Add(_txtPino);
                     ArvorePinos.Nodes[0].Nodes[j].ForeColor = _cor;
-                    ArvorePinos.Nodes[0].Nodes[j].Tag = pd.TipoPino;
-                    lstEndModificado.Add(pd.TipoDefinido);
+                    ArvorePinos.Nodes[0].Nodes[j].Tag = pd.PinType;
+                    lstEndModificado.Add(pd.Type);
                     _cor = corTextoPadrao;
                     j++;
                 //}

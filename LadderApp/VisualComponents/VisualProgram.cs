@@ -93,7 +93,7 @@ namespace LadderApp
         public VisualLine CreateVisualLine(Line line)
         {
             VisualLine visualLine = new VisualLine(ladderForm, line);
-            visualLine.LineBegin.MudaLinha += new MudaLinhaEventHandler(ladderForm.simboloInicioLinha_MudaLinha);
+            visualLine.LineBegin.ChangeLineEvent += new ChangeLineEventHandler(ladderForm.LineBeginVisualInstruction_ChangeLine);
 
             return visualLine;
         }

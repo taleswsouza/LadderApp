@@ -8,18 +8,18 @@ using System.Windows.Forms;
 
 namespace LadderApp
 {
-    public delegate void MudaLinhaEventHandler(VisualInstructionUserControl sender, System.Windows.Forms.Keys e);
-    public delegate void DeletaLinhaEventHandler(VisualLine sender);
-    public delegate void ControleSelecionadoEventHandler(VisualInstructionUserControl sender, VisualLine lCL);
-    public delegate void SolicitaMudarEnderecoEventHandler(VisualInstructionUserControl sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object[] faixa);
+    public delegate void ChangeLineEventHandler(VisualInstructionUserControl sender, System.Windows.Forms.Keys e);
+    public delegate void DeleteLineEventHandler(VisualLine sender);
+    public delegate void VisualInstructionSelectedEventHandler(VisualInstructionUserControl sender, VisualLine lCL);
+    public delegate void AskToChangeAddressEventHandler(VisualInstructionUserControl sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object[] faixa);
 
     public partial class VisualInstructionUserControl : BasicUserControl
 
     {
-        public event MudaLinhaEventHandler MudaLinha;
-        public event DeletaLinhaEventHandler DeletaLinha;
-        public event ControleSelecionadoEventHandler ControleSelecionado;
-        public event SolicitaMudarEnderecoEventHandler SolicitaMudarEndereco;
+        public event ChangeLineEventHandler ChangeLineEvent;
+        public event DeleteLineEventHandler DeleteLineEvent;
+        public event VisualInstructionSelectedEventHandler VisualInstructionSelectedEvent;
+        public event AskToChangeAddressEventHandler AskToChangeAddressEvent;
 
         private List<Panel> insertionIndicatorList = new List<Panel>();
 
@@ -242,12 +242,12 @@ namespace LadderApp
                 case OperationCode.None:
                     break;
                 case OperationCode.LineBegin:
-                    xyConexao = new Point(xDecimoHorizontal * 7, (VisualLine.tamY / 2));
+                    xyConexao = new Point(xDecimoHorizontal * 7, (VisualLine.YSize / 2));
                     //Selecao
                     rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
                 case OperationCode.LineEnd:
-                    xyConexao = new Point(0, (VisualLine.tamY / 2));
+                    xyConexao = new Point(0, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.NormallyOpenContact:
                     //Selecao
@@ -265,21 +265,21 @@ namespace LadderApp
                     break;
                 case OperationCode.ParallelBranchBegin:
                     // selecao em torno do ponto de conexao
-                    rectSelecao = new Rectangle(1, (VisualLine.tamY / 4) + 3, xTotalHorizontal - 3, (VisualLine.tamY / 2) - 3);
+                    rectSelecao = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, (VisualLine.YSize / 2) - 3);
 
-                    xyConexao = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
+                    xyConexao = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.ParallelBranchEnd:
-                    rectSelecao = new Rectangle(1, (VisualLine.tamY / 4) + 3, xTotalHorizontal - 3, yTotalVertical - (VisualLine.tamY / 2) - 3);
-                    xyConexao = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
+                    rectSelecao = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, yTotalVertical - (VisualLine.YSize / 2) - 3);
+                    xyConexao = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.ParallelBranchNext:
                     // selecao em torno do ponto de conexao
-                    rectSelecao = new Rectangle(1, (VisualLine.tamY / 4) + 3, xTotalHorizontal - 3, (VisualLine.tamY / 2) - 3);
+                    rectSelecao = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, (VisualLine.YSize / 2) - 3);
                     if (ultimoVPI)
                         xyConexao = new Point(xMeioHorizontal, yMeioVertical);
                     else
-                        xyConexao = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
+                        xyConexao = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.BackgroundLine:
                     break;
@@ -437,31 +437,31 @@ namespace LadderApp
         private void DesenhaParaleloInicial()
         {
             // Linha vertical
-            xy1 = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
+            xy1 = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
             xy2 = new Point(xMeioHorizontal, yTotalVertical);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal
-            xy1 = new Point(0, (VisualLine.tamY / 2));
-            xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
+            xy1 = new Point(0, (VisualLine.YSize / 2));
+            xy2 = new Point(xTotalHorizontal, (VisualLine.YSize / 2));
             graphics.DrawLine(linePen, xy1, xy2);
         }
 
         private void DesenhaParaleloFinal()
         {
             // Linha vertical
-            xy1 = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
-            xy2 = new Point(xMeioHorizontal, (yTotalVertical - (VisualLine.tamY / 2)));
+            xy1 = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
+            xy2 = new Point(xMeioHorizontal, (yTotalVertical - (VisualLine.YSize / 2)));
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal 1
-            xy1 = new Point(0, (VisualLine.tamY / 2));
-            xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
+            xy1 = new Point(0, (VisualLine.YSize / 2));
+            xy2 = new Point(xTotalHorizontal, (VisualLine.YSize / 2));
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal 2
-            xy1 = new Point(0, (yTotalVertical - (VisualLine.tamY / 2)));
-            xy2 = new Point(xMeioHorizontal, (yTotalVertical - (VisualLine.tamY / 2)));
+            xy1 = new Point(0, (yTotalVertical - (VisualLine.YSize / 2)));
+            xy2 = new Point(xMeioHorizontal, (yTotalVertical - (VisualLine.YSize / 2)));
             graphics.DrawLine(linePen, xy1, xy2);
 
             if (visualInstructions != null)
@@ -501,8 +501,8 @@ namespace LadderApp
                 graphics.DrawLine(linePen, xy1, xy2);
 
                 // Linha horizontal
-                xy1 = new Point(xMeioHorizontal, (VisualLine.tamY / 2));
-                xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
+                xy1 = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
+                xy2 = new Point(xTotalHorizontal, (VisualLine.YSize / 2));
                 graphics.DrawLine(linePen, xy1, xy2);
             }
         }
@@ -517,8 +517,8 @@ namespace LadderApp
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha |-
-            xy1 = new Point(xDecimoHorizontal * 7, (VisualLine.tamY / 2));
-            xy2 = new Point(xTotalHorizontal, (VisualLine.tamY / 2));
+            xy1 = new Point(xDecimoHorizontal * 7, (VisualLine.YSize / 2));
+            xy2 = new Point(xTotalHorizontal, (VisualLine.YSize / 2));
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Posicao numero da linha
@@ -527,7 +527,7 @@ namespace LadderApp
             if (IsAllOperandsOk())
             {
                 // Endereco
-                RectangleF _recTxtLinha = new RectangleF(0F, (float)((VisualLine.tamY / 2) - textFont.Height), (float)(xDecimoHorizontal * 7), (float)(textFont.Height));
+                RectangleF _recTxtLinha = new RectangleF(0F, (float)((VisualLine.YSize / 2) - textFont.Height), (float)(xDecimoHorizontal * 7), (float)(textFont.Height));
                 StringFormat _stringFormat = new StringFormat();
                 _stringFormat.Alignment = StringAlignment.Center;
                 _stringFormat.LineAlignment = StringAlignment.Center;
@@ -545,8 +545,8 @@ namespace LadderApp
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha |-
-            xy1 = new Point(0, (VisualLine.tamY / 2));
-            xy2 = new Point(xDecimoHorizontal, (VisualLine.tamY / 2));
+            xy1 = new Point(0, (VisualLine.YSize / 2));
+            xy2 = new Point(xDecimoHorizontal, (VisualLine.YSize / 2));
             graphics.DrawLine(linePen, xy1, xy2);
         }
 
@@ -641,7 +641,7 @@ namespace LadderApp
             //  dos controles
             int _posX = 0; // linhaAtual.posX;  // auxiliar para posX
             int _posY = 0; // linhaAtual.posY;  // auxiliar para posY
-            int _posYOriginal = VisualLine.posY;
+            int _posYOriginal = VisualLine.YPosition;
 
 
             VisualParallelBranch _par = null;
@@ -1093,32 +1093,31 @@ namespace LadderApp
 
         private void ControleLivre_Paint(object sender, PaintEventArgs e)
         {
-            if (this.graphics != null && VisualLine.tamY > 0)
+            if (this.graphics != null && VisualLine.YSize > 0)
             {
                 this.graphics = e.Graphics;
                 DesenhaSimbolo();
             }
         }
 
-        private void ControleLivre_Enter(object sender, EventArgs e)
+        private void VisualInstruction_Enter(object sender, EventArgs e)
         {
             if (OpCode != OperationCode.BackgroundLine &&
                 OpCode != OperationCode.LineEnd)
             {
                 this.Selected = true;
 
-                if (ControleSelecionado != null)
-                    ControleSelecionado(this, VisualLine);
+                if (VisualInstructionSelectedEvent != null)
+                    VisualInstructionSelectedEvent(this, VisualLine);
 
-                LadderForm _frmDL;
-                _frmDL = (LadderForm)this.Parent;
-                _frmDL.SetMessage(this.Location.ToString() + " - " + this.Size.ToString() + " - " + this.TabStop.ToString() + " - " + this.TabIndex.ToString() + " - " + this.OpCode.ToString());
+                LadderForm ladderForm = (LadderForm)this.Parent;
+                ladderForm.SetMessage(this.Location.ToString() + " - " + this.Size.ToString() + " - " + this.TabStop.ToString() + " - " + this.TabIndex.ToString() + " - " + this.OpCode.ToString());
 
                 this.Refresh();
             }
         }
 
-        private void ControleLivre_Leave(object sender, EventArgs e)
+        private void VisualInstruction_Leave(object sender, EventArgs e)
         {
             if (OpCode != OperationCode.BackgroundLine &&
                 OpCode != OperationCode.LineEnd)
@@ -1127,7 +1126,7 @@ namespace LadderApp
             }
         }
 
-        private void ControleLivre_Resize(object sender, EventArgs e)
+        private void VisualInstruction_Resize(object sender, EventArgs e)
         {
             AtualizaVariaveisDesenho();
         }
@@ -1151,16 +1150,16 @@ namespace LadderApp
 
             if (this.OpCode == OperationCode.LineBegin)
             {
-                if (MudaLinha != null &&
+                if (ChangeLineEvent != null &&
                     (e.KeyData == Keys.Down || e.KeyData == Keys.Up))
                 {
-                    MudaLinha(this, e.KeyData);
+                    ChangeLineEvent(this, e.KeyData);
                 }
 
-                if (DeletaLinha != null &&
+                if (DeleteLineEvent != null &&
                     (e.KeyData == Keys.Delete))
                 {
-                    DeletaLinha(VisualLine);
+                    DeleteLineEvent(VisualLine);
                 }
             }
         }
@@ -1188,21 +1187,21 @@ namespace LadderApp
         private void txtEndereco_DoubleClick(object sender, EventArgs e)
         {
             /// caso o evento nao este alocado, nao executa
-            if (SolicitaMudarEndereco == null)
+            if (AskToChangeAddressEvent == null)
                 return;
 
             switch (OpCode)
             {
                 case OperationCode.NormallyOpenContact:
                 case OperationCode.NormallyClosedContact:
-                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
+                    AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
                 case OperationCode.OutputCoil:
-                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
+                    AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
                 case OperationCode.Timer:
                 case OperationCode.Counter:
-                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
+                    AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
             }
         }
@@ -1224,7 +1223,7 @@ namespace LadderApp
                     break;
                 case OperationCode.Timer:
                 case OperationCode.Counter:
-                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
+                    AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
                     break;
             }
         }
