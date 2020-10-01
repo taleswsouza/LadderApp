@@ -72,7 +72,7 @@ namespace LadderApp
 
         public void ApagaLinha(int linha)
         {
-            lines[linha].ApagaLinha();
+            lines[linha].DeleteLine();
             lines.RemoveAt(linha);
 
             program.RemoveLineAt(linha);

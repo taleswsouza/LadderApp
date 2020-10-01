@@ -405,31 +405,31 @@ namespace LadderApp
             return true;
         }
 
-        public bool GeraExecutavel(bool bGravarLadderNoExecutavel, bool bGravarSenha, bool bEscreverPrograma)
+        public bool GenerateExecutable(bool savePrograInsideExecutable, bool savePassword, bool writeProgram)
         {
-            String doc = "", linha = "", linhaTeste = "", saidaUltimoOperando = "";
-            bool bOperandosLinha = false;
-            List<String> OperandosLinha = new List<string>();
-            List<String> OperandosSELinha = new List<string>();
-            String FuncoesAposLinha = "";
+            String doc = "", lineText = "", lineTestText = "", outputLastOperand = "";
+            bool operandInLine = false;
+            List<String> operandsInLine = new List<string>();
+            List<String> operandsInLine2MaybeWithAddress = new List<string>();
+            String functionsAfterLine = "";
             DialogResult result;
-            OpCode2TextServices txtCodigoInterpretavel = new OpCode2TextServices();
+            OpCode2TextServices opCode2TextServices = new OpCode2TextServices();
 
-            bool bIniciado = false;
+            bool initiated = false;
 
             if (!VerifyProgram())
                 return false;
 
-            txtCodigoInterpretavel.Add(OperationCode.None);
+            opCode2TextServices.Add(OperationCode.None);
 
             /// caso senha para inserir senha
             /// realiza recuperação da senha
-            if (bGravarLadderNoExecutavel && bGravarSenha)
+            if (savePrograInsideExecutable && savePassword)
             {
                 result = MessageBox.Show("Are you sure you want to write a password to the executable to be generated?", "Request password", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if (result == DialogResult.Yes)
                 {
-                    if (!SavePasswordIntoLadder(ref txtCodigoInterpretavel))
+                    if (!SavePasswordIntoLadder(ref opCode2TextServices))
                         return false;
                 }
                 else
@@ -440,62 +440,62 @@ namespace LadderApp
 
             addressing.CleanUsedIndication();
 
-            linha += Environment.NewLine;
-            doc += linha;
+            lineText += Environment.NewLine;
+            doc += lineText;
 
 
             foreach (Line line in this.Lines)
             {
-                linha = "";
+                lineText = "";
                 foreach (Instruction instruction in line.instructions)
                 {
                     switch (instruction.OpCode)
                     {
                         case OperationCode.ParallelBranchBegin:
-                            if (bIniciado)
-                                linha += " && ";
+                            if (initiated)
+                                lineText += " && ";
 
-                            bIniciado = false;
-                            linha += "((";
+                            initiated = false;
+                            lineText += "((";
                             break;
                         case OperationCode.ParallelBranchEnd:
-                            linha += "))";
+                            lineText += "))";
                             break;
                         case OperationCode.ParallelBranchNext:
-                            bIniciado = false;
-                            linha += ") || (";
+                            initiated = false;
+                            lineText += ") || (";
                             break;
                         default:
-                            if (bIniciado)
-                                linha += " && ";
+                            if (initiated)
+                                lineText += " && ";
                             switch (instruction.OpCode)
                             {
                                 case OperationCode.NormallyOpenContact:
-                                    linha += ((Address)instruction.GetOperand(0)).Acesso;
+                                    lineText += ((Address)instruction.GetOperand(0)).Acesso;
                                     ((Address)instruction.GetOperand(0)).Used = true;
                                     break;
                                 case OperationCode.NormallyClosedContact:
-                                    linha += "!" + ((Address)instruction.GetOperand(0)).Acesso;
+                                    lineText += "!" + ((Address)instruction.GetOperand(0)).Acesso;
                                     ((Address)instruction.GetOperand(0)).Used = true;
                                     break;
                             }
-                            bIniciado = true;
+                            initiated = true;
                             break;
                     }
 
-                    txtCodigoInterpretavel.Add(instruction);
+                    opCode2TextServices.Add(instruction);
                 }
-                bIniciado = false;
+                initiated = false;
 
-                if (linha == "")
-                    linha = "1";
+                if (lineText == "")
+                    lineText = "1";
 
-                linha = "(" + linha + ")";
+                lineText = "(" + lineText + ")";
 
-                linhaTeste = linha;
+                lineTestText = lineText;
 
-                OperandosLinha.Clear();
-                OperandosSELinha.Clear();
+                operandsInLine.Clear();
+                operandsInLine2MaybeWithAddress.Clear();
                 foreach (Instruction instruction in line.outputs)
                 {
                     switch (instruction.OpCode)
@@ -504,33 +504,33 @@ namespace LadderApp
                         case OperationCode.Timer:
                         case OperationCode.Counter:
                         case OperationCode.Reset:
-                            txtCodigoInterpretavel.Add(instruction);
+                            opCode2TextServices.Add(instruction);
 
                             if (instruction.OpCode == OperationCode.OutputCoil)
                             {
-                                OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso);
+                                operandsInLine.Add(((Address)instruction.GetOperand(0)).Acesso);
                                 ((Address)instruction.GetOperand(0)).Used = true;
                             }
                             else if (instruction.OpCode == OperationCode.Timer)
                             {
-                                OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso2);
+                                operandsInLine.Add(((Address)instruction.GetOperand(0)).Acesso2);
                                 ((Address)instruction.GetOperand(0)).Used = true;
                             }
                             else if (instruction.OpCode == OperationCode.Counter)
                             {
-                                OperandosLinha.Add(((Address)instruction.GetOperand(0)).Acesso2);
-                                FuncoesAposLinha += " ExecContador(&" + ((Address)instruction.GetOperand(0)).Name + ");";
+                                operandsInLine.Add(((Address)instruction.GetOperand(0)).Acesso2);
+                                functionsAfterLine += " ExecContador(&" + ((Address)instruction.GetOperand(0)).Name + ");";
                                 ((Address)instruction.GetOperand(0)).Used = true;
                             }
                             else if (instruction.OpCode == OperationCode.Reset)
                             {
-                                OperandosSELinha.Add(((Address)instruction.GetOperand(0)).Name + ".Reset = 1;");
+                                operandsInLine2MaybeWithAddress.Add(((Address)instruction.GetOperand(0)).Name + ".Reset = 1;");
                                 ((Address)instruction.GetOperand(0)).Used = true;
 
                                 switch (((Address)instruction.GetOperand(0)).AddressType)
                                 {
                                     case AddressTypeEnum.DigitalMemoryCounter:
-                                        OperandosSELinha.Add("ExecContador(&" + ((Address)instruction.GetOperand(0)).Name + ");");
+                                        operandsInLine2MaybeWithAddress.Add("ExecContador(&" + ((Address)instruction.GetOperand(0)).Name + ");");
                                         break;
                                     default:
                                         break;
@@ -542,44 +542,44 @@ namespace LadderApp
                     }
                 }
 
-                if (OperandosLinha.Count > 0)
+                if (operandsInLine.Count > 0)
                 {
-                    bOperandosLinha = true;
-                    linha = "";
-                    foreach (String saidalinha in OperandosLinha)
+                    operandInLine = true;
+                    lineText = "";
+                    foreach (String saidalinha in operandsInLine)
                     {
-                        linha += saidalinha + " = ";
-                        saidaUltimoOperando = saidalinha;
+                        lineText += saidalinha + " = ";
+                        outputLastOperand = saidalinha;
                     }
-                    linha += linhaTeste + ";";
+                    lineText += lineTestText + ";";
 
-                    if (FuncoesAposLinha != "")
-                        linha += Environment.NewLine + FuncoesAposLinha;
-                    FuncoesAposLinha = "";
+                    if (functionsAfterLine != "")
+                        lineText += Environment.NewLine + functionsAfterLine;
+                    functionsAfterLine = "";
 
-                    doc += linha + Environment.NewLine;
+                    doc += lineText + Environment.NewLine;
                 }
 
 
-                if (OperandosSELinha.Count > 0)
+                if (operandsInLine2MaybeWithAddress.Count > 0)
                 {
-                    if (bOperandosLinha)
-                        linhaTeste = saidaUltimoOperando;
+                    if (operandInLine)
+                        lineTestText = outputLastOperand;
 
-                    linha = "if (" + linhaTeste + ") {" + Environment.NewLine;
-                    foreach (String saidalinha in OperandosSELinha)
-                        linha += saidalinha + Environment.NewLine;
-                    linha += "}";
-                    doc += linha + Environment.NewLine;
+                    lineText = "if (" + lineTestText + ") {" + Environment.NewLine;
+                    foreach (String maybeOutpustOfLine in operandsInLine2MaybeWithAddress)
+                        lineText += maybeOutpustOfLine + Environment.NewLine;
+                    lineText += "}";
+                    doc += lineText + Environment.NewLine;
                 }
-                bOperandosLinha = false;
+                operandInLine = false;
 
                 doc += Environment.NewLine;
 
-                txtCodigoInterpretavel.Add(OperationCode.LineEnd);
+                opCode2TextServices.Add(OperationCode.LineEnd);
             }
 
-            txtCodigoInterpretavel.Add(OperationCode.None);
+            opCode2TextServices.Add(OperationCode.None);
 
             result = MessageBox.Show("Do you want to generate the .C file below? " + Environment.NewLine + doc, "Confirmation: Generate .C file?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
@@ -815,10 +815,10 @@ namespace LadderApp
                 /// Prepara MAIN
                 contentMainDotCFile = MicrocontrollersBaseCodeFilesResource.mainC;
 
-                if (bGravarLadderNoExecutavel)
+                if (savePrograInsideExecutable)
                 {
-                    txtCodigoInterpretavel.FinalizaCabecalho();
-                    contentOpCodes = "const unsigned char codigosInterpretaveis[" + txtCodigoInterpretavel.Length.ToString().Trim() + "] = {" + txtCodigoInterpretavel.ToString() + "};";
+                    opCode2TextServices.FinalizaCabecalho();
+                    contentOpCodes = "const unsigned char codigosInterpretaveis[" + opCode2TextServices.Length.ToString().Trim() + "] = {" + opCode2TextServices.ToString() + "};";
                     contentMainDotCFile = contentMainDotCFile.Replace("#CODIGOSINTERPRETAVEIS#", contentOpCodes);
                 }
                 else
@@ -903,7 +903,7 @@ namespace LadderApp
                 /// CRIA EXECUTAVE E GRAVA NO DISPOSITIVO
                 msp430gcc.CompileA43(this.Name);
 
-                if (bEscreverPrograma)
+                if (writeProgram)
                     msp430gcc.DownloadViaUSB(this.Name);
             }
 

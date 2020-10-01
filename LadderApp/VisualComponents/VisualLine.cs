@@ -63,14 +63,14 @@ namespace LadderApp
         [XmlIgnore]
         public int tabStop = 0;
 
-        private int iNumLinha = 0;
-        public int NumLinha
+        private int lineNumber = 0;
+        public int LineNumber
         {
-            get { return iNumLinha; }
+            get { return lineNumber; }
             set
             {
                 LineBegin.SetOperand(0, value);
-                iNumLinha = value;
+                lineNumber = value;
             }
         }
 
@@ -403,7 +403,7 @@ namespace LadderApp
             SetFunctionsToFixedVisualInstructions();
         }
 
-        public void ApagaLinha()
+        public void DeleteLine()
         {
             visualOutputInstructions.Reverse();
             foreach (VisualInstructionUserControl cl in visualOutputInstructions)
@@ -733,7 +733,7 @@ namespace LadderApp
 
                             menu.DropDownItems[menu.DropDownItems.Count - 1].Name = eachAddressNode.Text;
                             menu.DropDownItems[menu.DropDownItems.Count - 1].Tag = eachAddressNode.Tag;
-                            menu.DropDownItems[menu.DropDownItems.Count - 1].Click += new EventHandler(LinhaCompletaLivre_Click);
+                            menu.DropDownItems[menu.DropDownItems.Count - 1].Click += new EventHandler(MenuContextAddress_Click);
                         }
                     }
 
@@ -742,7 +742,7 @@ namespace LadderApp
             ladderForm.mnuContextAtInstruction.Show(visualInstruction.PointToScreen(e.Location));
         }
 
-        void LinhaCompletaLivre_Click(object sender, EventArgs e)
+        void MenuContextAddress_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem clickedMenuItem = (ToolStripMenuItem)sender;
             ladderForm.projectForm.InsertAddressAtInstruction(ladderForm.VisualInstruction, (Address)clickedMenuItem.Tag);

@@ -815,7 +815,7 @@ namespace LadderApp
 
             try
             {
-                projectForm.Program.GeraExecutavel(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, true);
+                projectForm.Program.GenerateExecutable(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, true);
 
                 File.Delete(Application.StartupPath + @"\" + projectForm.Program.Name.Replace(' ', '_') + ".a43");
             }
@@ -880,7 +880,7 @@ namespace LadderApp
 
             try
             {
-                projectForm.Program.GeraExecutavel(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, false);
+                projectForm.Program.GenerateExecutable(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, false);
                 if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\" + projectForm.Program.Name.Replace(' ', '_') + ".a43"))
                     File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\" + projectForm.Program.Name.Replace(' ', '_') + ".a43");
 

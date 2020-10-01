@@ -132,7 +132,7 @@ namespace LadderApp
                         visualLine.PreviousLine = previsousVisualLine;
                         visualLine.tabStop = iTabStop;
                         visualLine.YPosition = auxY;
-                        visualLine.NumLinha = iLinha;
+                        visualLine.LineNumber = iLinha;
                         visualLine.LineBegin.Invalidate();
                         visualLine.AdjustPositioning();
                         auxY += visualLine.BackgroundLine.tamanhoXY.Height;
