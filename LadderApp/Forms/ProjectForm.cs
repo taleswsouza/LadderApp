@@ -51,7 +51,7 @@ namespace LadderApp
 
             if (Status == ProgramStatus.NotInitialized)
             {
-                Program.device = new Device(1);
+                Program.device = new Device();
 
                 AlocateIOAddressing();
 
@@ -62,7 +62,7 @@ namespace LadderApp
             else
             {
                 if (Program.device == null)
-                    Program.device = new Device(1);
+                    Program.device = new Device();
                 AlocateIOAddressing();
 
                 AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, Program.addressing.ListMemoryAddress.Count);
@@ -101,7 +101,7 @@ namespace LadderApp
             }
         }
 
-        private void ArvoreProjeto_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void tvnProjectTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             switch (e.Node.Name)
             {
@@ -113,12 +113,12 @@ namespace LadderApp
                     if (deviceForm.ShowDialog() == DialogResult.OK)
                     {
                         int i = 0;
-                        foreach (Pin pin in Program.device.pins)
+                        foreach (Pin pin in Program.device.Pins)
                         {
                             pin.Type = deviceForm.lstEndModificado[i];
                             i++;
                         }
-                        Program.device.RealocaEnderecoDispositivo();
+                        Program.device.RealocatePinAddresses();
                         AlocateIOAddressing();
                     }
                     break;
@@ -187,7 +187,7 @@ namespace LadderApp
 
             Program.addressing.ListInputAddress.Clear();
             Program.addressing.ListOutputAddress.Clear();
-            foreach (Address address in Program.device.addressesToEachPinList)
+            foreach (Address address in Program.device.PinAddresses)
             {
                 address.SetDevice(Program.device);
                 switch (address.AddressType)
@@ -208,13 +208,13 @@ namespace LadderApp
             tvnProjectTree.EndUpdate();
         }
 
-        void Address_EditedComment(Address editedAddress)
+        void Address_EditedComment(Address sender)
         {
             tvnProjectTree.BeginUpdate();
-            TreeNodeCollection nodeToUpdateAddress = GetAddressingNodesByAddressType(editedAddress.AddressType);
-            int position = nodeToUpdateAddress.IndexOfKey(editedAddress.Name);
+            TreeNodeCollection nodeToUpdateAddress = GetAddressingNodesByAddressType(sender.AddressType);
+            int position = nodeToUpdateAddress.IndexOfKey(sender.Name);
             if (position >= 0)
-                nodeToUpdateAddress[position].Text = editedAddress.GetNameAndComment();
+                nodeToUpdateAddress[position].Text = sender.GetNameAndComment();
             tvnProjectTree.EndUpdate();
         }
 
@@ -257,7 +257,7 @@ namespace LadderApp
 
         private void IndicateAddressUsed(LadderProgram program, AddressTypeEnum addressType)
         {
-            program.addressing.LimpaIndicacaoEmUso();
+            program.addressing.CleanUsedIndication();
             foreach (Line line in program.Lines)
             {
                 line.instructions.AddRange(line.outputs);

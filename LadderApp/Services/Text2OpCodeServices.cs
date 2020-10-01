@@ -7,102 +7,91 @@ namespace LadderApp.CodigoInterpretavel
 {
     public class Text2OpCodeServices
     {
-        private String DadosConvertidosChar = "";
+        private String charConvertedData = "";
 
-        /// <summary>
-        /// Flags
-        /// </summary>
-        private bool bCabecalhoValidado = false;
-        public bool bSolicitarSenha = false;
-        public String strSenha = "";
+        private bool validatedHeader = false;
+        public bool askPassword = false;
+        public string password = "";
+        public int CurrentPosition { get; } = -1;
 
-        private Int32 posAtualLeitura = -1;
-        public Int32 PosAtual
+        private int HeaderLenght = -1;
+
+        const string CodeId = "@laddermic.com";
+
+        public Text2OpCodeServices(string charConvertedData)
+        {
+            this.charConvertedData = charConvertedData;
+        }
+
+        public int InitialPosition
         {
             get
             {
-                return posAtualLeitura;
-            }
-        }
-
-        private Int32 intTamanhoCabecalho = -1;
-
-        const String IdCodigo = "@laddermic.com";
-
-        public Text2OpCodeServices(String DadosConvertidosChar)
-        {
-            this.DadosConvertidosChar = DadosConvertidosChar;
-        }
-
-        public Int32 PosInicial
-        {
-            get
-            {
-                if (this.ExisteCodigoInterpretavel())
+                if (this.ExistsOpCode())
                 {
-                    Int32 posIncial = DadosConvertidosChar.IndexOf(IdCodigo) + IdCodigo.Length;
+                    int initialPosition = charConvertedData.IndexOf(CodeId) + CodeId.Length;
 
-                    if (bCabecalhoValidado)
-                        posIncial = posIncial + intTamanhoCabecalho + 2;
+                    if (validatedHeader)
+                        initialPosition = initialPosition + HeaderLenght + 2;
 
-                    return posIncial;
+                    return initialPosition;
                 }
                 else
                     return -1;
             }
         }
 
-        public bool ExisteCodigoInterpretavel()
+        public bool ExistsOpCode()
         {
-            if (DadosConvertidosChar.IndexOf(IdCodigo) != -1)
+            if (charConvertedData.IndexOf(CodeId) != -1)
                 return true;
             else
                 return false;
         }
 
-        public bool ExisteCabecalho()
+        public bool ExistsHeader()
         {
-            if (ExisteCodigoInterpretavel())
-                if (ReadOperationCode(PosInicial) == OperationCode.HeadLenght)
+            if (ExistsOpCode())
+                if (ReadOperationCode(InitialPosition) == OperationCode.HeadLenght)
                 {
-                    intTamanhoCabecalho = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(PosInicial + 1, 1));
+                    HeaderLenght = (Int32)Convert.ToChar(charConvertedData.Substring(InitialPosition + 1, 1));
                     return true;
                 }
 
             return false;
         }
 
-        public void ObtemInformacoesCabecalho()
+        public void GetHeaderInformation()
         {
-            int intTamanhoSenha = 0;
-            if (ExisteCodigoInterpretavel())
-                if (ExisteCabecalho())
+            int passwordLenght = 0;
+            if (ExistsOpCode())
+                if (ExistsHeader())
                 {
-                    for (int i = PosInicial + 2; i <= PosInicial + intTamanhoCabecalho + 2; i++)
+                    for (int i = InitialPosition + 2; i <= InitialPosition + HeaderLenght + 2; i++)
                         switch (ReadOperationCode(i))
                         {
                             case OperationCode.HeadPassword0:
-                                bSolicitarSenha = true;
+                                askPassword = true;
                                 i++;
-                                intTamanhoSenha = LeInteiro(i);
+                                passwordLenght = ReadInteger(i);
                                 i++;
 
-                                strSenha = DadosConvertidosChar.Substring(i, intTamanhoSenha);
-                                i += intTamanhoSenha;
+                                password = charConvertedData.Substring(i, passwordLenght);
+                                i += passwordLenght;
                                 break;
                             default:
                                 break;
                         }
                 }
 
-            bCabecalhoValidado = true;
+            validatedHeader = true;
         }
 
         public OperationCode ReadOperationCode(int position)
         {
             try
             {
-                return (OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(position, 1));
+                return (OperationCode)Convert.ToChar(charConvertedData.Substring(position, 1));
             }
             catch
             {
@@ -110,30 +99,29 @@ namespace LadderApp.CodigoInterpretavel
             }
         }
 
-        public AddressTypeEnum LeTipoEnderecamento(Int32 _pos)
+        public AddressTypeEnum GetAddressingType(int position)
         {
-            if (ExisteCodigoInterpretavel())
+            if (ExistsOpCode())
             {
                 try
                 {
-                    return (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(_pos, 1));
+                    return (AddressTypeEnum)Convert.ToChar(charConvertedData.Substring(position, 1));
                 }
                 catch
                 {
                     throw new Exception();
                 }
             }
-
             return AddressTypeEnum.None;
         }
 
-        public Int32 LeInteiro(Int32 _pos)
+        public int ReadInteger(Int32 position)
         {
-            if (ExisteCodigoInterpretavel())
+            if (ExistsOpCode())
             {
                 try
                 {
-                    return (Int32)Convert.ToChar(DadosConvertidosChar.Substring(_pos, 1));
+                    return (Int32)Convert.ToChar(charConvertedData.Substring(position, 1));
                 }
                 catch
                 {
@@ -154,9 +142,9 @@ namespace LadderApp.CodigoInterpretavel
                     break;
                 case OperationCode.NormallyOpenContact:
                 case OperationCode.NormallyClosedContact:
-                    AddressTypeEnum addressType = LeTipoEnderecamento(position);
+                    AddressTypeEnum addressType = GetAddressingType(position);
                     position++;
-                    Int32 addressIndex = LeInteiro(position);
+                    Int32 addressIndex = ReadInteger(position);
                     position++;
                     return addressing.Find(addressType, addressIndex); ;
                 case OperationCode.OutputCoil:

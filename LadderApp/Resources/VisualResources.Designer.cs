@@ -61,20 +61,13 @@ namespace LadderApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LadderMic.
+        ///   Looks up a localized string similar to MSP430 JTAG programmer Version: 2.3
+        ///Erase Main Flash...
+        ///Program....
         /// </summary>
-        internal static string STR_NOME_ARQUIVO_NOVO {
+        internal static string ReturnedTextFromMspJtagWriteBegin {
             get {
-                return ResourceManager.GetString("STR_NOME_ARQUIVO_NOVO", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tem certeza que deseja fechar o projeto %% ?.
-        /// </summary>
-        internal static string STR_QUESTIONA_SALVAR_PROJETO {
-            get {
-                return ResourceManager.GetString("STR_QUESTIONA_SALVAR_PROJETO", resourceCulture);
+                return ResourceManager.GetString("ReturnedTextFromMspJtagWriteBegin", resourceCulture);
             }
         }
         
@@ -84,20 +77,18 @@ namespace LadderApp.Resources {
         ///Reset and release device...
         ///.
         /// </summary>
-        internal static string STR_RETORNO_MSPJTAG_ESCREVER_FIM {
+        internal static string ReturnedTextFromMspJtagWriteEnd {
             get {
-                return ResourceManager.GetString("STR_RETORNO_MSPJTAG_ESCREVER_FIM", resourceCulture);
+                return ResourceManager.GetString("ReturnedTextFromMspJtagWriteEnd", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MSP430 JTAG programmer Version: 2.3
-        ///Erase Main Flash...
-        ///Program....
+        ///   Looks up a localized string similar to Tem certeza que deseja fechar o projeto %% ?.
         /// </summary>
-        internal static string STR_RETORNO_MSPJTAG_ESCREVER_INI {
+        internal static string SaveTheProjectQuestion {
             get {
-                return ResourceManager.GetString("STR_RETORNO_MSPJTAG_ESCREVER_INI", resourceCulture);
+                return ResourceManager.GetString("SaveTheProjectQuestion", resourceCulture);
             }
         }
     }

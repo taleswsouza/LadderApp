@@ -57,7 +57,7 @@ namespace LadderApp
             }
             else
             {
-                DialogResult result = MessageBox.Show(VisualResources.STR_QUESTIONA_SALVAR_PROJETO.Replace("%%", projectForm.Text.Trim()).Trim(), "LadderApp", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show(VisualResources.SaveTheProjectQuestion.Replace("%%", projectForm.Text.Trim()).Trim(), "LadderApp", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
                     projectForm.Close();
@@ -104,9 +104,9 @@ namespace LadderApp
                         try
                         {
                             MSP430IntegrationServices p = new MSP430IntegrationServices();
-                            String strLido = p.ConvertHex2String(fileName);
-                            if (VerifyPassword(strLido))
-                                ReadExecutable(strLido, fileName.Substring(fileName.LastIndexOf(@"\") + 1, fileName.Length - fileName.LastIndexOf(@"\") - 1));
+                            String readContent = p.ConvertHex2String(fileName);
+                            if (VerifyPassword(readContent))
+                                ReadExecutable(readContent, fileName.Substring(fileName.LastIndexOf(@"\") + 1, fileName.Length - fileName.LastIndexOf(@"\") - 1));
                         }
                         catch
                         {
@@ -575,22 +575,21 @@ namespace LadderApp
             if (DadosConvertidosChar.IndexOf("@laddermic.com") != -1)
             {
                 Int32 intContaFim = 0;
-                Int32 intIndiceLinha = 0;
+                Int32 lineIndex = 0;
                 Address _endLido;
                 AddressTypeEnum _tpEndLido;
                 Int32 _iIndiceEndLido = 0;
 
 
-                /// Cria um programa novo vazio
-                LadderProgram programa = new LadderProgram();
+                LadderProgram program = new LadderProgram();
                 //programa.Status = LadderProgram.ProgramStatus.New;
-                programa.Name = strNomeProjeto;
-                programa.device = new Device(1);
-                programa.addressing.AlocaEnderecamentoIO(programa.device);
-                programa.addressing.AlocaEnderecamentoMemoria(programa.device, programa.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
-                programa.addressing.AlocaEnderecamentoMemoria(programa.device, programa.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
-                programa.addressing.AlocaEnderecamentoMemoria(programa.device, programa.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
-                intIndiceLinha = programa.InsertLineAtEnd(new Line());
+                program.Name = strNomeProjeto;
+                program.device = new Device();
+                program.addressing.AlocateIOAddressing(program.device);
+                program.addressing.AlocateMemoryAddressing(program.device, program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
+                program.addressing.AlocateMemoryAddressing(program.device, program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
+                program.addressing.AlocateMemoryAddressing(program.device, program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
+                lineIndex = program.InsertLineAtEnd(new Line());
 
                 for (int i = DadosConvertidosChar.IndexOf("@laddermic.com") + 15; i < DadosConvertidosChar.Length; i++)
                 {
@@ -604,7 +603,7 @@ namespace LadderApp
                         case OperationCode.LineEnd:
                             intContaFim++;
                             if ((OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1)) != OperationCode.None)
-                                intIndiceLinha = programa.InsertLineAtEnd(new Line());
+                                lineIndex = program.InsertLineAtEnd(new Line());
                             break;
                         case OperationCode.NormallyOpenContact:
                         case OperationCode.NormallyClosedContact:
@@ -614,18 +613,18 @@ namespace LadderApp
 
                                 _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
+                                _endLido = program.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
                                 {
-                                    programa.device.pins[_iIndiceEndLido - 1].Type = _tpEndLido;
-                                    programa.device.RealocaEnderecoDispositivo();
-                                    programa.addressing.AlocaEnderecamentoIO(programa.device);
-                                    _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
+                                    program.device.Pins[_iIndiceEndLido - 1].Type = _tpEndLido;
+                                    program.device.RealocatePinAddresses();
+                                    program.addressing.AlocateIOAddressing(program.device);
+                                    _endLido = program.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 }
                                 instruction.SetOperand(0, _endLido);
 
                                 i += 2;
-                                programa.Lines[intIndiceLinha].instructions.Add(instruction);
+                                program.Lines[lineIndex].instructions.Add(instruction);
                             }
                             break;
                         case OperationCode.OutputCoil:
@@ -636,17 +635,17 @@ namespace LadderApp
                                 _lstSB.Add(new Instruction((OperationCode)guarda));
                                 _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
                                 _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
+                                _endLido = program.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 if (_endLido == null)
                                 {
-                                    programa.device.pins[_iIndiceEndLido - 1].Type = _tpEndLido;
-                                    programa.device.RealocaEnderecoDispositivo();
-                                    programa.addressing.AlocaEnderecamentoIO(programa.device);
-                                    _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
+                                    program.device.Pins[_iIndiceEndLido - 1].Type = _tpEndLido;
+                                    program.device.RealocatePinAddresses();
+                                    program.addressing.AlocateIOAddressing(program.device);
+                                    _endLido = program.addressing.Find(_tpEndLido, _iIndiceEndLido);
                                 }
                                 _lstSB[_lstSB.Count - 1].SetOperand(0, _endLido);
                                 i += 2;
-                                programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
+                                program.Lines[lineIndex].Insere2Saida(_lstSB);
                                 _lstSB.Clear();
                             }
                             break;
@@ -654,21 +653,21 @@ namespace LadderApp
                         case OperationCode.ParallelBranchEnd:
                         case OperationCode.ParallelBranchNext:
                             intContaFim = 0;
-                            programa.Lines[intIndiceLinha].instructions.Add(new Instruction((OperationCode)guarda));
+                            program.Lines[lineIndex].instructions.Add(new Instruction((OperationCode)guarda));
                             break;
                         case OperationCode.Counter:
                             intContaFim = 0;
                             {
                                 InstructionList _lstSB = new InstructionList();
                                 _lstSB.Add(new Instruction((OperationCode)guarda));
-                                _lstSB[_lstSB.Count - 1].SetOperand(0, programa.addressing.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
+                                _lstSB[_lstSB.Count - 1].SetOperand(0, program.addressing.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
+                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Type = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
 
-                                _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Tipo);
+                                _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Type);
                                 _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Preset);
                                 i += 3;
-                                programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
+                                program.Lines[lineIndex].Insere2Saida(_lstSB);
                                 _lstSB.Clear();
                             }
                             break;
@@ -677,17 +676,17 @@ namespace LadderApp
                             {
                                 InstructionList _lstSB = new InstructionList();
                                 _lstSB.Add(new Instruction((OperationCode)guarda));
-                                _lstSB[_lstSB.Count - 1].SetOperand(0, programa.addressing.Find(AddressTypeEnum.DigitalMemoryTimer, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.BaseTempo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
+                                _lstSB[_lstSB.Count - 1].SetOperand(0, program.addressing.Find(AddressTypeEnum.DigitalMemoryTimer, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
+                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Type = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
+                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.TimeBase = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
                                 ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 4, 1));
 
-                                _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Tipo);
+                                _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Type);
                                 _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Preset);
-                                _lstSB[_lstSB.Count - 1].SetOperand(4, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.BaseTempo);
+                                _lstSB[_lstSB.Count - 1].SetOperand(4, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.TimeBase);
 
                                 i += 4;
-                                programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
+                                program.Lines[lineIndex].Insere2Saida(_lstSB);
                                 _lstSB.Clear();
                             }
                             break;
@@ -704,7 +703,7 @@ namespace LadderApp
                         i = DadosConvertidosChar.Length;
                     }
                 }
-                projectForm = new ProjectForm(programa);
+                projectForm = new ProjectForm(program);
                 projectForm.MdiParent = this;
                 projectForm.Show();
                 projectForm.SetText();
@@ -908,49 +907,42 @@ namespace LadderApp
             }
         }
 
-        private bool VerifyPassword(String strLido)
+        private bool VerifyPassword(String content)
         {
-            Text2OpCodeServices txt2CI = null;
-
-            txt2CI = new Text2OpCodeServices(strLido);
-
-            if (txt2CI.ExisteCabecalho())
+            Text2OpCodeServices textToOpCode = new Text2OpCodeServices(content);
+            if (textToOpCode.ExistsHeader())
             {
-                txt2CI.ObtemInformacoesCabecalho();
-                if (txt2CI.bSolicitarSenha)
+                textToOpCode.GetHeaderInformation();
+                if (textToOpCode.askPassword)
                 {
-                    DialogResult _result;
-                    //String _strSenha = "";
-                    bool _bSenhaOK = false;
-                    PasswordForm _frmSenha = new PasswordForm();
-
-                    _frmSenha.Text = "Digite a senha (1/2):";
-                    _frmSenha.lblPassword.Text = "Senha:";
+                    bool passwordOK = false;
+                    PasswordForm passwordForm = new PasswordForm();
+                    passwordForm.Text = "Type the password (1/2):";
+                    passwordForm.lblPassword.Text = "Password:";
 
                     for (int i = 0; i < 2; i++)
                     {
-                        _result = _frmSenha.ShowDialog();
-
-                        if (_result == DialogResult.Cancel)
+                        DialogResult result = passwordForm.ShowDialog();
+                        if (result == DialogResult.Cancel)
                         {
                             MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return false;
                         }
                         else
                         {
-                            if (txt2CI.strSenha != _frmSenha.txtSenha.Text)
+                            if (textToOpCode.password != passwordForm.txtSenha.Text)
                             {
-                                _frmSenha.txtSenha.Text = "";
-                                _frmSenha.Text = "Digite a senha (1/2):";
+                                passwordForm.txtSenha.Text = "";
+                                passwordForm.Text = "Type the password (1/2):";
                             }
                             else
                             {
-                                _bSenhaOK = true;
+                                passwordOK = true;
                                 i = 5; //sai
                             }
                         }
                     }
-                    if (!_bSenhaOK)
+                    if (!passwordOK)
                     {
                         MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return false;

@@ -83,7 +83,7 @@ namespace LadderApp
             treeNode11});
             this.tvnProjectTree.Size = new System.Drawing.Size(202, 192);
             this.tvnProjectTree.TabIndex = 0;
-            this.tvnProjectTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.ArvoreProjeto_NodeMouseDoubleClick);
+            this.tvnProjectTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvnProjectTree_NodeMouseDoubleClick);
             // 
             // ProjetoLadder
             // 

@@ -26,21 +26,21 @@ namespace LadderApp
             String _txtPino = "";
             Color _cor = corTextoPadrao;
             InitializeComponent();
-            lblFabricante.Text = "Manufacturer: " + dl.Fabricante;
-            lblSerie.Text = "Series: " + dl.Serie;
-            lblModelo.Text = "Model: " + dl.Modelo;
-            lblQtdPortas.Text = "Number of ports: " + dl.QtdPortas.ToString();
-            lblQtdBitsPorta.Text = "Number of bits per port: " + dl.QtdBitsPorta.ToString();
+            lblFabricante.Text = "Manufacturer: " + dl.Manufacturer;
+            lblSerie.Text = "Series: " + dl.Series;
+            lblModelo.Text = "Model: " + dl.Model;
+            lblQtdPortas.Text = "Number of ports: " + dl.NumberOfPorts.ToString();
+            lblQtdBitsPorta.Text = "Number of bits per port: " + dl.NumberBitsByPort.ToString();
 
             int i = 1;
             int j = 0;
-            foreach(Pin pd in dl.pins)
+            foreach(Pin pd in dl.Pins)
             {
                 //_txtPino = "Pino " + i.ToString().PadLeft(2,'0');
-                _txtPino = "(P" + (((i - 1) / dl.QtdBitsPorta) + 1) + "." + ((i - 1) - ((Int16)((i - 1) / dl.QtdBitsPorta) * dl.QtdBitsPorta)) + ")";
+                _txtPino = "(P" + (((i - 1) / dl.NumberBitsByPort) + 1) + "." + ((i - 1) - ((Int16)((i - 1) / dl.NumberBitsByPort) * dl.NumberBitsByPort)) + ")";
                 switch (pd.PinType)
                 {
-                    case PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA:
+                    case PinTypeEnum.IODigitalInputOrOutput:
                         if (pd.Type == AddressTypeEnum.None)
                         {
                             _txtPino += "-Not Used";
@@ -57,10 +57,10 @@ namespace LadderApp
                             _cor = corPinoDefinida;
                         }
                         break;
-                    case PinTypeEnum.IO_DIGITAL_ENTRADA:
+                    case PinTypeEnum.IODigitalInput:
                         _txtPino += "-Input";
                         break;
-                    case PinTypeEnum.IO_DIGITAL_SAIDA:
+                    case PinTypeEnum.IODigitalOutput:
                         _txtPino += "-Output";
                         break;
                     default:
@@ -107,7 +107,7 @@ namespace LadderApp
 
                 switch ((PinTypeEnum)e.Tag)
                 {
-                    case PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA:
+                    case PinTypeEnum.IODigitalInputOrOutput:
                         rbEntradaOuSaida.Enabled = true;
                         rbEntrada.Enabled = true;
                         rbSaida.Enabled = true;
@@ -127,13 +127,13 @@ namespace LadderApp
                         }
 
                         break;
-                    case PinTypeEnum.IO_DIGITAL_ENTRADA:
+                    case PinTypeEnum.IODigitalInput:
                         rbEntradaOuSaida.Enabled = false;
                         rbEntrada.Checked = true;
                         rbSaida.Enabled = false;
                         rbOutro.Enabled = false;
                         break;
-                    case PinTypeEnum.IO_DIGITAL_SAIDA:
+                    case PinTypeEnum.IODigitalOutput:
                         rbEntradaOuSaida.Enabled = false;
                         rbEntrada.Enabled = false;
                         rbSaida.Checked = true;
@@ -162,7 +162,7 @@ namespace LadderApp
             {
                 switch ((PinTypeEnum)ArvorePinos.SelectedNode.Tag)
                 {
-                    case PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA:
+                    case PinTypeEnum.IODigitalInputOrOutput:
                         _cor = corPinoDefinida;
                         if (rbEntradaOuSaida.Checked == true)
                         {
@@ -182,13 +182,13 @@ namespace LadderApp
                         }
                         ///rbEntradaOuSaida.Checked = true;
                         break;
-                    case PinTypeEnum.IO_DIGITAL_ENTRADA:
+                    case PinTypeEnum.IODigitalInput:
                         _txtPino += "-Input";
                         _cor = corPinoDefinida;
                         lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DigitalInput;
                         //rbEntrada.Checked = true;
                         break;
-                    case PinTypeEnum.IO_DIGITAL_SAIDA:
+                    case PinTypeEnum.IODigitalOutput:
                         _txtPino += "-Output";
                         _cor = corPinoDefinida;
                         lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DigitalOutput;

@@ -10,7 +10,7 @@ namespace LadderApp.Exceções
         {
             get
             {
-                return "Porta TIUSB não encontrou o microcontrolador.";
+                return "TIUSB port do not found the microcontroller.";
             }
         }
     }

@@ -6,15 +6,9 @@ namespace LadderApp
 {
     public enum PinTypeEnum
     {
-        NENHUM = 0,
-        IO_DIGITAL_ENTRADA = 1,
-        IO_DIGITAL_SAIDA = 2,
-        IO_DIGITAL_ENTRADA_OU_SAIDA = 3,
-        IO_ANALOGICO_ENTRADA = 4,
-        IO_ANALOGICO_SAIDA = 5,
-        IO_ANALOGICO_ENTRADA_OU_SAIDA = 6,
-        IO_ANALOGICO_PT100 = 7,
-        COMUNICACAO_SERIAL = 8,
-        COMUNICACAO_USB = 9
+        None = 0,
+        IODigitalInput = 1,
+        IODigitalOutput = 2,
+        IODigitalInputOrOutput = 3
     }
 }

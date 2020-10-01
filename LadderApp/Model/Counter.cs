@@ -6,15 +6,12 @@ namespace LadderApp
 {
     public class Counter
     {
-        //====================================================================================
-        // Tipo definido para Contadores
-        //====================================================================================
-        public Int32 Tipo = 0; // 0 = Contador Crescente, 1 = Contador Decrescente,...
-        public Int32 Preset; // valor de preset
-        public Int32 Acumulado = 0; //Valor acumulado
-        public Boolean EN = false; // Habilitado
-        public Boolean Pulso = true; // Pulso (Auxiliar)
-        public Boolean DN = false; // Contagem realizada (done)
-        public Boolean Reset = false; // reset do contador
+        public int Type = 0; // 0 = Contador Crescente, 1 = Contador Decrescente,...
+        public int Preset; // valor de preset
+        public int Accumulated = 0; //Valor acumulado
+        public bool Enable = false; // Habilitado
+        public bool Pulse = true; // Pulso (Auxiliar)
+        public bool Done = false; // Contagem realizada (done)
+        public bool Reset = false; // reset do contador
     }
 }

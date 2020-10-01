@@ -398,15 +398,15 @@ namespace LadderApp
             switch (sender.OpCode)
             {
                 case OperationCode.Timer:
-                    changeTimerCounterParametersForm.Type = (Int32)((Address)sender.GetOperand(0)).Timer.Tipo;
+                    changeTimerCounterParametersForm.Type = (Int32)((Address)sender.GetOperand(0)).Timer.Type;
                     changeTimerCounterParametersForm.Preset = (Int32)((Address)sender.GetOperand(0)).Timer.Preset;
-                    changeTimerCounterParametersForm.Accumulated = (Int32)((Address)sender.GetOperand(0)).Timer.Acumulado;
-                    changeTimerCounterParametersForm.TimeBase = (Int32)((Address)sender.GetOperand(0)).Timer.BaseTempo;
+                    changeTimerCounterParametersForm.Accumulated = (Int32)((Address)sender.GetOperand(0)).Timer.Accumulated;
+                    changeTimerCounterParametersForm.TimeBase = (Int32)((Address)sender.GetOperand(0)).Timer.TimeBase;
                     break;
                 case OperationCode.Counter:
-                    changeTimerCounterParametersForm.Type = (Int32)((Address)sender.GetOperand(0)).Counter.Tipo;
+                    changeTimerCounterParametersForm.Type = (Int32)((Address)sender.GetOperand(0)).Counter.Type;
                     changeTimerCounterParametersForm.Preset = (Int32)((Address)sender.GetOperand(0)).Counter.Preset;
-                    changeTimerCounterParametersForm.Accumulated = (Int32)((Address)sender.GetOperand(0)).Counter.Acumulado;
+                    changeTimerCounterParametersForm.Accumulated = (Int32)((Address)sender.GetOperand(0)).Counter.Accumulated;
                     break;
                 default:
                     break;
@@ -425,25 +425,25 @@ namespace LadderApp
                         /// mantem os parametros do ci atualizados
                         sender.SetOperand(4, changeTimerCounterParametersForm.TimeBase);
 
-                        ((Address)sender.GetOperand(0)).Timer.Tipo = changeTimerCounterParametersForm.Type;
+                        ((Address)sender.GetOperand(0)).Timer.Type = changeTimerCounterParametersForm.Type;
                         ((Address)sender.GetOperand(0)).Timer.Preset = changeTimerCounterParametersForm.Preset;
-                        ((Address)sender.GetOperand(0)).Timer.Acumulado = changeTimerCounterParametersForm.Accumulated;
-                        ((Address)sender.GetOperand(0)).Timer.BaseTempo = changeTimerCounterParametersForm.TimeBase;
+                        ((Address)sender.GetOperand(0)).Timer.Accumulated = changeTimerCounterParametersForm.Accumulated;
+                        ((Address)sender.GetOperand(0)).Timer.TimeBase = changeTimerCounterParametersForm.TimeBase;
 
-                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Timer.Tipo);
+                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Timer.Type);
                         sender.SetOperand(2, ((Address)sender.GetOperand(0)).Timer.Preset);
-                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Timer.Acumulado);
-                        sender.SetOperand(4, ((Address)sender.GetOperand(0)).Timer.BaseTempo);
+                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Timer.Accumulated);
+                        sender.SetOperand(4, ((Address)sender.GetOperand(0)).Timer.TimeBase);
 
                         break;
                     case OperationCode.Counter:
-                        ((Address)sender.GetOperand(0)).Counter.Tipo = changeTimerCounterParametersForm.Type;
+                        ((Address)sender.GetOperand(0)).Counter.Type = changeTimerCounterParametersForm.Type;
                         ((Address)sender.GetOperand(0)).Counter.Preset = changeTimerCounterParametersForm.Preset;
-                        ((Address)sender.GetOperand(0)).Counter.Acumulado = changeTimerCounterParametersForm.Accumulated;
+                        ((Address)sender.GetOperand(0)).Counter.Accumulated = changeTimerCounterParametersForm.Accumulated;
 
-                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Counter.Tipo);
+                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Counter.Type);
                         sender.SetOperand(2, ((Address)sender.GetOperand(0)).Counter.Preset);
-                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Counter.Acumulado);
+                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Counter.Accumulated);
                         break;
                     default:
                         break;

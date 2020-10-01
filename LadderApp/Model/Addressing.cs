@@ -21,201 +21,192 @@ namespace LadderApp
         {
         }
 
-        /// <summary>
-        /// Procura o endereco de parametro nas listas do objeto
-        /// da classe EnderecamentoPrograma 
-        /// </summary>
-        /// <param name="_end">Endereco a ser buscado na lista de enderecos da classe</param>
-        /// <returns>Caso encontre o endereco em uma das listas retorna o
-        /// endereco das listas encontrado. caso contrario retorna null</returns>
-        public Address Find(Address _end)
+        public Address Find(Address address)
         {
-            return Find(_end.AddressType, _end.Id);
+            return Find(address.AddressType, address.Id);
         }
 
-        public Address Find(AddressTypeEnum tpEnderecamento, Int32 indice)
+        public Address Find(AddressTypeEnum addressType, Int32 index)
         {
-            List<Address> _lstGenerica;
-            switch (tpEnderecamento)
+            List<Address> addresses;
+            switch (addressType)
             {
                 case AddressTypeEnum.DigitalMemory:
-                    _lstGenerica = ListMemoryAddress;
+                    addresses = ListMemoryAddress;
                     break;
                 case AddressTypeEnum.DigitalMemoryCounter:
-                    _lstGenerica = ListCounterAddress;
+                    addresses = ListCounterAddress;
                     break;
                 case AddressTypeEnum.DigitalMemoryTimer:
-                    _lstGenerica = ListTimerAddress;
+                    addresses = ListTimerAddress;
                     break;
                 case AddressTypeEnum.DigitalInput:
-                    _lstGenerica = ListInputAddress;
+                    addresses = ListInputAddress;
                     break;
                 case AddressTypeEnum.DigitalOutput:
-                    _lstGenerica = ListOutputAddress;
+                    addresses = ListOutputAddress;
                     break;
                 default:
                     return null;
             }
 
-            foreach (Address _endCada in _lstGenerica)
+            foreach (Address address in addresses)
             {
-                if (_endCada.AddressType == tpEnderecamento &&
-                    _endCada.Id == indice)
+                if (address.AddressType == addressType &&
+                    address.Id == index)
                 {
-                    return _endCada;
+                    return address;
                 }
             }
-
             return null;
         }
 
 
-        public List<Address> ListaNomes(OperationCode _ci)
+        public List<Address> ListNames(OperationCode opCode)
         {
-            List<Address> _listaEnderecos = new List<Address>();
-            List<AddressTypeEnum> tiposListados = new List<AddressTypeEnum>();
-            List<Address> _lstGenerica;
+            List<Address> addresses = new List<Address>();
+            List<AddressTypeEnum> addressTypes = new List<AddressTypeEnum>();
+            List<Address> generalList;
 
-            switch (_ci)
+            switch (opCode)
             {
                 case OperationCode.NormallyOpenContact:
                 case OperationCode.NormallyClosedContact:
-                    tiposListados.Add(AddressTypeEnum.DigitalInput);
-                    tiposListados.Add(AddressTypeEnum.DigitalMemory);
-                    tiposListados.Add(AddressTypeEnum.DigitalMemoryCounter);
-                    tiposListados.Add(AddressTypeEnum.DigitalMemoryTimer);
+                    addressTypes.Add(AddressTypeEnum.DigitalInput);
+                    addressTypes.Add(AddressTypeEnum.DigitalMemory);
+                    addressTypes.Add(AddressTypeEnum.DigitalMemoryCounter);
+                    addressTypes.Add(AddressTypeEnum.DigitalMemoryTimer);
                     break;
                 case OperationCode.Timer:
-                    tiposListados.Add(AddressTypeEnum.DigitalMemoryTimer);
+                    addressTypes.Add(AddressTypeEnum.DigitalMemoryTimer);
                     break;
                 case OperationCode.Counter:
-                    tiposListados.Add(AddressTypeEnum.DigitalMemoryCounter);
+                    addressTypes.Add(AddressTypeEnum.DigitalMemoryCounter);
                     break;
                 case OperationCode.OutputCoil:
-                    tiposListados.Add(AddressTypeEnum.DigitalMemory);
-                    tiposListados.Add(AddressTypeEnum.DigitalOutput);
+                    addressTypes.Add(AddressTypeEnum.DigitalMemory);
+                    addressTypes.Add(AddressTypeEnum.DigitalOutput);
                     break;
             }
 
-            foreach (AddressTypeEnum _cadaTipo in tiposListados)
+            foreach (AddressTypeEnum addressType in addressTypes)
             {
-                switch (_cadaTipo)
+                switch (addressType)
                 {
                     case AddressTypeEnum.DigitalMemory:
-                        _lstGenerica = ListMemoryAddress;
+                        generalList = ListMemoryAddress;
                         break;
                     case AddressTypeEnum.DigitalMemoryCounter:
-                        _lstGenerica = ListCounterAddress;
+                        generalList = ListCounterAddress;
                         break;
                     case AddressTypeEnum.DigitalMemoryTimer:
-                        _lstGenerica = ListTimerAddress;
+                        generalList = ListTimerAddress;
                         break;
                     case AddressTypeEnum.DigitalInput:
-                        _lstGenerica = ListInputAddress;
+                        generalList = ListInputAddress;
                         break;
                     case AddressTypeEnum.DigitalOutput:
-                        _lstGenerica = ListOutputAddress;
+                        generalList = ListOutputAddress;
                         break;
                     default:
                         return null;
                 }
 
-                foreach (Address _endCada in _lstGenerica)
-                    _listaEnderecos.Add(_endCada);
+                foreach (Address address in generalList)
+                    addresses.Add(address);
             }
 
-            return _listaEnderecos;
+            return addresses;
         }
 
-        public void LimpaIndicacaoEmUso()
+        public void CleanUsedIndication()
         {
-            List<Address> _lstGenerica;
-            List<AddressTypeEnum> _lstTpEnd = new List<AddressTypeEnum>();
+            List<Address> generalList;
+            List<AddressTypeEnum> addressTypes = new List<AddressTypeEnum>();
 
-            _lstTpEnd.Add(AddressTypeEnum.DigitalMemory);
-            _lstTpEnd.Add(AddressTypeEnum.DigitalMemoryCounter);
-            _lstTpEnd.Add(AddressTypeEnum.DigitalMemoryTimer);
-            _lstTpEnd.Add(AddressTypeEnum.DigitalInput);
-            _lstTpEnd.Add(AddressTypeEnum.DigitalOutput);
+            addressTypes.Add(AddressTypeEnum.DigitalMemory);
+            addressTypes.Add(AddressTypeEnum.DigitalMemoryCounter);
+            addressTypes.Add(AddressTypeEnum.DigitalMemoryTimer);
+            addressTypes.Add(AddressTypeEnum.DigitalInput);
+            addressTypes.Add(AddressTypeEnum.DigitalOutput);
 
-            foreach (AddressTypeEnum _tp in _lstTpEnd)
+            foreach (AddressTypeEnum addressType in addressTypes)
             {
-
-                switch (_tp)
+                switch (addressType)
                 {
                     case AddressTypeEnum.DigitalMemory:
-                        _lstGenerica = ListMemoryAddress;
+                        generalList = ListMemoryAddress;
                         break;
                     case AddressTypeEnum.DigitalMemoryCounter:
-                        _lstGenerica = ListCounterAddress;
+                        generalList = ListCounterAddress;
                         break;
                     case AddressTypeEnum.DigitalMemoryTimer:
-                        _lstGenerica = ListTimerAddress;
+                        generalList = ListTimerAddress;
                         break;
                     case AddressTypeEnum.DigitalInput:
-                        _lstGenerica = ListInputAddress;
+                        generalList = ListInputAddress;
                         break;
                     case AddressTypeEnum.DigitalOutput:
-                        _lstGenerica = ListOutputAddress;
+                        generalList = ListOutputAddress;
                         break;
                     default:
                         return;
                 }
 
-                foreach (Address _endCada in _lstGenerica)
-                    _endCada.Used = false;
+                foreach (Address address in generalList)
+                    address.Used = false;
             }
         }
 
-        public List<Address> ListaEnderecamentosEmUso()
+        public List<Address> ListUsedAddressing()
         {
-            List<Address> _lstGenerica;
-            List<AddressTypeEnum> _lstTpEnd = new List<AddressTypeEnum>();
-            List<Address> _lstResult = new List<Address>();
+            List<Address> generalList;
+            List<AddressTypeEnum> addressTypeList = new List<AddressTypeEnum>();
+            List<Address> resultAddresses = new List<Address>();
 
-            _lstTpEnd.Add(AddressTypeEnum.DigitalMemory);
-            _lstTpEnd.Add(AddressTypeEnum.DigitalMemoryCounter);
-            _lstTpEnd.Add(AddressTypeEnum.DigitalMemoryTimer);
-            _lstTpEnd.Add(AddressTypeEnum.DigitalInput);
-            _lstTpEnd.Add(AddressTypeEnum.DigitalOutput);
+            addressTypeList.Add(AddressTypeEnum.DigitalMemory);
+            addressTypeList.Add(AddressTypeEnum.DigitalMemoryCounter);
+            addressTypeList.Add(AddressTypeEnum.DigitalMemoryTimer);
+            addressTypeList.Add(AddressTypeEnum.DigitalInput);
+            addressTypeList.Add(AddressTypeEnum.DigitalOutput);
 
-            foreach (AddressTypeEnum _tp in _lstTpEnd)
+            foreach (AddressTypeEnum _tp in addressTypeList)
             {
 
                 switch (_tp)
                 {
                     case AddressTypeEnum.DigitalMemory:
-                        _lstGenerica = ListMemoryAddress;
+                        generalList = ListMemoryAddress;
                         break;
                     case AddressTypeEnum.DigitalMemoryCounter:
-                        _lstGenerica = ListCounterAddress;
+                        generalList = ListCounterAddress;
                         break;
                     case AddressTypeEnum.DigitalMemoryTimer:
-                        _lstGenerica = ListTimerAddress;
+                        generalList = ListTimerAddress;
                         break;
                     case AddressTypeEnum.DigitalInput:
-                        _lstGenerica = ListInputAddress;
+                        generalList = ListInputAddress;
                         break;
                     case AddressTypeEnum.DigitalOutput:
-                        _lstGenerica = ListOutputAddress;
+                        generalList = ListOutputAddress;
                         break;
                     default:
-                        return _lstResult;
+                        return resultAddresses;
                 }
 
-                foreach (Address _endCada in _lstGenerica)
-                    if (_endCada.Used == true)
-                        _lstResult.Add(_endCada);
+                foreach (Address address in generalList)
+                    if (address.Used == true)
+                        resultAddresses.Add(address);
             }
 
-            return _lstResult;
+            return resultAddresses;
         }
 
-        public void AlocaEnderecamentoIO(Device device)
+        public void AlocateIOAddressing(Device device)
         {
             this.ListInputAddress.Clear();
             this.ListOutputAddress.Clear();
-            foreach (Address address in device.addressesToEachPinList)
+            foreach (Address address in device.PinAddresses)
             {
                 address.SetDevice(device);
                 switch (address.AddressType)
@@ -231,37 +222,27 @@ namespace LadderApp
 
         }
 
-        /// <summary>
-        /// Aloca e realoca na No objeto de enderecamento do programa atual
-        /// uma quantidade especificada do tipo de memoria solicitado
-        /// </summary>
-        /// <param name="e">Enderecamento do programa</param>
-        /// <param name="tp">tipo de memoria a ser realocada</param>
-        /// <param name="qtdEnd">Quantidade do tipo desejada</param>
-        public int AlocaEnderecamentoMemoria(Device dispositivo, List<Address> _lstE, AddressTypeEnum tp, int qtdEnd)
+        public int AlocateMemoryAddressing(Device device, List<Address> addresses, AddressTypeEnum addressType, int numberOfAddress)
         {
-            int _qtdAtual = 1;
-
-            _qtdAtual = _lstE.Count;
-            if ((_qtdAtual == 0) || (_qtdAtual < qtdEnd))
+            int currentNumberOfAddress = addresses.Count;
+            if ((currentNumberOfAddress == 0) || (currentNumberOfAddress < numberOfAddress))
             {
-                for (int i = _qtdAtual + 1; i <= qtdEnd; i++)
-                    _lstE.Add(new Address(tp, i, dispositivo));
+                for (int i = currentNumberOfAddress + 1; i <= numberOfAddress; i++)
+                    addresses.Add(new Address(addressType, i, device));
             }
-            else if (_qtdAtual > qtdEnd)
+            else if (currentNumberOfAddress > numberOfAddress)
             {
-                for (int i = (_qtdAtual - 1); i >= qtdEnd; i--)
+                for (int i = (currentNumberOfAddress - 1); i >= numberOfAddress; i--)
                 {
-                    if (!_lstE[i].Used)
+                    if (!addresses[i].Used)
                     {
-                        _lstE[i] = null;
-                        _lstE.RemoveAt(i);
+                        addresses[i] = null;
+                        addresses.RemoveAt(i);
                     }
                     else
                         break;
                 }
             }
-
             return 0;
         }
     }

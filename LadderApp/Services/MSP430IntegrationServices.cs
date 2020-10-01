@@ -23,11 +23,11 @@ namespace LadderApp
 
         private string GetCompiledFilenames()
         {
-            String txt = "";
+            String filenamesText = "";
             foreach (String filename in compiledFilenames)
-                txt += filename + " ";
+                filenamesText += filename + " ";
 
-            return txt.Trim();
+            return filenamesText.Trim();
         }
 
         public MSP430IntegrationServices()
@@ -259,7 +259,6 @@ namespace LadderApp
 
         private string ConvertTITxt2String(String filePath)
         {
-            /// número definido em avaliação do arquivo TITxt
             const int usefulStartingPosition = 9;
             if (File.Exists(filePath))
             {
@@ -299,19 +298,19 @@ namespace LadderApp
             return true;
         }
 
-        private bool ShowStandardStrings(String strNomeArquivo)
+        private bool ShowStandardStrings(String filename)
         {
             if (strStandardError != "")
             {
-                if (strStandardError.StartsWith(VisualResources.STR_RETORNO_MSPJTAG_ESCREVER_INI) && strStandardError.EndsWith(VisualResources.STR_RETORNO_MSPJTAG_ESCREVER_FIM))
+                if (strStandardError.StartsWith(VisualResources.ReturnedTextFromMspJtagWriteBegin) && strStandardError.EndsWith(VisualResources.ReturnedTextFromMspJtagWriteEnd))
                 {
-                    MessageBox.Show(strStandardError.Substring(VisualResources.STR_RETORNO_MSPJTAG_ESCREVER_INI.Length, strStandardError.IndexOf(VisualResources.STR_RETORNO_MSPJTAG_ESCREVER_FIM) - VisualResources.STR_RETORNO_MSPJTAG_ESCREVER_INI.Length) + " recorded bytes.", "Error message:" + strNomeArquivo);
+                    MessageBox.Show(strStandardError.Substring(VisualResources.ReturnedTextFromMspJtagWriteBegin.Length, strStandardError.IndexOf(VisualResources.ReturnedTextFromMspJtagWriteEnd) - VisualResources.ReturnedTextFromMspJtagWriteBegin.Length) + " recorded bytes.", "Error message:" + filename);
                     return true;
                 }
                 else
                 {
                     CreateFile("Erro.txt", strStandardError);
-                    MessageBox.Show(strStandardError, "Error message:" + strNomeArquivo);
+                    MessageBox.Show(strStandardError, "Error message:" + filename);
                     strStandardError = "";
                     return false;
                 }
@@ -319,7 +318,7 @@ namespace LadderApp
 
             if (strStandardOutput != "")
             {
-                MessageBox.Show(strStandardOutput, "Message: " + strNomeArquivo);
+                MessageBox.Show(strStandardOutput, "Message: " + filename);
                 strStandardOutput = "";
                 return false;
             }

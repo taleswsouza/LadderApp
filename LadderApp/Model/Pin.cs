@@ -15,38 +15,38 @@ namespace LadderApp
         {
         }
 
-        private PinTypeEnum pinType = PinTypeEnum.NENHUM;
+        private PinTypeEnum pinType = PinTypeEnum.None;
         public PinTypeEnum PinType
         {
             get { return pinType; }
             set
             {
-                if (value == PinTypeEnum.IO_DIGITAL_ENTRADA ||
-                   value == PinTypeEnum.IO_DIGITAL_SAIDA ||
-                   value == PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA)
+                if (value == PinTypeEnum.IODigitalInput ||
+                   value == PinTypeEnum.IODigitalOutput ||
+                   value == PinTypeEnum.IODigitalInputOrOutput)
                 {
                     switch (value)
                     {
-                        case PinTypeEnum.IO_DIGITAL_ENTRADA:
+                        case PinTypeEnum.IODigitalInput:
                             type = AddressTypeEnum.DigitalInput;
                             pinType = value;
                             break;
-                        case PinTypeEnum.IO_DIGITAL_SAIDA:
+                        case PinTypeEnum.IODigitalOutput:
                             type = AddressTypeEnum.DigitalOutput;
                             pinType = value;
                             break;
-                        case PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA:
+                        case PinTypeEnum.IODigitalInputOrOutput:
                             type = AddressTypeEnum.None;
                             pinType = value;
                             break;
                         default:
                             type = AddressTypeEnum.None;
-                            pinType = PinTypeEnum.NENHUM;
+                            pinType = PinTypeEnum.None;
                             break;
                     }
                 }
                 else
-                    pinType = PinTypeEnum.NENHUM;
+                    pinType = PinTypeEnum.None;
 
             }
         }
@@ -57,7 +57,7 @@ namespace LadderApp
             get { return type; }
             set
             {
-                if (pinType == PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA)
+                if (pinType == PinTypeEnum.IODigitalInputOrOutput)
                 {
                     switch (value)
                     {
@@ -70,9 +70,9 @@ namespace LadderApp
                             break;
                     }
                 }
-                else if (pinType == PinTypeEnum.IO_DIGITAL_ENTRADA)
+                else if (pinType == PinTypeEnum.IODigitalInput)
                     type = AddressTypeEnum.DigitalInput;
-                else if (pinType == PinTypeEnum.IO_DIGITAL_SAIDA)
+                else if (pinType == PinTypeEnum.IODigitalOutput)
                     type = AddressTypeEnum.DigitalOutput;
                 else
                     type = AddressTypeEnum.None;

@@ -565,7 +565,7 @@ namespace LadderApp
                 case OperationCode.Timer:
                     title = "T";
                     if (IsAllOperandsOk())
-                        switch ((Int32)((Address)GetOperand(0)).Timer.Tipo)
+                        switch ((Int32)((Address)GetOperand(0)).Timer.Type)
                         {
                             case 0:
                                 title = "TON";
@@ -586,7 +586,7 @@ namespace LadderApp
                 case OperationCode.Counter:
                     title = "C";
                     if (IsAllOperandsOk())
-                        switch ((Int32)((Address)GetOperand(0)).Counter.Tipo)
+                        switch ((Int32)((Address)GetOperand(0)).Counter.Type)
                         {
                             case 0:
                                 title = "CTU";
@@ -900,7 +900,7 @@ namespace LadderApp
                     return;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
-                        _intBaseTempo = (Int32)((Address)GetOperand(0)).Timer.BaseTempo;
+                        _intBaseTempo = (Int32)((Address)GetOperand(0)).Timer.TimeBase;
                     _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
@@ -956,12 +956,12 @@ namespace LadderApp
             {
                 case OperationCode.Counter:
                     if (IsAllOperandsOk())
-                        _intAcum = (Int32)((Address)GetOperand(0)).Counter.Acumulado;
+                        _intAcum = (Int32)((Address)GetOperand(0)).Counter.Accumulated;
                     _recTxtAcum = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
-                        _intAcum = (Int32)((Address)GetOperand(0)).Timer.Acumulado;
+                        _intAcum = (Int32)((Address)GetOperand(0)).Timer.Accumulated;
                     _recTxtAcum = new RectangleF((float)(0), (float)(4 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
