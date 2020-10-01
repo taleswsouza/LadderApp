@@ -35,7 +35,7 @@ namespace LadderApp
         {
         }
 
-        virtual public void DesenhaSimbolo()
+        virtual public void DrawInstruction()
         {
         }
 

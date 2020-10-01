@@ -30,7 +30,7 @@ namespace LadderApp.Formularios
         {
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
-            this.lblSenhaAtual = new System.Windows.Forms.Label();
+            this.lblPassword = new System.Windows.Forms.Label();
             this.txtSenha = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
@@ -56,12 +56,12 @@ namespace LadderApp.Formularios
             // 
             // lblSenhaAtual
             // 
-            this.lblSenhaAtual.Location = new System.Drawing.Point(22, 27);
-            this.lblSenhaAtual.Name = "lblSenhaAtual";
-            this.lblSenhaAtual.Size = new System.Drawing.Size(100, 17);
-            this.lblSenhaAtual.TabIndex = 2;
-            this.lblSenhaAtual.Text = "Password:";
-            this.lblSenhaAtual.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblPassword.Location = new System.Drawing.Point(22, 27);
+            this.lblPassword.Name = "lblSenhaAtual";
+            this.lblPassword.Size = new System.Drawing.Size(100, 17);
+            this.lblPassword.TabIndex = 2;
+            this.lblPassword.Text = "Password:";
+            this.lblPassword.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtSenha
             // 
@@ -80,7 +80,7 @@ namespace LadderApp.Formularios
             this.CancelButton = this.btnCancelar;
             this.ClientSize = new System.Drawing.Size(330, 120);
             this.Controls.Add(this.txtSenha);
-            this.Controls.Add(this.lblSenhaAtual);
+            this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnOK);
             this.Name = "frmSenha";
@@ -95,7 +95,7 @@ namespace LadderApp.Formularios
         #endregion
 
         private System.Windows.Forms.Button btnCancelar;
-        public System.Windows.Forms.Label lblSenhaAtual;
+        public System.Windows.Forms.Label lblPassword;
         public System.Windows.Forms.TextBox txtSenha;
         public System.Windows.Forms.Button btnOK;
     }

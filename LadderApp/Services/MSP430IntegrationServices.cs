@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.IO;
-using System.Threading;
 using LadderApp.Exceções;
 using LadderApp.Resources;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace LadderApp
 {
@@ -14,75 +13,72 @@ namespace LadderApp
     {
         private Process p = new Process();
         private ProcessStartInfo startInfo = new ProcessStartInfo();
-        private List<string> lstNomesArquivosCompilados = new List<string>();
-        private List<string> lstNomesArquivosCriados = new List<string>();
-        private bool bHabilitaDeletarArqIntermediarios = false;
+        private List<string> compiledFilenames = new List<string>();
+        private List<string> createdFilenames = new List<string>();
+        private bool EnabledDeletingIntermediateFiles = false;
         private String strMMCU = "";
 
         private String strStandardOutput = "";
         private String strStandardError = "";
 
-        private string RetornaArquivosCompilados()
+        private string GetCompiledFilenames()
         {
-            String strResult = "";
+            String txt = "";
+            foreach (String filename in compiledFilenames)
+                txt += filename + " ";
 
-            foreach (String _strFile in lstNomesArquivosCompilados)
-                strResult += _strFile + " ";
-
-            return strResult.Trim();
+            return txt.Trim();
         }
 
         public MSP430IntegrationServices()
         {
             p.StartInfo = startInfo;
             SetDefaults();
-            lstNomesArquivosCompilados.Clear();
-            lstNomesArquivosCriados.Clear();
+            compiledFilenames.Clear();
+            createdFilenames.Clear();
             strMMCU = "-mmcu=msp430x2013 ";
         }
 
-        public MSP430IntegrationServices(bool bDeletarArquivos)
+        public MSP430IntegrationServices(bool deleteIntermediateFiles)
         {
             p.StartInfo = startInfo;
             SetDefaults();
-            lstNomesArquivosCompilados.Clear();
-            lstNomesArquivosCriados.Clear();
-            bHabilitaDeletarArqIntermediarios = bDeletarArquivos;
+            compiledFilenames.Clear();
+            createdFilenames.Clear();
+            EnabledDeletingIntermediateFiles = deleteIntermediateFiles;
             strMMCU = "-mmcu=msp430x2013 ";
         }
 
-        public bool CriaArquivo(String strNomeArquivo, String strDadosArquivo)
+        public bool CreateFile(string filename, string dataContent)
         {
-            FileStream fileCGravado;
-
             try
             {
-                fileCGravado = new FileStream(Application.StartupPath + "\\" + strNomeArquivo, FileMode.Create);
-                fileCGravado.Write(Encoding.Default.GetBytes(strDadosArquivo), 0, Encoding.Default.GetByteCount(strDadosArquivo));
-                fileCGravado.Flush();
-                fileCGravado.Close();
+                FileStream fs = new FileStream(Application.StartupPath + "\\" + filename, FileMode.Create);
+                fs.Write(Encoding.Default.GetBytes(dataContent), 0, Encoding.Default.GetByteCount(dataContent));
+                fs.Flush();
+                fs.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "LadderApp" + strNomeArquivo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "LadderApp" + filename, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
-            lstNomesArquivosCriados.Add(strNomeArquivo);
+            createdFilenames.Add(filename);
             return true;
         }
 
-        private bool DeletaTodosArquivosIntermediarios()
+        private bool DeleteAllIntermediateFiles()
         {
             try
             {
-                foreach (String _strFile in lstNomesArquivosCriados)
-                    File.Delete(Application.StartupPath + @"\" + _strFile);
-                lstNomesArquivosCriados.Clear();
+                foreach (String filename in createdFilenames)
+                    File.Delete(Application.StartupPath + @"\" + filename);
+                createdFilenames.Clear();
 
-                foreach (String _strFile in lstNomesArquivosCompilados)
-                    File.Delete(Application.StartupPath + @"\" + _strFile);
-                lstNomesArquivosCompilados.Clear();
+                foreach (String filename in compiledFilenames)
+                    File.Delete(Application.StartupPath + @"\" + filename);
+                compiledFilenames.Clear();
             }
             catch (Exception ex)
             {
@@ -95,36 +91,35 @@ namespace LadderApp
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="strNomeArquivo"></param>
+        /// <param name="fileNameWithoutExtension"></param>
         /// <returns></returns>
         /// <remarks>Eclipse: Menu Project/Properties/"C/C++ Settings"/Tool Settings/mspgcc GCC C Compiler/Command:
         /// msp430-gcc
         /// ./All Options: -I"C:\mspgcc\msp430\include" -Os -Wall -c -fmessage-length=0 -mmcu=msp430x2013</remarks>
-        public bool CompilaMSP430gcc(String strNomeArquivo)
+        public bool CompilesMsp430ViaGcc(String fileNameWithoutExtension)
         {
             startInfo.FileName = "msp430-gcc.exe";
-            startInfo.Arguments = @"-IC:\mspgcc\msp430\include -Os -Wall -c -fmessage-length=0 " + strMMCU + "-o" + strNomeArquivo + @".o .\" + strNomeArquivo + @".c";
+            startInfo.Arguments = @"-IC:\mspgcc\msp430\include -Os -Wall -c -fmessage-length=0 " + strMMCU + "-o" + fileNameWithoutExtension + @".o .\" + fileNameWithoutExtension + @".c";
             p.Start();
-            RecuperaStandardStrings();
+            ReadStandardStrings();
             p.WaitForExit();
 
-            if (!ShowStandardStrings(strNomeArquivo))
+            if (!ShowStandardStrings(fileNameWithoutExtension))
                 return false;
 
-            lstNomesArquivosCompilados.Add(strNomeArquivo + ".o");
+            compiledFilenames.Add(fileNameWithoutExtension + ".o");
 
             try
             {
-                if (bHabilitaDeletarArqIntermediarios)
-                    File.Delete(Application.StartupPath + @"\" + strNomeArquivo + ".c");
+                if (EnabledDeletingIntermediateFiles)
+                    File.Delete(Application.StartupPath + @"\" + fileNameWithoutExtension + ".c");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "LadderApp" + strNomeArquivo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "LadderApp" + fileNameWithoutExtension, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            lstNomesArquivosCriados.Remove(strNomeArquivo + ".c");
-
+            createdFilenames.Remove(fileNameWithoutExtension + ".c");
             return true;
         }
 
@@ -135,27 +130,27 @@ namespace LadderApp
         /// <returns></returns>
         /// <remarks>Eclipse: Menu Project/Properties/"C/C++ Settings"/Build Steps/Post-build steps/Command:
         /// msp430-objcopy -O ihex  ${ProjName}.elf ${ProjName}.a43;msp430-size  ${ProjName}.elf</remarks>
-        public bool CompilaELF(String fileName)
+        public bool CompileELF(String fileName)
         {
             try
             {
                 startInfo.FileName = "msp430-gcc.exe";
-                startInfo.Arguments = @"-Os " + strMMCU + "-o" + fileName.Replace(' ', '_') + ".elf " + this.RetornaArquivosCompilados();
+                startInfo.Arguments = @"-Os " + strMMCU + "-o" + fileName.Replace(' ', '_') + ".elf " + this.GetCompiledFilenames();
                 p.Start();
-                RecuperaStandardStrings();
+                ReadStandardStrings();
                 p.WaitForExit();
             }
             catch
             {
             }
 
-            if (bHabilitaDeletarArqIntermediarios)
-                this.DeletaTodosArquivosIntermediarios();
+            if (EnabledDeletingIntermediateFiles)
+                this.DeleteAllIntermediateFiles();
 
             return ShowStandardStrings(startInfo.FileName + fileName);
         }
 
-        public bool CompilaA43(String fileName)
+        public bool CompileA43(String fileName)
         {
             try
             {
@@ -163,51 +158,51 @@ namespace LadderApp
                 startInfo.FileName = "msp430-objcopy";
                 startInfo.Arguments = @"-O ihex " + fileName.Replace(' ', '_') + ".elf " + fileName.Replace(' ', '_') + ".a43";
                 p.Start();
-                RecuperaStandardStrings();
+                ReadStandardStrings();
                 p.WaitForExit();
             }
             catch
             {
             }
 
-                if (ShowStandardStrings(startInfo.FileName + fileName))
+            if (ShowStandardStrings(startInfo.FileName + fileName))
+            {
+                try
                 {
-                    try
-                    {
-                        if (bHabilitaDeletarArqIntermediarios)
-                            File.Delete(Application.StartupPath + @"\" + fileName.Replace(' ', '_') + ".elf");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "LadderApp" + fileName.Replace(' ', '_') + ".elf", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
-                    try
-                    {
-                        startInfo.FileName = "msp430-strip";
-                        startInfo.Arguments = @"-s " + fileName.Replace(' ', '_') + ".a43";
-                        p.Start();
-                        RecuperaStandardStrings();
-                        p.WaitForExit();
-                    }
-                    catch
-                    {
-                    }
+                    if (EnabledDeletingIntermediateFiles)
+                        File.Delete(Application.StartupPath + @"\" + fileName.Replace(' ', '_') + ".elf");
                 }
-                else
-                    return false;
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "LadderApp" + fileName.Replace(' ', '_') + ".elf", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                try
+                {
+                    startInfo.FileName = "msp430-strip";
+                    startInfo.Arguments = @"-s " + fileName.Replace(' ', '_') + ".a43";
+                    p.Start();
+                    ReadStandardStrings();
+                    p.WaitForExit();
+                }
+                catch
+                {
+                }
+            }
+            else
+                return false;
 
             return ShowStandardStrings(startInfo.FileName + fileName);
         }
 
-        public bool GravaViaUSB(String fileName)
+        public bool DownloadViaUSB(String fileName)
         {
             try
             {
                 startInfo.FileName = "msp430-jtag";
                 startInfo.Arguments = @"--spy-bi-wire --backend=ti --lpt=TIUSB -m -p -v " + fileName + ".a43";
                 p.Start();
-                RecuperaStandardStrings();
+                ReadStandardStrings();
                 p.WaitForExit();
             }
             catch
@@ -218,14 +213,14 @@ namespace LadderApp
         }
 
 
-        public String LeViaUSB()
+        public string ReadsViaUSB()
         {
             try
             {
                 startInfo.FileName = "msp430-jtag";
                 startInfo.Arguments = @"--spy-bi-wire --backend=ti --lpt=TIUSB -u 0xf800-0xffff -i";
                 p.Start();
-                RecuperaStandardStrings();
+                ReadStandardStrings();
                 p.WaitForExit();
             }
             catch
@@ -234,7 +229,7 @@ namespace LadderApp
             }
 
             if (strStandardOutput != "")
-                this.CriaArquivo("dump.a43", strStandardOutput);
+                this.CreateFile("dump.a43", strStandardOutput);
             else
             {
                 if (strStandardError.Contains("Could not initialize the library (port: TIUSB)"))
@@ -242,8 +237,6 @@ namespace LadderApp
                 else
                     throw new NotSupportedException();
             }
-            
-
             return ConvertHex2String(Application.StartupPath + @"\dump.a43");
         }
 
@@ -256,7 +249,7 @@ namespace LadderApp
                 startInfo.FileName = "ihex2titext";
                 startInfo.Arguments = filePath + @" -o " + filePath + ".txt";
                 p.Start();
-                RecuperaStandardStrings();
+                ReadStandardStrings();
                 p.WaitForExit();
             }
 
@@ -266,27 +259,20 @@ namespace LadderApp
 
         private string ConvertTITxt2String(String filePath)
         {
-            string DadosArquivo = "", DadosConvertidosChar = "";
             /// número definido em avaliação do arquivo TITxt
-            Int32 _posInicialUtil = 9;
-
+            const int usefulStartingPosition = 9;
             if (File.Exists(filePath))
             {
-                DadosArquivo = File.ReadAllText(filePath);
+                string fileContent = File.ReadAllText(filePath);
                 File.Delete(filePath);
-                for (int i = _posInicialUtil; i < DadosArquivo.Length; i = i + 3)
+                string charConvertedData = "";
+                for (int i = usefulStartingPosition; i < fileContent.Length; i = i + 3)
                 {
-                    try
-                    {
-                        DadosConvertidosChar += (char)Int32.Parse(DadosArquivo.Substring(i, 2), System.Globalization.NumberStyles.HexNumber);
-                    }
-                    catch
-                    {
-                    }
+                    charConvertedData += (char)int.Parse(fileContent.Substring(i, 2), System.Globalization.NumberStyles.HexNumber);
                 }
+                return charConvertedData;
             }
-
-            return DadosConvertidosChar;
+            return null;
         }
 
         public string ConvertHex2String(String filePath)
@@ -306,11 +292,10 @@ namespace LadderApp
             startInfo.RedirectStandardInput = true;
         }
 
-        private bool RecuperaStandardStrings()
+        private bool ReadStandardStrings()
         {
             strStandardOutput = p.StandardOutput.ReadToEnd();
             strStandardError = p.StandardError.ReadToEnd();
-
             return true;
         }
 
@@ -325,7 +310,7 @@ namespace LadderApp
                 }
                 else
                 {
-                    CriaArquivo("Erro.txt", strStandardError);
+                    CreateFile("Erro.txt", strStandardError);
                     MessageBox.Show(strStandardError, "Error message:" + strNomeArquivo);
                     strStandardError = "";
                     return false;

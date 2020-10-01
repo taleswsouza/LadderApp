@@ -52,14 +52,14 @@ namespace LadderApp
 
         public void ApagaLinhasSimbolos()
         {
-            foreach (VisualLine lcl in visualProgram.linhas)
+            foreach (VisualLine lcl in visualProgram.Lines)
             {
             }
         }
 
         public void LineBeginVisualInstruction_DeleteLine(VisualLine sender)
         {
-            int _indiceLinhaDeletar = this.visualProgram.linhas.IndexOf(sender);
+            int _indiceLinhaDeletar = this.visualProgram.Lines.IndexOf(sender);
             int _indiceLinha = _indiceLinhaDeletar;
 
             if (_indiceLinha >= 0)
@@ -75,13 +75,13 @@ namespace LadderApp
                 if (_indiceLinha == 0)
                     _indiceLinha = 1;
 
-                if (this.visualProgram.linhas.Count > 0)
-                    this.visualProgram.linhas[_indiceLinha - 1].LineBegin.Select();
+                if (this.visualProgram.Lines.Count > 0)
+                    this.visualProgram.Lines[_indiceLinha - 1].LineBegin.Select();
 
                 this.ReorganizeLines();
 
-                if (this.visualProgram.linhas.Count > 0)
-                    this.visualProgram.linhas[_indiceLinha - 1].LineBegin.Refresh();
+                if (this.visualProgram.Lines.Count > 0)
+                    this.visualProgram.Lines[_indiceLinha - 1].LineBegin.Refresh();
 
                 this.ResumeLayout();
             }
@@ -102,7 +102,7 @@ namespace LadderApp
 
             if (visualProgram != null)
             {
-                if (visualProgram.linhas.Count > 0)
+                if (visualProgram.Lines.Count > 0)
                 {
                     if (numberOfTimes == 0)
                     {
@@ -120,33 +120,33 @@ namespace LadderApp
                     {
                         SetMessage(ex.Message);
                     }
-                    VisualLine _LinhaAnterior = visualProgram.linhas[visualProgram.linhas.Count - 1];
+                    VisualLine previsousVisualLine = visualProgram.Lines[visualProgram.Lines.Count - 1];
 
                     if (numberOfTimes == 0)
-                        visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.PositionXY = new Point(auxX, 0);
+                        visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.PositionXY = new Point(auxX, 0);
 
-                    foreach (VisualLine _linhasDL in visualProgram.linhas)
+                    foreach (VisualLine visualLine in visualProgram.Lines)
                     {
-                        if (_LinhaAnterior != null)
-                            _LinhaAnterior.NextLine = _linhasDL;
-                        _linhasDL.PreviousLine = _LinhaAnterior;
-                        _linhasDL.tabStop = iTabStop;
-                        _linhasDL.YPosition = auxY;
-                        _linhasDL.NumLinha = iLinha;
-                        _linhasDL.LineBegin.Invalidate();
-                        _linhasDL.AdjustPositioning();
-                        auxY += _linhasDL.BackgroundLine.tamanhoXY.Height;
-                        iTabStop = _linhasDL.tabStop;
+                        if (previsousVisualLine != null)
+                            previsousVisualLine.NextLine = visualLine;
+                        visualLine.PreviousLine = previsousVisualLine;
+                        visualLine.tabStop = iTabStop;
+                        visualLine.YPosition = auxY;
+                        visualLine.NumLinha = iLinha;
+                        visualLine.LineBegin.Invalidate();
+                        visualLine.AdjustPositioning();
+                        auxY += visualLine.BackgroundLine.tamanhoXY.Height;
+                        iTabStop = visualLine.tabStop;
                         iLinha++;
-                        _LinhaAnterior = _linhasDL;
+                        previsousVisualLine = visualLine;
 
-                        _linhasDL.BackgroundLine.Invalidate();
+                        visualLine.BackgroundLine.Invalidate();
 
-                        if (auxX < _linhasDL.LineEnd.PositionXY.X)
-                            auxX = _linhasDL.LineEnd.PositionXY.X;
+                        if (auxX < visualLine.LineEnd.PositionXY.X)
+                            auxX = visualLine.LineEnd.PositionXY.X;
 
                     }
-                    _LinhaAnterior.NextLine = visualProgram.linhas[0];
+                    previsousVisualLine.NextLine = visualProgram.Lines[0];
 
                     if (tempVertical > 0 || tempHorizontal > 0)
                     {
@@ -156,17 +156,17 @@ namespace LadderApp
                     this.AutoScroll = true;
                 }
 
-                if (numberOfTimes == 0 && visualProgram.linhas.Count > 0)
+                if (numberOfTimes == 0 && visualProgram.Lines.Count > 0)
                 {
-                    visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.PositionXY = new Point(auxX, visualProgram.linhas[0].LineEnd.PositionXY.Y);
+                    visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.PositionXY = new Point(auxX, visualProgram.Lines[0].LineEnd.PositionXY.Y);
                     ReorganizeLines(1);
                 }
 
                 if (numberOfTimes == 1)
                 {
-                    if (visualProgram.linhas.Count > 0)
+                    if (visualProgram.Lines.Count > 0)
                     {
-                        this.VerticalScroll.Maximum = visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.PositionXY.Y + visualProgram.linhas[visualProgram.linhas.Count - 1].LineEnd.tamanhoXY.Height;
+                        this.VerticalScroll.Maximum = visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.PositionXY.Y + visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.tamanhoXY.Height;
                         this.HorizontalScroll.Maximum = auxX;
                     }
                     else
@@ -201,11 +201,11 @@ namespace LadderApp
 
             this.SuspendLayout();
 
-            lineIndex = visualProgram.InsereLinhaNoIndice(lineIndex);
+            lineIndex = visualProgram.InsertLineAt(lineIndex);
             this.ReorganizeLines();
 
-            visualProgram.linhas[lineIndex].LineBegin.Select();
-            visualProgram.linhas[lineIndex].LineBegin.Refresh();
+            visualProgram.Lines[lineIndex].LineBegin.Select();
+            visualProgram.Lines[lineIndex].LineBegin.Refresh();
 
 
             this.ResumeLayout();
@@ -382,7 +382,7 @@ namespace LadderApp
         private void mnuToggleBit_Click(object sender, EventArgs e)
         {
             ((Address)VisualInstruction.GetOperand(0)).Value = ((Address)VisualInstruction.GetOperand(0)).Value == true ? false : true;
-            projectForm.program.SimulateLadder();
+            projectForm.Program.SimulateLadder();
             this.Invalidate(true);
         }
 
@@ -456,9 +456,9 @@ namespace LadderApp
 
         private void mnuToggleBitPulse_Click(object sender, EventArgs e)
         {
-            projectForm.program.auxToggleBitPulse = ((Address)VisualInstruction.GetOperand(0));
-            projectForm.program.auxToggleBitPulse.Value = projectForm.program.auxToggleBitPulse.Value == true ? false : true;
-            projectForm.program.SimulateLadder();
+            projectForm.Program.auxToggleBitPulse = ((Address)VisualInstruction.GetOperand(0));
+            projectForm.Program.auxToggleBitPulse.Value = projectForm.Program.auxToggleBitPulse.Value == true ? false : true;
+            projectForm.Program.SimulateLadder();
             this.Invalidate(true);
         }
 

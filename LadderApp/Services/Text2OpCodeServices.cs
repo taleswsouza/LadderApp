@@ -212,147 +212,146 @@ namespace LadderApp.CodigoInterpretavel
         //    return iNumOperandos;
         //}
 
-        private LadderProgram LerExecutavel(String strNomeProjeto)
-        {
-            List<int> lstCodigosLidos = new List<int>();
-            OperationCode guarda = OperationCode.None;
+        //private LadderProgram LerExecutavel(String strNomeProjeto)
+        //{
+        //    List<int> lstCodigosLidos = new List<int>();
+        //    OperationCode guarda = OperationCode.None;
 
-            if (this.ExisteCodigoInterpretavel())
-            {
-                Int32 intContaFim = 0;
-                Int32 intIndiceLinha = 0;
-                Address _endLido;
-                AddressTypeEnum _tpEndLido;
-                Int32 _iIndiceEndLido = 0;
+        //    if (this.ExisteCodigoInterpretavel())
+        //    {
+        //        Int32 intContaFim = 0;
+        //        Int32 intIndiceLinha = 0;
+        //        Address _endLido;
+        //        AddressTypeEnum _tpEndLido;
+        //        Int32 _iIndiceEndLido = 0;
 
 
-                /// Cria um programa novo vazio
-                LadderProgram programa = new LadderProgram();
-                programa.Status = LadderProgram.ProgramStatus.New;
-                programa.Nome = strNomeProjeto;
-                programa.device = new Device(1);
-                programa.addressing.AlocaEnderecamentoIO(programa.device);
-                programa.addressing.AlocaEnderecamentoMemoria(programa.device, programa.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
-                programa.addressing.AlocaEnderecamentoMemoria(programa.device, programa.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
-                programa.addressing.AlocaEnderecamentoMemoria(programa.device, programa.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
-                intIndiceLinha = programa.InsereLinhaNoFinal(new Line());
+        //        /// Cria um programa novo vazio
+        //        LadderProgram programa = new LadderProgram();
+        //        programa.Name = strNomeProjeto;
+        //        programa.device = new Device(1);
+        //        programa.addressing.AlocaEnderecamentoIO(programa.device);
+        //        programa.addressing.AlocaEnderecamentoMemoria(programa.device, programa.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
+        //        programa.addressing.AlocaEnderecamentoMemoria(programa.device, programa.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
+        //        programa.addressing.AlocaEnderecamentoMemoria(programa.device, programa.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
+        //        intIndiceLinha = programa.InsertLineAtEnd(new Line());
 
-                for (int i = this.PosInicial; i < DadosConvertidosChar.Length; i++)
-                {
-                    guarda = ReadOperationCode(i); i++;
+        //        for (int i = this.PosInicial; i < DadosConvertidosChar.Length; i++)
+        //        {
+        //            guarda = ReadOperationCode(i); i++;
 
-                    switch (guarda)
-                    {
-                        case OperationCode.None:
-                            intContaFim++;
-                            break;
-                        case OperationCode.LineEnd:
-                            intContaFim++;
-                            if (ReadOperationCode(i + 1) != OperationCode.None)
-                                intIndiceLinha = programa.InsereLinhaNoFinal(new Line());
-                            break;
-                        case OperationCode.NormallyOpenContact:
-                        case OperationCode.NormallyClosedContact:
-                            intContaFim = 0;
-                            {
-                                Instruction instruction = new Instruction((OperationCode)guarda);
-                                _tpEndLido = LeTipoEnderecamento(i); i++;
-                                _iIndiceEndLido = LeInteiro(i); i++;
-                                _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
-                                if (_endLido == null)
-                                {
-                                    programa.device.pins[_iIndiceEndLido - 1].Type = _tpEndLido;
-                                    programa.device.RealocaEnderecoDispositivo();
-                                    programa.addressing.AlocaEnderecamentoIO(programa.device);
-                                    _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
-                                }
-                                instruction.SetOperand(0, _endLido);
+        //            switch (guarda)
+        //            {
+        //                case OperationCode.None:
+        //                    intContaFim++;
+        //                    break;
+        //                case OperationCode.LineEnd:
+        //                    intContaFim++;
+        //                    if (ReadOperationCode(i + 1) != OperationCode.None)
+        //                        intIndiceLinha = programa.InsertLineAtEnd(new Line());
+        //                    break;
+        //                case OperationCode.NormallyOpenContact:
+        //                case OperationCode.NormallyClosedContact:
+        //                    intContaFim = 0;
+        //                    {
+        //                        Instruction instruction = new Instruction((OperationCode)guarda);
+        //                        _tpEndLido = LeTipoEnderecamento(i); i++;
+        //                        _iIndiceEndLido = LeInteiro(i); i++;
+        //                        _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
+        //                        if (_endLido == null)
+        //                        {
+        //                            programa.device.pins[_iIndiceEndLido - 1].Type = _tpEndLido;
+        //                            programa.device.RealocaEnderecoDispositivo();
+        //                            programa.addressing.AlocaEnderecamentoIO(programa.device);
+        //                            _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
+        //                        }
+        //                        instruction.SetOperand(0, _endLido);
 
-                                //i += 2;
-                                programa.Lines[intIndiceLinha].instructions.Add(instruction);
-                            }
-                            break;
-                        case OperationCode.OutputCoil:
-                        case OperationCode.Reset:
-                            intContaFim = 0;
-                            {
-                                InstructionList _lstSB = new InstructionList();
-                                _lstSB.Add(new Instruction((OperationCode)guarda));
-                                _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
-                                _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
-                                if (_endLido == null)
-                                {
-                                    programa.device.pins[_iIndiceEndLido - 1].Type = _tpEndLido;
-                                    programa.device.RealocaEnderecoDispositivo();
-                                    programa.addressing.AlocaEnderecamentoIO(programa.device);
-                                    _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
-                                }
-                                _lstSB[_lstSB.Count - 1].SetOperand(0, _endLido);
-                                i += 2;
-                                programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
-                                _lstSB.Clear();
-                            }
-                            break;
-                        case OperationCode.ParallelBranchBegin:
-                        case OperationCode.ParallelBranchEnd:
-                        case OperationCode.ParallelBranchNext:
-                            intContaFim = 0;
-                            programa.Lines[intIndiceLinha].instructions.Add(new Instruction((OperationCode)guarda));
-                            break;
-                        case OperationCode.Counter:
-                            intContaFim = 0;
-                            {
-                                InstructionList _lstSB = new InstructionList();
-                                _lstSB.Add(new Instruction((OperationCode)guarda));
-                                _lstSB[_lstSB.Count - 1].SetOperand(0, programa.addressing.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
+        //                        //i += 2;
+        //                        programa.Lines[intIndiceLinha].instructions.Add(instruction);
+        //                    }
+        //                    break;
+        //                case OperationCode.OutputCoil:
+        //                case OperationCode.Reset:
+        //                    intContaFim = 0;
+        //                    {
+        //                        InstructionList _lstSB = new InstructionList();
+        //                        _lstSB.Add(new Instruction((OperationCode)guarda));
+        //                        _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
+        //                        _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
+        //                        _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
+        //                        if (_endLido == null)
+        //                        {
+        //                            programa.device.pins[_iIndiceEndLido - 1].Type = _tpEndLido;
+        //                            programa.device.RealocaEnderecoDispositivo();
+        //                            programa.addressing.AlocaEnderecamentoIO(programa.device);
+        //                            _endLido = programa.addressing.Find(_tpEndLido, _iIndiceEndLido);
+        //                        }
+        //                        _lstSB[_lstSB.Count - 1].SetOperand(0, _endLido);
+        //                        i += 2;
+        //                        programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
+        //                        _lstSB.Clear();
+        //                    }
+        //                    break;
+        //                case OperationCode.ParallelBranchBegin:
+        //                case OperationCode.ParallelBranchEnd:
+        //                case OperationCode.ParallelBranchNext:
+        //                    intContaFim = 0;
+        //                    programa.Lines[intIndiceLinha].instructions.Add(new Instruction((OperationCode)guarda));
+        //                    break;
+        //                case OperationCode.Counter:
+        //                    intContaFim = 0;
+        //                    {
+        //                        InstructionList _lstSB = new InstructionList();
+        //                        _lstSB.Add(new Instruction((OperationCode)guarda));
+        //                        _lstSB[_lstSB.Count - 1].SetOperand(0, programa.addressing.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
+        //                        ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
+        //                        ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
 
-                                _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Tipo);
-                                _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Preset);
-                                i += 3;
-                                programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
-                                _lstSB.Clear();
-                            }
-                            break;
-                        case OperationCode.Timer:
-                            intContaFim = 0;
-                            {
-                                InstructionList _lstSB = new InstructionList();
-                                _lstSB.Add(new Instruction((OperationCode)guarda));
-                                _lstSB[_lstSB.Count - 1].SetOperand(0, programa.addressing.Find(AddressTypeEnum.DigitalMemoryTimer, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.BaseTempo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 4, 1));
+        //                        _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Tipo);
+        //                        _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Preset);
+        //                        i += 3;
+        //                        programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
+        //                        _lstSB.Clear();
+        //                    }
+        //                    break;
+        //                case OperationCode.Timer:
+        //                    intContaFim = 0;
+        //                    {
+        //                        InstructionList _lstSB = new InstructionList();
+        //                        _lstSB.Add(new Instruction((OperationCode)guarda));
+        //                        _lstSB[_lstSB.Count - 1].SetOperand(0, programa.addressing.Find(AddressTypeEnum.DigitalMemoryTimer, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
+        //                        ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Tipo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
+        //                        ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.BaseTempo = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
+        //                        ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 4, 1));
 
-                                _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Tipo);
-                                _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Preset);
-                                _lstSB[_lstSB.Count - 1].SetOperand(4, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.BaseTempo);
+        //                        _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Tipo);
+        //                        _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Preset);
+        //                        _lstSB[_lstSB.Count - 1].SetOperand(4, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.BaseTempo);
 
-                                i += 4;
-                                programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
-                                _lstSB.Clear();
-                            }
-                            break;
-                    }
+        //                        i += 4;
+        //                        programa.Lines[intIndiceLinha].Insere2Saida(_lstSB);
+        //                        _lstSB.Clear();
+        //                    }
+        //                    break;
+        //            }
 
-                    /// fim dos códigos
-                    if (intContaFim >= 2)
-                    {
-                        /// grava os dados lidos do codigo intepretavel
-                        MSP430IntegrationServices p = new MSP430IntegrationServices();
-                        p.CriaArquivo("codigosinterpretaveis.txt", DadosConvertidosChar.Substring(DadosConvertidosChar.IndexOf("@laddermic.com"), i - DadosConvertidosChar.IndexOf("@laddermic.com") + 1));
+        //            /// fim dos códigos
+        //            if (intContaFim >= 2)
+        //            {
+        //                /// grava os dados lidos do codigo intepretavel
+        //                MSP430IntegrationServices p = new MSP430IntegrationServices();
+        //                p.CriaArquivo("codigosinterpretaveis.txt", DadosConvertidosChar.Substring(DadosConvertidosChar.IndexOf("@laddermic.com"), i - DadosConvertidosChar.IndexOf("@laddermic.com") + 1));
 
-                        /// força saída do loop
-                        i = DadosConvertidosChar.Length;
-                    }
-                }
-                return programa;
+        //                /// força saída do loop
+        //                i = DadosConvertidosChar.Length;
+        //            }
+        //        }
+        //        return programa;
 
-            }
-            return null;
-        }
+        //    }
+        //    return null;
+        //}
 
     }
 }

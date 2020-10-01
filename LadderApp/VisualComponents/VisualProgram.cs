@@ -19,71 +19,63 @@ namespace LadderApp
                 foreach (Line line in this.program.Lines)
                 {
                     VisualLine visualLine = CreateVisualLine(line);
-                    InsereLinhaNoFinal(visualLine);
+                    InsertLineAtEnd(visualLine);
                 }
             }
         }
         
-        private List<VisualLine> linhasPrograma = new List<VisualLine>();
-        public IList<VisualLine> linhas
+        private List<VisualLine> lines = new List<VisualLine>();
+        public IList<VisualLine> Lines => lines.AsReadOnly();
+
+        public int InsertLineAtEnd(VisualLine visualLine)
         {
-            get 
-            {
-                //IList<LinhaCompletaLivre> linhasprg = linhasPrograma.AsReadOnly();
-                return linhasPrograma.AsReadOnly(); 
-            }
+            lines.Add(visualLine);
+            return (lines.Count - 1);
         }
 
-        public int InsereLinhaNoFinal(VisualLine visualLine)
+        public int InsertLineAtBegin(VisualLine visualLine)
         {
-            linhasPrograma.Add(visualLine);
-            return (linhasPrograma.Count - 1);
+            return InsetLineAt(0, visualLine);
         }
 
-        public int InsereLinhaNoInicio(VisualLine visualLine)
+        public int InsetLineAt(int index, VisualLine visualLine)
         {
+            if (index > lines.Count)
+                index = lines.Count;
 
-            return InsereLinhaNoIndice(0, visualLine);
+            if (index < 0)
+                index = 0;
+
+            lines.Insert(index, visualLine);
+            return index;
         }
 
-        public int InsereLinhaNoIndice(int linha, VisualLine _lc)
+        public int InsertLineAt(int index)
         {
-            if (linha > linhasPrograma.Count)
-                linha = linhasPrograma.Count;
+            index = program.InsertLineAt(index, new Line());
 
-            if (linha < 0)
-                linha = 0;
+            VisualLine _lc = CreateVisualLine(program.Lines[index]);
 
-            linhasPrograma.Insert(linha, _lc);
-            return linha;
-        }
-
-        public int InsereLinhaNoIndice(int linha)
-        {
-            linha = program.InsereLinhaNoIndice(linha, new Line());
-
-            VisualLine _lc = CreateVisualLine(program.Lines[linha]);
-
-            return InsereLinhaNoIndice(linha, _lc);
+            return InsetLineAt(index, _lc);
         }
 
 
         public int InsereLinhaNoFinal()
         {
-            int linha = program.InsereLinhaNoFinal(new Line());
+            int linha = program.InsertLineAtEnd(new Line());
 
             VisualLine _lc = CreateVisualLine(program.Lines[linha]);
 
-            return InsereLinhaNoFinal(_lc);
+            return InsertLineAtEnd(_lc);
         }
 
 
         public void ApagaLinha(int linha)
         {
-            linhasPrograma[linha].ApagaLinha();
-            linhasPrograma.RemoveAt(linha);
+            lines[linha].ApagaLinha();
+            lines.RemoveAt(linha);
 
-            program.ApagaLinha(linha);
+            program.RemoveLineAt(linha);
         }
 
         /// <summary>

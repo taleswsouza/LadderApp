@@ -311,7 +311,7 @@ namespace LadderApp
             {
                 if (this.OpCode == OperationCode.NormallyOpenContact &&
                 ((Address)GetOperand(0)).Value == true)
-                    Energizado();
+                    DrawEnergized();
             }
 
             // -| Linha horizontal anterior ao simbolo
@@ -356,8 +356,8 @@ namespace LadderApp
             xy2 = new Point(xFimHSimbolo, yFimVSimbolo);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            DesenhaEndereco();
-            DesenhaComentario();
+            DrawAddress();
+            DrawComment();
         }
 
         private void DesenhaContatoNF()
@@ -366,10 +366,10 @@ namespace LadderApp
             {
                 if (this.OpCode == OperationCode.NormallyClosedContact &&
                     ((Address)GetOperand(0)).Value == false)
-                    Energizado();
+                    DrawEnergized();
             }
             else
-                Energizado();
+                DrawEnergized();
 
 
             DesenhaContatoNA();
@@ -381,14 +381,14 @@ namespace LadderApp
             graphics.DrawLine(linePen, xy1, xy2);
         }
 
-        private void DesenhaBobinaSaida()
+        private void DrawOutputCoil()
         {
             if (IsAllOperandsOk())
             {
 
                 if (this.OpCode == OperationCode.OutputCoil &&
                     ((Address)GetOperand(0)).Value == true)
-                    Energizado();
+                    DrawEnergized();
             }
 
             Point[] pontosCurva = new Point[3];
@@ -421,20 +421,20 @@ namespace LadderApp
             pontosCurva[2] = xy3;
             graphics.DrawCurve(linePen, pontosCurva, 0.7F);
 
-            DesenhaEndereco();
-            DesenhaComentario();
+            DrawAddress();
+            DrawComment();
         }
 
-        private void DesenhaBobinaComString(string Texto)
+        private void DrawOutputCoilWithText(string text)
         {
-            DesenhaBobinaSaida();
+            DrawOutputCoil();
 
             xy1 = new Point(xMeioHorizontal - (int)(textFont.Size / 2.0F), yMeioVertical - (int)(textFont.Size / 2.0F));
-            graphics.DrawString(Texto, textFont, symbolTextBrush, xy1.X, xy1.Y);
+            graphics.DrawString(text, textFont, symbolTextBrush, xy1.X, xy1.Y);
         }
 
 
-        private void DesenhaParaleloInicial()
+        private void DrawParallelBranchBegin()
         {
             // Linha vertical
             xy1 = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
@@ -447,7 +447,7 @@ namespace LadderApp
             graphics.DrawLine(linePen, xy1, xy2);
         }
 
-        private void DesenhaParaleloFinal()
+        private void DrawParallelBranchEnd()
         {
             // Linha vertical
             xy1 = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
@@ -478,7 +478,7 @@ namespace LadderApp
             }
         }
 
-        private void DesenhaParaleloProximo()
+        private void DrawParallelBranchNext()
         {
             if (ultimoVPI)
             {
@@ -507,7 +507,7 @@ namespace LadderApp
             }
         }
 
-        private void DesenhaInicioLinha()
+        private void DrawLineBegin()
         {
             Font fontTexto = new Font(FontFamily.GenericSansSerif.Name, 12, FontStyle.Regular, GraphicsUnit.Pixel);
 
@@ -537,7 +537,7 @@ namespace LadderApp
             }
         }
 
-        private void DesenhaFimLinha()
+        private void DrawLineEnd()
         {
             // Linha vertical
             xy1 = new Point(xDecimoHorizontal, 0);
@@ -551,59 +551,51 @@ namespace LadderApp
         }
 
 
-        private void DesenhaQuadroSaida()
+        private void DrawOutputBox()
         {
-            RectangleF _recTxtTitulo;
-            String _txtTitulo = "";
+            DrawAddress();
 
-            _recTxtTitulo = new RectangleF(1F, 3F, (float)xTotalHorizontal, (float)(textFont.Height));
+            DrawPreset();
 
-            StringFormat _stringFormat = new StringFormat();
-            _stringFormat.Alignment = StringAlignment.Center;
-            _stringFormat.LineAlignment = StringAlignment.Center;
+            DrawAccumulated();
 
-            DesenhaEndereco();
-
-            DesenhaPreset();
-
-            DesenhaAcum();
-
+            String title = "";
             switch (this.OpCode)
             {
                 case OperationCode.Timer:
-                    _txtTitulo = "T";
+                    title = "T";
                     if (IsAllOperandsOk())
                         switch ((Int32)((Address)GetOperand(0)).Timer.Tipo)
                         {
                             case 0:
-                                _txtTitulo = "TON";
+                                title = "TON";
                                 break;
                             case 1:
-                                _txtTitulo = "TOF";
+                                title = "TOF";
                                 break;
                             case 2:
-                                _txtTitulo = "RTO";
+                                title = "RTO";
                                 break;
                             default:
-                                _txtTitulo = "T?";
+                                title = "T?";
                                 break;
                         }
 
-                    DesenhaBaseTempo();
+                    DrawTimeBase();
                     break;
                 case OperationCode.Counter:
-                    _txtTitulo = "C";
+                    title = "C";
                     if (IsAllOperandsOk())
                         switch ((Int32)((Address)GetOperand(0)).Counter.Tipo)
                         {
                             case 0:
-                                _txtTitulo = "CTU";
+                                title = "CTU";
                                 break;
                             case 1:
-                                _txtTitulo = "CTD";
+                                title = "CTD";
                                 break;
                             default:
-                                _txtTitulo = "C?";
+                                title = "C?";
                                 break;
                         }
                     break;
@@ -611,7 +603,13 @@ namespace LadderApp
 
 
 
-            graphics.DrawString(_txtTitulo, textFont, symbolTextBrush, _recTxtTitulo, _stringFormat);
+            StringFormat format = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+            RectangleF titleRectangle = new RectangleF(1F, 3F, (float)xTotalHorizontal, (float)(textFont.Height));
+            graphics.DrawString(title, textFont, symbolTextBrush, titleRectangle, format);
             graphics.DrawRectangle(linePen, rectSimbolo);
 
             /// para indicar comentário no quadro de saida
@@ -635,7 +633,7 @@ namespace LadderApp
 
         }
 
-        private void DesenhaFundo()
+        private void DrawBackground()
         {
             // Variaveis auxiliares para posicionamento
             //  dos controles
@@ -644,8 +642,8 @@ namespace LadderApp
             int _posYOriginal = VisualLine.YPosition;
 
 
-            VisualParallelBranch _par = null;
-            List<VisualParallelBranch> _lst_par = new List<VisualParallelBranch>();
+            VisualParallelBranch visualParallelBranch = null;
+            List<VisualParallelBranch> visualParallelBranchList = new List<VisualParallelBranch>();
 
             VisualInstructionUserControl _simbAntAux = null;
             VisualInstructionUserControl _simbAnt2DesenhoAux = null;
@@ -665,18 +663,18 @@ namespace LadderApp
                         switch (simbAux.OpCode)
                         {
                             case OperationCode.ParallelBranchBegin:
-                                _par = new VisualParallelBranch();
-                                _par.par = simbAux;
+                                visualParallelBranch = new VisualParallelBranch();
+                                visualParallelBranch.par = simbAux;
 
-                                _lst_par.Add(_par);
+                                visualParallelBranchList.Add(visualParallelBranch);
                                 break;
                             case OperationCode.ParallelBranchEnd:
 
                                 simbAux.Refresh();
 
-                                _par.lstVPI.Insert(0, _par.par);
+                                visualParallelBranch.lstVPI.Insert(0, visualParallelBranch.par);
 
-                                foreach (VisualInstructionUserControl _simb2PF in _par.lstVPI)
+                                foreach (VisualInstructionUserControl _simb2PF in visualParallelBranch.lstVPI)
                                 {
                                     _posX = _simb2PF.PosicaoXY.X + _simb2PF.XYConexao.X;
                                     _posY = _simb2PF.PosicaoXY.Y + _simb2PF.XYConexao.Y;
@@ -692,7 +690,7 @@ namespace LadderApp
                                 }
 
                                 _posX = simbAux.PosicaoXY.X + simbAux.XYConexao.X;
-                                _posY = _par.lstVPI[_par.lstVPI.Count - 1].PosicaoXY.Y + _par.lstVPI[_par.lstVPI.Count - 1].XYConexao.Y;
+                                _posY = visualParallelBranch.lstVPI[visualParallelBranch.lstVPI.Count - 1].PosicaoXY.Y + visualParallelBranch.lstVPI[visualParallelBranch.lstVPI.Count - 1].XYConexao.Y;
                                 _posY -= _posYOriginal;
                                 xy1 = new Point(_posX, _posY);
 
@@ -703,14 +701,14 @@ namespace LadderApp
 
                                 graphics.DrawLine(pen, xy1, xy2);
 
-                                _par = null;
-                                _lst_par.RemoveAt(_lst_par.Count - 1);
+                                visualParallelBranch = null;
+                                visualParallelBranchList.RemoveAt(visualParallelBranchList.Count - 1);
 
-                                if (_lst_par.Count > 0)
-                                    _par = _lst_par[_lst_par.Count - 1];
+                                if (visualParallelBranchList.Count > 0)
+                                    visualParallelBranch = visualParallelBranchList[visualParallelBranchList.Count - 1];
                                 break;
                             case OperationCode.ParallelBranchNext:
-                                _par.lstVPI.Add(simbAux);
+                                visualParallelBranch.lstVPI.Add(simbAux);
                                 break;
                             default:
                                 break;
@@ -732,11 +730,11 @@ namespace LadderApp
                         }
 
 
-                        if (_lst_par.Count > 0 && simbAux.OpCode == OperationCode.ParallelBranchEnd)
-                            if (_par.lstVPI.Count > 0)
-                                _simbAnt2DesenhoAux = _par.lstVPI[_par.lstVPI.Count - 1];
+                        if (visualParallelBranchList.Count > 0 && simbAux.OpCode == OperationCode.ParallelBranchEnd)
+                            if (visualParallelBranch.lstVPI.Count > 0)
+                                _simbAnt2DesenhoAux = visualParallelBranch.lstVPI[visualParallelBranch.lstVPI.Count - 1];
                             else
-                                _simbAnt2DesenhoAux = _par.par;
+                                _simbAnt2DesenhoAux = visualParallelBranch.par;
                         else
                             _simbAnt2DesenhoAux = simbAux;
 
@@ -760,7 +758,7 @@ namespace LadderApp
             graphics.DrawLine(pen, xy1, xy2);
         }
 
-        private void DesenhaComentario()
+        private void DrawComment()
         {
 
             if (!IsAllOperandsOk() || !(GetOperand(0) is Address))
@@ -816,9 +814,9 @@ namespace LadderApp
         }
 
 
-        private void DesenhaEndereco()
+        private void DrawAddress()
         {
-            String _txtEndereco = "";
+            String addressName = "";
             RectangleF _recTxtEnd;
 
             switch (this.OpCode)
@@ -840,17 +838,17 @@ namespace LadderApp
 
             if (GetOperand(0) != null)
             {
-                _txtEndereco = ((Address)GetOperand(0)).Name;
+                addressName = ((Address)GetOperand(0)).Name;
             }
             else
-                _txtEndereco = "?";
+                addressName = "?";
 
 
-            graphics.DrawString(_txtEndereco, textFont, symbolTextBrush, _recTxtEnd, _stringFormat);
+            graphics.DrawString(addressName, textFont, symbolTextBrush, _recTxtEnd, _stringFormat);
 
         }
 
-        private void DesenhaPreset()
+        private void DrawPreset()
         {
             String _txtPreset = "";
             Int32 _intPreset = -1;
@@ -890,7 +888,7 @@ namespace LadderApp
 
         }
 
-        private void DesenhaBaseTempo()
+        private void DrawTimeBase()
         {
             String _txtBaseTempo = "";
             Int32 _intBaseTempo = -1;
@@ -948,7 +946,7 @@ namespace LadderApp
         /// Desenha o valor de acumulado para os quadros de saida
         ///<remarks>incluido modificação para uso da classe SimulaContador</remarks>
         /// </summary>
-        private void DesenhaAcum()
+        private void DrawAccumulated()
         {
             String _txtAcum = "AC: ?";
             Int32 _intAcum = -1;
@@ -988,7 +986,7 @@ namespace LadderApp
 
         }
 
-        private void SelecaoSimbolo(TipoSelecaoFlag tipoSelecao)
+        private void DrawSelectedVisualInstruction(TipoSelecaoFlag tipoSelecao)
         {
             //borda no objeto inteiro
             switch (tipoSelecao)
@@ -1007,7 +1005,7 @@ namespace LadderApp
         }
 
 
-        private void Energizado()
+        private void DrawEnergized()
         {
             // Sobre a linha horizontal antes do simbolo
             rectEnergizado = new Rectangle(Convert.ToInt32(selectionPen.Width), (yTotalVertical - ySextoVertical) / 2, xInicioHSimbolo - Convert.ToInt32(selectionPen.Width), ySextoVertical);
@@ -1023,7 +1021,7 @@ namespace LadderApp
             base.OnPaint(e);
         }
 
-        public override void DesenhaSimbolo()
+        public override void DrawInstruction()
         {
             if (graphics == null)
             {
@@ -1031,7 +1029,7 @@ namespace LadderApp
             }
 
             if (Selected)
-                SelecaoSimbolo(TipoSelecaoFlag.Fundo);
+                DrawSelectedVisualInstruction(TipoSelecaoFlag.Fundo);
             else
                 graphics.Clear(Color.White);
 
@@ -1041,10 +1039,10 @@ namespace LadderApp
                     graphics.Clear(Color.White);
                     break;
                 case OperationCode.LineBegin:
-                    DesenhaInicioLinha();
+                    DrawLineBegin();
                     break;
                 case OperationCode.LineEnd:
-                    DesenhaFimLinha();
+                    DrawLineEnd();
                     break;
                 case OperationCode.NormallyOpenContact:
                     DesenhaContatoNA();
@@ -1053,50 +1051,50 @@ namespace LadderApp
                     DesenhaContatoNF();
                     break;
                 case OperationCode.OutputCoil:
-                    DesenhaBobinaSaida();
+                    DrawOutputCoil();
                     break;
                 case OperationCode.Timer:
-                    DesenhaQuadroSaida();
+                    DrawOutputBox();
                     break;
                 case OperationCode.Counter:
-                    DesenhaQuadroSaida();
+                    DrawOutputBox();
                     break;
                 case OperationCode.ParallelBranchBegin:
-                    DesenhaParaleloInicial();
+                    DrawParallelBranchBegin();
                     break;
                 case OperationCode.ParallelBranchEnd:
-                    DesenhaParaleloFinal();
+                    DrawParallelBranchEnd();
                     break;
                 case OperationCode.ParallelBranchNext:
-                    DesenhaParaleloProximo();
+                    DrawParallelBranchNext();
                     break;
                 case OperationCode.BackgroundLine:
-                    DesenhaFundo();
+                    DrawBackground();
                     break;
                 case OperationCode.Reset:
-                    DesenhaBobinaComString("R");
+                    DrawOutputCoilWithText("R");
                     break;
                 default:
                     break;
             }
 
             if (this.Selected)
-                SelecaoSimbolo(TipoSelecaoFlag.Borda);
+                DrawSelectedVisualInstruction(TipoSelecaoFlag.Borda);
 
         }
 
-        private void ControleLivre_Load(object sender, EventArgs e)
+        private void VisualInstruction_Load(object sender, EventArgs e)
         {
             graphics = Graphics.FromHwnd(Handle);
             AtualizaVariaveisDesenho();
         }
 
-        private void ControleLivre_Paint(object sender, PaintEventArgs e)
+        private void VisualInstruction_Paint(object sender, PaintEventArgs e)
         {
             if (this.graphics != null && VisualLine.YSize > 0)
             {
                 this.graphics = e.Graphics;
-                DesenhaSimbolo();
+                DrawInstruction();
             }
         }
 
@@ -1131,7 +1129,7 @@ namespace LadderApp
             AtualizaVariaveisDesenho();
         }
 
-        private void ControleLivre_SizeChanged(object sender, EventArgs e)
+        private void VisualInstruction_SizeChanged(object sender, EventArgs e)
         {
             AtualizaVariaveisDesenho();
         }
@@ -1145,7 +1143,7 @@ namespace LadderApp
             return base.IsInputKey(keyData);
         }
 
-        private void ControleLivre_KeyDown(object sender, KeyEventArgs e)
+        private void VisualInstruction_KeyDown(object sender, KeyEventArgs e)
         {
 
             if (this.OpCode == OperationCode.LineBegin)
@@ -1172,46 +1170,46 @@ namespace LadderApp
             get { return instruction; }
         }
 
-        private void txtGeral_Enter(object sender, EventArgs e)
-        {
-            ((Label)sender).BackColor = Color.Black;
-            ((Label)sender).ForeColor = Color.White;
-        }
+        //private void txtGeral_Enter(object sender, EventArgs e)
+        //{
+        //    ((Label)sender).BackColor = Color.Black;
+        //    ((Label)sender).ForeColor = Color.White;
+        //}
 
-        private void txtGeral_Leave(object sender, EventArgs e)
-        {
-            ((Label)sender).BackColor = Color.Transparent;
-            ((Label)sender).ForeColor = Color.Black;
-        }
+        //private void txtGeral_Leave(object sender, EventArgs e)
+        //{
+        //    ((Label)sender).BackColor = Color.Transparent;
+        //    ((Label)sender).ForeColor = Color.Black;
+        //}
 
-        private void txtEndereco_DoubleClick(object sender, EventArgs e)
-        {
-            /// caso o evento nao este alocado, nao executa
-            if (AskToChangeAddressEvent == null)
-                return;
+        //private void txtEndereco_DoubleClick(object sender, EventArgs e)
+        //{
+        //    /// caso o evento nao este alocado, nao executa
+        //    if (AskToChangeAddressEvent == null)
+        //        return;
 
-            switch (OpCode)
-            {
-                case OperationCode.NormallyOpenContact:
-                case OperationCode.NormallyClosedContact:
-                    AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
-                    break;
-                case OperationCode.OutputCoil:
-                    AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
-                    break;
-                case OperationCode.Timer:
-                case OperationCode.Counter:
-                    AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
-                    break;
-            }
-        }
+        //    switch (OpCode)
+        //    {
+        //        case OperationCode.NormallyOpenContact:
+        //        case OperationCode.NormallyClosedContact:
+        //            AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
+        //            break;
+        //        case OperationCode.OutputCoil:
+        //            AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
+        //            break;
+        //        case OperationCode.Timer:
+        //        case OperationCode.Counter:
+        //            AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
+        //            break;
+        //    }
+        //}
 
-        private void txtGeral_Click(object sender, EventArgs e)
-        {
-            ((Label)sender).Select();
-        }
+        //private void txtGeral_Click(object sender, EventArgs e)
+        //{
+        //    ((Label)sender).Select();
+        //}
 
-        private void ControleLivre_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void VisualInstruction_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             switch (OpCode)
             {

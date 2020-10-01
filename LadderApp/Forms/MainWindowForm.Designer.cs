@@ -196,7 +196,7 @@ namespace LadderApp
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.saveToolStripMenuItem.Text = "&Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.SalvarArquivo);
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveFile);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -736,7 +736,7 @@ namespace LadderApp
             this.saveToolStripButton.Name = "saveToolStripButton";
             this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.saveToolStripButton.Text = "Save";
-            this.saveToolStripButton.Click += new System.EventHandler(this.SalvarArquivo);
+            this.saveToolStripButton.Click += new System.EventHandler(this.SaveFile);
             // 
             // toolStripSeparator1
             // 

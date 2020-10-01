@@ -479,7 +479,7 @@ namespace LadderApp
 
         public VisualInstructionUserControl InsertInstructionAtLocalToBeDefined(bool after, VisualInstructionUserControl visualInstruction, InstructionList instructions)
         {
-            instructions.ValidaOperandos(ladderForm.projectForm.program.addressing);
+            instructions.ValidaOperandos(ladderForm.projectForm.Program.addressing);
 
             if (!instructions.Contains(OperationCode.OutputCoil) &&
                 !instructions.Contains(OperationCode.Timer) &&

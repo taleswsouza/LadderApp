@@ -18,54 +18,16 @@ namespace LadderApp
 
     public class LadderProgram
     {
-        public enum ProgramStatus
-        {
-            [XmlEnum(Name = "NAOINICIADO")]
-            NotInitialized,
-            [XmlEnum(Name = "NOVO")]
-            New,
-            [XmlEnum(Name = "ABERTO")]
-            Open,
-            [XmlEnum(Name = "SALVO")]
-            Saved
-        }
-
-        private String nomePrograma = "";
-        public String Nome
-        {
-            get
-            {
-                if (PathFile == "")
-                {
-                    if (nomePrograma != "")
-                        return nomePrograma;
-                    else
-                        return "Sem nome";
-                }
-                else
-                    return PathFile.Substring(PathFile.LastIndexOf(@"\") + 1, PathFile.Length - PathFile.LastIndexOf(@"\") - 1);
-            }
-            set { nomePrograma = value; }
-        }
-        [XmlIgnore]
-        public String PathFile = "";
-
-        [XmlElement(ElementName = "StsPrograma")]
-        public ProgramStatus Status { get; set; } = ProgramStatus.NotInitialized;
-
         public LadderProgram()
         {
         }
 
+        public string Name { get; set; } = "NoName";
+
         public Addressing addressing = new Addressing();
 
         public Device device;
-
-        private List<Line> lines = new List<Line>();
-        public List<Line> Lines
-        {
-            get { return lines; }
-        }
+        public List<Line> Lines { get; } = new List<Line>();
 
         [XmlIgnore]
         public List<Address> usedTimers = new List<Address>();
@@ -73,146 +35,133 @@ namespace LadderApp
         public List<Address> usedCounters = new List<Address>();
 
 
-        /// <summary>
-        /// Insere uma linha no programa no final das linhas
-        /// </summary>
-        /// <param name="_lc">nova linha a ser inserida</param>
-        /// <returns>indice da linha inserida</returns>
-        public int InsereLinhaNoFinal(Line _lc)
+        public int InsertLineAtEnd(Line line)
         {
-            lines.Add(_lc);
-            return (lines.Count - 1);
+            Lines.Add(line);
+            return (Lines.Count - 1);
         }
 
-        /// <summary>
-        /// Insere uma linha no programa na primeira linha (antes de todas)
-        /// </summary>
-        /// <param name="_lc">nova linha a ser inserida</param>
-        /// <returns></returns>
-        public int InsereLinhaNoInicio(Line _lc)
+        public int InsertLineAtBegin(Line line)
         {
-            return InsereLinhaNoIndice(0, _lc);
+            return InsertLineAt(0, line);
         }
 
-        public int InsereLinhaNoIndice(int linha, Line _lc)
+        public int InsertLineAt(int index, Line line)
         {
-            if (linha > lines.Count)
-                linha = lines.Count;
+            if (index > Lines.Count)
+                index = Lines.Count;
 
-            if (linha < 0)
-                linha = 0;
+            if (index < 0)
+                index = 0;
 
-            lines.Insert(linha, _lc);
-            return linha;
+            Lines.Insert(index, line);
+            return index;
         }
 
-        public void ApagaLinha(int linha)
+        public void RemoveLineAt(int index)
         {
-            lines[linha].ApagaLinha();
-            lines.RemoveAt(linha);
+            Lines[index].ApagaLinha();
+            Lines.RemoveAt(index);
         }
 
-        /// <summary>
-        /// Lógica dos temporizadores
-        /// </summary>
         public void SimulateTimers()
         {
             /// faz a função de um preset parcial para acumular na base de tempo
             /// programada para o temporizador, utilizando a base de tempo da thread (100ms)
-            Int32 _intPresetParcial = -1;
+            int parcialPreset = -1;
 
             /// executa a rotina para cada temporizador
-            foreach (Address _tmp in addressing.ListTimerAddress)
+            foreach (Address address in addressing.ListTimerAddress)
             {
-                if (_tmp.Timer.Reset == true)
+                if (address.Timer.Reset == true)
                 {
-                    _tmp.Timer.Acumulado = 0;
-                    _tmp.Value = false;
-                    _tmp.Timer.Reset = false;
+                    address.Timer.Acumulado = 0;
+                    address.Value = false;
+                    address.Timer.Reset = false;
                 }
 
-                switch (_tmp.Timer.Tipo)
+                switch (address.Timer.Tipo)
                 {
                     case 0: // TON - Contador Crescente
-                        if (_tmp.Timer.EN && !_tmp.Timer.Reset)
+                        if (address.Timer.EN && !address.Timer.Reset)
                         {
-                            _tmp.Timer.AcumuladoParcial++;
-                            if (_tmp.Timer.AcumuladoParcial >= _tmp.Timer.PresetParcial)
+                            address.Timer.AcumuladoParcial++;
+                            if (address.Timer.AcumuladoParcial >= address.Timer.PresetParcial)
                             {
-                                _tmp.Timer.AcumuladoParcial = 0;
-                                _tmp.Timer.Acumulado++;
+                                address.Timer.AcumuladoParcial = 0;
+                                address.Timer.Acumulado++;
 
-                                if (_tmp.Timer.Acumulado >= _tmp.Timer.Preset)
+                                if (address.Timer.Acumulado >= address.Timer.Preset)
                                 {
-                                    _tmp.Value = true; /// DONE = true
-                                    _tmp.Timer.Acumulado = _tmp.Timer.Preset;
+                                    address.Value = true; /// DONE = true
+                                    address.Timer.Acumulado = address.Timer.Preset;
                                 }
                             }
                         }
                         else
                         {
-                            _tmp.Value = false; /// DONE = false
-                            _tmp.Timer.Acumulado = 0;
-                            _tmp.Timer.AcumuladoParcial = 0;
-                            _tmp.Timer.Reset = false;
+                            address.Value = false; /// DONE = false
+                            address.Timer.Acumulado = 0;
+                            address.Timer.AcumuladoParcial = 0;
+                            address.Timer.Reset = false;
                         }
                         break;
 
                     case 1: // TOF - Contador Decrescente
-                        if (_tmp.Timer.EN || _tmp.Timer.Reset)
+                        if (address.Timer.EN || address.Timer.Reset)
                         {
-                            _tmp.Value = true; /// DONE = true
-                            _tmp.Timer.Acumulado = 0;
-                            _tmp.Timer.AcumuladoParcial = 0;
-                            _tmp.Timer.Reset = false;
+                            address.Value = true; /// DONE = true
+                            address.Timer.Acumulado = 0;
+                            address.Timer.AcumuladoParcial = 0;
+                            address.Timer.Reset = false;
                         }
                         else
                         {
-                            if (_tmp.Value) // DN habilitado - temporizador contando
-                                _tmp.Timer.AcumuladoParcial++;
+                            if (address.Value) // DN habilitado - temporizador contando
+                                address.Timer.AcumuladoParcial++;
 
-                            if (_tmp.Timer.AcumuladoParcial >= _tmp.Timer.PresetParcial)
+                            if (address.Timer.AcumuladoParcial >= address.Timer.PresetParcial)
                             {
-                                _tmp.Timer.AcumuladoParcial = 0;
-                                _tmp.Timer.Acumulado++;
+                                address.Timer.AcumuladoParcial = 0;
+                                address.Timer.Acumulado++;
                             }
 
-                            if (_tmp.Timer.Acumulado >= _tmp.Timer.Preset)
+                            if (address.Timer.Acumulado >= address.Timer.Preset)
                             {
-                                _tmp.Value = false; /// DONE = false
-                                _tmp.Timer.Acumulado = 0;
-                                _tmp.Timer.AcumuladoParcial = 0;
+                                address.Value = false; /// DONE = false
+                                address.Timer.Acumulado = 0;
+                                address.Timer.AcumuladoParcial = 0;
                             }
                         }
 
                         break;
 
                     case 2: // RTO
-                        if (_tmp.Timer.Reset)
+                        if (address.Timer.Reset)
                         {
-                            _tmp.Value = false; /// DONE = false
-                            _tmp.Timer.Acumulado = 0;
-                            _tmp.Timer.AcumuladoParcial = 0;
+                            address.Value = false; /// DONE = false
+                            address.Timer.Acumulado = 0;
+                            address.Timer.AcumuladoParcial = 0;
                         }
 
-                        if (_tmp.Timer.EN)
+                        if (address.Timer.EN)
                         {
-                            _tmp.Timer.AcumuladoParcial++;
-                            if (_tmp.Timer.AcumuladoParcial == _intPresetParcial)
+                            address.Timer.AcumuladoParcial++;
+                            if (address.Timer.AcumuladoParcial == parcialPreset)
                             {
-                                _tmp.Timer.AcumuladoParcial = 0;
+                                address.Timer.AcumuladoParcial = 0;
 
-                                if (_tmp.Timer.Acumulado <= Int32.MaxValue)
+                                if (address.Timer.Acumulado <= Int32.MaxValue)
                                 {
-                                    if (_tmp.Timer.Acumulado < _tmp.Timer.Preset)
-                                        _tmp.Timer.Acumulado++;
+                                    if (address.Timer.Acumulado < address.Timer.Preset)
+                                        address.Timer.Acumulado++;
                                     else
-                                        _tmp.Timer.Acumulado = _tmp.Timer.Preset;
+                                        address.Timer.Acumulado = address.Timer.Preset;
 
-                                    if (_tmp.Timer.Acumulado >= _tmp.Timer.Preset)
-                                        _tmp.Value = true; /// DONE = true
+                                    if (address.Timer.Acumulado >= address.Timer.Preset)
+                                        address.Value = true; /// DONE = true
                                     else
-                                        _tmp.Value = false; /// DONE = false
+                                        address.Value = false; /// DONE = false
                                 }
                             }
                         }
@@ -231,51 +180,51 @@ namespace LadderApp
         public Address auxToggleBitPulse = null;
 
 
-        public void ExecutaSimuladoContadores(Instruction instruction, Address _endContador)
+        public void ExecutaSimuladoContadores(Instruction instruction, Address counterAddress)
         {
 
-            switch (_endContador.Counter.Tipo)
+            switch (counterAddress.Counter.Tipo)
             {
                 case 0: // Contador Crescente
-                    if (_endContador.Counter.Reset == true)
+                    if (counterAddress.Counter.Reset == true)
                     {
-                        _endContador.Value = false;
-                        _endContador.Counter.Acumulado = 0;
-                        _endContador.Counter.Reset = false;
+                        counterAddress.Value = false;
+                        counterAddress.Counter.Acumulado = 0;
+                        counterAddress.Counter.Reset = false;
                     }
-                    if (_endContador.Counter.EN == true && _endContador.Counter.Pulso == true)
+                    if (counterAddress.Counter.EN == true && counterAddress.Counter.Pulso == true)
                     {
-                        _endContador.Counter.Pulso = false;
+                        counterAddress.Counter.Pulso = false;
 
-                        if (_endContador.Counter.Acumulado <= Int32.MaxValue)
+                        if (counterAddress.Counter.Acumulado <= Int32.MaxValue)
                         {
-                            _endContador.Counter.Acumulado++;
-                            if (_endContador.Counter.Acumulado >= _endContador.Counter.Preset)
-                                _endContador.Value = true;
+                            counterAddress.Counter.Acumulado++;
+                            if (counterAddress.Counter.Acumulado >= counterAddress.Counter.Preset)
+                                counterAddress.Value = true;
                             else
-                                _endContador.Value = false;
+                                counterAddress.Value = false;
                         }
                     }
                     break;
 
                 case 1: // Contador Decrescente
-                    if (_endContador.Counter.Reset == true)
+                    if (counterAddress.Counter.Reset == true)
                     {
-                        _endContador.Counter.Acumulado = _endContador.Counter.Preset;
-                        _endContador.Value = false;
-                        _endContador.Counter.Reset = false;
+                        counterAddress.Counter.Acumulado = counterAddress.Counter.Preset;
+                        counterAddress.Value = false;
+                        counterAddress.Counter.Reset = false;
                     }
-                    if (_endContador.Counter.EN == true && _endContador.Counter.Pulso == true)
+                    if (counterAddress.Counter.EN == true && counterAddress.Counter.Pulso == true)
                     {
-                        _endContador.Counter.Pulso = false;
-                        if (_endContador.Counter.Acumulado > 0)
+                        counterAddress.Counter.Pulso = false;
+                        if (counterAddress.Counter.Acumulado > 0)
                         {
-                            _endContador.Counter.Acumulado--;
+                            counterAddress.Counter.Acumulado--;
 
-                            if (_endContador.Counter.Acumulado == 0)
-                                _endContador.Value = true;
+                            if (counterAddress.Counter.Acumulado == 0)
+                                counterAddress.Value = true;
                             else
-                                _endContador.Value = false;
+                                counterAddress.Value = false;
                         }
                     }
                     break;
@@ -283,8 +232,8 @@ namespace LadderApp
                 default:
                     break;
             }
-            if (_endContador.Counter.EN == false)
-                _endContador.Counter.Pulso = true;
+            if (counterAddress.Counter.EN == false)
+                counterAddress.Counter.Pulso = true;
 
         }
 
@@ -299,7 +248,7 @@ namespace LadderApp
                 return false;
 
             List<LineStretchSummary> lineStretchSummary = new List<LineStretchSummary>();
-            foreach (Line line in this.lines)
+            foreach (Line line in this.Lines)
             {
                 lineStretchSummary.Add(new LineStretchSummary());
                 foreach (Instruction instruction in line.instructions)
@@ -415,35 +364,32 @@ namespace LadderApp
             lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
         }
 
-        private bool GravaSenhaNoLadder(ref OpCode2TextServices txtCodigoInterpretavel)
+        private bool SavePasswordIntoLadder(ref OpCode2TextServices txtCodigoInterpretavel)
         {
-            DialogResult _result;
-            String _strSenha = "";
-            PasswordForm _frmSenha = new PasswordForm();
-
-            _frmSenha.Text = "Enter the new password:";
-            _frmSenha.lblSenhaAtual.Text = "New password:";
+            String password = "";
+            PasswordForm passwordForm = new PasswordForm();
+            passwordForm.Text = "Enter the new password:";
+            passwordForm.lblPassword.Text = "New password:";
 
             for (int i = 0; i < 2; i++)
             {
-                _result = _frmSenha.ShowDialog();
-
-                if (_result == DialogResult.OK)
+                DialogResult result = passwordForm.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    _strSenha = _frmSenha.txtSenha.Text;
-                    _frmSenha.txtSenha.Text = "";
-                    _frmSenha.Text = "Confirm the new password:";
-                    _frmSenha.lblSenhaAtual.Text = "Confirm the new password:";
-                    _frmSenha.btnOK.DialogResult = DialogResult.Yes;
+                    password = passwordForm.txtSenha.Text;
+                    passwordForm.txtSenha.Text = "";
+                    passwordForm.Text = "Confirm the new password:";
+                    passwordForm.lblPassword.Text = "Confirm the new password:";
+                    passwordForm.btnOK.DialogResult = DialogResult.Yes;
                 }
-                else if (_result != DialogResult.Yes)
+                else if (result != DialogResult.Yes)
                 {
                     MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return false;
                 }
                 else
                 {
-                    if (_strSenha != _frmSenha.txtSenha.Text)
+                    if (password != passwordForm.txtSenha.Text)
                     {
                         MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return false;
@@ -452,8 +398,8 @@ namespace LadderApp
                     {
                         txtCodigoInterpretavel.AddCabecalho();
                         txtCodigoInterpretavel.txtCabecalho.Add(OperationCode.HeadPassword0);
-                        txtCodigoInterpretavel.txtCabecalho.Add(_strSenha.Length);
-                        txtCodigoInterpretavel.txtCabecalho.Add(_strSenha);
+                        txtCodigoInterpretavel.txtCabecalho.Add(password.Length);
+                        txtCodigoInterpretavel.txtCabecalho.Add(password);
                     }
                 }
             }
@@ -463,12 +409,11 @@ namespace LadderApp
         public bool GeraExecutavel(bool bGravarLadderNoExecutavel, bool bGravarSenha, bool bEscreverPrograma)
         {
             String doc = "", linha = "", linhaTeste = "", saidaUltimoOperando = "";
-            //int numCodigosInterpretaveis = 0;
             bool bOperandosLinha = false;
             List<String> OperandosLinha = new List<string>();
             List<String> OperandosSELinha = new List<string>();
             String FuncoesAposLinha = "";
-            DialogResult _result;
+            DialogResult result;
             OpCode2TextServices txtCodigoInterpretavel = new OpCode2TextServices();
 
             bool bIniciado = false;
@@ -476,18 +421,16 @@ namespace LadderApp
             if (!VerifyProgram())
                 return false;
 
-            //txtCodigoInterpretavel.Add("@laddermic.com");
             txtCodigoInterpretavel.Add(OperationCode.None);
 
             /// caso senha para inserir senha
             /// realiza recuperação da senha
             if (bGravarLadderNoExecutavel && bGravarSenha)
             {
-                _result = MessageBox.Show("Are you sure you want to write a password to the executable to be generated?", "Request password", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-
-                if (_result == DialogResult.Yes)
+                result = MessageBox.Show("Are you sure you want to write a password to the executable to be generated?", "Request password", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.Yes)
                 {
-                    if (!GravaSenhaNoLadder(ref txtCodigoInterpretavel))
+                    if (!SavePasswordIntoLadder(ref txtCodigoInterpretavel))
                         return false;
                 }
                 else
@@ -502,10 +445,10 @@ namespace LadderApp
             doc += linha;
 
 
-            foreach (Line _lc in this.lines)
+            foreach (Line line in this.Lines)
             {
                 linha = "";
-                foreach (Instruction instruction in _lc.instructions)
+                foreach (Instruction instruction in line.instructions)
                 {
                     switch (instruction.OpCode)
                     {
@@ -554,7 +497,7 @@ namespace LadderApp
 
                 OperandosLinha.Clear();
                 OperandosSELinha.Clear();
-                foreach (Instruction instruction in _lc.outputs)
+                foreach (Instruction instruction in line.outputs)
                 {
                     switch (instruction.OpCode)
                     {
@@ -639,9 +582,9 @@ namespace LadderApp
 
             txtCodigoInterpretavel.Add(OperationCode.None);
 
-            _result = MessageBox.Show("Do you want to generate the .C file below? " + Environment.NewLine + doc, "Confirmation: Generate .C file?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            result = MessageBox.Show("Do you want to generate the .C file below? " + Environment.NewLine + doc, "Confirmation: Generate .C file?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
-            if (_result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 /// declarações
                 string DadosArquivoUsuarioC = "";
@@ -670,16 +613,16 @@ namespace LadderApp
 
                 /// 1. prepara a configuração para as portas de entrada.
                 /// 2. levantamento das portas que foram usadas no programa
-                foreach (Address _endCada in addressing.ListInputAddress)
-                    if (_endCada.Parametro != "" && _endCada.Used == true)
+                foreach (Address address in addressing.ListInputAddress)
+                    if (address.Parametro != "" && address.Used == true)
                     {
                         bIndicaEntradaUsadaNoPrograma = true;
                         /// 1.1. Adiciona os parametros dos endereços usados no programa
-                        DadosParametros += "\t" + _endCada.Parametro + ";" + Environment.NewLine;
+                        DadosParametros += "\t" + address.Parametro + ";" + Environment.NewLine;
 
                         /// 2.1. prerapara a declaração dos endereços
-                        if (!usedPorts.Contains(_endCada.EnderecoRaiz))
-                            usedPorts.Add(_endCada.EnderecoRaiz);
+                        if (!usedPorts.Contains(address.EnderecoRaiz))
+                            usedPorts.Add(address.EnderecoRaiz);
                     }
                 DadosParametros += Environment.NewLine;
 
@@ -819,15 +762,15 @@ namespace LadderApp
                 DadosArquivoEnderecosH = DadosArquivoEnderecosH.Replace("#ENDEREÇOS#", DadosEnderecos);
                 DadosArquivoEnderecosH.Trim();
 
-                msp430gcc.CriaArquivo("enderecos.h", DadosArquivoEnderecosH);
+                msp430gcc.CreateFile("enderecos.h", DadosArquivoEnderecosH);
 
 
                 /// Prepara DEFINICAO
-                msp430gcc.CriaArquivo("definicao.h", MicrocontrollersBaseCodeFilesResource.definicaoH);
+                msp430gcc.CreateFile("definicao.h", MicrocontrollersBaseCodeFilesResource.definicaoH);
 
 
                 /// Prepara SETUPHARDWARE
-                msp430gcc.CriaArquivo("setuphardware.h", MicrocontrollersBaseCodeFilesResource.setupHardwareH);
+                msp430gcc.CreateFile("setuphardware.h", MicrocontrollersBaseCodeFilesResource.setupHardwareH);
 
 
                 /// Prepara FUNCOES
@@ -842,7 +785,7 @@ namespace LadderApp
                 else
                     DadosArquivoFuncoesH = DadosArquivoFuncoesH.Replace("#EXECTEMPORIZADOR_H#", "");
 
-                msp430gcc.CriaArquivo("funcoes.h", DadosArquivoFuncoesH);
+                msp430gcc.CreateFile("funcoes.h", DadosArquivoFuncoesH);
 
 
                 /// Prepara USUARIO
@@ -851,7 +794,7 @@ namespace LadderApp
                 else
                     DadosArquivoUsuarioH = MicrocontrollersBaseCodeFilesResource.usuarioH.Replace("#EXECTEMPORIZADORES_H#", "");
 
-                msp430gcc.CriaArquivo("usuario.h", DadosArquivoUsuarioH);
+                msp430gcc.CreateFile("usuario.h", DadosArquivoUsuarioH);
 
                 DadosArquivoUsuarioC = MicrocontrollersBaseCodeFilesResource.usuarioC;
                 if (bIndicaTemporizadorNoPrograma)
@@ -866,8 +809,8 @@ namespace LadderApp
                 DadosArquivoUsuarioC = DadosArquivoUsuarioC.Replace("#PARAMETROS#", DadosParametros);
                 DadosArquivoUsuarioC.Trim();
 
-                msp430gcc.CriaArquivo("usuario.c", DadosArquivoUsuarioC);
-                msp430gcc.CompilaMSP430gcc("usuario");
+                msp430gcc.CreateFile("usuario.c", DadosArquivoUsuarioC);
+                msp430gcc.CompilesMsp430ViaGcc("usuario");
 
 
                 /// Prepara MAIN
@@ -884,7 +827,7 @@ namespace LadderApp
                 DadosArquivoMainC.Trim();
 
                 /// criar classe para tratar codigos interpretaveis
-                msp430gcc.CriaArquivo("codigos.txt", DadosCodigosInterpretaveis);
+                msp430gcc.CreateFile("codigos.txt", DadosCodigosInterpretaveis);
 
 
                 if (bIndicaTemporizadorNoPrograma)
@@ -896,8 +839,8 @@ namespace LadderApp
                     DadosArquivoMainC = DadosArquivoMainC.Replace("#EXECTEMPORIZADORES_CHAMADA#", "");
                 }
 
-                msp430gcc.CriaArquivo("main.c", DadosArquivoMainC);
-                msp430gcc.CompilaMSP430gcc("main");
+                msp430gcc.CreateFile("main.c", DadosArquivoMainC);
+                msp430gcc.CompilesMsp430ViaGcc("main");
 
 
                 /// Prepara FUNCOES
@@ -939,30 +882,30 @@ namespace LadderApp
                 {
                     DadosArquivoFuncoesC = DadosArquivoFuncoesC.Replace("#EXECTEMPORIZADOR_C#", "");
                 }
-                msp430gcc.CriaArquivo("funcoes.c", DadosArquivoFuncoesC);
-                msp430gcc.CompilaMSP430gcc("funcoes");
+                msp430gcc.CreateFile("funcoes.c", DadosArquivoFuncoesC);
+                msp430gcc.CompilesMsp430ViaGcc("funcoes");
 
 
                 /// Prepara SETUPHARDARE
                 DadosArquivoSetupHardwareC = MicrocontrollersBaseCodeFilesResource.setupHardwareC.Replace("#SETUPIO#", DadosSetupIO);
                 DadosArquivoSetupHardwareC = DadosArquivoSetupHardwareC.Replace("#LEENTRADAS#", DadosLeEntradas);
                 DadosArquivoSetupHardwareC = DadosArquivoSetupHardwareC.Replace("#ESCREVESAIDAS#", DadosEscreveSaidas);
-                msp430gcc.CriaArquivo("setuphardware.c", DadosArquivoSetupHardwareC);
-                msp430gcc.CompilaMSP430gcc("setuphardware");
+                msp430gcc.CreateFile("setuphardware.c", DadosArquivoSetupHardwareC);
+                msp430gcc.CompilesMsp430ViaGcc("setuphardware");
 
 
                 /// Prepara INTERRUPCAO
-                msp430gcc.CriaArquivo("interrupcao.c", MicrocontrollersBaseCodeFilesResource.interrupcaoC);
-                msp430gcc.CompilaMSP430gcc("interrupcao");
+                msp430gcc.CreateFile("interrupcao.c", MicrocontrollersBaseCodeFilesResource.interrupcaoC);
+                msp430gcc.CompilesMsp430ViaGcc("interrupcao");
 
                 /// CRIA ELF
-                msp430gcc.CompilaELF(this.Nome);
+                msp430gcc.CompileELF(this.Name);
 
                 /// CRIA EXECUTAVE E GRAVA NO DISPOSITIVO
-                msp430gcc.CompilaA43(this.Nome);
+                msp430gcc.CompileA43(this.Name);
 
                 if (bEscreverPrograma)
-                    msp430gcc.GravaViaUSB(this.Nome);
+                    msp430gcc.DownloadViaUSB(this.Name);
             }
 
             return true;
@@ -972,7 +915,7 @@ namespace LadderApp
         {
             usedCounters.Clear();
             usedTimers.Clear();
-            foreach (Line line in this.lines)
+            foreach (Line line in this.Lines)
             {
                 if (!VerifyLine(line))
                     return false;
@@ -1026,7 +969,7 @@ namespace LadderApp
 
         public bool ReindexAddresses()
         {
-            foreach (Line line in this.lines)
+            foreach (Line line in this.Lines)
             {
                 foreach (Instruction instruction in line.instructions)
                 {
