@@ -36,7 +36,7 @@ namespace LadderApp
             SetDefaults();
             compiledFilenames.Clear();
             createdFilenames.Clear();
-            strMMCU = "-mmcu=msp430x2013 ";
+            strMMCU = "-mmcu=msp430f2013 ";
         }
 
         public MSP430IntegrationServices(bool deleteIntermediateFiles)
@@ -46,7 +46,7 @@ namespace LadderApp
             compiledFilenames.Clear();
             createdFilenames.Clear();
             EnabledDeletingIntermediateFiles = deleteIntermediateFiles;
-            strMMCU = "-mmcu=msp430x2013 ";
+            strMMCU = "-mmcu=msp430f2013 ";
         }
 
         public bool CreateFile(string filename, string dataContent)
