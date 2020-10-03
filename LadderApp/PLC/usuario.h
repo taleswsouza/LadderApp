@@ -19,6 +19,6 @@
 //====================================================================================
 void Parametros(void);
 void ExecPrograma(void);
-#EXECTEMPORIZADORES_H#
+#EXEC_TIMERS_USER_H#
 
 #endif

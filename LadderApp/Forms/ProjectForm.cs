@@ -115,7 +115,7 @@ namespace LadderApp
                         int i = 0;
                         foreach (Pin pin in Program.device.Pins)
                         {
-                            pin.Type = deviceForm.lstEndModificado[i];
+                            pin.Type = deviceForm.PinTypeList[i];
                             i++;
                         }
                         Program.device.RealocatePinAddresses();
@@ -260,8 +260,8 @@ namespace LadderApp
             program.addressing.CleanUsedIndication();
             foreach (Line line in program.Lines)
             {
-                line.instructions.AddRange(line.outputs);
-                foreach (Instruction instruction in line.instructions)
+                line.Instructions.AddRange(line.Outputs);
+                foreach (Instruction instruction in line.Instructions)
                 {
                     switch (instruction.OpCode)
                     {
@@ -281,7 +281,7 @@ namespace LadderApp
                             break;
                     }
                 }
-                line.instructions.RemoveRange(line.instructions.Count - line.outputs.Count, line.outputs.Count);
+                line.Instructions.RemoveRange(line.Instructions.Count - line.Outputs.Count, line.Outputs.Count);
             }
         }
 

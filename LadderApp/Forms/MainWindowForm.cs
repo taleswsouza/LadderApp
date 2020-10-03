@@ -1,20 +1,17 @@
+using LadderApp.CodigoInterpretavel;
+using LadderApp.Exceções;
+using LadderApp.Formularios;
+using LadderApp.Resources;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml.Serialization;
-using System.IO;
-using System.Xml;
-using System.Threading;
-using LadderApp.Formularios;
-using System.Security;
-using LadderApp.Exceções;
-using LadderApp.CodigoInterpretavel;
 using System.Diagnostics;
-using LadderApp.Resources;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace LadderApp
 {
@@ -25,8 +22,8 @@ namespace LadderApp
         private ProjectForm projectForm;
 
 
-        public delegate void InvalidateDiagrama();
-        public InvalidateDiagrama myDelegateInvalidateDiagrama;
+        public delegate void InvalidateLadderFormEventHandler();
+        public InvalidateLadderFormEventHandler InvalidateLadderFormEvent;
 
 
         public delegate void UncheckBtnSimularType();
@@ -39,7 +36,7 @@ namespace LadderApp
             this.HScroll = false;
             InitializeComponent();
 
-            myDelegateInvalidateDiagrama = new InvalidateDiagrama(InvalidateLadderForm);
+            InvalidateLadderFormEvent = new InvalidateLadderFormEventHandler(MainWindowForm_InvalidateLadderForm);
 
             myDelegateUncheckBtnSimular = new UncheckBtnSimularType(UncheckBtnSimularMethod);
 
@@ -383,7 +380,7 @@ namespace LadderApp
             InsertInstruction(VisualLine.LocalToInsertInstruction.OutputsAtRight, OperationCode.Counter);
         }
 
-        private void EditorLadder_FormClosed(object sender, FormClosedEventArgs e)
+        private void MainWindowForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             /// para garantir que a thread não estará executando qnd a aplicação fechar
             if (btnSimulateLadder.Checked)
@@ -467,8 +464,13 @@ namespace LadderApp
             // Create rectangle for displaying image.
             Rectangle destRect = new Rectangle(100, 100, 450, 150);
 
+
+            Bitmap bmp = new Bitmap(projectForm.LadderForm.Width, projectForm.LadderForm.Height);
+            this.DrawToBitmap(bmp, new Rectangle(Point.Empty, bmp.Size));
+            bmp.Save(@"C:\sample.png", ImageFormat.Png); // make sure path exists!
+
             // Draw image to screen.
-            e.Graphics.DrawImage(newImage, destRect);
+            e.Graphics.DrawImage(bmp, destRect);
 
 
             // The following code will render a simple
@@ -534,7 +536,7 @@ namespace LadderApp
         {
             if (projectForm.LadderForm.InvokeRequired)
             {
-                this.Invoke(this.myDelegateInvalidateDiagrama);
+                this.Invoke(this.InvalidateLadderFormEvent);
             }
             else
             {
@@ -555,7 +557,7 @@ namespace LadderApp
             }
         }
 
-        public void InvalidateLadderForm()
+        public void MainWindowForm_InvalidateLadderForm()
         {
             projectForm.LadderForm.Invalidate(true);
         }
@@ -567,23 +569,20 @@ namespace LadderApp
         }
 
 
-        private void ReadExecutable(String DadosConvertidosChar, String strNomeProjeto)
+        private void ReadExecutable(string content, string projectName)
         {
-            List<int> lstCodigosLidos = new List<int>();
-            OperationCode guarda = OperationCode.None;
-
-            if (DadosConvertidosChar.IndexOf("@laddermic.com") != -1)
+            OperationCode opCode = OperationCode.None;
+            if (content.IndexOf("@laddermic.com") != -1)
             {
-                Int32 intContaFim = 0;
-                Int32 lineIndex = 0;
-                Address _endLido;
-                AddressTypeEnum _tpEndLido;
-                Int32 _iIndiceEndLido = 0;
+                int countOfEnds = 0;
+                int lineIndex = 0;
+                Address address;
+                AddressTypeEnum addressType;
+                int index = 0;
 
 
                 LadderProgram program = new LadderProgram();
-                //programa.Status = LadderProgram.ProgramStatus.New;
-                program.Name = strNomeProjeto;
+                program.Name = projectName;
                 program.device = new Device();
                 program.addressing.AlocateIOAddressing(program.device);
                 program.addressing.AlocateMemoryAddressing(program.device, program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
@@ -591,116 +590,114 @@ namespace LadderApp
                 program.addressing.AlocateMemoryAddressing(program.device, program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
                 lineIndex = program.InsertLineAtEnd(new Line());
 
-                for (int i = DadosConvertidosChar.IndexOf("@laddermic.com") + 15; i < DadosConvertidosChar.Length; i++)
+                for (int position = content.IndexOf("@laddermic.com") + 15; position < content.Length; position++)
                 {
-                    guarda = (OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(i, 1));
+                    opCode = (OperationCode)Convert.ToChar(content.Substring(position, 1));
 
-                    switch (guarda)
+                    switch (opCode)
                     {
                         case OperationCode.None:
-                            intContaFim++;
+                            countOfEnds++;
                             break;
                         case OperationCode.LineEnd:
-                            intContaFim++;
-                            if ((OperationCode)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1)) != OperationCode.None)
+                            countOfEnds++;
+                            if ((OperationCode)Convert.ToChar(content.Substring(position + 1, 1)) != OperationCode.None)
                                 lineIndex = program.InsertLineAtEnd(new Line());
                             break;
                         case OperationCode.NormallyOpenContact:
                         case OperationCode.NormallyClosedContact:
-                            intContaFim = 0;
+                            countOfEnds = 0;
                             {
-                                Instruction instruction = new Instruction((OperationCode)guarda);
+                                Instruction instruction = new Instruction((OperationCode)opCode);
 
-                                _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
-                                _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                _endLido = program.addressing.Find(_tpEndLido, _iIndiceEndLido);
-                                if (_endLido == null)
+                                addressType = (AddressTypeEnum)Convert.ToChar(content.Substring(position + 1, 1));
+                                index = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
+                                address = program.addressing.Find(addressType, index);
+                                if (address == null)
                                 {
-                                    program.device.Pins[_iIndiceEndLido - 1].Type = _tpEndLido;
+                                    program.device.Pins[index - 1].Type = addressType;
                                     program.device.RealocatePinAddresses();
                                     program.addressing.AlocateIOAddressing(program.device);
-                                    _endLido = program.addressing.Find(_tpEndLido, _iIndiceEndLido);
+                                    address = program.addressing.Find(addressType, index);
                                 }
-                                instruction.SetOperand(0, _endLido);
+                                instruction.SetOperand(0, address);
 
-                                i += 2;
-                                program.Lines[lineIndex].instructions.Add(instruction);
+                                position += 2;
+                                program.Lines[lineIndex].Instructions.Add(instruction);
                             }
                             break;
                         case OperationCode.OutputCoil:
                         case OperationCode.Reset:
-                            intContaFim = 0;
+                            countOfEnds = 0;
                             {
-                                InstructionList _lstSB = new InstructionList();
-                                _lstSB.Add(new Instruction((OperationCode)guarda));
-                                _tpEndLido = (AddressTypeEnum)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1));
-                                _iIndiceEndLido = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                _endLido = program.addressing.Find(_tpEndLido, _iIndiceEndLido);
-                                if (_endLido == null)
+                                InstructionList instructions = new InstructionList();
+                                instructions.Add(new Instruction((OperationCode)opCode));
+                                addressType = (AddressTypeEnum)Convert.ToChar(content.Substring(position + 1, 1));
+                                index = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
+                                address = program.addressing.Find(addressType, index);
+                                if (address == null)
                                 {
-                                    program.device.Pins[_iIndiceEndLido - 1].Type = _tpEndLido;
+                                    program.device.Pins[index - 1].Type = addressType;
                                     program.device.RealocatePinAddresses();
                                     program.addressing.AlocateIOAddressing(program.device);
-                                    _endLido = program.addressing.Find(_tpEndLido, _iIndiceEndLido);
+                                    address = program.addressing.Find(addressType, index);
                                 }
-                                _lstSB[_lstSB.Count - 1].SetOperand(0, _endLido);
-                                i += 2;
-                                program.Lines[lineIndex].Insere2Saida(_lstSB);
-                                _lstSB.Clear();
+                                instructions[instructions.Count - 1].SetOperand(0, address);
+                                position += 2;
+                                program.Lines[lineIndex].InsertToOutputs(instructions);
+                                instructions.Clear();
                             }
                             break;
                         case OperationCode.ParallelBranchBegin:
                         case OperationCode.ParallelBranchEnd:
                         case OperationCode.ParallelBranchNext:
-                            intContaFim = 0;
-                            program.Lines[lineIndex].instructions.Add(new Instruction((OperationCode)guarda));
+                            countOfEnds = 0;
+                            program.Lines[lineIndex].Instructions.Add(new Instruction((OperationCode)opCode));
                             break;
                         case OperationCode.Counter:
-                            intContaFim = 0;
+                            countOfEnds = 0;
                             {
-                                InstructionList _lstSB = new InstructionList();
-                                _lstSB.Add(new Instruction((OperationCode)guarda));
-                                _lstSB[_lstSB.Count - 1].SetOperand(0, program.addressing.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Type = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
+                                InstructionList instructions = new InstructionList();
+                                instructions.Add(new Instruction((OperationCode)opCode));
+                                instructions[instructions.Count - 1].SetOperand(0, program.addressing.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
+                                ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
+                                ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset = (Int32)Convert.ToChar(content.Substring(position + 3, 1));
 
-                                _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Type);
-                                _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Counter.Preset);
-                                i += 3;
-                                program.Lines[lineIndex].Insere2Saida(_lstSB);
-                                _lstSB.Clear();
+                                instructions[instructions.Count - 1].SetOperand(1, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type);
+                                instructions[instructions.Count - 1].SetOperand(2, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset);
+                                position += 3;
+                                program.Lines[lineIndex].InsertToOutputs(instructions);
+                                instructions.Clear();
                             }
                             break;
                         case OperationCode.Timer:
-                            intContaFim = 0;
+                            countOfEnds = 0;
                             {
-                                InstructionList _lstSB = new InstructionList();
-                                _lstSB.Add(new Instruction((OperationCode)guarda));
-                                _lstSB[_lstSB.Count - 1].SetOperand(0, program.addressing.Find(AddressTypeEnum.DigitalMemoryTimer, (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 1, 1))));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Type = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 2, 1));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.TimeBase = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 3, 1));
-                                ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Preset = (Int32)Convert.ToChar(DadosConvertidosChar.Substring(i + 4, 1));
+                                InstructionList instructions = new InstructionList();
+                                instructions.Add(new Instruction((OperationCode)opCode));
+                                instructions[instructions.Count - 1].SetOperand(0, program.addressing.Find(AddressTypeEnum.DigitalMemoryTimer, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
+                                ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Type = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
+                                ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.TimeBase = (Int32)Convert.ToChar(content.Substring(position + 3, 1));
+                                ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Preset = (Int32)Convert.ToChar(content.Substring(position + 4, 1));
 
-                                _lstSB[_lstSB.Count - 1].SetOperand(1, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Type);
-                                _lstSB[_lstSB.Count - 1].SetOperand(2, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.Preset);
-                                _lstSB[_lstSB.Count - 1].SetOperand(4, ((Address)_lstSB[_lstSB.Count - 1].GetOperand(0)).Timer.TimeBase);
+                                instructions[instructions.Count - 1].SetOperand(1, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Type);
+                                instructions[instructions.Count - 1].SetOperand(2, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Preset);
+                                instructions[instructions.Count - 1].SetOperand(4, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.TimeBase);
 
-                                i += 4;
-                                program.Lines[lineIndex].Insere2Saida(_lstSB);
-                                _lstSB.Clear();
+                                position += 4;
+                                program.Lines[lineIndex].InsertToOutputs(instructions);
+                                instructions.Clear();
                             }
                             break;
                     }
 
                     /// fim dos códigos
-                    if (intContaFim >= 2)
+                    if (countOfEnds >= 2)
                     {
-                        /// grava os dados lidos do codigo intepretavel
                         MSP430IntegrationServices p = new MSP430IntegrationServices();
-                        p.CreateFile("codigosinterpretaveis.txt", DadosConvertidosChar.Substring(DadosConvertidosChar.IndexOf("@laddermic.com"), i - DadosConvertidosChar.IndexOf("@laddermic.com") + 1));
-
-                        /// força saída do loop
-                        i = DadosConvertidosChar.Length;
+                        //p.CreateFile("codigosinterpretaveis.txt", content.Substring(content.IndexOf("@laddermic.com"), i - content.IndexOf("@laddermic.com") + 1));
+                        //position = content.Length;
+                        break;
                     }
                 }
                 projectForm = new ProjectForm(program);
@@ -762,16 +759,10 @@ namespace LadderApp
         {
             try
             {
-                // TODO: Add code here to save the current contents of the form to a file.
-                XmlSerializer mySerializer = new XmlSerializer(typeof(LadderProgram));
-                //teste XmlSerializer mySerializer = new XmlSerializer(typeof(DispositivoLadder));
-                //XmlSerializer mySerializer = new XmlSerializer(typeof(DispositivoLadder));
-                // To write to a file, create a StreamWriter object.
-                StreamWriter myWriter = new StreamWriter(FileName);
-                mySerializer.Serialize(myWriter, projectForm.Program);
-                //teste mySerializer.Serialize(myWriter, frmProj.programa.dispositivo);
-                //mySerializer.Serialize(myWriter, frmProj.programa.dispositivo);
-                myWriter.Close();
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(LadderProgram));
+                StreamWriter fsWriter = new StreamWriter(FileName);
+                xmlSerializer.Serialize(fsWriter, projectForm.Program);
+                fsWriter.Close();
                 projectForm.PathFile = FileName;
                 projectForm.Program.Name = Path.GetFileNameWithoutExtension(FileName);
                 projectForm.Status = ProjectForm.ProgramStatus.Saved;
@@ -779,21 +770,13 @@ namespace LadderApp
             }
             catch (Exception ex)
             {
-                try
-                {
-                    MessageBox.Show("The file cannot be saved!" + ex.InnerException.Message, "Salve As ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch
-                {
-                    MessageBox.Show("The file cannot be saved!" + ex.Message, "Salvar As ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("The file cannot be saved!" + GetMessage(ex), "Salve As ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-
-        private void mnuGravarLadderNoExecutavel_Click_1(object sender, EventArgs e)
+        private static string GetMessage(Exception ex)
         {
-            mnuMicrocontrollerLadderSaveInsideMic.Checked = ((mnuMicrocontrollerLadderSaveInsideMic.Checked == true) ? false : true);
+            return ex.InnerException != null ? ex.InnerException.Message : ex.Message;
         }
 
         private void mnuMicrocontrollerOptionsJtagUsb_Click(object sender, EventArgs e)
@@ -853,13 +836,13 @@ namespace LadderApp
                 mnuMicrocontrollerLadderAskPasswordToRead.Enabled = true;
         }
 
-        private bool bSimulacao = false;
+        private bool Simulation = false;
         private void btnSimulateLadder_Click(object sender, EventArgs e)
         {
             /// inverte condição da simulação - habilitada / desabilitada
-            bSimulacao = (bSimulacao == true ? false : true);
+            Simulation = (Simulation == true ? false : true);
 
-            if (bSimulacao)
+            if (Simulation)
             {
                 btnSimulateLadder.Checked = true;
                 mnuLadderSimulate.Checked = true;
@@ -897,9 +880,9 @@ namespace LadderApp
             MSP430IntegrationServices p = new MSP430IntegrationServices();
             try
             {
-                String strLido = p.ReadsViaUSB();
-                if (VerifyPassword(strLido))
-                    ReadExecutable(strLido, "No Name");
+                string content = p.ReadsViaUSB();
+                if (VerifyPassword(content))
+                    ReadExecutable(content, "No Name");
             }
             catch (CouldNotInitializeTIUSBException ex)
             {
@@ -963,6 +946,21 @@ namespace LadderApp
             {
                 MessageBox.Show(ex.Message, "LadderApp");
             }
+        }
+
+        private void mnuMicrocontrollerLadderSaveInsideMic_Click(object sender, EventArgs e)
+        {
+            mnuMicrocontrollerLadderSaveInsideMic.Checked = ((mnuMicrocontrollerLadderSaveInsideMic.Checked == true) ? false : true);
+        }
+
+        private void printPreviewToolStripButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void printPreviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

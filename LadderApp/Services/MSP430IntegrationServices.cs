@@ -32,14 +32,14 @@ namespace LadderApp
 
         public MSP430IntegrationServices()
         {
-            p.StartInfo = startInfo;
-            SetDefaults();
-            compiledFilenames.Clear();
-            createdFilenames.Clear();
-            strMMCU = "-mmcu=msp430f2013 ";
+            //p.StartInfo = startInfo;
+            //SetDefaults();
+            //compiledFilenames.Clear();
+            //createdFilenames.Clear();
+            //strMMCU = "-mmcu=msp430f2013 ";
         }
 
-        public MSP430IntegrationServices(bool deleteIntermediateFiles)
+        public MSP430IntegrationServices(bool deleteIntermediateFiles) : this()
         {
             p.StartInfo = startInfo;
             SetDefaults();

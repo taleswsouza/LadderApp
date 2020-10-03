@@ -118,24 +118,6 @@ namespace LadderApp
             return GetNumberOfOperands();
         }
 
-        //private Size TamanhoXY;
-        //[XmlIgnore]
-        //public Size tamanhoXY
-        //{
-        //    get { return TamanhoXY; }
-        //    set { TamanhoXY = new Size(0, 0); }
-        //}
-
-        //private Point positionXY;
-        //public Point PositionXY { get => positionXY; set => positionXY = new Point(0, 0); }
-
-        //[XmlIgnore]
-        //public Point XYConexao
-        //{
-        //    get { return new Point(0, 0); }
-        //}
-
-
         public void Dispose()
         {
             OpCode = OperationCode.None;

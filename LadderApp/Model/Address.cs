@@ -97,47 +97,38 @@ namespace LadderApp
             }
         }
 
-        [XmlIgnore]
-        public String EnderecoRaiz
+        public string GetVariableName()
         {
-            get
+            switch (this.addressType)
             {
-                switch (this.addressType)
-                {
-                    case AddressTypeEnum.DigitalInput:
-                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
-                    case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
-                    case AddressTypeEnum.DigitalMemory:
-                        return "M" + ((Id / NumberOfBitsByPort) + 1);
-                    case AddressTypeEnum.DigitalMemoryTimer:
-                        return "T" + Id.ToString();
-                    case AddressTypeEnum.DigitalMemoryCounter:
-                        return "C" + Id.ToString();
-                    default:
-                        return "ERROR";
-                }
+                case AddressTypeEnum.DigitalInput:
+                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
+                case AddressTypeEnum.DigitalOutput:
+                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
+                case AddressTypeEnum.DigitalMemory:
+                    return "M" + ((Id / NumberOfBitsByPort) + 1);
+                case AddressTypeEnum.DigitalMemoryTimer:
+                    return "T" + Id.ToString();
+                case AddressTypeEnum.DigitalMemoryCounter:
+                    return "C" + Id.ToString();
+                default:
+                    return "ERROR";
             }
         }
 
         /// <summary>
         /// Para realizar a Parametrização do endereco dentro do código C
-        [XmlIgnore]
-        public String Parametro
+        public string GetPortParameterization()
         {
-            get
+            switch (this.addressType)
             {
-                switch (this.addressType)
-                {
-                    case AddressTypeEnum.DigitalInput:
-                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 0";
-                    case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 1";
-                    default:
-                        return "ERROR";
-                }
+                case AddressTypeEnum.DigitalInput:
+                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 0";
+                case AddressTypeEnum.DigitalOutput:
+                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 1";
+                default:
+                    return "ERROR";
             }
-            //set { parametro = value; }
         }
 
         /// <summary>

@@ -1,206 +1,189 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace LadderApp
 {
     public partial class DeviceForm : Form
     {
-        public List<AddressTypeEnum> lstEndModificado = new List<AddressTypeEnum>();
+        private Color DefaultTextColor = Color.Black;
+        Color DefaultUndefinedColor = Color.Red;
+        Color DefaultDefinedColor = Color.Green;
 
-        Color corTextoPadrao = Color.Black;
-        Color corPinoIndefinida = Color.Red;
-        Color corPinoDefinida = Color.Green;
+        public List<AddressTypeEnum> PinTypeList { get; set; } = new List<AddressTypeEnum>();
 
         public DeviceForm()
         {
             InitializeComponent();
         }
 
-        public DeviceForm(Device dl)
+        public DeviceForm(Device device) : this()
         {
-            String _txtPino = "";
-            Color _cor = corTextoPadrao;
-            InitializeComponent();
-            lblFabricante.Text = "Manufacturer: " + dl.Manufacturer;
-            lblSerie.Text = "Series: " + dl.Series;
-            lblModelo.Text = "Model: " + dl.Model;
-            lblQtdPortas.Text = "Number of ports: " + dl.NumberOfPorts.ToString();
-            lblQtdBitsPorta.Text = "Number of bits per port: " + dl.NumberBitsByPort.ToString();
+            lblManufacturer.Text = "Manufacturer: " + device.Manufacturer;
+            lblSeries.Text = "Series: " + device.Series;
+            lblModel.Text = "Model: " + device.Model;
+            lblNumberOfPorts.Text = "Number of ports: " + device.NumberOfPorts.ToString();
+            lblNumberOfBitsPerPort.Text = "Number of bits per port: " + device.NumberBitsByPort.ToString();
 
             int i = 1;
-            int j = 0;
-            foreach(Pin pd in dl.Pins)
+            foreach (Pin pin in device.Pins)
             {
-                //_txtPino = "Pino " + i.ToString().PadLeft(2,'0');
-                _txtPino = "(P" + (((i - 1) / dl.NumberBitsByPort) + 1) + "." + ((i - 1) - ((Int16)((i - 1) / dl.NumberBitsByPort) * dl.NumberBitsByPort)) + ")";
-                switch (pd.PinType)
+                Color color = DefaultTextColor;
+                String pinText = "(P" + (((i - 1) / device.NumberBitsByPort) + 1) + "." + ((i - 1) - ((Int16)((i - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + ")";
+                switch (pin.PinType)
                 {
                     case PinTypeEnum.IODigitalInputOrOutput:
-                        if (pd.Type == AddressTypeEnum.None)
+                        if (pin.Type == AddressTypeEnum.None)
                         {
-                            _txtPino += "-Not Used";
-                            _cor = corPinoIndefinida;
+                            pinText += "-Not Used";
+                            color = DefaultUndefinedColor;
                         }
-                        else if (pd.Type == AddressTypeEnum.DigitalInput)
+                        else if (pin.Type == AddressTypeEnum.DigitalInput)
                         {
-                            _txtPino += "-Input";
-                            _cor = corPinoDefinida;
+                            pinText += "-Input";
+                            color = DefaultDefinedColor;
                         }
-                        else if (pd.Type == AddressTypeEnum.DigitalOutput)
+                        else if (pin.Type == AddressTypeEnum.DigitalOutput)
                         {
-                            _txtPino += "-Output";
-                            _cor = corPinoDefinida;
+                            pinText += "-Output";
+                            color = DefaultDefinedColor;
                         }
                         break;
                     case PinTypeEnum.IODigitalInput:
-                        _txtPino += "-Input";
+                        pinText += "-Input";
                         break;
                     case PinTypeEnum.IODigitalOutput:
-                        _txtPino += "-Output";
+                        pinText += "-Output";
                         break;
                     default:
-                        _txtPino += "-Unavailable";
+                        pinText += "-Unavailable";
                         break;
                 }
-                //if (pd.TipoPino != TiposPinosDispositivo.NENHUM)
-                //{
-                    ArvorePinos.Nodes[0].Nodes.Add(_txtPino);
-                    ArvorePinos.Nodes[0].Nodes[j].ForeColor = _cor;
-                    ArvorePinos.Nodes[0].Nodes[j].Tag = pd.PinType;
-                    lstEndModificado.Add(pd.Type);
-                    _cor = corTextoPadrao;
-                    j++;
-                //}
+                tvnPinsTree.Nodes[0].Nodes.Add(pinText);
+                tvnPinsTree.Nodes[0].Nodes[i-1].ForeColor = color;
+                tvnPinsTree.Nodes[0].Nodes[i-1].Tag = pin.PinType;
+                PinTypeList.Add(pin.Type);
+                color = DefaultTextColor;
                 i++;
-                
             }
-            grpConfiguraPino.Visible = false;
+            grpPinConfiguration.Visible = false;
         }
 
-        private void ArvorePortas_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void tvnPinsTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            PinoSelecionado(e.Node);
+            PinSelectedEvent(e.Node);
         }
 
-        private void ArvorePortas_AfterSelect(object sender, TreeViewEventArgs e)
+        private void tvnPinsTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            PinoSelecionado(e.Node);
+            PinSelectedEvent(e.Node);
         }
 
-        private void PinoSelecionado(TreeNode e)
+        private void PinSelectedEvent(TreeNode e)
         {
 
             if (e.Text.StartsWith("(P"))
             {
-                grpConfiguraPino.Visible = true;
-                grpConfiguraPino.Text = "Bit Configuration : " + e.Text.Substring(1, e.Text.IndexOf(")-")- 1);
+                grpPinConfiguration.Visible = true;
+                grpPinConfiguration.Text = "Bit Configuration : " + e.Text.Substring(1, e.Text.IndexOf(")-") - 1);
 
-                rbEntradaOuSaida.Enabled = true;
-                rbEntrada.Enabled = true;
-                rbSaida.Enabled = true;
-                rbOutro.Enabled = true;
+                rbNotUsed.Enabled = true;
+                rbInput.Enabled = true;
+                rbOutput.Enabled = true;
+                rbUnavailable.Enabled = true;
 
                 switch ((PinTypeEnum)e.Tag)
                 {
                     case PinTypeEnum.IODigitalInputOrOutput:
-                        rbEntradaOuSaida.Enabled = true;
-                        rbEntrada.Enabled = true;
-                        rbSaida.Enabled = true;
-                        rbOutro.Enabled = false;
+                        rbNotUsed.Enabled = true;
+                        rbInput.Enabled = true;
+                        rbOutput.Enabled = true;
+                        rbUnavailable.Enabled = false;
 
-                        switch (lstEndModificado[e.Index])
+                        switch (PinTypeList[e.Index])
                         {
                             case AddressTypeEnum.None:
-                                rbEntradaOuSaida.Checked = true;
+                                rbNotUsed.Checked = true;
                                 break;
                             case AddressTypeEnum.DigitalInput:
-                                rbEntrada.Checked = true;
+                                rbInput.Checked = true;
                                 break;
                             case AddressTypeEnum.DigitalOutput:
-                                rbSaida.Checked = true;
+                                rbOutput.Checked = true;
                                 break;
                         }
 
                         break;
                     case PinTypeEnum.IODigitalInput:
-                        rbEntradaOuSaida.Enabled = false;
-                        rbEntrada.Checked = true;
-                        rbSaida.Enabled = false;
-                        rbOutro.Enabled = false;
+                        rbNotUsed.Enabled = false;
+                        rbInput.Checked = true;
+                        rbOutput.Enabled = false;
+                        rbUnavailable.Enabled = false;
                         break;
                     case PinTypeEnum.IODigitalOutput:
-                        rbEntradaOuSaida.Enabled = false;
-                        rbEntrada.Enabled = false;
-                        rbSaida.Checked = true;
-                        rbOutro.Enabled = false;
+                        rbNotUsed.Enabled = false;
+                        rbInput.Enabled = false;
+                        rbOutput.Checked = true;
+                        rbUnavailable.Enabled = false;
                         break;
                     default:
-                        rbEntradaOuSaida.Enabled = false;
-                        rbEntrada.Enabled = false;
-                        rbSaida.Enabled = false;
-                        rbOutro.Checked = true;
+                        rbNotUsed.Enabled = false;
+                        rbInput.Enabled = false;
+                        rbOutput.Enabled = false;
+                        rbUnavailable.Checked = true;
                         break;
                 }
             }
             else
-                grpConfiguraPino.Visible = false;
+                grpPinConfiguration.Visible = false;
         }
 
-        private void btnAplicar_Click(object sender, EventArgs e)
+        private void btnApply_Click(object sender, EventArgs e)
         {
-            String _txtPino = ArvorePinos.SelectedNode.Text.Substring(0, ArvorePinos.SelectedNode.Text.IndexOf(")-")+1);
-            //String _txtPino = "(P"; //+ ((i / dl.QtdBitsPorta) + 1) + "." + ((i - 1) - ((Int16)((i - 1) / dl.QtdBitsPorta) * dl.QtdBitsPorta)) + ")";
+            string pinText = tvnPinsTree.SelectedNode.Text.Substring(0, tvnPinsTree.SelectedNode.Text.IndexOf(")-") + 1);
 
-            Color _cor = corTextoPadrao;
+            Color color = DefaultTextColor;
 
-            if (ArvorePinos.SelectedNode.Text.StartsWith("(P"))
+            if (tvnPinsTree.SelectedNode.Text.StartsWith("(P"))
             {
-                switch ((PinTypeEnum)ArvorePinos.SelectedNode.Tag)
+                switch ((PinTypeEnum)tvnPinsTree.SelectedNode.Tag)
                 {
                     case PinTypeEnum.IODigitalInputOrOutput:
-                        _cor = corPinoDefinida;
-                        if (rbEntradaOuSaida.Checked == true)
+                        color = DefaultDefinedColor;
+                        if (rbNotUsed.Checked == true)
                         {
-                            lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.None;
-                            _txtPino += "-Not Used";
-                            _cor = corPinoIndefinida;
+                            PinTypeList[tvnPinsTree.SelectedNode.Index] = AddressTypeEnum.None;
+                            pinText += "-Not Used";
+                            color = DefaultUndefinedColor;
                         }
-                        else if (rbEntrada.Checked == true)
+                        else if (rbInput.Checked == true)
                         {
-                            lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DigitalInput;
-                            _txtPino += "-Input";
+                            PinTypeList[tvnPinsTree.SelectedNode.Index] = AddressTypeEnum.DigitalInput;
+                            pinText += "-Input";
                         }
-                        else if (rbSaida.Checked == true)
+                        else if (rbOutput.Checked == true)
                         {
-                            lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DigitalOutput;
-                            _txtPino += "-Output";
+                            PinTypeList[tvnPinsTree.SelectedNode.Index] = AddressTypeEnum.DigitalOutput;
+                            pinText += "-Output";
                         }
-                        ///rbEntradaOuSaida.Checked = true;
                         break;
                     case PinTypeEnum.IODigitalInput:
-                        _txtPino += "-Input";
-                        _cor = corPinoDefinida;
-                        lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DigitalInput;
-                        //rbEntrada.Checked = true;
+                        pinText += "-Input";
+                        color = DefaultDefinedColor;
+                        PinTypeList[tvnPinsTree.SelectedNode.Index] = AddressTypeEnum.DigitalInput;
                         break;
                     case PinTypeEnum.IODigitalOutput:
-                        _txtPino += "-Output";
-                        _cor = corPinoDefinida;
-                        lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.DigitalOutput;
-                        //rbSaida.Checked = true;
+                        pinText += "-Output";
+                        color = DefaultDefinedColor;
+                        PinTypeList[tvnPinsTree.SelectedNode.Index] = AddressTypeEnum.DigitalOutput;
                         break;
                     default:
-                        lstEndModificado[ArvorePinos.SelectedNode.Index] = AddressTypeEnum.None;
-                        //rbOutro.Checked = true;
+                        PinTypeList[tvnPinsTree.SelectedNode.Index] = AddressTypeEnum.None;
                         break;
                 }
-                ArvorePinos.SelectedNode.Text = _txtPino;
-                ArvorePinos.SelectedNode.ForeColor = _cor;
+                tvnPinsTree.SelectedNode.Text = pinText;
+                tvnPinsTree.SelectedNode.ForeColor = color;
             }
         }
 
@@ -209,10 +192,10 @@ namespace LadderApp
             this.Close();
         }
 
-        private void btnCancelar_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-    
+
     }
 }

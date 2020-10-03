@@ -59,14 +59,12 @@ namespace LadderApp
 
         public void RemoveLineAt(int index)
         {
-            Lines[index].ApagaLinha();
+            Lines[index].DeleteLine();
             Lines.RemoveAt(index);
         }
 
         public void SimulateTimers()
         {
-            /// faz a função de um preset parcial para acumular na base de tempo
-            /// programada para o temporizador, utilizando a base de tempo da thread (100ms)
             int parcialPreset = -1;
 
             /// executa a rotina para cada temporizador
@@ -250,7 +248,7 @@ namespace LadderApp
             foreach (Line line in this.Lines)
             {
                 lineStretchSummary.Add(new LineStretchSummary());
-                foreach (Instruction instruction in line.instructions)
+                foreach (Instruction instruction in line.Instructions)
                 {
                     switch (instruction.OpCode)
                     {
@@ -287,7 +285,7 @@ namespace LadderApp
                     }
                 }
 
-                foreach (Instruction instruction in line.outputs)
+                foreach (Instruction instruction in line.Outputs)
                 {
                     switch (instruction.OpCode)
                     {
@@ -447,7 +445,7 @@ namespace LadderApp
             foreach (Line line in this.Lines)
             {
                 lineText = "";
-                foreach (Instruction instruction in line.instructions)
+                foreach (Instruction instruction in line.Instructions)
                 {
                     switch (instruction.OpCode)
                     {
@@ -496,7 +494,7 @@ namespace LadderApp
 
                 operandsInLine.Clear();
                 operandsInLine2MaybeWithAddress.Clear();
-                foreach (Instruction instruction in line.outputs)
+                foreach (Instruction instruction in line.Outputs)
                 {
                     switch (instruction.OpCode)
                     {
@@ -596,8 +594,8 @@ namespace LadderApp
                 string contentIOSetup = "";
                 string contentReadInputs = "";
                 string contentWriteOutputs = "";
-                string contentParameters = "";
-                string contentAddress = "";
+                string contentParameterization = "";
+                string contentVariableDeclarations = "";
                 string contentOpCodes = "";
                 string contentTimers = "";
                 bool counterPresent = false;
@@ -605,44 +603,44 @@ namespace LadderApp
                 bool inputsPresent = false;
                 bool outputsPresent = false;
 
-                List<String> usedAddresses = new List<String>();
-                List<String> usedPorts = new List<String>();
-                List<Int32> usedTimerTypes = new List<Int32>();
-                List<Int32> usedCounterTypes = new List<Int32>();
+                List<string> usedVariableNames = new List<string>();
+                List<string> usedPorts = new List<string>();
+                List<int> usedTimerTypes = new List<int>();
+                List<int> usedCounterTypes = new List<int>();
 
                 /// 1. prepara a configuração para as portas de entrada.
                 /// 2. levantamento das portas que foram usadas no programa
                 foreach (Address address in addressing.ListInputAddress)
-                    if (address.Parametro != "" && address.Used == true)
+                    if (address.GetPortParameterization() != "" && address.Used == true)
                     {
                         inputsPresent = true;
                         /// 1.1. Adiciona os parametros dos endereços usados no programa
-                        contentParameters += "\t" + address.Parametro + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.GetPortParameterization() + ";" + Environment.NewLine;
 
                         /// 2.1. prerapara a declaração dos endereços
-                        if (!usedPorts.Contains(address.EnderecoRaiz))
-                            usedPorts.Add(address.EnderecoRaiz);
+                        if (!usedPorts.Contains(address.GetVariableName()))
+                            usedPorts.Add(address.GetVariableName());
                     }
-                contentParameters += Environment.NewLine;
+                contentParameterization += Environment.NewLine;
 
                 /// 1. prepara a configuração para as portas de saida.
                 /// 2. levantamento das portas que foram usadas no programa
                 foreach (Address address in addressing.ListOutputAddress)
-                    if (address.Parametro != "" && address.Used == true)
+                    if (address.GetPortParameterization() != "" && address.Used == true)
                     {
                         outputsPresent = true;
                         /// 1.1. Adiciona os parametros dos endereços usados no programa
-                        contentParameters += "\t" + address.Parametro + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.GetPortParameterization() + ";" + Environment.NewLine;
 
                         /// 2.1. prerapara a declaração dos endereços
-                        if (!usedPorts.Contains(address.EnderecoRaiz))
-                            usedPorts.Add(address.EnderecoRaiz);
+                        if (!usedPorts.Contains(address.GetVariableName()))
+                            usedPorts.Add(address.GetVariableName());
                     }
-                contentParameters += Environment.NewLine;
+                contentParameterization += Environment.NewLine;
 
                 /// prepara a declaração das portas que foram usadas no programa
                 for (int i = 0; i < usedPorts.Count; i++)
-                    usedAddresses.Add(usedPorts[i] + "_IN, " + usedPorts[i] + "_OUT, " + usedPorts[i] + "_DIR");
+                    usedVariableNames.Add(usedPorts[i] + "_IN, " + usedPorts[i] + "_OUT, " + usedPorts[i] + "_DIR");
 
                 for (int i = 0; i < usedPorts.Count; i++)
                 {
@@ -672,36 +670,36 @@ namespace LadderApp
                     if (address.Used)
                     {
                         /// prerapara a declaração dos endereços
-                        if (!usedAddresses.Contains(address.EnderecoRaiz))
-                            usedAddresses.Add(address.EnderecoRaiz);
+                        if (!usedVariableNames.Contains(address.GetVariableName()))
+                            usedVariableNames.Add(address.GetVariableName());
                     }
 
                 /// Prepara a lista de endereços do tipo TPort - que será declarada
-                if (usedAddresses.Count > 0)
+                if (usedVariableNames.Count > 0)
                 {
-                    contentAddress += "TPort ";
-                    foreach (String _strDeclaraVariavel in usedAddresses)
-                        contentAddress += _strDeclaraVariavel + ", ";
-                    contentAddress = contentAddress.Substring(0, contentAddress.Length - 2) + ";" + Environment.NewLine;
-                    usedAddresses.Clear();
+                    contentVariableDeclarations += "TPort ";
+                    foreach (String _strDeclaraVariavel in usedVariableNames)
+                        contentVariableDeclarations += _strDeclaraVariavel + ", ";
+                    contentVariableDeclarations = contentVariableDeclarations.Substring(0, contentVariableDeclarations.Length - 2) + ";" + Environment.NewLine;
+                    usedVariableNames.Clear();
                 }
 
                 /// Adiciona os parametros dos endereços usados no programa
-                contentParameters += "// timer parameters" + Environment.NewLine;
+                contentParameterization += "// timer parameters" + Environment.NewLine;
                 foreach (Address address in addressing.ListTimerAddress)
                 {
                     if (address.Used)
                     {
                         timerPresent = true;
-                        contentParameters += "\t" + address.Name + ".Tipo = " + address.Timer.Type.ToString() + ";" + Environment.NewLine;
-                        contentParameters += "\t" + address.Name + ".Base = " + address.Timer.TimeBase.ToString() + ";" + Environment.NewLine;
-                        contentParameters += "\t" + address.Name + ".Preset = " + address.Timer.Preset.ToString() + ";" + Environment.NewLine;
-                        contentParameters += "\t" + address.Name + ".Acumulado = 0;" + Environment.NewLine;
-                        contentParameters += Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Tipo = " + address.Timer.Type.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Base = " + address.Timer.TimeBase.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Preset = " + address.Timer.Preset.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Acumulado = 0;" + Environment.NewLine;
+                        contentParameterization += Environment.NewLine;
 
                         /// prerapara a declaração dos endereços
-                        if (!usedAddresses.Contains(address.EnderecoRaiz))
-                            usedAddresses.Add(address.EnderecoRaiz);
+                        if (!usedVariableNames.Contains(address.GetVariableName()))
+                            usedVariableNames.Add(address.GetVariableName());
 
                         /// prerapara verificação dos tipos de temporizadores usados
                         if (!usedTimerTypes.Contains(address.Timer.Type))
@@ -710,16 +708,16 @@ namespace LadderApp
                 }
 
                 /// Prepara a lista de endereços do tipo TTemporizador  - que será declarada
-                if (usedAddresses.Count > 0)
+                if (usedVariableNames.Count > 0)
                 {
-                    contentAddress += "TTemporizador ";
-                    foreach (String variableDeclaration in usedAddresses)
+                    contentVariableDeclarations += "TTemporizador ";
+                    foreach (String variableName in usedVariableNames)
                     {
-                        contentAddress += variableDeclaration + ", ";
-                        contentTimers += "ExecTemporizador(&" + variableDeclaration + ");" + Environment.NewLine;
+                        contentVariableDeclarations += variableName + ", ";
+                        contentTimers += "ExecTemporizador(&" + variableName + ");" + Environment.NewLine;
                     }
-                    contentAddress = contentAddress.Substring(0, contentAddress.Length - 2) + ";" + Environment.NewLine;
-                    usedAddresses.Clear();
+                    contentVariableDeclarations = contentVariableDeclarations.Substring(0, contentVariableDeclarations.Length - 2) + ";" + Environment.NewLine;
+                    usedVariableNames.Clear();
                 }
 
 
@@ -729,14 +727,14 @@ namespace LadderApp
                     if (address.Used)
                     {
                         counterPresent = true;
-                        contentParameters += "\t" + address.Name + ".Tipo = " + address.Counter.Type.ToString() + ";" + Environment.NewLine;
-                        contentParameters += "\t" + address.Name + ".Preset = " + address.Counter.Preset.ToString() + ";" + Environment.NewLine;
-                        contentParameters += "\t" + address.Name + ".Acumulado = 0;" + Environment.NewLine;
-                        contentParameters += Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Tipo = " + address.Counter.Type.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Preset = " + address.Counter.Preset.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Acumulado = 0;" + Environment.NewLine;
+                        contentParameterization += Environment.NewLine;
 
                         /// prerapara a declaração dos endereços
-                        if (!usedAddresses.Contains(address.EnderecoRaiz))
-                            usedAddresses.Add(address.EnderecoRaiz);
+                        if (!usedVariableNames.Contains(address.GetVariableName()))
+                            usedVariableNames.Add(address.GetVariableName());
 
                         /// prerapara verificação dos tipos de temporizadores usados
                         if (!usedCounterTypes.Contains(address.Counter.Type))
@@ -745,20 +743,20 @@ namespace LadderApp
                 }
 
                 /// Prepara a lista de endereços do tipo TContador  - que será declarada
-                if (usedAddresses.Count > 0)
+                if (usedVariableNames.Count > 0)
                 {
-                    contentAddress += "TContador ";
-                    foreach (String variableDeclaration in usedAddresses)
-                        contentAddress += variableDeclaration + ", ";
-                    contentAddress = contentAddress.Substring(0, contentAddress.Length - 2) + ";" + Environment.NewLine;
-                    usedAddresses.Clear();
+                    contentVariableDeclarations += "TContador ";
+                    foreach (String variableDeclaration in usedVariableNames)
+                        contentVariableDeclarations += variableDeclaration + ", ";
+                    contentVariableDeclarations = contentVariableDeclarations.Substring(0, contentVariableDeclarations.Length - 2) + ";" + Environment.NewLine;
+                    usedVariableNames.Clear();
                 }
 
                 MSP430IntegrationServices msp430gcc = new MSP430IntegrationServices(false);
 
                 /// Prepara ENDERECOS
                 contentAddressesDotHFile = MicrocontrollersBaseCodeFilesResource.enderecosH;
-                contentAddressesDotHFile = contentAddressesDotHFile.Replace("#ENDEREÇOS#", contentAddress);
+                contentAddressesDotHFile = contentAddressesDotHFile.Replace("#VARIABLE_DECLARATIONS#", contentVariableDeclarations);
                 contentAddressesDotHFile.Trim();
 
                 msp430gcc.CreateFile("enderecos.h", contentAddressesDotHFile);
@@ -774,38 +772,38 @@ namespace LadderApp
 
                 /// Prepara FUNCOES
                 if (counterPresent) /// CONTADOR
-                    contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.funcoesH.Replace("#EXECCONTADOR_H#", MicrocontrollersBaseCodeFilesResource.ExecContador_funcoesH);
+                    contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.funcoesH.Replace("#EXECCOUNTER_FUNCTION_H#", MicrocontrollersBaseCodeFilesResource.ExecContador_funcoesH);
                 else
-                    contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.funcoesH.Replace("#EXECCONTADOR_H#", "");
+                    contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.funcoesH.Replace("#EXECCOUNTER_FUNCTION_H#", "");
 
 
                 if (timerPresent) /// TEMPORIZADOR
-                    contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTEMPORIZADOR_H#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_funcoesH);
+                    contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTIMER_FUNCTION_H#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_funcoesH);
                 else
-                    contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTEMPORIZADOR_H#", "");
+                    contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTIMER_FUNCTION_H#", "");
 
                 msp430gcc.CreateFile("funcoes.h", contentFunctionsDotHFile);
 
 
                 /// Prepara USUARIO
                 if (timerPresent)
-                    contentUserDotHFile = MicrocontrollersBaseCodeFilesResource.usuarioH.Replace("#EXECTEMPORIZADORES_H#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioH);
+                    contentUserDotHFile = MicrocontrollersBaseCodeFilesResource.usuarioH.Replace("#EXEC_TIMERS_USER_H#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioH);
                 else
-                    contentUserDotHFile = MicrocontrollersBaseCodeFilesResource.usuarioH.Replace("#EXECTEMPORIZADORES_H#", "");
+                    contentUserDotHFile = MicrocontrollersBaseCodeFilesResource.usuarioH.Replace("#EXEC_TIMERS_USER_H#", "");
 
                 msp430gcc.CreateFile("usuario.h", contentUserDotHFile);
 
                 contentUserDotCFile = MicrocontrollersBaseCodeFilesResource.usuarioC;
                 if (timerPresent)
                 {
-                    contentUserDotCFile = contentUserDotCFile.Replace("#EXECTEMPORIZADORES_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioC);
-                    contentUserDotCFile = contentUserDotCFile.Replace("#TEMPORIZADORES#", contentTimers);
+                    contentUserDotCFile = contentUserDotCFile.Replace("#EXEC_TIMERS_USER_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioC);
+                    contentUserDotCFile = contentUserDotCFile.Replace("#TIMERS_USER_C#", contentTimers);
                 }
                 else
-                    contentUserDotCFile = contentUserDotCFile.Replace("#EXECTEMPORIZADORES_C#", "");
+                    contentUserDotCFile = contentUserDotCFile.Replace("#EXEC_TIMERS_USER_C#", "");
 
                 contentUserDotCFile = contentUserDotCFile.Replace("#LADDER#", doc);
-                contentUserDotCFile = contentUserDotCFile.Replace("#PARAMETROS#", contentParameters);
+                contentUserDotCFile = contentUserDotCFile.Replace("#PARAMETERIZATION#", contentParameterization);
                 contentUserDotCFile.Trim();
 
                 msp430gcc.CreateFile("usuario.c", contentUserDotCFile);
@@ -818,24 +816,24 @@ namespace LadderApp
                 if (savePrograInsideExecutable)
                 {
                     opCode2TextServices.FinalizaCabecalho();
-                    contentOpCodes = "const unsigned char codigosInterpretaveis[" + opCode2TextServices.Length.ToString().Trim() + "] = {" + opCode2TextServices.ToString() + "};";
-                    contentMainDotCFile = contentMainDotCFile.Replace("#CODIGOSINTERPRETAVEIS#", contentOpCodes);
+                    contentOpCodes = "const unsigned char ladderInstructions[" + opCode2TextServices.Length.ToString().Trim() + "] = {" + opCode2TextServices.ToString() + "};";
+                    contentMainDotCFile = contentMainDotCFile.Replace("#LADDER_INSTRUCTIONS#", contentOpCodes);
                 }
                 else
-                    contentMainDotCFile = contentMainDotCFile.Replace("#CODIGOSINTERPRETAVEIS#", "");
+                    contentMainDotCFile = contentMainDotCFile.Replace("#LADDER_INSTRUCTIONS#", "");
                 contentMainDotCFile.Trim();
 
-                /// criar classe para tratar codigos interpretaveis
-                msp430gcc.CreateFile("codigos.txt", contentOpCodes);
+                ///// criar classe para tratar codigos interpretaveis
+                //msp430gcc.CreateFile("codigos.txt", contentOpCodes);
 
 
                 if (timerPresent)
                 {
-                    contentMainDotCFile = contentMainDotCFile.Replace("#EXECTEMPORIZADORES_CHAMADA#", "ExecTemporizadores();");
+                    contentMainDotCFile = contentMainDotCFile.Replace("#EXEC_TIMERS_CALL#", "ExecTemporizadores();");
                 }
                 else
                 {
-                    contentMainDotCFile = contentMainDotCFile.Replace("#EXECTEMPORIZADORES_CHAMADA#", "");
+                    contentMainDotCFile = contentMainDotCFile.Replace("#EXEC_TIMERS_CALL#", "");
                 }
 
                 msp430gcc.CreateFile("main.c", contentMainDotCFile);
@@ -845,50 +843,50 @@ namespace LadderApp
                 /// Prepara FUNCOES
                 if (counterPresent) /// CONTADOR
                 {
-                    contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.funcoesC.Replace("#EXECCONTADOR_C#", MicrocontrollersBaseCodeFilesResource.ExecContador_funcoesC);
+                    contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.funcoesC.Replace("#EXEC_COUNTER_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecContador_funcoesC);
 
                     /// TIPOS DE TEMPORIZADORES USADOS
                     if (usedCounterTypes.Contains(0))
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXECCONTADOR_TIPO0#", MicrocontrollersBaseCodeFilesResource.ExecContador_Tipo0_funcoesC);
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_0_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecContador_Tipo0_funcoesC);
                     else
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXECCONTADOR_TIPO0#", "");
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_0_FUNCTION_C#", "");
 
                     if (usedCounterTypes.Contains(1))
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXECCONTADOR_TIPO1#", MicrocontrollersBaseCodeFilesResource.ExecContador_Tipo1_funcoesC);
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_1_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecContador_Tipo1_funcoesC);
                     else
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXECCONTADOR_TIPO1#", "");
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_1_FUNCTION_C#", "");
                 }
                 else
-                    contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.funcoesC.Replace("#EXECCONTADOR_C#", "");
+                    contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.funcoesC.Replace("#EXEC_COUNTER_FUNCTION_C#", "");
 
 
                 if (timerPresent) /// TEMPORIZADOR
                 {
-                    contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXECTEMPORIZADOR_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_funcoesC);
+                    contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_funcoesC);
 
                     /// TIPOS DE TEMPORIZADORES USADOS
                     if (usedTimerTypes.Contains(0))
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXECTEMPORIZADOR_TIPO0#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_Tipo0_funcoes);
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_0_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_Tipo0_funcoes);
                     else
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXECTEMPORIZADOR_TIPO0#", "");
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_0_FUNCTION_C#", "");
 
                     if (usedTimerTypes.Contains(1))
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXECTEMPORIZADOR_TIPO1#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_Tipo1_funcoes);
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_1_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_Tipo1_funcoes);
                     else
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXECTEMPORIZADOR_TIPO1#", "");
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_1_FUNCTION_C#", "");
                 }
                 else
                 {
-                    contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXECTEMPORIZADOR_C#", "");
+                    contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_FUNCTION_C#", "");
                 }
                 msp430gcc.CreateFile("funcoes.c", contentFunctionsDotCFile);
                 msp430gcc.CompilesMsp430ViaGcc("funcoes");
 
 
                 /// Prepara SETUPHARDARE
-                contentHardwareSetupDotCFile = MicrocontrollersBaseCodeFilesResource.setupHardwareC.Replace("#SETUPIO#", contentIOSetup);
-                contentHardwareSetupDotCFile = contentHardwareSetupDotCFile.Replace("#LEENTRADAS#", contentReadInputs);
-                contentHardwareSetupDotCFile = contentHardwareSetupDotCFile.Replace("#ESCREVESAIDAS#", contentWriteOutputs);
+                contentHardwareSetupDotCFile = MicrocontrollersBaseCodeFilesResource.setupHardwareC.Replace("#IO_HARDWARE_SETUP_C#", contentIOSetup);
+                contentHardwareSetupDotCFile = contentHardwareSetupDotCFile.Replace("#READ_INPUTS#", contentReadInputs);
+                contentHardwareSetupDotCFile = contentHardwareSetupDotCFile.Replace("#WRITE_OUTPUTS#", contentWriteOutputs);
                 msp430gcc.CreateFile("setuphardware.c", contentHardwareSetupDotCFile);
                 msp430gcc.CompilesMsp430ViaGcc("setuphardware");
 
@@ -925,7 +923,7 @@ namespace LadderApp
         private bool VerifyLine(Line line)
         {
             InstructionList instructions = new InstructionList();
-            instructions.InsertAllWithClearBefore(line.outputs);
+            instructions.InsertAllWithClearBefore(line.Outputs);
             if (instructions.Count > 0)
             {
                 if (!(instructions.Contains(OperationCode.OutputCoil) ||
@@ -948,9 +946,8 @@ namespace LadderApp
             if (!instructions.HasDuplicatedCounters(usedCounters))
                 return false;
 
-            instructions.InsertAllWithClearBefore(line.instructions);
+            instructions.InsertAllWithClearBefore(line.Instructions);
 
-            /// 1.1 - Verifica se a linha tem simbolos validos
             if (instructions.Count > 0)
                 if (instructions.Contains(OperationCode.OutputCoil) ||
                     instructions.Contains(OperationCode.Timer) ||
@@ -959,7 +956,6 @@ namespace LadderApp
                     return false;
 
 
-            /// 2.2 - Verifica se todos os simbolos tem os operandos minimos atribuidos
             if (!instructions.ContainsAllOperandos())
                 return false;
 
@@ -970,7 +966,7 @@ namespace LadderApp
         {
             foreach (Line line in this.Lines)
             {
-                foreach (Instruction instruction in line.instructions)
+                foreach (Instruction instruction in line.Instructions)
                 {
                     switch (instruction.OpCode)
                     {
@@ -986,7 +982,7 @@ namespace LadderApp
                             break;
                     }
                 }
-                foreach (Instruction instruction in line.outputs)
+                foreach (Instruction instruction in line.Outputs)
                 {
                     switch (instruction.OpCode)
                     {

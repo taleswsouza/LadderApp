@@ -13,13 +13,48 @@ namespace LadderApp
     public delegate void VisualInstructionSelectedEventHandler(VisualInstructionUserControl sender, VisualLine lCL);
     public delegate void AskToChangeAddressEventHandler(VisualInstructionUserControl sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object[] faixa);
 
-    public partial class VisualInstructionUserControl : BasicUserControl
+    public partial class VisualInstructionUserControl : UserControl
 
     {
         public event ChangeLineEventHandler ChangeLineEvent;
         public event DeleteLineEventHandler DeleteLineEvent;
         public event VisualInstructionSelectedEventHandler VisualInstructionSelectedEvent;
         public event AskToChangeAddressEventHandler AskToChangeAddressEvent;
+
+        public Instruction Instruction { get; private set; }
+        public bool Selected { get; set; } = false;
+        public Size XYSize { get; set; }
+        public Point XYPosition { get; set; }
+
+        public OperationCode OpCode
+        {
+            get
+            {
+                if (Instruction != null)
+                    return Instruction.OpCode;
+                else
+                    return OperationCode.None;
+
+            }
+
+            set => Instruction.OpCode = value;
+        }
+
+        public Object GetOperand(int posicao)
+        {
+            return Instruction.GetOperand(posicao);
+        }
+
+        public void SetOperand(int operandIndex, Object value)
+        {
+            Instruction.SetOperand(operandIndex, value);
+        }
+
+        public bool IsAllOperandsOk()
+        {
+            return ((IInstruction)Instruction).IsAllOperandsOk();
+        }
+
 
         private List<Panel> insertionIndicatorList = new List<Panel>();
 
@@ -64,12 +99,7 @@ namespace LadderApp
                     ultimoVPI = value;
             }
         }
-
-        private new Point xyConexao;
-        public new Point XYConexao
-        {
-            get { return xyConexao; }
-        }
+        public Point XYConnection { get; private set; }
 
         private Rectangle rectSelecao;
         private Rectangle rectSimbolo;
@@ -178,7 +208,7 @@ namespace LadderApp
         public VisualInstructionUserControl()
         {
             InitializeComponent();
-            instruction = new Instruction();
+            Instruction = new Instruction();
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             this.BackColor = Color.Transparent;
         }
@@ -186,7 +216,7 @@ namespace LadderApp
         public VisualInstructionUserControl(Instruction intruction)
         {
             InitializeComponent();
-            this.instruction = intruction;
+            this.Instruction = intruction;
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             this.BackColor = Color.Transparent;
         }
@@ -194,7 +224,7 @@ namespace LadderApp
         public VisualInstructionUserControl(OperationCode _ci)
         {
             InitializeComponent();
-            instruction = new Instruction(_ci);
+            Instruction = new Instruction(_ci);
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             this.BackColor = Color.Transparent;
         }
@@ -242,12 +272,12 @@ namespace LadderApp
                 case OperationCode.None:
                     break;
                 case OperationCode.LineBegin:
-                    xyConexao = new Point(xDecimoHorizontal * 7, (VisualLine.YSize / 2));
+                    XYConnection = new Point(xDecimoHorizontal * 7, (VisualLine.YSize / 2));
                     //Selecao
                     rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
                 case OperationCode.LineEnd:
-                    xyConexao = new Point(0, (VisualLine.YSize / 2));
+                    XYConnection = new Point(0, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.NormallyOpenContact:
                     //Selecao
@@ -267,19 +297,19 @@ namespace LadderApp
                     // selecao em torno do ponto de conexao
                     rectSelecao = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, (VisualLine.YSize / 2) - 3);
 
-                    xyConexao = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
+                    XYConnection = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.ParallelBranchEnd:
                     rectSelecao = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, yTotalVertical - (VisualLine.YSize / 2) - 3);
-                    xyConexao = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
+                    XYConnection = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.ParallelBranchNext:
                     // selecao em torno do ponto de conexao
                     rectSelecao = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, (VisualLine.YSize / 2) - 3);
                     if (ultimoVPI)
-                        xyConexao = new Point(xMeioHorizontal, yMeioVertical);
+                        XYConnection = new Point(xMeioHorizontal, yMeioVertical);
                     else
-                        xyConexao = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
+                        XYConnection = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.BackgroundLine:
                     break;
@@ -307,7 +337,7 @@ namespace LadderApp
 
         private void DesenhaContatoNA()
         {
-            if (instruction.IsAllOperandsOk())
+            if (Instruction.IsAllOperandsOk())
             {
                 if (this.OpCode == OperationCode.NormallyOpenContact &&
                 ((Address)GetOperand(0)).Value == true)
@@ -470,9 +500,9 @@ namespace LadderApp
                 {
 
                     //?? talvez passar xy3 para _xyConexao
-                    xy3 = visualInstruction.xyConexao;
-                    xy1 = new Point(0, ((visualInstruction.PosicaoXY.Y + xy3.Y) - this.PosicaoXY.Y));
-                    xy2 = new Point(xMeioHorizontal, ((visualInstruction.PosicaoXY.Y + xy3.Y) - this.PosicaoXY.Y));
+                    xy3 = visualInstruction.XYConnection;
+                    xy1 = new Point(0, ((visualInstruction.XYPosition.Y + xy3.Y) - this.XYPosition.Y));
+                    xy2 = new Point(xMeioHorizontal, ((visualInstruction.XYPosition.Y + xy3.Y) - this.XYPosition.Y));
                     graphics.DrawLine(linePen, xy1, xy2);
                 }
             }
@@ -676,26 +706,26 @@ namespace LadderApp
 
                                 foreach (VisualInstructionUserControl _simb2PF in visualParallelBranch.lstVPI)
                                 {
-                                    _posX = _simb2PF.PosicaoXY.X + _simb2PF.XYConexao.X;
-                                    _posY = _simb2PF.PosicaoXY.Y + _simb2PF.XYConexao.Y;
+                                    _posX = _simb2PF.XYPosition.X + _simb2PF.XYConnection.X;
+                                    _posY = _simb2PF.XYPosition.Y + _simb2PF.XYConnection.Y;
                                     _posY -= _posYOriginal;
                                     xy1 = new Point(_posX, _posY);
 
-                                    _posX = simbAux.PosicaoXY.X + simbAux.XYConexao.X;
-                                    _posY = _simb2PF.PosicaoXY.Y + _simb2PF.XYConexao.Y;
+                                    _posX = simbAux.XYPosition.X + simbAux.XYConnection.X;
+                                    _posY = _simb2PF.XYPosition.Y + _simb2PF.XYConnection.Y;
                                     _posY -= _posYOriginal;
                                     xy2 = new Point(_posX, _posY);
 
                                     graphics.DrawLine(pen, xy1, xy2);
                                 }
 
-                                _posX = simbAux.PosicaoXY.X + simbAux.XYConexao.X;
-                                _posY = visualParallelBranch.lstVPI[visualParallelBranch.lstVPI.Count - 1].PosicaoXY.Y + visualParallelBranch.lstVPI[visualParallelBranch.lstVPI.Count - 1].XYConexao.Y;
+                                _posX = simbAux.XYPosition.X + simbAux.XYConnection.X;
+                                _posY = visualParallelBranch.lstVPI[visualParallelBranch.lstVPI.Count - 1].XYPosition.Y + visualParallelBranch.lstVPI[visualParallelBranch.lstVPI.Count - 1].XYConnection.Y;
                                 _posY -= _posYOriginal;
                                 xy1 = new Point(_posX, _posY);
 
-                                _posX = simbAux.PosicaoXY.X + simbAux.XYConexao.X;
-                                _posY = simbAux.PosicaoXY.Y + simbAux.XYConexao.Y;
+                                _posX = simbAux.XYPosition.X + simbAux.XYConnection.X;
+                                _posY = simbAux.XYPosition.Y + simbAux.XYConnection.Y;
                                 _posY -= _posYOriginal;
                                 xy2 = new Point(_posX, _posY);
 
@@ -716,13 +746,13 @@ namespace LadderApp
 
                         if (simbAux.OpCode != OperationCode.ParallelBranchEnd)
                         {
-                            _posX = _simbAnt2DesenhoAux.PosicaoXY.X + _simbAnt2DesenhoAux.XYConexao.X;
-                            _posY = _simbAnt2DesenhoAux.PosicaoXY.Y + _simbAnt2DesenhoAux.XYConexao.Y;
+                            _posX = _simbAnt2DesenhoAux.XYPosition.X + _simbAnt2DesenhoAux.XYConnection.X;
+                            _posY = _simbAnt2DesenhoAux.XYPosition.Y + _simbAnt2DesenhoAux.XYConnection.Y;
                             _posY -= _posYOriginal;
                             xy1 = new Point(_posX, _posY);
 
-                            _posX = simbAux.PosicaoXY.X + simbAux.XYConexao.X;
-                            _posY = simbAux.PosicaoXY.Y + simbAux.XYConexao.Y;
+                            _posX = simbAux.XYPosition.X + simbAux.XYConnection.X;
+                            _posY = simbAux.XYPosition.Y + simbAux.XYConnection.Y;
                             _posY -= _posYOriginal;
                             xy2 = new Point(_posX, _posY);
 
@@ -743,15 +773,15 @@ namespace LadderApp
                 }
             }
 
-            _posX = _simbAnt2DesenhoAux.PosicaoXY.X + _simbAnt2DesenhoAux.XYConexao.X;
-            _posY = _simbAnt2DesenhoAux.PosicaoXY.Y + _simbAnt2DesenhoAux.XYConexao.Y;
+            _posX = _simbAnt2DesenhoAux.XYPosition.X + _simbAnt2DesenhoAux.XYConnection.X;
+            _posY = _simbAnt2DesenhoAux.XYPosition.Y + _simbAnt2DesenhoAux.XYConnection.Y;
             _posY -= _posYOriginal;
 
 
             xy1 = new Point(_posX, _posY);
 
-            _posX = VisualLine.LineEnd.PosicaoXY.X + VisualLine.LineEnd.XYConexao.X;
-            _posY = VisualLine.LineEnd.PosicaoXY.Y + VisualLine.LineEnd.XYConexao.Y;
+            _posX = VisualLine.LineEnd.XYPosition.X + VisualLine.LineEnd.XYConnection.X;
+            _posY = VisualLine.LineEnd.XYPosition.Y + VisualLine.LineEnd.XYConnection.Y;
             _posY -= _posYOriginal;
             xy2 = new Point(_posX, _posY);
 
@@ -1021,7 +1051,7 @@ namespace LadderApp
             base.OnPaint(e);
         }
 
-        public override void DrawInstruction()
+        public void DrawInstruction()
         {
             if (graphics == null)
             {
@@ -1162,13 +1192,13 @@ namespace LadderApp
             }
         }
 
-        /// <summary>
-        /// Retorna o simbolobasico do objeto
-        /// </summary>
-        public Instruction Instruction
-        {
-            get { return instruction; }
-        }
+        ///// <summary>
+        ///// Retorna o simbolobasico do objeto
+        ///// </summary>
+        //public Instruction Instruction
+        //{
+        //    get { return instruction; }
+        //}
 
         //private void txtGeral_Enter(object sender, EventArgs e)
         //{

@@ -108,8 +108,8 @@ namespace LadderApp.Resources {
         ///{
         ///	switch (Contador-&gt;Tipo)
         ///	{
-        ///#EXECCONTADOR_TIPO0#
-        ///#EXECCONTADOR_TIPO1#
+        ///#EXEC_COUNTER_TYPE_0_FUNCTION_C#
+        ///#EXEC_COUNTER_TYPE_1_FUNCTION_C#
         ///	default:
         ///		break;
         ///	}
@@ -200,7 +200,7 @@ namespace LadderApp.Resources {
         ///	switch (Temporizador-&gt;Tipo)
         ///	{
         /////-----------------------------------------------------------------------
-        ///#EXECTEMPORIZADOR_TIPO0#
+        ///#EXEC_TIMER_TYPE_0_FUNCTION_C#
         /////-----------------------------------------------------------------------
         ///#EXEC [rest of string was truncated]&quot;;.
         /// </summary>
@@ -287,7 +287,7 @@ namespace LadderApp.Resources {
         /////====================================================================================
         ///void ExecTemporizadores(void)
         ///{
-        ///#TEMPORIZADORES#
+        ///#TIMERS_USER_C#
         ///}.
         /// </summary>
         internal static string ExecTemporizadores_usuarioC {

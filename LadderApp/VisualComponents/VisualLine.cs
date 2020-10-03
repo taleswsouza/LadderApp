@@ -11,11 +11,13 @@ namespace LadderApp
 {
     public partial class VisualLine
     {
+        private Line line;
+
         public VisualLine()
         {
         }
 
-        public VisualLine(LadderForm ladderForm, Line line)
+        public VisualLine(LadderForm ladderForm, Line line) : this()
         {
             this.ladderForm = ladderForm;
             this.line = line;
@@ -23,36 +25,20 @@ namespace LadderApp
             InitializeFixedVisualInstructionsToInitialVisualLine();
         }
 
-        private Line line;
-
-        /// <summary>
-        /// Link para o formulario DiagramaLadder aonde sera
-        /// desenhada os controles da linha
-        /// </summary>
+        // links
         public LadderForm ladderForm;
         public VisualLine PreviousLine { get; set; }
         public VisualLine NextLine { get; set; }
 
-        /// <summary>
-        /// objetos fixos na linha
-        /// </summary>
-        [XmlIgnore]
+        // fixed objects
         public VisualInstructionUserControl LineBegin = new VisualInstructionUserControl(OperationCode.LineBegin);
-        [XmlIgnore]
         public VisualInstructionUserControl LineEnd = new VisualInstructionUserControl(OperationCode.LineEnd);
-        [XmlIgnore]
         public VisualInstructionUserControl BackgroundLine = new VisualInstructionUserControl(OperationCode.BackgroundLine);
 
-        /// <summary>
-        /// lista de Objetos dinamicos na linha
-        /// </summary>
+        // dinamic objects
         public List<VisualInstructionUserControl> visualInstructions = new List<VisualInstructionUserControl>();
         public List<VisualInstructionUserControl> visualOutputInstructions = new List<VisualInstructionUserControl>();
 
-        /// <summary>
-        /// enum para indicar em qual das listas de objetos dinamicos da linha
-        /// a funcao de insere simbolo ira inserir (simbolos ou saida)
-        /// </summary>
         public enum LocalToInsertInstruction
         {
             ConditionsAtLeft,
@@ -60,7 +46,6 @@ namespace LadderApp
             Undefined
         }
 
-        [XmlIgnore]
         public int tabStop = 0;
 
         private int lineNumber = 0;
@@ -83,21 +68,6 @@ namespace LadderApp
         private int XPositionToFirstOutputVisualInstruction = 0;
 
         public double percentageVisualInstructionReduction = 1D;
-
-        private int xTotalHorizontal = 0;
-        public int xTotal
-        {
-            get { return xTotalHorizontal; }
-            set { xTotalHorizontal = value - 10; }
-        }
-
-
-        private int yTotalVertical = 0;
-        public int yTotal
-        {
-            get { return yTotalVertical; }
-            set { yTotalVertical = value - 10; }
-        }
 
         public void AdjustPositioning()
         {
@@ -123,17 +93,13 @@ namespace LadderApp
 
             int sizeOfYToBackgroundDraw = 0;
 
-            /// Variaveis auxiliares para posicionamento
-            ///  dos controles
             int _posX = XPosition;  // auxiliar para posX
             int _posY = YPosition;  // auxiliar para posY
-            int _tamX = this.XSize;  // auxiliar para tamX
+            int _tamX = XSize;  // auxiliar para tamX
             int _tamY = YSize;  // auxiliar para tamY
-            int _acumTamX = 0;  // usado para acumular o valor de X na sequencia
-            // em que os simbolos sao montados
-            int _acumTamY = YSize;  // auxiliar para tamY
 
-            _acumTamX += this.XSize;
+            int xSizeAccumulated = XSize;
+            int ySizeAccumulated = YSize;
 
             visualInstructions.AddRange(visualOutputInstructions);
 
@@ -160,7 +126,7 @@ namespace LadderApp
                 {
                     case OperationCode.ParallelBranchBegin:
                         _tamY = YSize; // restaura tamanho Y base
-                        _posX = _acumTamX;
+                        _posX = xSizeAccumulated;
                         _tamX = this.XSize / 3;
 
                         parallelBranch = new VisualParallelBranch();
@@ -171,12 +137,12 @@ namespace LadderApp
                         parallelBranch.maiorX = biggerX;
                         parallelBranch.par = visualInstruction;
 
-                        _acumTamX = _posX + _tamX;
+                        xSizeAccumulated = _posX + _tamX;
                         break;
                     case OperationCode.ParallelBranchEnd:
-                        _tamX = this.XSize / 3;
-                        _tamY = parallelBranch.ultimoVPI.PositionXY.Y - parallelBranch.par.PositionXY.Y + parallelBranch.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
-                        _posY = parallelBranch.par.PositionXY.Y;
+                        _tamX = XSize / 3;
+                        _tamY = parallelBranch.ultimoVPI.XYPosition.Y - parallelBranch.par.XYPosition.Y + parallelBranch.ultimoVPI.XYSize.Height; // _ultTamY2ParaleloFinal;
+                        _posY = parallelBranch.par.XYPosition.Y;
 
                         if (biggerX > parallelBranch.maiorX)
                             parallelBranch.maiorX = biggerX;
@@ -211,7 +177,7 @@ namespace LadderApp
                             if (lastSizeOfYToFinalParallelBranch > parallelBranch.maiorY)
                                 parallelBranch.maiorY = lastSizeOfYToFinalParallelBranch;
 
-                        _acumTamX = _posX + _tamX;
+                        xSizeAccumulated = _posX + _tamX;
                         break;
                     case OperationCode.ParallelBranchNext:
                         _tamY = YSize; // restaura tamanho Y base
@@ -221,7 +187,7 @@ namespace LadderApp
                             parallelBranch.maiorX = biggerX;
                         biggerX = 0;
 
-                        _posX = parallelBranch.par.PositionXY.X;
+                        _posX = parallelBranch.par.XYPosition.X;
 
                         parallelBranch._yAcum = parallelBranch.maiorY;
                         _posY = parallelBranch.maiorY + (YSize * (parallelBranch.numVPITratados + 1));
@@ -238,7 +204,7 @@ namespace LadderApp
                             visualInstructionAux = parallelBranch.par;
                         }
 
-                        visualInstructionAux.tamanhoXY = new Size(visualInstructionAux.tamanhoXY.Width, _posY - visualInstructionAux.PositionXY.Y);
+                        visualInstructionAux.XYSize = new Size(visualInstructionAux.XYSize.Width, _posY - visualInstructionAux.XYPosition.Y);
 
                         /// PARA FACILITAR A BUSCA DO PROXIMO PONTO DE PARALELO
                         visualInstructionAux.Aponta2proxPP = visualInstruction;
@@ -249,27 +215,27 @@ namespace LadderApp
 
                         parallelBranch.lstVPI.Add(visualInstruction);
 
-                        _acumTamX = _posX + _tamX;
+                        xSizeAccumulated = _posX + _tamX;
                         break;
                     default:
                         _tamY = YSize;
                         _tamX = this.XSize;
-                        _posX = _acumTamX;
-                        _acumTamX += _tamX;
+                        _posX = xSizeAccumulated;
+                        xSizeAccumulated += _tamX;
                         break;
                 }
 
                 // posiciona e dimensiona simbolo
-                visualInstruction.PositionXY = new Point(_posX, _posY);
-                visualInstruction.tamanhoXY = new Size(_tamX, _tamY);
+                visualInstruction.XYPosition = new Point(_posX, _posY);
+                visualInstruction.XYSize = new Size(_tamX, _tamY);
 
                 if ((visualOutputInstructions.Count > 0) && (countInstructions >= (visualInstructions.Count - visualOutputInstructions.Count)))
                 {
                     if (countInstructions == (visualInstructions.Count - visualOutputInstructions.Count))
-                        accumulatedXAtFirstOutputInstruction = _acumTamX;
+                        accumulatedXAtFirstOutputInstruction = xSizeAccumulated;
 
-                    if (accumulatedXAtBiggerOutputInstruction < _acumTamX)
-                        accumulatedXAtBiggerOutputInstruction = _acumTamX;
+                    if (accumulatedXAtBiggerOutputInstruction < xSizeAccumulated)
+                        accumulatedXAtBiggerOutputInstruction = xSizeAccumulated;
                 }
             }
 
@@ -287,85 +253,80 @@ namespace LadderApp
                 sizeOfYToBackgroundDraw -= YPosition;
 
             //--Inicio da linha
-            LineBegin.PositionXY = new Point(XPosition, YPosition);
-            LineBegin.tamanhoXY = new Size(this.XSize, sizeOfYToBackgroundDraw);
+            LineBegin.XYPosition = new Point(XPosition, YPosition);
+            LineBegin.XYSize = new Size(this.XSize, sizeOfYToBackgroundDraw);
             LineBegin.Location = new Point(XPosition, YPosition);
             LineBegin.Size = new Size(this.XSize, sizeOfYToBackgroundDraw);
 
             //--Fim da linha
-            if (_acumTamX < (ladderForm.Width - this.XSize))
-                _acumTamX = (ladderForm.Width - this.XSize);
+            if (xSizeAccumulated < (ladderForm.Width - this.XSize))
+                xSizeAccumulated = (ladderForm.Width - this.XSize);
 
             if (PreviousLine != null)
-                if (_acumTamX < PreviousLine.LineEnd.PositionXY.X)
-                    _acumTamX = PreviousLine.LineEnd.PositionXY.X;
+                if (xSizeAccumulated < PreviousLine.LineEnd.XYPosition.X)
+                    xSizeAccumulated = PreviousLine.LineEnd.XYPosition.X;
 
-            XPositionToFirstOutputVisualInstruction = _acumTamX - accumulatedXAtFirstOutputInstruction - (outputSize);
+            XPositionToFirstOutputVisualInstruction = xSizeAccumulated - accumulatedXAtFirstOutputInstruction - (outputSize);
 
-            LineEnd.PositionXY = new Point(_acumTamX, YPosition);
-            LineEnd.tamanhoXY = new Size(this.XSize, sizeOfYToBackgroundDraw);
-            LineEnd.Location = new Point(_acumTamX, YPosition);
+            LineEnd.XYPosition = new Point(xSizeAccumulated, YPosition);
+            LineEnd.XYSize = new Size(this.XSize, sizeOfYToBackgroundDraw);
+            LineEnd.Location = new Point(xSizeAccumulated, YPosition);
             LineEnd.Size = new Size(this.XSize, sizeOfYToBackgroundDraw);
 
             //--Desenho de fundo
-            BackgroundLine.PositionXY = new Point(XPosition, YPosition);
-            BackgroundLine.tamanhoXY = new Size(_acumTamX, sizeOfYToBackgroundDraw);
+            BackgroundLine.XYPosition = new Point(XPosition, YPosition);
+            BackgroundLine.XYSize = new Size(xSizeAccumulated, sizeOfYToBackgroundDraw);
             BackgroundLine.Location = new Point(XPosition, YPosition);
-            BackgroundLine.Size = new Size(_acumTamX, sizeOfYToBackgroundDraw);
+            BackgroundLine.Size = new Size(xSizeAccumulated, sizeOfYToBackgroundDraw);
 
             ResizeVisualInstructions();
         }
 
         private void ResizeVisualInstructions()
         {
-
-            //--Inicio da linha
             tabStop++;
             LineBegin.TabIndex = tabStop;
             LineBegin.TabStop = true;
 
-            int indiceInsereSaida = 0;
+            int outputToInsertIndex = 0;
             if (visualOutputInstructions.Count > 0)
             {
-                indiceInsereSaida = visualInstructions.Count;
+                outputToInsertIndex = visualInstructions.Count;
                 visualInstructions.AddRange(visualOutputInstructions);
             }
 
-            int i = 0;
+            int index = 0;
             foreach (VisualInstructionUserControl visualInstruction in visualInstructions)
             {
                 tabStop++;
                 visualInstruction.TabIndex = tabStop;
                 visualInstruction.TabStop = true;
 
-                visualInstruction.Size = new Size(Convert.ToInt32(Convert.ToDouble(visualInstruction.tamanhoXY.Width) * percentageVisualInstructionReduction), visualInstruction.tamanhoXY.Height);
+                visualInstruction.Size = new Size(Convert.ToInt32(Convert.ToDouble(visualInstruction.XYSize.Width) * percentageVisualInstructionReduction), visualInstruction.XYSize.Height);
 
-                if (i >= indiceInsereSaida && (visualOutputInstructions.Count > 0))
-                    visualInstruction.Location = new Point(visualInstruction.PositionXY.X + (visualInstruction.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(visualInstruction.tamanhoXY.Width) * percentageVisualInstructionReduction))) / 2 + XPositionToFirstOutputVisualInstruction, visualInstruction.PositionXY.Y);
+                if (index >= outputToInsertIndex && (visualOutputInstructions.Count > 0))
+                    visualInstruction.Location = new Point(visualInstruction.XYPosition.X + (visualInstruction.XYSize.Width - (Convert.ToInt32(Convert.ToDouble(visualInstruction.XYSize.Width) * percentageVisualInstructionReduction))) / 2 + XPositionToFirstOutputVisualInstruction, visualInstruction.XYPosition.Y);
                 else
-                    visualInstruction.Location = new Point(visualInstruction.PositionXY.X + (visualInstruction.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(visualInstruction.tamanhoXY.Width) * percentageVisualInstructionReduction))) / 2, visualInstruction.PositionXY.Y);
+                    visualInstruction.Location = new Point(visualInstruction.XYPosition.X + (visualInstruction.XYSize.Width - (Convert.ToInt32(Convert.ToDouble(visualInstruction.XYSize.Width) * percentageVisualInstructionReduction))) / 2, visualInstruction.XYPosition.Y);
 
                 visualInstruction.Visible = true;
                 visualInstruction.Invalidate();
-                i++;
+                index++;
             }
 
             if (visualOutputInstructions.Count > 0)
             {
-                visualInstructions.RemoveRange(indiceInsereSaida, visualOutputInstructions.Count);
+                visualInstructions.RemoveRange(outputToInsertIndex, visualOutputInstructions.Count);
             }
 
-            //--Fim da linha
-            //iTabStop = 0;
+            // Fim da linha
             LineEnd.TabIndex = 0;
             LineEnd.TabStop = false;
 
-            //--Desenho de fundo
-            //iTabStop = 0;
+            // Desenho de fundo
             BackgroundLine.TabIndex = 0;
             BackgroundLine.TabStop = false;
             BackgroundLine.Invalidate();
-
         }
 
 
@@ -385,8 +346,8 @@ namespace LadderApp
             LineEnd.CreateControl();
             LineEnd.BringToFront();
 
-            InsertInstructionDirect(this.visualInstructions, this.LineBegin, line.instructions);
-            InsertInstructionDirect(this.visualOutputInstructions, this.LineBegin, line.outputs);
+            InsertInstructionDirect(this.visualInstructions, this.LineBegin, line.Instructions);
+            InsertInstructionDirect(this.visualOutputInstructions, this.LineBegin, line.Outputs);
 
             BackgroundLine.OpCode = OperationCode.BackgroundLine;
             BackgroundLine.TabStop = false;
@@ -406,16 +367,16 @@ namespace LadderApp
         public void DeleteLine()
         {
             visualOutputInstructions.Reverse();
-            foreach (VisualInstructionUserControl cl in visualOutputInstructions)
+            foreach (VisualInstructionUserControl visualInstruction in visualOutputInstructions)
             {
-                cl.Dispose();
+                visualInstruction.Dispose();
             }
             visualOutputInstructions.Clear();
 
             visualInstructions.Reverse();
-            foreach (VisualInstructionUserControl cl in visualInstructions)
+            foreach (VisualInstructionUserControl visualInstruction in visualInstructions)
             {
-                cl.Dispose();
+                visualInstruction.Dispose();
             }
             visualInstructions.Clear();
 
@@ -479,7 +440,7 @@ namespace LadderApp
 
         public VisualInstructionUserControl InsertInstructionAtLocalToBeDefined(bool after, VisualInstructionUserControl visualInstruction, InstructionList instructions)
         {
-            instructions.ValidaOperandos(ladderForm.projectForm.Program.addressing);
+            instructions.ValidateOperands(ladderForm.projectForm.Program.addressing);
 
             if (!instructions.Contains(OperationCode.OutputCoil) &&
                 !instructions.Contains(OperationCode.Timer) &&
@@ -498,7 +459,7 @@ namespace LadderApp
             int index = VerifyPositionToInsert(after, visualInstruction, this.visualInstructions);
             foreach (Instruction instruction in instructions)
             {
-                line.instructions.Insert(index, instruction);
+                line.Instructions.Insert(index, instruction);
                 InsertVisualInstructionAt(index, this.visualInstructions, instruction);
                 index++;
             }
@@ -508,7 +469,7 @@ namespace LadderApp
         private VisualInstructionUserControl InsertOutputInstructionAtRight(bool after, VisualInstructionUserControl visualInstruction, InstructionList instructions)
         {
             int index = 0;
-            int _subt2posicionaSimboloInserido = 0;
+            int autToRetornInsertedInstruction = 0;
 
             switch (visualOutputInstructions.Count)
             {
@@ -519,8 +480,8 @@ namespace LadderApp
 
                     if (instructions.Count > 1)
                     {
-                        instructions.InsereParalelo(InstructionList.TipoInsercaoParalelo.PARALELO_COMPLETO);
-                        _subt2posicionaSimboloInserido = -1;
+                        instructions.InsertParallelBranch(InstructionList.ParallelBranchInsertionType.ParallelBranchCompleted);
+                        autToRetornInsertedInstruction = -1;
                     }
 
                     break;
@@ -534,21 +495,21 @@ namespace LadderApp
                     if (index == 0)
                     {
                         /// prepara para inserir antes do objeto atual
-                        instructions.InsereParalelo(InstructionList.TipoInsercaoParalelo.PARALELO_INICIADO);
+                        instructions.InsertParallelBranch(InstructionList.ParallelBranchInsertionType.ParallelBranchInitialized);
 
                         /// insere PP antes do objeto atual na linha
-                        line.outputs.Insert(0, new Instruction(OperationCode.ParallelBranchNext));
+                        line.Outputs.Insert(0, new Instruction(OperationCode.ParallelBranchNext));
                         InsertVisualInstructionAt(0, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchNext));
                         /// insere PF depois do objeto atual da linha
-                        line.outputs.Insert(this.visualOutputInstructions.Count, new Instruction(OperationCode.ParallelBranchEnd));
+                        line.Outputs.Insert(this.visualOutputInstructions.Count, new Instruction(OperationCode.ParallelBranchEnd));
                         InsertVisualInstructionAt(this.visualOutputInstructions.Count, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchEnd));
                     }
                     else
                     {
-                        instructions.InsereParalelo(InstructionList.TipoInsercaoParalelo.PARALELO_FINALIZADO);
-                        _subt2posicionaSimboloInserido = -1;
+                        instructions.InsertParallelBranch(InstructionList.ParallelBranchInsertionType.ParallelBranchFinalized);
+                        autToRetornInsertedInstruction = -1;
 
-                        line.outputs.Insert(0, new Instruction(OperationCode.ParallelBranchBegin));
+                        line.Outputs.Insert(0, new Instruction(OperationCode.ParallelBranchBegin));
                         InsertVisualInstructionAt(0, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchBegin));
                         index++;
                     }
@@ -561,19 +522,19 @@ namespace LadderApp
                     switch (this.visualOutputInstructions[index].OpCode)
                     {
                         case OperationCode.ParallelBranchBegin:
-                            instructions.InsereParalelo(InstructionList.TipoInsercaoParalelo.PARALELO_INICIADO);
+                            instructions.InsertParallelBranch(InstructionList.ParallelBranchInsertionType.ParallelBranchInitialized);
 
-                            line.outputs[0].OpCode = OperationCode.ParallelBranchNext;
+                            line.Outputs[0].OpCode = OperationCode.ParallelBranchNext;
                             this.visualOutputInstructions[0].OpCode = OperationCode.ParallelBranchNext;
                             break;
                         case OperationCode.ParallelBranchNext:
-                            instructions.InsereParaleloProximo();
+                            instructions.InsertParallelBranchNext();
                             break;
                         case OperationCode.ParallelBranchEnd:
-                            instructions.InsereParaleloProximo();
+                            instructions.InsertParallelBranchNext();
                             break;
                         default:
-                            instructions.InsereParaleloProximo();
+                            instructions.InsertParallelBranchNext();
                             index++;
                             break;
                     }
@@ -582,13 +543,13 @@ namespace LadderApp
 
             foreach (Instruction instruction in instructions)
             {
-                line.outputs.Insert(index, instruction);
+                line.Outputs.Insert(index, instruction);
                 InsertVisualInstructionAt(index, this.visualOutputInstructions, instruction);
                 index++;
             }
 
             /// retorna o ultimo objeto inserido
-            return this.visualOutputInstructions[index - 1 + _subt2posicionaSimboloInserido];
+            return this.visualOutputInstructions[index - 1 + autToRetornInsertedInstruction];
         }
 
         private static int VerifyPositionToInsert(bool after, VisualInstructionUserControl visualInstruction, List<VisualInstructionUserControl> visualInstructions)
@@ -791,7 +752,7 @@ namespace LadderApp
                 else
                 {
                     visualInstructionsAux = visualOutputInstructions;
-                    instructions = line.outputs;
+                    instructions = line.Outputs;
 
                     /// caso haja um paralelo na saida
                     /// deleta a linha do paralelo
@@ -814,7 +775,7 @@ namespace LadderApp
             else
             {
                 visualInstructionsAux = visualInstructions;
-                instructions = line.instructions;
+                instructions = line.Instructions;
             }
 
             switch (visualInstructionToBeRemoved.OpCode)
@@ -864,8 +825,8 @@ namespace LadderApp
                 visualInstructionsToRemove.Add(visualInstructionsAux[i]);
 
             /// deleta um a um
-            foreach (VisualInstructionUserControl _cLADeletar in visualInstructionsToRemove)
-                RemoveInstruction(visualInstructionsAux, instructions, _cLADeletar);
+            foreach (VisualInstructionUserControl eachVisualInstructionToBeRemoved in visualInstructionsToRemove)
+                RemoveInstruction(visualInstructionsAux, instructions, eachVisualInstructionToBeRemoved);
 
             if (visualInstructionToChangeOpCode != null)
                 visualInstructionToChangeOpCode.OpCode = OperationCode.ParallelBranchBegin;

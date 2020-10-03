@@ -123,7 +123,7 @@ namespace LadderApp
                     VisualLine previsousVisualLine = visualProgram.Lines[visualProgram.Lines.Count - 1];
 
                     if (numberOfTimes == 0)
-                        visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.PositionXY = new Point(auxX, 0);
+                        visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.XYPosition = new Point(auxX, 0);
 
                     foreach (VisualLine visualLine in visualProgram.Lines)
                     {
@@ -135,15 +135,15 @@ namespace LadderApp
                         visualLine.LineNumber = iLinha;
                         visualLine.LineBegin.Invalidate();
                         visualLine.AdjustPositioning();
-                        auxY += visualLine.BackgroundLine.tamanhoXY.Height;
+                        auxY += visualLine.BackgroundLine.XYSize.Height;
                         iTabStop = visualLine.tabStop;
                         iLinha++;
                         previsousVisualLine = visualLine;
 
                         visualLine.BackgroundLine.Invalidate();
 
-                        if (auxX < visualLine.LineEnd.PositionXY.X)
-                            auxX = visualLine.LineEnd.PositionXY.X;
+                        if (auxX < visualLine.LineEnd.XYPosition.X)
+                            auxX = visualLine.LineEnd.XYPosition.X;
 
                     }
                     previsousVisualLine.NextLine = visualProgram.Lines[0];
@@ -158,7 +158,7 @@ namespace LadderApp
 
                 if (numberOfTimes == 0 && visualProgram.Lines.Count > 0)
                 {
-                    visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.PositionXY = new Point(auxX, visualProgram.Lines[0].LineEnd.PositionXY.Y);
+                    visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.XYPosition = new Point(auxX, visualProgram.Lines[0].LineEnd.XYPosition.Y);
                     ReorganizeLines(1);
                 }
 
@@ -166,7 +166,7 @@ namespace LadderApp
                 {
                     if (visualProgram.Lines.Count > 0)
                     {
-                        this.VerticalScroll.Maximum = visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.PositionXY.Y + visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.tamanhoXY.Height;
+                        this.VerticalScroll.Maximum = visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.XYPosition.Y + visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.XYSize.Height;
                         this.HorizontalScroll.Maximum = auxX;
                     }
                     else

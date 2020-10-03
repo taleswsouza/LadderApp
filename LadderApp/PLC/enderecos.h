@@ -15,6 +15,6 @@
 // Variáveis Globais
 //====================================================================================
 TSistema Sistema, Sys;
-#ENDEREÇOS#
+#VARIABLE_DECLARATIONS#
 
 #endif /* ENDERECOS_H_ */

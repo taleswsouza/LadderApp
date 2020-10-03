@@ -142,10 +142,7 @@
     <Compile Include="Model\LadderProgram.cs" />
     <Compile Include="VisualComponents\VisualProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="UserControls\BasicUserControl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>BasicUserControl.cs</DependentUpon>
-    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\BasicUserControl.resx" />
     <EmbeddedResource Include="UserControls\VisualInstructionUserControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>VisualInstructionUserControl.cs</DependentUpon>
@@ -210,9 +207,6 @@
     </Compile>
     <Compile Include="Forms\ProjectForm.Designer.cs">
       <DependentUpon>ProjectForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\BasicUserControl.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Resources\VisualResources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -11,7 +11,7 @@
 #include "setuphardware.h"
 #include "usuario.h"
 
-#CODIGOSINTERPRETAVEIS#
+#LADDER_INSTRUCTIONS#
 
 //====================================================================================
 // Rotina Principal
@@ -24,7 +24,7 @@ int main(void)
 	while (1)
 	{
 		LeEntradas();
-		#EXECTEMPORIZADORES_CHAMADA#
+		#EXEC_TIMERS_CALL#
 		ExecPrograma();
 		EscreveSaidas();
 	}

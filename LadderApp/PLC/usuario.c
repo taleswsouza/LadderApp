@@ -14,11 +14,11 @@
 //====================================================================================
 void Parametros(void)
 {
-#PARAMETROS#
+#PARAMETERIZATION#
 }
 
 
-#EXECTEMPORIZADORES_C#
+#EXEC_TIMERS_USER_C#
 
 //====================================================================================
 // Rotina de Execução do programa do usúario
