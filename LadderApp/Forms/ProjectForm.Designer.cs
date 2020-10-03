@@ -49,48 +49,48 @@ namespace LadderApp
             treeNode3,
             treeNode4,
             treeNode10});
-            this.ArvoreProjeto = new System.Windows.Forms.TreeView();
+            this.tvnProjectTree = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
             // 
-            // ArvoreProjeto
+            // tvnProjectTree
             // 
-            this.ArvoreProjeto.Location = new System.Drawing.Point(9, 10);
-            this.ArvoreProjeto.Margin = new System.Windows.Forms.Padding(2);
-            this.ArvoreProjeto.Name = "ArvoreProjeto";
-            treeNode1.Name = "NoDispositivo";
+            this.tvnProjectTree.Location = new System.Drawing.Point(9, 10);
+            this.tvnProjectTree.Margin = new System.Windows.Forms.Padding(2);
+            this.tvnProjectTree.Name = "tvnProjectTree";
+            treeNode1.Name = "tvnDeviceNode";
             treeNode1.Text = "Device";
-            treeNode2.Name = "NoConfMemoria";
+            treeNode2.Name = "tvnAddressingConfigurationNode";
             treeNode2.Text = "Addressing";
-            treeNode3.Name = "NoConfiguracoes";
+            treeNode3.Name = "tvnConfigurationNode";
             treeNode3.Text = "Configuration";
-            treeNode4.Name = "NoProgramaLadder";
+            treeNode4.Name = "tvnLadderProgramNode";
             treeNode4.Text = "Ladder Program";
-            treeNode5.Name = "NoEntradas";
+            treeNode5.Name = "tvnInputsNode";
             treeNode5.Text = "Input";
-            treeNode6.Name = "NoSaidas";
+            treeNode6.Name = "tvnOutputsNode";
             treeNode6.Text = "Output";
-            treeNode7.Name = "NoMemoria";
+            treeNode7.Name = "tvnMemoriesNode";
             treeNode7.Text = "Memories";
-            treeNode8.Name = "NoTemporizadores";
+            treeNode8.Name = "tvnTimersNode";
             treeNode8.Text = "Timer";
-            treeNode9.Name = "NoContadores";
+            treeNode9.Name = "tvnCountersNode";
             treeNode9.Text = "Counter";
-            treeNode10.Name = "NoEnderecamento";
+            treeNode10.Name = "tvnAddressingNode";
             treeNode10.Text = "Addressing";
-            treeNode11.Name = "NoProjeto";
+            treeNode11.Name = "tvnProjectNode";
             treeNode11.Text = "Project";
-            this.ArvoreProjeto.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            this.tvnProjectTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode11});
-            this.ArvoreProjeto.Size = new System.Drawing.Size(202, 192);
-            this.ArvoreProjeto.TabIndex = 0;
-            this.ArvoreProjeto.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.ArvoreProjeto_NodeMouseDoubleClick);
+            this.tvnProjectTree.Size = new System.Drawing.Size(202, 192);
+            this.tvnProjectTree.TabIndex = 0;
+            this.tvnProjectTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvnProjectTree_NodeMouseDoubleClick);
             // 
             // ProjetoLadder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(219, 211);
-            this.Controls.Add(this.ArvoreProjeto);
+            this.Controls.Add(this.tvnProjectTree);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ProjetoLadder";
             this.Text = " Project";
@@ -105,7 +105,7 @@ namespace LadderApp
 
         #endregion
 
-        public System.Windows.Forms.TreeView ArvoreProjeto;
+        public System.Windows.Forms.TreeView tvnProjectTree;
 
     }
 }

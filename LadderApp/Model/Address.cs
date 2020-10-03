@@ -9,7 +9,7 @@ namespace LadderApp
     public delegate void EditedCommentEventHandler(Address sender);
 
     [Serializable]
-    [XmlType(TypeName = "Endereco")]
+    [XmlType(TypeName = "address")]
     public class Address : IOperand
     {
         public event ChangedOperandEventHandler ChangedOperandEvent;
@@ -22,16 +22,16 @@ namespace LadderApp
         public Address(AddressTypeEnum addressType, int index, Device device)
         {
             AddressType = addressType;
-            this.Id = index;
+            Id = index;
             this.device = device;
-            BitsPorta = device.QtdBitsPorta;
+            NumberOfBitsByPort = device.NumberBitsByPort;
         }
 
-        [XmlElement(Order = 1, ElementName = "Id")]
+        [XmlElement(Order = 1, ElementName = "id")]
         public int Id { get; set; } = 0;
 
         private AddressTypeEnum addressType = AddressTypeEnum.None;
-        [XmlElement(Order = 5, ElementName = "Tipo")]
+        [XmlElement(Order = 5, ElementName = "type")]
         public AddressTypeEnum AddressType
         {
             get { return addressType; }
@@ -49,11 +49,11 @@ namespace LadderApp
                             break;
                         case AddressTypeEnum.DigitalMemoryTimer:
                             Acesso2 = "T" + Id.ToString() + ".EN";
-                            timer = new Timer();
+                            Timer = new Timer();
                             break;
                         case AddressTypeEnum.DigitalMemoryCounter:
                             Acesso2 = "C" + Id.ToString() + ".EN";
-                            counter = new Counter();
+                            Counter = new Counter();
                             break;
                         default:
                             break;
@@ -76,7 +76,7 @@ namespace LadderApp
                 {
                     case AddressTypeEnum.DigitalInput:
                     case AddressTypeEnum.DigitalOutput:
-                        return addressType.GetPrefix() + Id.ToString() + "(P" + (((Id - 1) / device.QtdBitsPorta) + 1) + "." + ((Id - 1) - ((Int16)((Id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta)) + ")";
+                        return addressType.GetPrefix() + Id.ToString() + "(P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "." + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + ")";
                     default:
                         return addressType.GetPrefix() + Id.ToString();
                 }
@@ -85,7 +85,7 @@ namespace LadderApp
         }
 
         private String comment = "";
-        [XmlElement(ElementName = "Apelido", Order = 6, IsNullable = true, Type = typeof(String))]
+        [XmlElement(ElementName = "comment", Order = 6, IsNullable = true, Type = typeof(String))]
         public String Comment
         {
             get { return comment; }
@@ -105,11 +105,11 @@ namespace LadderApp
                 switch (this.addressType)
                 {
                     case AddressTypeEnum.DigitalInput:
-                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1);
+                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
                     case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1);
+                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
                     case AddressTypeEnum.DigitalMemory:
-                        return "M" + ((Id / BitsPorta) + 1);
+                        return "M" + ((Id / NumberOfBitsByPort) + 1);
                     case AddressTypeEnum.DigitalMemoryTimer:
                         return "T" + Id.ToString();
                     case AddressTypeEnum.DigitalMemoryCounter:
@@ -130,9 +130,9 @@ namespace LadderApp
                 switch (this.addressType)
                 {
                     case AddressTypeEnum.DigitalInput:
-                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta)) + " = 0";
+                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 0";
                     case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta)) + " = 1";
+                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 1";
                     default:
                         return "ERROR";
                 }
@@ -151,11 +151,11 @@ namespace LadderApp
                 switch (this.addressType)
                 {
                     case AddressTypeEnum.DigitalInput:
-                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1) + "_IN.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta));
+                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_IN.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort));
                     case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((Id - 1) / device.QtdBitsPorta) + 1) + "_OUT.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.QtdBitsPorta) * device.QtdBitsPorta));
+                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_OUT.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort));
                     case AddressTypeEnum.DigitalMemory:
-                        return "M" + ((Id / BitsPorta) + 1) + ".Bit" + (Id - (Int16)(Id / BitsPorta) * BitsPorta);
+                        return "M" + ((Id / NumberOfBitsByPort) + 1) + ".Bit" + (Id - (Int16)(Id / NumberOfBitsByPort) * NumberOfBitsByPort);
                     case AddressTypeEnum.DigitalMemoryTimer:
                         return "T" + Id.ToString() + ".DN";
                     case AddressTypeEnum.DigitalMemoryCounter:
@@ -167,8 +167,8 @@ namespace LadderApp
         }
         [XmlElement(ElementName = "Acesso2", Order = 8, IsNullable = false, Type = typeof(String))]
         public string Acesso2 { get; set; } = "";
-        [XmlElement(ElementName = "Valor", Order = 4, IsNullable = false, Type = typeof(Boolean))]
-        public bool Valor { get; set; } = false;
+        [XmlElement(ElementName = "value", Order = 4, IsNullable = false, Type = typeof(Boolean))]
+        public bool Value { get; set; } = false;
         [XmlIgnore]
         public bool Used { get; set; } = false;
 
@@ -177,42 +177,20 @@ namespace LadderApp
             return this.name;
         }
 
-        private int bitsPorta = 0;
         [XmlElement(ElementName = "BitsPorta", Order = 3, IsNullable = false, Type = typeof(int))]
-        public int BitsPorta
-        {
-            get { return bitsPorta; }
-            set { bitsPorta = value; }
-        }
+        public int NumberOfBitsByPort { get; set; } = 0;
 
-        /// <summary>
-        /// Aponta para o dispositivo do endereço
-        /// </summary>
         private Device device = null;
-        public void ApontaDispositivo(Device dispositivo)
-        {
-            this.device = dispositivo;
-        }
+        public void SetDevice(Device device) => this.device = device;
 
-        private Counter counter;
         [XmlIgnore]
-        public Counter Counter
-        {
-            get { return counter; }
-            set { counter = value; }
-        }
-
-        private Timer timer;
+        public Counter Counter { get; set; }
         [XmlIgnore]
-        public Timer Timer
-        {
-            get { return timer; }
-            set { timer = value; }
-        }
+        public Timer Timer { get; set; }
 
-        public static String ClassName()
+        public String GetNameAndComment()
         {
-            return (new Address()).GetType().Name;
+            return $"{Name}{(Comment == "" ? "" : " - " + Comment)}";
         }
     }
 }

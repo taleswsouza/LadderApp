@@ -10,101 +10,73 @@ namespace LadderApp
         public Pin()
         {
         }
-        public Pin(int _indice)
+
+        public Pin(int index)
         {
-            this.parametrizacao_C = this.parametrizacao_C.Replace("#", _indice.ToString());
         }
 
-        /// <summary>
-        /// Tipo da pino do dispositivo
-        /// </summary>
-        private PinTypeEnum tipoPino = PinTypeEnum.NENHUM;
-        public PinTypeEnum TipoPino
+        private PinTypeEnum pinType = PinTypeEnum.None;
+        public PinTypeEnum PinType
         {
-            get { return tipoPino; }
+            get { return pinType; }
             set
             {
-                if (value == PinTypeEnum.IO_DIGITAL_ENTRADA ||
-                   value == PinTypeEnum.IO_DIGITAL_SAIDA ||
-                   value == PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA)
+                if (value == PinTypeEnum.IODigitalInput ||
+                   value == PinTypeEnum.IODigitalOutput ||
+                   value == PinTypeEnum.IODigitalInputOrOutput)
                 {
                     switch (value)
                     {
-                        case PinTypeEnum.IO_DIGITAL_ENTRADA:
-                            tipoDefinido = AddressTypeEnum.DigitalInput;
-                            tipoPino = value;
+                        case PinTypeEnum.IODigitalInput:
+                            type = AddressTypeEnum.DigitalInput;
+                            pinType = value;
                             break;
-                        case PinTypeEnum.IO_DIGITAL_SAIDA:
-                            tipoDefinido = AddressTypeEnum.DigitalOutput;
-                            tipoPino = value;
+                        case PinTypeEnum.IODigitalOutput:
+                            type = AddressTypeEnum.DigitalOutput;
+                            pinType = value;
                             break;
-                        case PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA:
-                            tipoDefinido = AddressTypeEnum.None;
-                            tipoPino = value;
+                        case PinTypeEnum.IODigitalInputOrOutput:
+                            type = AddressTypeEnum.None;
+                            pinType = value;
                             break;
                         default:
-                            tipoDefinido = AddressTypeEnum.None;
-                            tipoPino = PinTypeEnum.NENHUM;
+                            type = AddressTypeEnum.None;
+                            pinType = PinTypeEnum.None;
                             break;
                     }
                 }
                 else
-                    tipoPino = PinTypeEnum.NENHUM;
+                    pinType = PinTypeEnum.None;
 
             }
         }
 
-        /// <summary>
-        /// Tipo da pino do dispositivo
-        /// </summary>
-        private AddressTypeEnum tipoDefinido = AddressTypeEnum.None;
-        public AddressTypeEnum TipoDefinido
+        private AddressTypeEnum type = AddressTypeEnum.None;
+        public AddressTypeEnum Type
         {
-            get { return tipoDefinido; }
+            get { return type; }
             set
             {
-                if (tipoPino == PinTypeEnum.IO_DIGITAL_ENTRADA_OU_SAIDA)
+                if (pinType == PinTypeEnum.IODigitalInputOrOutput)
                 {
                     switch (value)
                     {
                         case AddressTypeEnum.DigitalInput:
                         case AddressTypeEnum.DigitalOutput:
-                            tipoDefinido = value;
+                            type = value;
                             break;
                         default:
-                            tipoDefinido = AddressTypeEnum.None;
+                            type = AddressTypeEnum.None;
                             break;
                     }
                 }
-                else if (tipoPino == PinTypeEnum.IO_DIGITAL_ENTRADA)
-                    tipoDefinido = AddressTypeEnum.DigitalInput;
-                else if (tipoPino == PinTypeEnum.IO_DIGITAL_SAIDA)
-                    tipoDefinido = AddressTypeEnum.DigitalOutput;
+                else if (pinType == PinTypeEnum.IODigitalInput)
+                    type = AddressTypeEnum.DigitalInput;
+                else if (pinType == PinTypeEnum.IODigitalOutput)
+                    type = AddressTypeEnum.DigitalOutput;
                 else
-                    tipoDefinido = AddressTypeEnum.None;
+                    type = AddressTypeEnum.None;
             }
-        }
-
-        /// <summary>
-        /// String para acesso ao IO via codigo C
-        /// </summary>
-        private String acesso_C = "";
-        [XmlIgnore]
-        public String Acesso_C
-        {
-            get { return acesso_C; }
-            set { acesso_C = value; }
-        }
-
-        /// <summary>
-        /// String para parametrizacao do IO via codigo C
-        /// </summary>
-        private String parametrizacao_C = "P#DIR_bit.P1DIR_#";
-        [XmlIgnore]
-        public String Parametrizacao_C
-        {
-            get { return parametrizacao_C; }
-            set { parametrizacao_C = value; }
         }
     }
 }

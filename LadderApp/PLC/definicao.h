@@ -12,9 +12,9 @@
 // Includes
 //====================================================================================
 
-#include <io.h>
+#include <msp430.h> // #include <io.h>
 #include <iomacros.h>
-#include <signal.h>
+#include <legacymsp430.h> // #include <signal.h>
 
 //====================================================================================
 // Tipo definido para as portas

@@ -25,7 +25,7 @@ namespace LadderApp
         }
 
         protected Point PosicaoXY;
-        public Point posicaoXY
+        public Point PositionXY
         {
             get { return PosicaoXY; }
             set { PosicaoXY = value; }
@@ -35,7 +35,7 @@ namespace LadderApp
         {
         }
 
-        virtual public void DesenhaSimbolo()
+        virtual public void DrawInstruction()
         {
         }
 

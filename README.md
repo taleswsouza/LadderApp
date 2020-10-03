@@ -1,4 +1,4 @@
-# LadderApp
+# LadderApp [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Z2CDXWJ4L25GQ&item_name=LadderApp+development&currency_code=USD)
 
 
 ## A brief history and context

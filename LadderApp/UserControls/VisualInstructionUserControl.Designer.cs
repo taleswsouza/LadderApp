@@ -38,14 +38,14 @@ namespace LadderApp
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "VisualInstructionUserControl";
             this.Size = new System.Drawing.Size(98, 91);
-            this.Load += new System.EventHandler(this.ControleLivre_Load);
-            this.SizeChanged += new System.EventHandler(this.ControleLivre_SizeChanged);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.ControleLivre_Paint);
-            this.Enter += new System.EventHandler(this.ControleLivre_Enter);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ControleLivre_KeyDown);
-            this.Leave += new System.EventHandler(this.ControleLivre_Leave);
-            this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ControleLivre_MouseDoubleClick);
-            this.Resize += new System.EventHandler(this.ControleLivre_Resize);
+            this.Load += new System.EventHandler(this.VisualInstruction_Load);
+            this.SizeChanged += new System.EventHandler(this.VisualInstruction_SizeChanged);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.VisualInstruction_Paint);
+            this.Enter += new System.EventHandler(this.VisualInstruction_Enter);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.VisualInstruction_KeyDown);
+            this.Leave += new System.EventHandler(this.VisualInstruction_Leave);
+            this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.VisualInstruction_MouseDoubleClick);
+            this.Resize += new System.EventHandler(this.VisualInstruction_Resize);
             this.ResumeLayout(false);
 
         }

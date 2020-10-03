@@ -20,7 +20,7 @@ namespace LadderApp
             this.ladderForm = ladderForm;
             this.line = line;
 
-            InicializaSimbolosFixosDaLinha();
+            InitializeFixedVisualInstructionsToInitialVisualLine();
         }
 
         private Line line;
@@ -53,36 +53,36 @@ namespace LadderApp
         /// enum para indicar em qual das listas de objetos dinamicos da linha
         /// a funcao de insere simbolo ira inserir (simbolos ou saida)
         /// </summary>
-        public enum LocalInsereSimbolo
+        public enum LocalToInsertInstruction
         {
-            SIMBOLOS,
-            SAIDA,
-            INDEFINIDO
+            ConditionsAtLeft,
+            OutputsAtRight,
+            Undefined
         }
 
         [XmlIgnore]
-        public int iTabStop = 0;
+        public int tabStop = 0;
 
-        private int iNumLinha = 0;
-        public int NumLinha
+        private int lineNumber = 0;
+        public int LineNumber
         {
-            get { return iNumLinha; }
+            get { return lineNumber; }
             set
             {
                 LineBegin.SetOperand(0, value);
-                iNumLinha = value;
+                lineNumber = value;
             }
         }
 
-        public int posX = 0;
-        public int posY = 0;
+        public int XPosition { get; set; } = 0;
+        public int YPosition { get; set; } = 0;
 
-        public int tamX = 70;
-        public int tamY = 80;
+        public int XSize = 70;
+        public int YSize = 80;
 
-        private int posX2primeiroSimbSaida = 0;
+        private int XPositionToFirstOutputVisualInstruction = 0;
 
-        public double percReducaoSimbolo = 1D;
+        public double percentageVisualInstructionReduction = 1D;
 
         private int xTotalHorizontal = 0;
         public int xTotal
@@ -99,229 +99,229 @@ namespace LadderApp
             set { yTotalVertical = value - 10; }
         }
 
-        public void AjustaPosicionamento()
+        public void AdjustPositioning()
         {
-            VisualInstructionUserControl _ctrlLivreAux = null;
+            VisualInstructionUserControl visualInstructionAux = null;
 
-            int _maiorX = 0;
+            int biggerX = 0;
 
             /// Variaveis para desenhar os simbolos de saida
             /// sempre no final da linha
-            int _contaNumSimbolos = 0;
-            int _guardaAcumXnoPrimeiroSimbSaida = 0;
-            int _guardaAcumXnoMaiorSimbSaida = 0;
-            int _guardaTamSaida = 0;
+            int countInstructions = 0;
+            int accumulatedXAtFirstOutputInstruction = 0;
+            int accumulatedXAtBiggerOutputInstruction = 0;
+            int outputSize = 0;
 
-            VisualParallelBranch _par = null;
-            List<VisualParallelBranch> _lst_par = new List<VisualParallelBranch>();
+            VisualParallelBranch parallelBranch = null;
+            List<VisualParallelBranch> visualParallelBranches = new List<VisualParallelBranch>();
 
             /// acumula o tamanho Y (pos+tam) do ultimo
             /// VPI tratado dentro de um mesmo paralelo
             /// seu valor e usado para informar
             /// ao PF qual o seu tamanho Y
-            int _ultTamY2ParaleloFinal = 0;
+            int lastSizeOfYToFinalParallelBranch = 0;
 
-            int _tamY2DesenhoFundo = 0;
+            int sizeOfYToBackgroundDraw = 0;
 
             /// Variaveis auxiliares para posicionamento
             ///  dos controles
-            int _posX = posX;  // auxiliar para posX
-            int _posY = posY;  // auxiliar para posY
-            int _tamX = this.tamX;  // auxiliar para tamX
-            int _tamY = tamY;  // auxiliar para tamY
+            int _posX = XPosition;  // auxiliar para posX
+            int _posY = YPosition;  // auxiliar para posY
+            int _tamX = this.XSize;  // auxiliar para tamX
+            int _tamY = YSize;  // auxiliar para tamY
             int _acumTamX = 0;  // usado para acumular o valor de X na sequencia
             // em que os simbolos sao montados
-            int _acumTamY = tamY;  // auxiliar para tamY
+            int _acumTamY = YSize;  // auxiliar para tamY
 
-            _acumTamX += this.tamX;
+            _acumTamX += this.XSize;
 
             visualInstructions.AddRange(visualOutputInstructions);
 
-            foreach (VisualInstructionUserControl simbAux in visualInstructions)
+            foreach (VisualInstructionUserControl visualInstruction in visualInstructions)
             {
-                _contaNumSimbolos++;
+                countInstructions++;
 
                 // caso todos os paralelos abertos tenham sido
                 // tratados forca paralelos tratados = 0
-                if (_lst_par.Count == 0)
+                if (visualParallelBranches.Count == 0)
                 {
-                    if (_maiorX > 0)
-                        _posX = _maiorX;
+                    if (biggerX > 0)
+                        _posX = biggerX;
 
-                    _maiorX = 0;
+                    biggerX = 0;
                 }
                 else
                 {
-                    if (_maiorX < (_posX + _tamX))
-                        _maiorX = _posX + _tamX;
+                    if (biggerX < (_posX + _tamX))
+                        biggerX = _posX + _tamX;
                 }
 
-                switch (simbAux.OpCode)
+                switch (visualInstruction.OpCode)
                 {
                     case OperationCode.ParallelBranchBegin:
-                        _tamY = tamY; // restaura tamanho Y base
+                        _tamY = YSize; // restaura tamanho Y base
                         _posX = _acumTamX;
-                        _tamX = this.tamX / 3;
+                        _tamX = this.XSize / 3;
 
-                        _par = new VisualParallelBranch();
-                        _lst_par.Add(_par);
+                        parallelBranch = new VisualParallelBranch();
+                        visualParallelBranches.Add(parallelBranch);
 
-                        _par._yAcum = _posY;
-                        _par.maiorY = _posY;
-                        _par.maiorX = _maiorX;
-                        _par.par = simbAux;
+                        parallelBranch._yAcum = _posY;
+                        parallelBranch.maiorY = _posY;
+                        parallelBranch.maiorX = biggerX;
+                        parallelBranch.par = visualInstruction;
 
                         _acumTamX = _posX + _tamX;
                         break;
                     case OperationCode.ParallelBranchEnd:
-                        _tamX = this.tamX / 3;
-                        _tamY = _par.ultimoVPI.posicaoXY.Y - _par.par.posicaoXY.Y + _par.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
-                        _posY = _par.par.posicaoXY.Y;
+                        _tamX = this.XSize / 3;
+                        _tamY = parallelBranch.ultimoVPI.PositionXY.Y - parallelBranch.par.PositionXY.Y + parallelBranch.ultimoVPI.tamanhoXY.Height; // _ultTamY2ParaleloFinal;
+                        _posY = parallelBranch.par.PositionXY.Y;
 
-                        if (_maiorX > _par.maiorX)
-                            _par.maiorX = _maiorX;
+                        if (biggerX > parallelBranch.maiorX)
+                            parallelBranch.maiorX = biggerX;
 
-                        _posX = _par.maiorX;
+                        _posX = parallelBranch.maiorX;
 
                         // Salva (por paralelo) o maior tamanho Y para os simbolos
                         // linha inicial / final e desenho de fundo
-                        if (_ultTamY2ParaleloFinal > _tamY2DesenhoFundo)
-                            _tamY2DesenhoFundo = _ultTamY2ParaleloFinal;
+                        if (lastSizeOfYToFinalParallelBranch > sizeOfYToBackgroundDraw)
+                            sizeOfYToBackgroundDraw = lastSizeOfYToFinalParallelBranch;
 
-                        simbAux.SalvaVPI2PF(_par.lstVPI);
+                        visualInstruction.SalvaVPI2PF(parallelBranch.lstVPI);
 
                         /// Faz os apontamentos de paralelo
                         ///  para facilitar futuras buscas de paralelos
-                        simbAux.Aponta2PI = _par.par;
-                        _par.par.Aponta2PF = simbAux;
-                        _par.ultimoVPI.Aponta2proxPP = simbAux;
+                        visualInstruction.Aponta2PI = parallelBranch.par;
+                        parallelBranch.par.Aponta2PF = visualInstruction;
+                        parallelBranch.ultimoVPI.Aponta2proxPP = visualInstruction;
 
-                        _par.ultimoVPI.UltimoVPI = true;
+                        parallelBranch.ultimoVPI.UltimoVPI = true;
 
-                        _par = null;
-                        _lst_par.RemoveAt(_lst_par.Count - 1);
+                        parallelBranch = null;
+                        visualParallelBranches.RemoveAt(visualParallelBranches.Count - 1);
 
-                        if (_lst_par.Count > 0)
-                            _par = _lst_par[_lst_par.Count - 1];
+                        if (visualParallelBranches.Count > 0)
+                            parallelBranch = visualParallelBranches[visualParallelBranches.Count - 1];
 
 
                         // se tiver paralelo aberto
                         // salva nele o maior y processado dentro dele
-                        if (_lst_par.Count > 0)
-                            if (_ultTamY2ParaleloFinal > _par.maiorY)
-                                _par.maiorY = _ultTamY2ParaleloFinal;
+                        if (visualParallelBranches.Count > 0)
+                            if (lastSizeOfYToFinalParallelBranch > parallelBranch.maiorY)
+                                parallelBranch.maiorY = lastSizeOfYToFinalParallelBranch;
 
                         _acumTamX = _posX + _tamX;
                         break;
                     case OperationCode.ParallelBranchNext:
-                        _tamY = tamY; // restaura tamanho Y base
-                        _tamX = this.tamX / 3; // tamanho X reduzido
+                        _tamY = YSize; // restaura tamanho Y base
+                        _tamX = this.XSize / 3; // tamanho X reduzido
 
-                        if (_maiorX > _par.maiorX)
-                            _par.maiorX = _maiorX;
-                        _maiorX = 0;
+                        if (biggerX > parallelBranch.maiorX)
+                            parallelBranch.maiorX = biggerX;
+                        biggerX = 0;
 
-                        _posX = _par.par.posicaoXY.X;
+                        _posX = parallelBranch.par.PositionXY.X;
 
-                        _par._yAcum = _par.maiorY;
-                        _posY = _par.maiorY + (tamY * (_par.numVPITratados + 1));
+                        parallelBranch._yAcum = parallelBranch.maiorY;
+                        _posY = parallelBranch.maiorY + (YSize * (parallelBranch.numVPITratados + 1));
 
                         // caso seja o primeiro VPI(NXB) atualiza o SIZE do PI(BST)
                         // caso seja o segundo VPI em diante, atualiza SIZE do VPI anterior
-                        if (_par.numVPITratados > 0)
+                        if (parallelBranch.numVPITratados > 0)
                         {
-                            _ctrlLivreAux = _par.ultimoVPI;
-                            _ctrlLivreAux.UltimoVPI = false;
+                            visualInstructionAux = parallelBranch.ultimoVPI;
+                            visualInstructionAux.UltimoVPI = false;
                         }
                         else
                         {
-                            _ctrlLivreAux = _par.par;
+                            visualInstructionAux = parallelBranch.par;
                         }
 
-                        _ctrlLivreAux.tamanhoXY = new Size(_ctrlLivreAux.tamanhoXY.Width, _posY - _ctrlLivreAux.posicaoXY.Y);
+                        visualInstructionAux.tamanhoXY = new Size(visualInstructionAux.tamanhoXY.Width, _posY - visualInstructionAux.PositionXY.Y);
 
                         /// PARA FACILITAR A BUSCA DO PROXIMO PONTO DE PARALELO
-                        _ctrlLivreAux.Aponta2proxPP = simbAux;
+                        visualInstructionAux.Aponta2proxPP = visualInstruction;
 
-                        _par.numVPITratados += 1;
-                        _par.ultimoVPI = simbAux;
-                        _ultTamY2ParaleloFinal = _posY;
+                        parallelBranch.numVPITratados += 1;
+                        parallelBranch.ultimoVPI = visualInstruction;
+                        lastSizeOfYToFinalParallelBranch = _posY;
 
-                        _par.lstVPI.Add(simbAux);
+                        parallelBranch.lstVPI.Add(visualInstruction);
 
                         _acumTamX = _posX + _tamX;
                         break;
                     default:
-                        _tamY = tamY;
-                        _tamX = this.tamX;
+                        _tamY = YSize;
+                        _tamX = this.XSize;
                         _posX = _acumTamX;
                         _acumTamX += _tamX;
                         break;
                 }
 
                 // posiciona e dimensiona simbolo
-                simbAux.posicaoXY = new Point(_posX, _posY);
-                simbAux.tamanhoXY = new Size(_tamX, _tamY);
+                visualInstruction.PositionXY = new Point(_posX, _posY);
+                visualInstruction.tamanhoXY = new Size(_tamX, _tamY);
 
-                if ((visualOutputInstructions.Count > 0) && (_contaNumSimbolos >= (visualInstructions.Count - visualOutputInstructions.Count)))
+                if ((visualOutputInstructions.Count > 0) && (countInstructions >= (visualInstructions.Count - visualOutputInstructions.Count)))
                 {
-                    if (_contaNumSimbolos == (visualInstructions.Count - visualOutputInstructions.Count))
-                        _guardaAcumXnoPrimeiroSimbSaida = _acumTamX;
+                    if (countInstructions == (visualInstructions.Count - visualOutputInstructions.Count))
+                        accumulatedXAtFirstOutputInstruction = _acumTamX;
 
-                    if (_guardaAcumXnoMaiorSimbSaida < _acumTamX)
-                        _guardaAcumXnoMaiorSimbSaida = _acumTamX;
+                    if (accumulatedXAtBiggerOutputInstruction < _acumTamX)
+                        accumulatedXAtBiggerOutputInstruction = _acumTamX;
                 }
             }
 
-            _guardaTamSaida = (_guardaAcumXnoMaiorSimbSaida - _guardaAcumXnoPrimeiroSimbSaida);// -this.tamX;
-            if (_guardaTamSaida == 0)
-                _guardaTamSaida = tamX;
+            outputSize = (accumulatedXAtBiggerOutputInstruction - accumulatedXAtFirstOutputInstruction);// -this.tamX;
+            if (outputSize == 0)
+                outputSize = XSize;
 
             /// Caso tenha ao menos 1 objeto de saida cria um espaco de meio simbolo
             /// entre o ultimo simbolo e o primeiro de saida
             visualInstructions.RemoveRange((visualInstructions.Count - visualOutputInstructions.Count), visualOutputInstructions.Count);
 
-            _tamY2DesenhoFundo += tamY;
+            sizeOfYToBackgroundDraw += YSize;
 
-            if ((posY > tamY) && (_tamY2DesenhoFundo > posY))
-                _tamY2DesenhoFundo -= posY;
+            if ((YPosition > YSize) && (sizeOfYToBackgroundDraw > YPosition))
+                sizeOfYToBackgroundDraw -= YPosition;
 
             //--Inicio da linha
-            LineBegin.posicaoXY = new Point(posX, posY);
-            LineBegin.tamanhoXY = new Size(this.tamX, _tamY2DesenhoFundo);
-            LineBegin.Location = new Point(posX, posY);
-            LineBegin.Size = new Size(this.tamX, _tamY2DesenhoFundo);
+            LineBegin.PositionXY = new Point(XPosition, YPosition);
+            LineBegin.tamanhoXY = new Size(this.XSize, sizeOfYToBackgroundDraw);
+            LineBegin.Location = new Point(XPosition, YPosition);
+            LineBegin.Size = new Size(this.XSize, sizeOfYToBackgroundDraw);
 
             //--Fim da linha
-            if (_acumTamX < (ladderForm.Width - this.tamX))
-                _acumTamX = (ladderForm.Width - this.tamX);
+            if (_acumTamX < (ladderForm.Width - this.XSize))
+                _acumTamX = (ladderForm.Width - this.XSize);
 
             if (PreviousLine != null)
-                if (_acumTamX < PreviousLine.LineEnd.posicaoXY.X)
-                    _acumTamX = PreviousLine.LineEnd.posicaoXY.X;
+                if (_acumTamX < PreviousLine.LineEnd.PositionXY.X)
+                    _acumTamX = PreviousLine.LineEnd.PositionXY.X;
 
-            posX2primeiroSimbSaida = _acumTamX - _guardaAcumXnoPrimeiroSimbSaida - (_guardaTamSaida);
+            XPositionToFirstOutputVisualInstruction = _acumTamX - accumulatedXAtFirstOutputInstruction - (outputSize);
 
-            LineEnd.posicaoXY = new Point(_acumTamX, posY);
-            LineEnd.tamanhoXY = new Size(this.tamX, _tamY2DesenhoFundo);
-            LineEnd.Location = new Point(_acumTamX, posY);
-            LineEnd.Size = new Size(this.tamX, _tamY2DesenhoFundo);
+            LineEnd.PositionXY = new Point(_acumTamX, YPosition);
+            LineEnd.tamanhoXY = new Size(this.XSize, sizeOfYToBackgroundDraw);
+            LineEnd.Location = new Point(_acumTamX, YPosition);
+            LineEnd.Size = new Size(this.XSize, sizeOfYToBackgroundDraw);
 
             //--Desenho de fundo
-            BackgroundLine.posicaoXY = new Point(posX, posY);
-            BackgroundLine.tamanhoXY = new Size(_acumTamX, _tamY2DesenhoFundo);
-            BackgroundLine.Location = new Point(posX, posY);
-            BackgroundLine.Size = new Size(_acumTamX, _tamY2DesenhoFundo);
+            BackgroundLine.PositionXY = new Point(XPosition, YPosition);
+            BackgroundLine.tamanhoXY = new Size(_acumTamX, sizeOfYToBackgroundDraw);
+            BackgroundLine.Location = new Point(XPosition, YPosition);
+            BackgroundLine.Size = new Size(_acumTamX, sizeOfYToBackgroundDraw);
 
-            RedimensionaSimbolos();
+            ResizeVisualInstructions();
         }
 
-        private void RedimensionaSimbolos()
+        private void ResizeVisualInstructions()
         {
 
             //--Inicio da linha
-            iTabStop++;
-            LineBegin.TabIndex = iTabStop;
+            tabStop++;
+            LineBegin.TabIndex = tabStop;
             LineBegin.TabStop = true;
 
             int indiceInsereSaida = 0;
@@ -332,21 +332,21 @@ namespace LadderApp
             }
 
             int i = 0;
-            foreach (VisualInstructionUserControl _simbAux in visualInstructions)
+            foreach (VisualInstructionUserControl visualInstruction in visualInstructions)
             {
-                iTabStop++;
-                _simbAux.TabIndex = iTabStop;
-                _simbAux.TabStop = true;
+                tabStop++;
+                visualInstruction.TabIndex = tabStop;
+                visualInstruction.TabStop = true;
 
-                _simbAux.Size = new Size(Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * percReducaoSimbolo), _simbAux.tamanhoXY.Height);
+                visualInstruction.Size = new Size(Convert.ToInt32(Convert.ToDouble(visualInstruction.tamanhoXY.Width) * percentageVisualInstructionReduction), visualInstruction.tamanhoXY.Height);
 
                 if (i >= indiceInsereSaida && (visualOutputInstructions.Count > 0))
-                    _simbAux.Location = new Point(_simbAux.posicaoXY.X + (_simbAux.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * percReducaoSimbolo))) / 2 + posX2primeiroSimbSaida, _simbAux.posicaoXY.Y);
+                    visualInstruction.Location = new Point(visualInstruction.PositionXY.X + (visualInstruction.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(visualInstruction.tamanhoXY.Width) * percentageVisualInstructionReduction))) / 2 + XPositionToFirstOutputVisualInstruction, visualInstruction.PositionXY.Y);
                 else
-                    _simbAux.Location = new Point(_simbAux.posicaoXY.X + (_simbAux.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(_simbAux.tamanhoXY.Width) * percReducaoSimbolo))) / 2, _simbAux.posicaoXY.Y);
+                    visualInstruction.Location = new Point(visualInstruction.PositionXY.X + (visualInstruction.tamanhoXY.Width - (Convert.ToInt32(Convert.ToDouble(visualInstruction.tamanhoXY.Width) * percentageVisualInstructionReduction))) / 2, visualInstruction.PositionXY.Y);
 
-                _simbAux.Visible = true;
-                _simbAux.Invalidate();
+                visualInstruction.Visible = true;
+                visualInstruction.Invalidate();
                 i++;
             }
 
@@ -369,41 +369,27 @@ namespace LadderApp
         }
 
 
-        private void InicializaSimbolosFixosDaLinha()
+        private void InitializeFixedVisualInstructionsToInitialVisualLine()
         {
-            // Inicio de Linha
             LineBegin.OpCode = OperationCode.LineBegin;
             LineBegin.TabStop = true;
-
-            // Fim de Linha
-            LineEnd.OpCode = OperationCode.LineEnd;
-            LineEnd.TabStop = false;
-
-            // Desenho de fundo da Linha
-            BackgroundLine.OpCode = OperationCode.BackgroundLine;
-            BackgroundLine.TabStop = false;
-
-
-            ///////////////////////////////////////
-
-            // Inicio de linha
             LineBegin.VisualLine = this;
             LineBegin.Parent = this.ladderForm;
             LineBegin.CreateControl();
             LineBegin.BringToFront();
 
-            // Fim de linha de linha
+            LineEnd.OpCode = OperationCode.LineEnd;
+            LineEnd.TabStop = false;
             LineEnd.VisualLine = this;
             LineEnd.Parent = this.ladderForm;
             LineEnd.CreateControl();
             LineEnd.BringToFront();
 
+            InsertInstructionDirect(this.visualInstructions, this.LineBegin, line.instructions);
+            InsertInstructionDirect(this.visualOutputInstructions, this.LineBegin, line.outputs);
 
-
-            InsereSimboloDireto(this.visualInstructions, this.LineBegin, line.instructions);
-            InsereSimboloDireto(this.visualOutputInstructions, this.LineBegin, line.outputs);
-
-            // Desenho de fundo da linha
+            BackgroundLine.OpCode = OperationCode.BackgroundLine;
+            BackgroundLine.TabStop = false;
             BackgroundLine.VisualLine = this;
             BackgroundLine.SendToBack();
             BackgroundLine.Parent = this.ladderForm;
@@ -414,10 +400,10 @@ namespace LadderApp
             /// controle.
             BackgroundLine.Enabled = false;
 
-            AtribuiFuncoesAosControles();
+            SetFunctionsToFixedVisualInstructions();
         }
 
-        public void ApagaLinha()
+        public void DeleteLine()
         {
             visualOutputInstructions.Reverse();
             foreach (VisualInstructionUserControl cl in visualOutputInstructions)
@@ -439,11 +425,11 @@ namespace LadderApp
         }
 
 
-        private void AtribuiFuncoesAosControles()
+        private void SetFunctionsToFixedVisualInstructions()
         {
-            LineBegin.ControleSelecionado += new ControleSelecionadoEventHandler(ladderForm.Simbolo_ControleSelecionado);
-            LineBegin.MouseClick += new MouseEventHandler(simboloInicioLinha_Click);
-            LineBegin.DeletaLinha += new DeletaLinhaEventHandler(ladderForm.DeletaLinha);
+            LineBegin.VisualInstructionSelectedEvent += new VisualInstructionSelectedEventHandler(ladderForm.VisualInstruction_Selected);
+            LineBegin.MouseClick += new MouseEventHandler(LineBeginVisualInstruction_Click);
+            LineBegin.DeleteLineEvent += new DeleteLineEventHandler(ladderForm.LineBeginVisualInstruction_DeleteLine);
 
             int indiceInsereSaida = 0;
             if (visualOutputInstructions.Count > 0)
@@ -453,11 +439,11 @@ namespace LadderApp
             }
 
             // Demais simbolos
-            foreach (VisualInstructionUserControl simbAux in visualInstructions)
+            foreach (VisualInstructionUserControl visualInstruction in visualInstructions)
             {
-                simbAux.ControleSelecionado += new ControleSelecionadoEventHandler(ladderForm.Simbolo_ControleSelecionado);
-                simbAux.MouseClick += new MouseEventHandler(Simbolo_Click);
-                simbAux.KeyDown += new KeyEventHandler(ladderForm.Simbolo_KeyDown);
+                visualInstruction.VisualInstructionSelectedEvent += new VisualInstructionSelectedEventHandler(ladderForm.VisualInstruction_Selected);
+                visualInstruction.MouseClick += new MouseEventHandler(VisualInstruction_Click);
+                visualInstruction.KeyDown += new KeyEventHandler(ladderForm.VisualInstruction_KeyDown);
             }
 
             if (visualOutputInstructions.Count > 0)
@@ -465,69 +451,63 @@ namespace LadderApp
 
         }
 
-        public VisualInstructionUserControl InsereSimbolo(LocalInsereSimbolo _lIS, VisualInstructionUserControl _controle, params OperationCode[] _arrayCI)
+        public VisualInstructionUserControl InsertInstruction(LocalToInsertInstruction localToInsertInstruction, VisualInstructionUserControl visualInstruction, params OperationCode[] opCodes)
         {
-            return InsereSimbolo(true, _lIS, _controle, _arrayCI);
+            return InsertInstruction(true, localToInsertInstruction, visualInstruction, opCodes);
         }
 
-        public VisualInstructionUserControl InsereSimbolo(bool _bApos, LocalInsereSimbolo _lIS, VisualInstructionUserControl _controle, params OperationCode[] _arrayCI)
+        public VisualInstructionUserControl InsertInstruction(bool after, LocalToInsertInstruction localToInsertInstruction, VisualInstructionUserControl visualInstruction, params OperationCode[] opCodes)
         {
-            InstructionList _lstSB = new InstructionList();
+            InstructionList instructions = new InstructionList();
+            instructions.InsertAllWithClearBefore(opCodes);
 
-            /// Insere o array de CodigosInterpretaveis em uma lista de simbolos para facilitar a manipulacao
-            _lstSB.InsertAllWithClearBefore(_arrayCI);
-
-            switch (_lIS)
+            switch (localToInsertInstruction)
             {
-                case LocalInsereSimbolo.INDEFINIDO:
-                    _controle = InsereSimboloIndefinido(_bApos, _controle, _lstSB);
+                case LocalToInsertInstruction.Undefined:
+                    visualInstruction = InsertInstructionAtLocalToBeDefined(after, visualInstruction, instructions);
                     break;
-                case LocalInsereSimbolo.SIMBOLOS:
-                    _controle = Insere2Simbolo(_bApos, _controle, _lstSB);
+                case LocalToInsertInstruction.ConditionsAtLeft:
+                    visualInstruction = InsertConditionInstructionAtLeft(after, visualInstruction, instructions);
                     break;
-                case LocalInsereSimbolo.SAIDA:
-                    _controle = Insere2Saida(_bApos, _controle, _lstSB);
+                case LocalToInsertInstruction.OutputsAtRight:
+                    visualInstruction = InsertOutputInstructionAtRight(after, visualInstruction, instructions);
                     break;
             }
-            return _controle;
+            return visualInstruction;
         }
 
 
-        public VisualInstructionUserControl InsereSimboloIndefinido(bool _bApos, VisualInstructionUserControl _controle, InstructionList instructions)
+        public VisualInstructionUserControl InsertInstructionAtLocalToBeDefined(bool after, VisualInstructionUserControl visualInstruction, InstructionList instructions)
         {
+            instructions.ValidaOperandos(ladderForm.projectForm.Program.addressing);
 
-            instructions.ValidaOperandos(ladderForm.projectForm.program.addressing);
-
-            /// Verifica se a insercao sera no lista simbolos ou saida
             if (!instructions.Contains(OperationCode.OutputCoil) &&
                 !instructions.Contains(OperationCode.Timer) &&
                 !instructions.Contains(OperationCode.Counter))
             {
-                return Insere2Simbolo(_bApos, _controle, instructions);
+                return InsertConditionInstructionAtLeft(after, visualInstruction, instructions);
             }
             else
             {
-                return Insere2Saida(_bApos, _controle, instructions);
+                return InsertOutputInstructionAtRight(after, visualInstruction, instructions);
             }
         }
 
-        private VisualInstructionUserControl Insere2Simbolo(bool _bApos, VisualInstructionUserControl _controle, InstructionList instructions)
+        private VisualInstructionUserControl InsertConditionInstructionAtLeft(bool after, VisualInstructionUserControl visualInstruction, InstructionList instructions)
         {
-            int _indiceSimbolo = VerificaPosicaoDeInserirSimbolo(_bApos, _controle, this.visualInstructions);
-
+            int index = VerifyPositionToInsert(after, visualInstruction, this.visualInstructions);
             foreach (Instruction instruction in instructions)
             {
-                line.instructions.Insert(_indiceSimbolo, instruction);
-                InsereSimboloUnicoVisual(_indiceSimbolo, this.visualInstructions, instruction);
-                _indiceSimbolo++;
+                line.instructions.Insert(index, instruction);
+                InsertVisualInstructionAt(index, this.visualInstructions, instruction);
+                index++;
             }
-
-            return this.visualInstructions[_indiceSimbolo - 1];
+            return this.visualInstructions[index - 1];
         }
 
-        private VisualInstructionUserControl Insere2Saida(bool _bApos, VisualInstructionUserControl _controle, InstructionList instructions)
+        private VisualInstructionUserControl InsertOutputInstructionAtRight(bool after, VisualInstructionUserControl visualInstruction, InstructionList instructions)
         {
-            int _indiceSimbolo = 0;
+            int index = 0;
             int _subt2posicionaSimboloInserido = 0;
 
             switch (visualOutputInstructions.Count)
@@ -535,7 +515,7 @@ namespace LadderApp
                 case 0:
                     /// case 0: Primeiro simbolo na saida, adiciona apenas um
                     /// simbolo na saida
-                    _indiceSimbolo = 0;
+                    index = 0;
 
                     if (instructions.Count > 1)
                     {
@@ -548,20 +528,20 @@ namespace LadderApp
                     /// case 1: Caso ja exista 1 (um) simbolo de saida, insere um 
                     /// paralelo de forma automatica
 
-                    _indiceSimbolo = VerificaPosicaoDeInserirSimbolo(_bApos, _controle, this.visualOutputInstructions);
+                    index = VerifyPositionToInsert(after, visualInstruction, this.visualOutputInstructions);
 
                     // aqui 0=antes, 1=depois
-                    if (_indiceSimbolo == 0)
+                    if (index == 0)
                     {
                         /// prepara para inserir antes do objeto atual
                         instructions.InsereParalelo(InstructionList.TipoInsercaoParalelo.PARALELO_INICIADO);
 
                         /// insere PP antes do objeto atual na linha
                         line.outputs.Insert(0, new Instruction(OperationCode.ParallelBranchNext));
-                        InsereSimboloUnicoVisual(0, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchNext));
+                        InsertVisualInstructionAt(0, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchNext));
                         /// insere PF depois do objeto atual da linha
                         line.outputs.Insert(this.visualOutputInstructions.Count, new Instruction(OperationCode.ParallelBranchEnd));
-                        InsereSimboloUnicoVisual(this.visualOutputInstructions.Count, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchEnd));
+                        InsertVisualInstructionAt(this.visualOutputInstructions.Count, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchEnd));
                     }
                     else
                     {
@@ -569,16 +549,16 @@ namespace LadderApp
                         _subt2posicionaSimboloInserido = -1;
 
                         line.outputs.Insert(0, new Instruction(OperationCode.ParallelBranchBegin));
-                        InsereSimboloUnicoVisual(0, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchBegin));
-                        _indiceSimbolo++;
+                        InsertVisualInstructionAt(0, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchBegin));
+                        index++;
                     }
 
                     break;
                 default:
                     /// Caso ja haja paralelo, insere apenas PP + simbolo
-                    _indiceSimbolo = VerificaPosicaoDeInserirSimbolo(false, _controle, this.visualOutputInstructions);
+                    index = VerifyPositionToInsert(false, visualInstruction, this.visualOutputInstructions);
 
-                    switch (this.visualOutputInstructions[_indiceSimbolo].OpCode)
+                    switch (this.visualOutputInstructions[index].OpCode)
                     {
                         case OperationCode.ParallelBranchBegin:
                             instructions.InsereParalelo(InstructionList.TipoInsercaoParalelo.PARALELO_INICIADO);
@@ -594,7 +574,7 @@ namespace LadderApp
                             break;
                         default:
                             instructions.InsereParaleloProximo();
-                            _indiceSimbolo++;
+                            index++;
                             break;
                     }
                     break;
@@ -602,76 +582,74 @@ namespace LadderApp
 
             foreach (Instruction instruction in instructions)
             {
-                line.outputs.Insert(_indiceSimbolo, instruction);
-                InsereSimboloUnicoVisual(_indiceSimbolo, this.visualOutputInstructions, instruction);
-                _indiceSimbolo++;
+                line.outputs.Insert(index, instruction);
+                InsertVisualInstructionAt(index, this.visualOutputInstructions, instruction);
+                index++;
             }
 
             /// retorna o ultimo objeto inserido
-            return this.visualOutputInstructions[_indiceSimbolo - 1 + _subt2posicionaSimboloInserido];
+            return this.visualOutputInstructions[index - 1 + _subt2posicionaSimboloInserido];
         }
 
-        private static int VerificaPosicaoDeInserirSimbolo(bool _bApos, VisualInstructionUserControl _controle, List<VisualInstructionUserControl> _lstFinal)
+        private static int VerifyPositionToInsert(bool after, VisualInstructionUserControl visualInstruction, List<VisualInstructionUserControl> visualInstructions)
         {
-            int _indiceSimbolo = _lstFinal.IndexOf(_controle);
+            int index = visualInstructions.IndexOf(visualInstruction);
 
-            if (_indiceSimbolo < 0)
-                _indiceSimbolo = 0;
+            if (index < 0)
+                index = 0;
             else
-                if (_bApos)
-                _indiceSimbolo++;
-
-            return _indiceSimbolo;
+                if (after)
+                index++;
+            return index;
         }
 
-        private VisualInstructionUserControl InsereSimboloUnicoVisual(int _indiceSimbolo, List<VisualInstructionUserControl> _lstCL, Instruction instruction)
+        private VisualInstructionUserControl InsertVisualInstructionAt(int index, List<VisualInstructionUserControl> visualInstructions, Instruction instruction)
         {
-            /// Visual
-            _lstCL.Insert(_indiceSimbolo, new VisualInstructionUserControl(instruction));
-            _lstCL[_indiceSimbolo].VisualLine = this;
-            _lstCL[_indiceSimbolo].TabStop = true;
-            _lstCL[_indiceSimbolo].ControleSelecionado += new ControleSelecionadoEventHandler(ladderForm.Simbolo_ControleSelecionado);
-            _lstCL[_indiceSimbolo].MouseClick += new MouseEventHandler(Simbolo_Click);
-            _lstCL[_indiceSimbolo].KeyDown += new KeyEventHandler(ladderForm.Simbolo_KeyDown);
-            _lstCL[_indiceSimbolo].SolicitaMudarEndereco += new SolicitaMudarEnderecoEventHandler(ladderForm.ControleSelecionado_SolicitaMudarEndereco);
-            _lstCL[_indiceSimbolo].Parent = this.ladderForm;
-            _lstCL[_indiceSimbolo].Visible = false;
-            _lstCL[_indiceSimbolo].CreateControl();
-            _lstCL[_indiceSimbolo].BringToFront();
+            visualInstructions.Insert(index, new VisualInstructionUserControl(instruction));
+            visualInstructions[index].VisualLine = this;
+            visualInstructions[index].TabStop = true;
+            visualInstructions[index].VisualInstructionSelectedEvent += new VisualInstructionSelectedEventHandler(ladderForm.VisualInstruction_Selected);
+            visualInstructions[index].MouseClick += new MouseEventHandler(VisualInstruction_Click);
+            visualInstructions[index].KeyDown += new KeyEventHandler(ladderForm.VisualInstruction_KeyDown);
+            visualInstructions[index].AskToChangeAddressEvent += new AskToChangeAddressEventHandler(ladderForm.ControleSelecionado_SolicitaMudarEndereco);
+            visualInstructions[index].Parent = this.ladderForm;
+            visualInstructions[index].Visible = false;
+            visualInstructions[index].CreateControl();
+            visualInstructions[index].BringToFront();
 
             if (instruction.OpCode == OperationCode.Timer ||
                 instruction.OpCode == OperationCode.Counter)
-                _lstCL[_indiceSimbolo].MouseHover += new EventHandler(ladderForm.SimboloQuadroSaida_MouseHover);
+                visualInstructions[index].MouseHover += new EventHandler(ladderForm.OutputTypeBox_MouseHover);
 
-            return _lstCL[_indiceSimbolo];
+            return visualInstructions[index];
         }
 
 
 
-        public VisualInstructionUserControl InsereSimboloDireto(List<VisualInstructionUserControl> _lstCL, VisualInstructionUserControl _AposCL, List<Instruction> instructions)
+        public VisualInstructionUserControl InsertInstructionDirect(List<VisualInstructionUserControl> visualInstructions, VisualInstructionUserControl visualInstruction, List<Instruction> instructions)
         {
-            int _indiceSimbolo = _lstCL.IndexOf(_AposCL);
+            int index = visualInstructions.IndexOf(visualInstruction);
 
-            if (_indiceSimbolo < 0)
-                _indiceSimbolo = 0;
+            if (index < 0)
+                index = 0;
             else
-                _indiceSimbolo++;
+                index++;
 
             if (instructions.Count > 0)
             {
                 foreach (Instruction instruction in instructions)
                 {
-                    InsereSimboloUnicoVisual(_indiceSimbolo, _lstCL, instruction);
-                    _indiceSimbolo++;
+                    InsertVisualInstructionAt(index, visualInstructions, instruction);
+                    index++;
                 }
 
-                return _lstCL[_indiceSimbolo - 1];
+                return visualInstructions[index - 1];
             }
             return null;
         }
 
 
-        void Simbolo_Click(object sender, MouseEventArgs e)
+        void VisualInstruction_Click(object sender, MouseEventArgs e)
         {
             if (!e.Button.Equals(MouseButtons.Right))
             {
@@ -682,55 +660,55 @@ namespace LadderApp
             OperationCode opCode = visualInstruction.OpCode;
             if (opCode != OperationCode.LineBegin)
             {
-                ladderForm.menuInsereLinha.Enabled = false;
+                ladderForm.mnuInsertLadderLine.Enabled = false;
 
-                ladderForm.menuToggleBit.Enabled = false;
+                ladderForm.mnuToggleBit.Enabled = false;
                 if (opCode == OperationCode.ParallelBranchBegin ||
                     opCode == OperationCode.ParallelBranchEnd ||
                     opCode == OperationCode.ParallelBranchNext)
                 {
-                    ladderForm.menuEnderecamento.Enabled = false;
-                    ladderForm.menuEnderecamento.Visible = false;
+                    ladderForm.mnuAddressing.Enabled = false;
+                    ladderForm.mnuAddressing.Visible = false;
 
                     /// Extensao de paralelo - acima/abaixo
                     ///    somente sobre simbolos de paralelo
-                    ladderForm.menuEstenderParaleloAcima.Enabled = true;
-                    ladderForm.menuEstenderParaleloAcima.Visible = true;
-                    ladderForm.menuEstenderParaleloAbaixo.Enabled = true;
-                    ladderForm.menuEstenderParaleloAbaixo.Visible = true;
+                    ladderForm.mnuExtendParallelBranchAbove.Enabled = true;
+                    ladderForm.mnuExtendParallelBranchAbove.Visible = true;
+                    ladderForm.mnuExtendParallelBranchBelow.Enabled = true;
+                    ladderForm.mnuExtendParallelBranchBelow.Visible = true;
 
                 }
                 else
                 {
-                    ladderForm.menuEnderecamento.Enabled = true;
-                    ladderForm.menuEnderecamento.Visible = true;
+                    ladderForm.mnuAddressing.Enabled = true;
+                    ladderForm.mnuAddressing.Visible = true;
 
                     if (visualInstruction.IsAllOperandsOk())
-                        ladderForm.menuToggleBit.Enabled = true;
+                        ladderForm.mnuToggleBit.Enabled = true;
                     else
-                        ladderForm.menuToggleBit.Enabled = false;
+                        ladderForm.mnuToggleBit.Enabled = false;
 
                     ProjectForm projectForm = ladderForm.projectForm;
-                    TreeNode addressingNode = projectForm.ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
+                    TreeNode addressingNode = projectForm.tvnProjectTree.Nodes["tvnProjectNode"].Nodes["tvnAddressingNode"];
                     foreach (TreeNode eachAddressTypeNode in addressingNode.Nodes)
                     {
                         ToolStripMenuItem menu = null;
                         switch (eachAddressTypeNode.Text)
                         {
                             case "Memories":
-                                menu = ladderForm.menuMemoria;
+                                menu = ladderForm.mnuMemory;
                                 break;
                             case "Timer":
-                                menu = ladderForm.menuTemporizador;
+                                menu = ladderForm.mnuTimer;
                                 break;
                             case "Counter":
-                                menu = ladderForm.menuContador;
+                                menu = ladderForm.mnuCounter;
                                 break;
                             case "Input":
-                                menu = ladderForm.menuEntrada;
+                                menu = ladderForm.mnuInput;
                                 break;
                             case "Output":
-                                menu = ladderForm.menuSaida;
+                                menu = ladderForm.mnuOutput;
                                 break;
                         }
 
@@ -755,22 +733,22 @@ namespace LadderApp
 
                             menu.DropDownItems[menu.DropDownItems.Count - 1].Name = eachAddressNode.Text;
                             menu.DropDownItems[menu.DropDownItems.Count - 1].Tag = eachAddressNode.Tag;
-                            menu.DropDownItems[menu.DropDownItems.Count - 1].Click += new EventHandler(LinhaCompletaLivre_Click);
+                            menu.DropDownItems[menu.DropDownItems.Count - 1].Click += new EventHandler(MenuContextAddress_Click);
                         }
                     }
 
                 }
             }
-            ladderForm.menuControle.Show(visualInstruction.PointToScreen(e.Location));
+            ladderForm.mnuContextAtInstruction.Show(visualInstruction.PointToScreen(e.Location));
         }
 
-        void LinhaCompletaLivre_Click(object sender, EventArgs e)
+        void MenuContextAddress_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem clickedMenuItem = (ToolStripMenuItem)sender;
-            ladderForm.projectForm.InsereEnderecoNoSimbolo(ladderForm.ControleSelecionado, (Address)clickedMenuItem.Tag);
+            ladderForm.projectForm.InsertAddressAtInstruction(ladderForm.VisualInstruction, (Address)clickedMenuItem.Tag);
         }
 
-        void simboloInicioLinha_Click(object sender, MouseEventArgs e)
+        void LineBeginVisualInstruction_Click(object sender, MouseEventArgs e)
         {
             if (!e.Button.Equals(MouseButtons.Right))
             {
@@ -780,44 +758,44 @@ namespace LadderApp
             VisualInstructionUserControl visualInstruction = (VisualInstructionUserControl)sender;
             if (visualInstruction.OpCode == OperationCode.LineBegin)
             {
-                ladderForm.menuEnderecamento.Enabled = false;
-                ladderForm.menuInsereLinha.Enabled = true;
+                ladderForm.mnuAddressing.Enabled = false;
+                ladderForm.mnuInsertLadderLine.Enabled = true;
 
                 /// Extensao de paralelo - acima/abaixo
                 ///    somente sobre simbolos de paralelo
-                ladderForm.menuEstenderParaleloAcima.Enabled = false;
-                ladderForm.menuEstenderParaleloAcima.Visible = false;
-                ladderForm.menuEstenderParaleloAbaixo.Enabled = false;
-                ladderForm.menuEstenderParaleloAbaixo.Visible = false;
+                ladderForm.mnuExtendParallelBranchAbove.Enabled = false;
+                ladderForm.mnuExtendParallelBranchAbove.Visible = false;
+                ladderForm.mnuExtendParallelBranchBelow.Enabled = false;
+                ladderForm.mnuExtendParallelBranchBelow.Visible = false;
 
-                ladderForm.menuControle.Show(visualInstruction.PointToScreen(e.Location));
+                ladderForm.mnuContextAtInstruction.Show(visualInstruction.PointToScreen(e.Location));
             }
         }
 
-        public bool ApagaSimbolos(VisualInstructionUserControl _aSerApagado)
+        public bool RemoveVisualInstruction(VisualInstructionUserControl visualInstructionToBeRemoved)
         {
-            int _indicePosInicial = 0;
-            int _indicePosFinal = 0;
-            int _auxSaida = 0;
-            List<VisualInstructionUserControl> _lstCLDeletar = new List<VisualInstructionUserControl>();
-            List<VisualInstructionUserControl> _lstCL = null;
+            int initialPositionIndex = 0;
+            int finalPositionIndex = 0;
+            int outputIndex = 0;
+            List<VisualInstructionUserControl> visualInstructionsToRemove = new List<VisualInstructionUserControl>();
+            List<VisualInstructionUserControl> visualInstructionsAux = null;
             List<Instruction> instructions = null;
-            VisualInstructionUserControl _cLAMudarCI = null;
+            VisualInstructionUserControl visualInstructionToChangeOpCode = null;
 
-            if (!visualInstructions.Contains(_aSerApagado))
+            if (!visualInstructions.Contains(visualInstructionToBeRemoved))
             {
-                if (!visualOutputInstructions.Contains(_aSerApagado))
+                if (!visualOutputInstructions.Contains(visualInstructionToBeRemoved))
                 {
                     return false;
                 }
                 else
                 {
-                    _lstCL = this.visualOutputInstructions;
+                    visualInstructionsAux = visualOutputInstructions;
                     instructions = line.outputs;
 
                     /// caso haja um paralelo na saida
                     /// deleta a linha do paralelo
-                    switch (_aSerApagado.OpCode)
+                    switch (visualInstructionToBeRemoved.OpCode)
                     {
                         case OperationCode.ParallelBranchBegin:
                         case OperationCode.ParallelBranchEnd:
@@ -826,8 +804,8 @@ namespace LadderApp
                         default:
                             if (this.visualOutputInstructions.Count > 1)
                             {
-                                _auxSaida = this.visualOutputInstructions.IndexOf(_aSerApagado);
-                                _aSerApagado = this.visualOutputInstructions[_auxSaida - 1];
+                                outputIndex = this.visualOutputInstructions.IndexOf(visualInstructionToBeRemoved);
+                                visualInstructionToBeRemoved = this.visualOutputInstructions[outputIndex - 1];
                             }
                             break;
                     }
@@ -835,82 +813,78 @@ namespace LadderApp
             }
             else
             {
-                _lstCL = this.visualInstructions;
+                visualInstructionsAux = visualInstructions;
                 instructions = line.instructions;
             }
 
-            switch (_aSerApagado.OpCode)
+            switch (visualInstructionToBeRemoved.OpCode)
             {
                 case OperationCode.ParallelBranchBegin:
                 case OperationCode.ParallelBranchNext:
-                    _indicePosInicial = _lstCL.IndexOf(_aSerApagado);
-                    _indicePosFinal = _lstCL.IndexOf(_aSerApagado.Aponta2proxPP);
+                    initialPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved);
+                    finalPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved.Aponta2proxPP);
 
-                    _indicePosFinal--;
+                    finalPositionIndex--;
 
-                    switch (_aSerApagado.OpCode)
+                    switch (visualInstructionToBeRemoved.OpCode)
                     {
                         case OperationCode.ParallelBranchBegin:
-                            if (_aSerApagado.Aponta2proxPP.Aponta2proxPP.Aponta2PI != null)
+                            if (visualInstructionToBeRemoved.Aponta2proxPP.Aponta2proxPP.Aponta2PI != null)
                             {
-                                _lstCLDeletar.Add(_aSerApagado.Aponta2proxPP.Aponta2proxPP);
-                                _indicePosFinal++;
+                                visualInstructionsToRemove.Add(visualInstructionToBeRemoved.Aponta2proxPP.Aponta2proxPP);
+                                finalPositionIndex++;
                             }
                             else
-                                _cLAMudarCI = _aSerApagado.Aponta2proxPP;
+                                visualInstructionToChangeOpCode = visualInstructionToBeRemoved.Aponta2proxPP;
                             break;
                         case OperationCode.ParallelBranchNext:
-                            if (_aSerApagado.Aponta2proxPP.Aponta2PI != null)
+                            if (visualInstructionToBeRemoved.Aponta2proxPP.Aponta2PI != null)
                             {
-                                if (_aSerApagado.Aponta2proxPP.Aponta2PI.Aponta2proxPP.Equals(_aSerApagado))
+                                if (visualInstructionToBeRemoved.Aponta2proxPP.Aponta2PI.Aponta2proxPP.Equals(visualInstructionToBeRemoved))
                                 {
-                                    _lstCLDeletar.Add(_aSerApagado.Aponta2proxPP.Aponta2PI);
-                                    _indicePosFinal++;
+                                    visualInstructionsToRemove.Add(visualInstructionToBeRemoved.Aponta2proxPP.Aponta2PI);
+                                    finalPositionIndex++;
                                 }
-                                //else
-                                //_aSerApagado.Aponta2proxPP.setCI(CodigosInterpretaveis.PARALELO_FINAL);
                             }
                             break;
                     }
                     break;
                 case OperationCode.ParallelBranchEnd:
-                    _indicePosFinal = _lstCL.IndexOf(_aSerApagado);
-                    _indicePosInicial = _lstCL.IndexOf(_aSerApagado.Aponta2PI);
+                    finalPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved);
+                    initialPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved.Aponta2PI);
                     break;
                 default:
-                    _indicePosInicial = _lstCL.IndexOf(_aSerApagado);
-                    _indicePosFinal = _indicePosInicial;
+                    initialPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved);
+                    finalPositionIndex = initialPositionIndex;
                     break;
             }
 
             /// levanta os controles a serem deletados
-            for (int i = _indicePosInicial; i <= _indicePosFinal; i++)
-                _lstCLDeletar.Add(_lstCL[i]);
+            for (int i = initialPositionIndex; i <= finalPositionIndex; i++)
+                visualInstructionsToRemove.Add(visualInstructionsAux[i]);
 
             /// deleta um a um
-            foreach (VisualInstructionUserControl _cLADeletar in _lstCLDeletar)
-                ApagaSimbolo(_lstCL, instructions, _cLADeletar);
+            foreach (VisualInstructionUserControl _cLADeletar in visualInstructionsToRemove)
+                RemoveInstruction(visualInstructionsAux, instructions, _cLADeletar);
 
-            if (_cLAMudarCI != null)
-                _cLAMudarCI.OpCode = OperationCode.ParallelBranchBegin;
+            if (visualInstructionToChangeOpCode != null)
+                visualInstructionToChangeOpCode.OpCode = OperationCode.ParallelBranchBegin;
 
             return true;
         }
 
-        public bool ApagaSimbolo(List<VisualInstructionUserControl> _lstCL, List<Instruction> instructions, VisualInstructionUserControl _aSerApagado)
+        public bool RemoveInstruction(List<VisualInstructionUserControl> visualInstructions, List<Instruction> instructions, VisualInstructionUserControl visulInstructionToBeRemoved)
         {
-            int _indice = 0;
+            int index = visualInstructions.IndexOf(visulInstructionToBeRemoved);
+            visualInstructions.RemoveAt(index);
 
-            _indice = _lstCL.IndexOf(_aSerApagado);
-            _lstCL.RemoveAt(_indice);
+            instructions.RemoveAt(index);
 
-            instructions.RemoveAt(_indice);
-
-            _aSerApagado.ControleSelecionado -= new ControleSelecionadoEventHandler(ladderForm.Simbolo_ControleSelecionado);
-            _aSerApagado.MouseClick -= new MouseEventHandler(Simbolo_Click);
-            _aSerApagado.KeyDown += new KeyEventHandler(ladderForm.Simbolo_KeyDown);
-            _aSerApagado.Instruction.Dispose();
-            _aSerApagado.Dispose();
+            visulInstructionToBeRemoved.VisualInstructionSelectedEvent -= new VisualInstructionSelectedEventHandler(ladderForm.VisualInstruction_Selected);
+            visulInstructionToBeRemoved.MouseClick -= new MouseEventHandler(VisualInstruction_Click);
+            visulInstructionToBeRemoved.KeyDown -= new KeyEventHandler(ladderForm.VisualInstruction_KeyDown);
+            visulInstructionToBeRemoved.Instruction.Dispose();
+            visulInstructionToBeRemoved.Dispose();
 
             return true;
         }

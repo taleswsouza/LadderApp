@@ -10,12 +10,18 @@ namespace LadderApp
 {
     public partial class ProjectForm : Form
     {
-        public LadderForm ladderForm;
-        public LadderProgram program = new LadderProgram();
+        public enum ProgramStatus
+        {
+            NotInitialized,
+            New,
+            Open,
+            Saved
+        }
+        public ProgramStatus Status { get; set; } = ProgramStatus.NotInitialized;
 
         public ProjectForm(LadderProgram program) : this()
         {
-            this.program = program;
+            this.Program = program;
         }
 
         public ProjectForm()
@@ -23,46 +29,51 @@ namespace LadderApp
             InitializeComponent();
         }
 
+        public LadderForm LadderForm { get; set; }
+        public LadderProgram Program { get; set; } = new LadderProgram();
+        public string PathFile { get; set; } = "";
+
+
         public void SetText()
         {
-            this.Text = program.Nome;
+            this.Text = Program.Name;
         }
 
         private void ProjetoLadder_Resize(object sender, EventArgs e)
         {
-            ArvoreProjeto.Location = new Point(0, 0);
-            ArvoreProjeto.Size = new Size(this.Size.Width, this.Size.Height);
+            tvnProjectTree.Location = new Point(0, 0);
+            tvnProjectTree.Size = new Size(this.Size.Width, this.Size.Height);
         }
 
         private void ProjetoLadder_Load(object sender, EventArgs e)
         {
-            ArvoreProjeto.TopNode.Expand();
+            tvnProjectTree.TopNode.Expand();
 
-            if (program.Status == LadderProgram.ProgramStatus.NotInitialized)
+            if (Status == ProgramStatus.NotInitialized)
             {
-                program.device = new Device(1);
+                Program.device = new Device();
 
-                AlocaEnderecamentoIO();
+                AlocateIOAddressing();
 
-                AlocaEnderecamentoMemoria(program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
-                AlocaEnderecamentoMemoria(program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
-                AlocaEnderecamentoMemoria(program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
+                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
+                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
+                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
             }
             else
             {
-                if (program.device == null)
-                    program.device = new Device(1);
-                AlocaEnderecamentoIO();
+                if (Program.device == null)
+                    Program.device = new Device();
+                AlocateIOAddressing();
 
-                AlocaEnderecamentoMemoria(program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, program.addressing.ListMemoryAddress.Count);
-                AlocaEnderecamentoMemoria(program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, program.addressing.ListTimerAddress.Count);
-                AlocaEnderecamentoMemoria(program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, program.addressing.ListCounterAddress.Count);
+                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, Program.addressing.ListMemoryAddress.Count);
+                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, Program.addressing.ListTimerAddress.Count);
+                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, Program.addressing.ListCounterAddress.Count);
 
-                program.ReindexAddresses();
+                Program.ReindexAddresses();
             }
 
             //if (!CheckLadderFormIsNotNull())
-                OpenLadderForm();
+            OpenLadderForm();
         }
 
 
@@ -82,57 +93,51 @@ namespace LadderApp
                     e.Cancel = true;
                     break;
                 case DialogResult.Yes:
-                    ladderForm.Close();
+                    LadderForm.Close();
                     break;
                 case DialogResult.No:
-                    ladderForm.Close();
+                    LadderForm.Close();
                     break;
             }
         }
 
-        private void ArvoreProjeto_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void tvnProjectTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             switch (e.Node.Name)
             {
-                case "NoProgramaLadder":
-                    //if (!CheckLadderFormIsNotNull())
-                    //{
-                        OpenLadderForm();
-                    //}
+                case "tvnLadderProgramNode":
+                    OpenLadderForm();
                     break;
-                case "NoDispositivo":
-                    DeviceForm frmDisp = new DeviceForm(program.device);
-
-                    if (frmDisp.ShowDialog() == DialogResult.OK)
+                case "tvnDeviceNode":
+                    DeviceForm deviceForm = new DeviceForm(Program.device);
+                    if (deviceForm.ShowDialog() == DialogResult.OK)
                     {
                         int i = 0;
-                        foreach (Pin pd in program.device.lstBitPorta)
+                        foreach (Pin pin in Program.device.Pins)
                         {
-                            pd.TipoDefinido = frmDisp.lstEndModificado[i];
+                            pin.Type = deviceForm.lstEndModificado[i];
                             i++;
                         }
-                        program.device.RealocaEnderecoDispositivo();
-
-                        AlocaEnderecamentoIO();
+                        Program.device.RealocatePinAddresses();
+                        AlocateIOAddressing();
                     }
                     break;
-                case "NoConfMemoria":
-                    AddressingForm addressingForm = new AddressingForm(program.addressing);
+                case "tvnAddressingConfigurationNode":
+                    AddressingForm addressingForm = new AddressingForm(Program.addressing);
                     addressingForm.Owner = this;
-
                     if (addressingForm.ShowDialog() == DialogResult.OK)
                     {
-                        AlocaEnderecamentoMemoria(program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, addressingForm.NumberOfMemoryAddresses);
-                        AlocaEnderecamentoMemoria(program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, addressingForm.NumberOfTimerAddresses);
-                        AlocaEnderecamentoMemoria(program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, addressingForm.NumberOfCounterAddresses);
+                        AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, addressingForm.NumberOfMemoryAddresses);
+                        AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, addressingForm.NumberOfTimerAddresses);
+                        AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, addressingForm.NumberOfCounterAddresses);
                     }
                     break;
                 default:
                     if (e.Node.Tag != null)
-                        if (this.ladderForm.ControleSelecionado != null)
+                        if (this.LadderForm.VisualInstruction != null)
                         {
-                            InsereEnderecoNoSimbolo(this.ladderForm.ControleSelecionado, (Address)e.Node.Tag);
-                            this.ladderForm.ActiveControl = this.ladderForm.ControleSelecionado;
+                            InsertAddressAtInstruction(this.LadderForm.VisualInstruction, (Address)e.Node.Tag);
+                            this.LadderForm.ActiveControl = this.LadderForm.VisualInstruction;
                         }
                     break;
             }
@@ -140,153 +145,119 @@ namespace LadderApp
 
         public void OpenLadderForm()
         {
-            ladderForm = new LadderForm(program);
-            ladderForm.projectForm = this;
-            ladderForm.MdiParent = this.MdiParent;
-            ladderForm.ReorganizeLines();
-            ladderForm.Show();
+            LadderForm = new LadderForm(Program);
+            LadderForm.projectForm = this;
+            LadderForm.MdiParent = this.MdiParent;
+            LadderForm.ReorganizeLines();
+            LadderForm.Show();
         }
 
-        public void AlocaEnderecamentoIO()
-        {
-            /// Atalho para o No de enderecamento
-            TreeNode _NoEnderecamento = ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
-            _NoEnderecamento.Nodes["NoEntradas"].Nodes.Clear();
-            _NoEnderecamento.Nodes["NoSaidas"].Nodes.Clear();
-            program.addressing.ListInputAddress.Clear();
-            program.addressing.ListOutputAddress.Clear();
-            foreach (Address el in program.device.lstEndBitPorta)
-            {
-                el.ApontaDispositivo(program.device);
-                switch (el.AddressType)
-                {
-                    case AddressTypeEnum.DigitalInput:
-                        program.addressing.ListInputAddress.Add(el);
-                        //if (!_NoEnderecamento.Nodes["NoEntradas"].Nodes.ContainsKey(el.Nome))
-                        //{
-                        _NoEnderecamento.Nodes["NoEntradas"].Nodes.Add(el.Name, el.Name + (el.Comment == "" ? "" : " - " + el.Comment));
-                        _NoEnderecamento.Nodes["NoEntradas"].Nodes[el.Name].Tag = el;
-                        //el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
-                        //}
-                        break;
-                    case AddressTypeEnum.DigitalOutput:
-                        program.addressing.ListOutputAddress.Add(el);
-                        //if (!_NoEnderecamento.Nodes["NoSaidas"].Nodes.ContainsKey(el.Nome))
-                        //{
-                        _NoEnderecamento.Nodes["NoSaidas"].Nodes.Add(el.Name, el.Name + (el.Comment == "" ? "" : " - " + el.Comment));
-                        _NoEnderecamento.Nodes["NoSaidas"].Nodes[el.Name].Tag = el;
-                        //el.MudouComentario += new MudouComentarioEventHandler(Endereco_MudouComentario);
-                        //}
-                        break;
-                }
-                el.EditedCommentEvent += new EditedCommentEventHandler(Endereco_MudouComentario);
-            }
+        private TreeNode AddressingNode => tvnProjectTree.Nodes["tvnProjectNode"].Nodes["tvnAddressingNode"];
+        private TreeNodeCollection InputsNodes => AddressingNode.Nodes["tvnInputsNode"].Nodes;
+        private TreeNodeCollection OutputsNodes => AddressingNode.Nodes["tvnOutputsNode"].Nodes;
+        private TreeNodeCollection MemoriesNodes => AddressingNode.Nodes["tvnMemoriesNode"].Nodes;
+        private TreeNodeCollection CountersNodes => AddressingNode.Nodes["tvnCountersNode"].Nodes;
+        private TreeNodeCollection TimersNodes => AddressingNode.Nodes["tvnTimersNode"].Nodes;
 
-        }
-
-        void Endereco_MudouComentario(Address sender)
+        private TreeNodeCollection GetAddressingNodesByAddressType(AddressTypeEnum type)
         {
-            TreeNode _NoEnderecamento = ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
-            int _pos = 0;
-            switch (sender.AddressType)
+            switch (type)
             {
                 case AddressTypeEnum.DigitalInput:
-                    _pos = _NoEnderecamento.Nodes["NoEntradas"].Nodes.IndexOfKey(sender.Name);
-
-                    if (_pos >= 0)
-                        _NoEnderecamento.Nodes["NoEntradas"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
-                    break;
+                    return InputsNodes;
                 case AddressTypeEnum.DigitalOutput:
-                    _pos = _NoEnderecamento.Nodes["NoSaidas"].Nodes.IndexOfKey(sender.Name);
-
-                    if (_pos >= 0)
-                        _NoEnderecamento.Nodes["NoSaidas"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
-                    break;
+                    return OutputsNodes;
                 case AddressTypeEnum.DigitalMemory:
-                    _pos = _NoEnderecamento.Nodes["NoMemoria"].Nodes.IndexOfKey(sender.Name);
-
-                    if (_pos >= 0)
-                        _NoEnderecamento.Nodes["NoMemoria"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
-                    break;
+                    return MemoriesNodes;
                 case AddressTypeEnum.DigitalMemoryCounter:
-                    _pos = _NoEnderecamento.Nodes["NoContadores"].Nodes.IndexOfKey(sender.Name);
-
-                    if (_pos >= 0)
-                        _NoEnderecamento.Nodes["NoContadores"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
-                    break;
+                    return CountersNodes;
                 case AddressTypeEnum.DigitalMemoryTimer:
-                    _pos = _NoEnderecamento.Nodes["NoTemporizadores"].Nodes.IndexOfKey(sender.Name);
-
-                    if (_pos >= 0)
-                        _NoEnderecamento.Nodes["NoTemporizadores"].Nodes[_pos].Text = sender.Name + (sender.Comment == "" ? "" : " - " + sender.Comment);
-                    break;
+                    return TimersNodes;
+                default:
+                    return null;
             }
-
         }
 
-        /// <summary>
-        /// Aloca e realoca na No objeto de enderecamento do programa atual
-        /// uma quantidade especificada do tipo de memoria solicitado
-        /// </summary>
-        /// <param name="e">Enderecamento do programa</param>
-        /// <param name="tp">tipo de memoria a ser realocada</param>
-        /// <param name="qtdEnd">Quantidade do tipo desejada</param>
-        public int AlocaEnderecamentoMemoria(List<Address> _lstE, AddressTypeEnum tp, int qtdEnd)
+        public void AlocateIOAddressing()
         {
-            /// Atalho para o No de enderecamento
-            TreeNode _NoEnderecamento = ArvoreProjeto.Nodes["NoProjeto"].Nodes["NoEnderecamento"];
-            String _txtNoEndereco = "";
+            tvnProjectTree.BeginUpdate();
 
-            int _qtdAtual = 1;
-            switch (tp)
-            {
-                case AddressTypeEnum.DigitalMemory:
-                    _txtNoEndereco = "NoMemoria";
-                    break;
-                case AddressTypeEnum.DigitalMemoryCounter:
-                    _txtNoEndereco = "NoContadores";
-                    break;
-                case AddressTypeEnum.DigitalMemoryTimer:
-                    _txtNoEndereco = "NoTemporizadores";
-                    break;
-            }
+            InputsNodes.Clear();
+            OutputsNodes.Clear();
 
-            IndicaEnderecoEmUso(this.program, tp);
-
-            _NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Clear();
-            _qtdAtual = _lstE.Count;
-            if ((_qtdAtual == 0) || (_qtdAtual < qtdEnd))
+            Program.addressing.ListInputAddress.Clear();
+            Program.addressing.ListOutputAddress.Clear();
+            foreach (Address address in Program.device.PinAddresses)
             {
-                for (int i = _qtdAtual + 1; i <= qtdEnd; i++)
-                    _lstE.Add(new Address(tp, i, program.device));
-            }
-            else if (_qtdAtual > qtdEnd)
-            {
-                for (int i = (_qtdAtual - 1); i >= qtdEnd; i--)
+                address.SetDevice(Program.device);
+                switch (address.AddressType)
                 {
-                    if (!_lstE[i].Used)
+                    case AddressTypeEnum.DigitalInput:
+                        Program.addressing.ListInputAddress.Add(address);
+                        InputsNodes.Add(address.Name, address.GetNameAndComment());
+                        InputsNodes[address.Name].Tag = address;
+                        break;
+                    case AddressTypeEnum.DigitalOutput:
+                        Program.addressing.ListOutputAddress.Add(address);
+                        OutputsNodes.Add(address.Name, address.GetNameAndComment());
+                        OutputsNodes[address.Name].Tag = address;
+                        break;
+                }
+                address.EditedCommentEvent += new EditedCommentEventHandler(Address_EditedComment);
+            }
+            tvnProjectTree.EndUpdate();
+        }
+
+        void Address_EditedComment(Address sender)
+        {
+            tvnProjectTree.BeginUpdate();
+            TreeNodeCollection nodeToUpdateAddress = GetAddressingNodesByAddressType(sender.AddressType);
+            int position = nodeToUpdateAddress.IndexOfKey(sender.Name);
+            if (position >= 0)
+                nodeToUpdateAddress[position].Text = sender.GetNameAndComment();
+            tvnProjectTree.EndUpdate();
+        }
+
+        public int AlocateAddressingMemoryAndTimerAndCounter(List<Address> adresses, AddressTypeEnum type, int numberOfAddresses)
+        {
+            IndicateAddressUsed(this.Program, type);
+
+            TreeNodeCollection nodeToUpdate = GetAddressingNodesByAddressType(type);
+            nodeToUpdate.Clear();
+
+
+            int currentNumber = adresses.Count;
+            if (currentNumber == 0 || currentNumber < numberOfAddresses)
+            {
+                for (int i = currentNumber + 1; i <= numberOfAddresses; i++)
+                    adresses.Add(new Address(type, i, Program.device));
+            }
+            else if (currentNumber > numberOfAddresses)
+            {
+                for (int i = (currentNumber - 1); i >= numberOfAddresses; i--)
+                {
+                    if (!adresses[i].Used)
                     {
-                        _lstE[i] = null;
-                        _lstE.RemoveAt(i);
+                        adresses[i] = null;
+                        adresses.RemoveAt(i);
                     }
                     else
                         break;
                 }
             }
 
-            foreach (Address el in _lstE)
+            foreach (Address address in adresses)
             {
-                _NoEnderecamento.Nodes[_txtNoEndereco].Nodes.Add(el.Name, el.Name + (el.Comment == "" ? "" : " - " + el.Comment));
-                _NoEnderecamento.Nodes[_txtNoEndereco].Nodes[el.Name].Tag = el;
-                el.EditedCommentEvent += new EditedCommentEventHandler(Endereco_MudouComentario);
+                nodeToUpdate.Add(address.Name, address.GetNameAndComment());
+                nodeToUpdate[address.Name].Tag = address;
+                address.EditedCommentEvent += new EditedCommentEventHandler(Address_EditedComment);
             }
-
             return 0;
         }
 
-        private void IndicaEnderecoEmUso(LadderProgram program, AddressTypeEnum addressType)
+        private void IndicateAddressUsed(LadderProgram program, AddressTypeEnum addressType)
         {
-            program.addressing.LimpaIndicacaoEmUso();
+            program.addressing.CleanUsedIndication();
             foreach (Line line in program.Lines)
             {
                 line.instructions.AddRange(line.outputs);
@@ -303,9 +274,9 @@ namespace LadderApp
                         case OperationCode.Reset:
                             if (instruction.IsAllOperandsOk())
                             {
-                                Address _el = (Address)instruction.GetOperand(0);
-                                if (_el.AddressType == addressType)
-                                    _el.Used = true;
+                                Address address = (Address)instruction.GetOperand(0);
+                                if (address.AddressType == addressType)
+                                    address.Used = true;
                             }
                             break;
                     }
@@ -314,12 +285,12 @@ namespace LadderApp
             }
         }
 
-        public void InsereEnderecoNoSimbolo(VisualInstructionUserControl _cL, Address _end)
+        public void InsertAddressAtInstruction(VisualInstructionUserControl visualInstruction, Address address)
         {
-            if (!_cL.IsDisposed)
+            if (!visualInstruction.IsDisposed)
             {
-                _cL.SetOperand(0, _end);
-                _cL.Refresh();
+                visualInstruction.SetOperand(0, address);
+                visualInstruction.Refresh();
             }
         }
     }

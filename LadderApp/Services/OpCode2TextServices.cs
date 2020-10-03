@@ -139,7 +139,7 @@ namespace LadderApp
                             {
                                 Address address = (Address)instruction.GetOperand(0);
                                 Add(address.Id);
-                                Add(address.Counter.Tipo);
+                                Add(address.Counter.Type);
                                 Add(address.Counter.Preset);
                             }
                     }
@@ -152,8 +152,8 @@ namespace LadderApp
                             {
                                 Address address = (Address)instruction.GetOperand(0);
                                 Add(address.Id);
-                                Add(address.Timer.Tipo);
-                                Add(address.Timer.BaseTempo);
+                                Add(address.Timer.Type);
+                                Add(address.Timer.TimeBase);
                                 Add(address.Timer.Preset);
                             }
                     }
