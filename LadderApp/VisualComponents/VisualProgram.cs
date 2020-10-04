@@ -70,7 +70,7 @@ namespace LadderApp
         }
 
 
-        public void ApagaLinha(int linha)
+        public void DeleteLine(int linha)
         {
             lines[linha].DeleteLine();
             lines.RemoveAt(linha);

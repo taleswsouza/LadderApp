@@ -142,7 +142,6 @@
     <Compile Include="Model\LadderProgram.cs" />
     <Compile Include="VisualComponents\VisualProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="UserControls\BasicUserControl.resx" />
     <EmbeddedResource Include="UserControls\VisualInstructionUserControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>VisualInstructionUserControl.cs</DependentUpon>

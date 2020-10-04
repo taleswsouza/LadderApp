@@ -126,7 +126,7 @@ namespace LadderApp
 
         private bool ValidateAddress(int index, Object newOperand)
         {
-            bool _bEndereco = false;
+            bool isAddress = false;
 
             Address address = null;
             if (newOperand != null)
@@ -146,12 +146,12 @@ namespace LadderApp
                     break;
                 case OperationCode.LineBegin:
                     if (newOperand != null)
-                        if (newOperand.GetType().ToString() != "System.Int32")
+                        if (newOperand is Int32 == false)
                             isValid = false;
                     break;
                 case OperationCode.NormallyOpenContact:
                 case OperationCode.NormallyClosedContact:
-                    _bEndereco = true;
+                    isAddress = true;
                     if (address != null)
                     {
                         switch (address.AddressType)
@@ -172,7 +172,7 @@ namespace LadderApp
                         isValid = false;
                     break;
                 case OperationCode.OutputCoil:
-                    _bEndereco = true;
+                    isAddress = true;
                     if (address != null)
                     {
                         switch (address.AddressType)
@@ -192,7 +192,7 @@ namespace LadderApp
                 case OperationCode.Timer:
                     if (address != null && index == 0)
                     {
-                        _bEndereco = true;
+                        isAddress = true;
                         switch (address.AddressType)
                         {
                             case AddressTypeEnum.DigitalMemoryTimer:
@@ -221,7 +221,7 @@ namespace LadderApp
                 case OperationCode.Counter:
                     if (address != null && index == 0)
                     {
-                        _bEndereco = true;
+                        isAddress = true;
                         switch (address.AddressType)
                         {
                             case AddressTypeEnum.DigitalMemoryCounter:
@@ -253,7 +253,7 @@ namespace LadderApp
                     isValid = false;
                     break;
                 case OperationCode.Reset:
-                    _bEndereco = true;
+                    isAddress = true;
                     if (address != null)
                     {
                         switch (address.AddressType)
@@ -275,7 +275,7 @@ namespace LadderApp
                     break;
             }
 
-            if (_bEndereco)
+            if (isAddress)
             {
                 Address currentOperand = null;
                 if (IsAllOperandsOk())

@@ -11,13 +11,15 @@ namespace LadderApp
 {
     public partial class VisualLine
     {
+        private int tabStop = 0;
         private Line line;
+
 
         public VisualLine()
         {
         }
 
-        public VisualLine(LadderForm ladderForm, Line line) : this()
+        public VisualLine(LadderForm ladderForm, Line line)
         {
             this.ladderForm = ladderForm;
             this.line = line;
@@ -26,16 +28,16 @@ namespace LadderApp
         }
 
         // links
-        public LadderForm ladderForm;
+        private LadderForm ladderForm;
         public VisualLine PreviousLine { get; set; }
         public VisualLine NextLine { get; set; }
 
-        // fixed objects
+        // fixed visual instructions
         public VisualInstructionUserControl LineBegin = new VisualInstructionUserControl(OperationCode.LineBegin);
         public VisualInstructionUserControl LineEnd = new VisualInstructionUserControl(OperationCode.LineEnd);
         public VisualInstructionUserControl BackgroundLine = new VisualInstructionUserControl(OperationCode.BackgroundLine);
 
-        // dinamic objects
+        // dinamic visual instructions
         public List<VisualInstructionUserControl> visualInstructions = new List<VisualInstructionUserControl>();
         public List<VisualInstructionUserControl> visualOutputInstructions = new List<VisualInstructionUserControl>();
 
@@ -45,8 +47,6 @@ namespace LadderApp
             OutputsAtRight,
             Undefined
         }
-
-        public int tabStop = 0;
 
         private int lineNumber = 0;
         public int LineNumber
@@ -69,14 +69,27 @@ namespace LadderApp
 
         public double percentageVisualInstructionReduction = 1D;
 
+        private int xTotalHorizontal = 0;
+        public int xTotal
+        {
+            get { return xTotalHorizontal; }
+            set { xTotalHorizontal = value - 10; }
+        }
+
+
+        private int yTotalVertical = 0;
+        public int yTotal
+        {
+            get { return yTotalVertical; }
+            set { yTotalVertical = value - 10; }
+        }
+
         public void AdjustPositioning()
         {
             VisualInstructionUserControl visualInstructionAux = null;
 
             int biggerX = 0;
 
-            /// Variaveis para desenhar os simbolos de saida
-            /// sempre no final da linha
             int countInstructions = 0;
             int accumulatedXAtFirstOutputInstruction = 0;
             int accumulatedXAtBiggerOutputInstruction = 0;
@@ -85,18 +98,15 @@ namespace LadderApp
             VisualParallelBranch parallelBranch = null;
             List<VisualParallelBranch> visualParallelBranches = new List<VisualParallelBranch>();
 
-            /// acumula o tamanho Y (pos+tam) do ultimo
-            /// VPI tratado dentro de um mesmo paralelo
-            /// seu valor e usado para informar
-            /// ao PF qual o seu tamanho Y
             int lastSizeOfYToFinalParallelBranch = 0;
 
             int sizeOfYToBackgroundDraw = 0;
 
-            int _posX = XPosition;  // auxiliar para posX
-            int _posY = YPosition;  // auxiliar para posY
-            int _tamX = XSize;  // auxiliar para tamX
-            int _tamY = YSize;  // auxiliar para tamY
+            int xPosition = XPosition;
+            int yPosition = YPosition;
+
+            int xSize = XSize;
+            int ySize = YSize;
 
             int xSizeAccumulated = XSize;
             int ySizeAccumulated = YSize;
@@ -107,62 +117,57 @@ namespace LadderApp
             {
                 countInstructions++;
 
-                // caso todos os paralelos abertos tenham sido
-                // tratados forca paralelos tratados = 0
                 if (visualParallelBranches.Count == 0)
                 {
                     if (biggerX > 0)
-                        _posX = biggerX;
-
+                    {
+                        xPosition = biggerX;
+                    }
                     biggerX = 0;
                 }
                 else
                 {
-                    if (biggerX < (_posX + _tamX))
-                        biggerX = _posX + _tamX;
+                    if (biggerX < (xPosition + xSize))
+                        biggerX = xPosition + xSize;
                 }
 
                 switch (visualInstruction.OpCode)
                 {
                     case OperationCode.ParallelBranchBegin:
-                        _tamY = YSize; // restaura tamanho Y base
-                        _posX = xSizeAccumulated;
-                        _tamX = this.XSize / 3;
+                        ySize = YSize; // restaura tamanho Y base
+                        xPosition = xSizeAccumulated;
+                        xSize = this.XSize / 3;
 
                         parallelBranch = new VisualParallelBranch();
                         visualParallelBranches.Add(parallelBranch);
 
-                        parallelBranch._yAcum = _posY;
-                        parallelBranch.maiorY = _posY;
-                        parallelBranch.maiorX = biggerX;
-                        parallelBranch.par = visualInstruction;
+                        parallelBranch.accumulatedY = yPosition;
+                        parallelBranch.biggerY = yPosition;
+                        parallelBranch.biggerX = biggerX;
+                        parallelBranch.parallelBranchBegin = visualInstruction;
 
-                        xSizeAccumulated = _posX + _tamX;
+                        xSizeAccumulated = xPosition + xSize;
                         break;
                     case OperationCode.ParallelBranchEnd:
-                        _tamX = XSize / 3;
-                        _tamY = parallelBranch.ultimoVPI.XYPosition.Y - parallelBranch.par.XYPosition.Y + parallelBranch.ultimoVPI.XYSize.Height; // _ultTamY2ParaleloFinal;
-                        _posY = parallelBranch.par.XYPosition.Y;
+                        xSize = this.XSize / 3;
+                        ySize = parallelBranch.lastParallelBranchNext.XYPosition.Y - parallelBranch.parallelBranchBegin.XYPosition.Y + parallelBranch.lastParallelBranchNext.XYSize.Height; // _ultTamY2ParaleloFinal;
+                        yPosition = parallelBranch.parallelBranchBegin.XYPosition.Y;
 
-                        if (biggerX > parallelBranch.maiorX)
-                            parallelBranch.maiorX = biggerX;
+                        if (biggerX > parallelBranch.biggerX)
+                            parallelBranch.biggerX = biggerX;
 
-                        _posX = parallelBranch.maiorX;
+                        xPosition = parallelBranch.biggerX;
 
-                        // Salva (por paralelo) o maior tamanho Y para os simbolos
-                        // linha inicial / final e desenho de fundo
                         if (lastSizeOfYToFinalParallelBranch > sizeOfYToBackgroundDraw)
                             sizeOfYToBackgroundDraw = lastSizeOfYToFinalParallelBranch;
 
-                        visualInstruction.SalvaVPI2PF(parallelBranch.lstVPI);
+                        visualInstruction.AssociateParallelBranchList(parallelBranch.parallelBranchList);
 
-                        /// Faz os apontamentos de paralelo
-                        ///  para facilitar futuras buscas de paralelos
-                        visualInstruction.Aponta2PI = parallelBranch.par;
-                        parallelBranch.par.Aponta2PF = visualInstruction;
-                        parallelBranch.ultimoVPI.Aponta2proxPP = visualInstruction;
+                        visualInstruction.PointToParallelBegin = parallelBranch.parallelBranchBegin;
+                        parallelBranch.parallelBranchBegin.PointToParallelEnd = visualInstruction;
+                        parallelBranch.lastParallelBranchNext.PointToNextParallelPoint = visualInstruction;
 
-                        parallelBranch.ultimoVPI.UltimoVPI = true;
+                        parallelBranch.lastParallelBranchNext.LastParallelBranchEnd = true;
 
                         parallelBranch = null;
                         visualParallelBranches.RemoveAt(visualParallelBranches.Count - 1);
@@ -171,63 +176,57 @@ namespace LadderApp
                             parallelBranch = visualParallelBranches[visualParallelBranches.Count - 1];
 
 
-                        // se tiver paralelo aberto
-                        // salva nele o maior y processado dentro dele
                         if (visualParallelBranches.Count > 0)
-                            if (lastSizeOfYToFinalParallelBranch > parallelBranch.maiorY)
-                                parallelBranch.maiorY = lastSizeOfYToFinalParallelBranch;
+                            if (lastSizeOfYToFinalParallelBranch > parallelBranch.biggerY)
+                                parallelBranch.biggerY = lastSizeOfYToFinalParallelBranch;
 
-                        xSizeAccumulated = _posX + _tamX;
+                        xSizeAccumulated = xPosition + xSize;
                         break;
                     case OperationCode.ParallelBranchNext:
-                        _tamY = YSize; // restaura tamanho Y base
-                        _tamX = this.XSize / 3; // tamanho X reduzido
+                        ySize = YSize;
+                        xSize = this.XSize / 3;
 
-                        if (biggerX > parallelBranch.maiorX)
-                            parallelBranch.maiorX = biggerX;
+                        if (biggerX > parallelBranch.biggerX)
+                            parallelBranch.biggerX = biggerX;
                         biggerX = 0;
 
-                        _posX = parallelBranch.par.XYPosition.X;
+                        xPosition = parallelBranch.parallelBranchBegin.XYPosition.X;
 
-                        parallelBranch._yAcum = parallelBranch.maiorY;
-                        _posY = parallelBranch.maiorY + (YSize * (parallelBranch.numVPITratados + 1));
+                        parallelBranch.accumulatedY = parallelBranch.biggerY;
+                        yPosition = parallelBranch.biggerY + (YSize * (parallelBranch.numVPITratados + 1));
 
-                        // caso seja o primeiro VPI(NXB) atualiza o SIZE do PI(BST)
-                        // caso seja o segundo VPI em diante, atualiza SIZE do VPI anterior
                         if (parallelBranch.numVPITratados > 0)
                         {
-                            visualInstructionAux = parallelBranch.ultimoVPI;
-                            visualInstructionAux.UltimoVPI = false;
+                            visualInstructionAux = parallelBranch.lastParallelBranchNext;
+                            visualInstructionAux.LastParallelBranchEnd = false;
                         }
                         else
                         {
-                            visualInstructionAux = parallelBranch.par;
+                            visualInstructionAux = parallelBranch.parallelBranchBegin;
                         }
 
-                        visualInstructionAux.XYSize = new Size(visualInstructionAux.XYSize.Width, _posY - visualInstructionAux.XYPosition.Y);
+                        visualInstructionAux.XYSize = new Size(visualInstructionAux.XYSize.Width, yPosition - visualInstructionAux.XYPosition.Y);
 
-                        /// PARA FACILITAR A BUSCA DO PROXIMO PONTO DE PARALELO
-                        visualInstructionAux.Aponta2proxPP = visualInstruction;
+                        visualInstructionAux.PointToNextParallelPoint = visualInstruction;
 
                         parallelBranch.numVPITratados += 1;
-                        parallelBranch.ultimoVPI = visualInstruction;
-                        lastSizeOfYToFinalParallelBranch = _posY;
+                        parallelBranch.lastParallelBranchNext = visualInstruction;
+                        lastSizeOfYToFinalParallelBranch = yPosition;
 
-                        parallelBranch.lstVPI.Add(visualInstruction);
+                        parallelBranch.parallelBranchList.Add(visualInstruction);
 
-                        xSizeAccumulated = _posX + _tamX;
+                        xSizeAccumulated = xPosition + xSize;
                         break;
                     default:
-                        _tamY = YSize;
-                        _tamX = this.XSize;
-                        _posX = xSizeAccumulated;
-                        xSizeAccumulated += _tamX;
+                        ySize = YSize;
+                        xSize = XSize;
+                        xPosition = xSizeAccumulated;
+                        xSizeAccumulated += xSize;
                         break;
                 }
 
-                // posiciona e dimensiona simbolo
-                visualInstruction.XYPosition = new Point(_posX, _posY);
-                visualInstruction.XYSize = new Size(_tamX, _tamY);
+                visualInstruction.XYPosition = new Point(xPosition, yPosition);
+                visualInstruction.XYSize = new Size(xSize, ySize);
 
                 if ((visualOutputInstructions.Count > 0) && (countInstructions >= (visualInstructions.Count - visualOutputInstructions.Count)))
                 {
@@ -243,8 +242,6 @@ namespace LadderApp
             if (outputSize == 0)
                 outputSize = XSize;
 
-            /// Caso tenha ao menos 1 objeto de saida cria um espaco de meio simbolo
-            /// entre o ultimo simbolo e o primeiro de saida
             visualInstructions.RemoveRange((visualInstructions.Count - visualOutputInstructions.Count), visualOutputInstructions.Count);
 
             sizeOfYToBackgroundDraw += YSize;
@@ -252,13 +249,11 @@ namespace LadderApp
             if ((YPosition > YSize) && (sizeOfYToBackgroundDraw > YPosition))
                 sizeOfYToBackgroundDraw -= YPosition;
 
-            //--Inicio da linha
             LineBegin.XYPosition = new Point(XPosition, YPosition);
             LineBegin.XYSize = new Size(this.XSize, sizeOfYToBackgroundDraw);
             LineBegin.Location = new Point(XPosition, YPosition);
             LineBegin.Size = new Size(this.XSize, sizeOfYToBackgroundDraw);
 
-            //--Fim da linha
             if (xSizeAccumulated < (ladderForm.Width - this.XSize))
                 xSizeAccumulated = (ladderForm.Width - this.XSize);
 
@@ -319,14 +314,13 @@ namespace LadderApp
                 visualInstructions.RemoveRange(outputToInsertIndex, visualOutputInstructions.Count);
             }
 
-            // Fim da linha
             LineEnd.TabIndex = 0;
             LineEnd.TabStop = false;
 
-            // Desenho de fundo
             BackgroundLine.TabIndex = 0;
             BackgroundLine.TabStop = false;
             BackgroundLine.Invalidate();
+
         }
 
 
@@ -356,9 +350,6 @@ namespace LadderApp
             BackgroundLine.Parent = this.ladderForm;
             BackgroundLine.CreateControl();
             BackgroundLine.SendToBack();
-            /// Desabilito o desenho de fundo para evitar que um clique do mouse
-            /// sobre partes dele faca com que a tela seja movida para o primeiro
-            /// controle.
             BackgroundLine.Enabled = false;
 
             SetFunctionsToFixedVisualInstructions();
@@ -399,7 +390,6 @@ namespace LadderApp
                 visualInstructions.AddRange(visualOutputInstructions);
             }
 
-            // Demais simbolos
             foreach (VisualInstructionUserControl visualInstruction in visualInstructions)
             {
                 visualInstruction.VisualInstructionSelectedEvent += new VisualInstructionSelectedEventHandler(ladderForm.VisualInstruction_Selected);
@@ -474,8 +464,6 @@ namespace LadderApp
             switch (visualOutputInstructions.Count)
             {
                 case 0:
-                    /// case 0: Primeiro simbolo na saida, adiciona apenas um
-                    /// simbolo na saida
                     index = 0;
 
                     if (instructions.Count > 1)
@@ -486,21 +474,14 @@ namespace LadderApp
 
                     break;
                 case 1:
-                    /// case 1: Caso ja exista 1 (um) simbolo de saida, insere um 
-                    /// paralelo de forma automatica
-
                     index = VerifyPositionToInsert(after, visualInstruction, this.visualOutputInstructions);
 
-                    // aqui 0=antes, 1=depois
                     if (index == 0)
                     {
-                        /// prepara para inserir antes do objeto atual
                         instructions.InsertParallelBranch(InstructionList.ParallelBranchInsertionType.ParallelBranchInitialized);
 
-                        /// insere PP antes do objeto atual na linha
                         line.Outputs.Insert(0, new Instruction(OperationCode.ParallelBranchNext));
                         InsertVisualInstructionAt(0, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchNext));
-                        /// insere PF depois do objeto atual da linha
                         line.Outputs.Insert(this.visualOutputInstructions.Count, new Instruction(OperationCode.ParallelBranchEnd));
                         InsertVisualInstructionAt(this.visualOutputInstructions.Count, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchEnd));
                     }
@@ -516,7 +497,6 @@ namespace LadderApp
 
                     break;
                 default:
-                    /// Caso ja haja paralelo, insere apenas PP + simbolo
                     index = VerifyPositionToInsert(false, visualInstruction, this.visualOutputInstructions);
 
                     switch (this.visualOutputInstructions[index].OpCode)
@@ -548,7 +528,6 @@ namespace LadderApp
                 index++;
             }
 
-            /// retorna o ultimo objeto inserido
             return this.visualOutputInstructions[index - 1 + autToRetornInsertedInstruction];
         }
 
@@ -631,8 +610,6 @@ namespace LadderApp
                     ladderForm.mnuAddressing.Enabled = false;
                     ladderForm.mnuAddressing.Visible = false;
 
-                    /// Extensao de paralelo - acima/abaixo
-                    ///    somente sobre simbolos de paralelo
                     ladderForm.mnuExtendParallelBranchAbove.Enabled = true;
                     ladderForm.mnuExtendParallelBranchAbove.Visible = true;
                     ladderForm.mnuExtendParallelBranchBelow.Enabled = true;
@@ -722,8 +699,6 @@ namespace LadderApp
                 ladderForm.mnuAddressing.Enabled = false;
                 ladderForm.mnuInsertLadderLine.Enabled = true;
 
-                /// Extensao de paralelo - acima/abaixo
-                ///    somente sobre simbolos de paralelo
                 ladderForm.mnuExtendParallelBranchAbove.Enabled = false;
                 ladderForm.mnuExtendParallelBranchAbove.Visible = false;
                 ladderForm.mnuExtendParallelBranchBelow.Enabled = false;
@@ -754,8 +729,6 @@ namespace LadderApp
                     visualInstructionsAux = visualOutputInstructions;
                     instructions = line.Outputs;
 
-                    /// caso haja um paralelo na saida
-                    /// deleta a linha do paralelo
                     switch (visualInstructionToBeRemoved.OpCode)
                     {
                         case OperationCode.ParallelBranchBegin:
@@ -783,27 +756,27 @@ namespace LadderApp
                 case OperationCode.ParallelBranchBegin:
                 case OperationCode.ParallelBranchNext:
                     initialPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved);
-                    finalPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved.Aponta2proxPP);
+                    finalPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved.PointToNextParallelPoint);
 
                     finalPositionIndex--;
 
                     switch (visualInstructionToBeRemoved.OpCode)
                     {
                         case OperationCode.ParallelBranchBegin:
-                            if (visualInstructionToBeRemoved.Aponta2proxPP.Aponta2proxPP.Aponta2PI != null)
+                            if (visualInstructionToBeRemoved.PointToNextParallelPoint.PointToNextParallelPoint.PointToParallelBegin != null)
                             {
-                                visualInstructionsToRemove.Add(visualInstructionToBeRemoved.Aponta2proxPP.Aponta2proxPP);
+                                visualInstructionsToRemove.Add(visualInstructionToBeRemoved.PointToNextParallelPoint.PointToNextParallelPoint);
                                 finalPositionIndex++;
                             }
                             else
-                                visualInstructionToChangeOpCode = visualInstructionToBeRemoved.Aponta2proxPP;
+                                visualInstructionToChangeOpCode = visualInstructionToBeRemoved.PointToNextParallelPoint;
                             break;
                         case OperationCode.ParallelBranchNext:
-                            if (visualInstructionToBeRemoved.Aponta2proxPP.Aponta2PI != null)
+                            if (visualInstructionToBeRemoved.PointToNextParallelPoint.PointToParallelBegin != null)
                             {
-                                if (visualInstructionToBeRemoved.Aponta2proxPP.Aponta2PI.Aponta2proxPP.Equals(visualInstructionToBeRemoved))
+                                if (visualInstructionToBeRemoved.PointToNextParallelPoint.PointToParallelBegin.PointToNextParallelPoint.Equals(visualInstructionToBeRemoved))
                                 {
-                                    visualInstructionsToRemove.Add(visualInstructionToBeRemoved.Aponta2proxPP.Aponta2PI);
+                                    visualInstructionsToRemove.Add(visualInstructionToBeRemoved.PointToNextParallelPoint.PointToParallelBegin);
                                     finalPositionIndex++;
                                 }
                             }
@@ -812,7 +785,7 @@ namespace LadderApp
                     break;
                 case OperationCode.ParallelBranchEnd:
                     finalPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved);
-                    initialPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved.Aponta2PI);
+                    initialPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved.PointToParallelBegin);
                     break;
                 default:
                     initialPositionIndex = visualInstructionsAux.IndexOf(visualInstructionToBeRemoved);
@@ -820,11 +793,9 @@ namespace LadderApp
                     break;
             }
 
-            /// levanta os controles a serem deletados
             for (int i = initialPositionIndex; i <= finalPositionIndex; i++)
                 visualInstructionsToRemove.Add(visualInstructionsAux[i]);
 
-            /// deleta um a um
             foreach (VisualInstructionUserControl eachVisualInstructionToBeRemoved in visualInstructionsToRemove)
                 RemoveInstruction(visualInstructionsAux, instructions, eachVisualInstructionToBeRemoved);
 

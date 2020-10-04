@@ -45,45 +45,34 @@ namespace LadderApp
             }
         }
 
-        public void SetMessage(String Texto)
+        public void ShowMessageInStatus(String message)
         {
-            //lblstatusMensagem.Text = Texto;
+            lblstatusMessage.Text = message;
         }
 
-        public void ApagaLinhasSimbolos()
-        {
-            foreach (VisualLine lcl in visualProgram.Lines)
-            {
-            }
-        }
 
         public void LineBeginVisualInstruction_DeleteLine(VisualLine sender)
         {
-            int _indiceLinhaDeletar = this.visualProgram.Lines.IndexOf(sender);
-            int _indiceLinha = _indiceLinhaDeletar;
+            int lineIndex = visualProgram.Lines.IndexOf(sender);
 
-            if (_indiceLinha >= 0)
+            if (lineIndex >= 0)
             {
-                this.SuspendLayout();
+                SuspendLayout();
 
-                /// Faz todos os tratamentos para
-                /// desconsiderar a linha a ser deleta
-                /// OBS.: Isto garante um melhor agilidade
-                ///     no desenho da tela.
-                this.visualProgram.ApagaLinha(_indiceLinha);
+                visualProgram.DeleteLine(lineIndex);
 
-                if (_indiceLinha == 0)
-                    _indiceLinha = 1;
+                if (lineIndex == 0)
+                    lineIndex = 1;
 
-                if (this.visualProgram.Lines.Count > 0)
-                    this.visualProgram.Lines[_indiceLinha - 1].LineBegin.Select();
+                if (visualProgram.Lines.Count > 0)
+                    visualProgram.Lines[lineIndex - 1].LineBegin.Select();
 
-                this.ReorganizeLines();
+                ReorganizeLines();
 
-                if (this.visualProgram.Lines.Count > 0)
-                    this.visualProgram.Lines[_indiceLinha - 1].LineBegin.Refresh();
+                if (visualProgram.Lines.Count > 0)
+                    visualProgram.Lines[lineIndex - 1].LineBegin.Refresh();
 
-                this.ResumeLayout();
+                ResumeLayout();
             }
         }
 
@@ -96,8 +85,7 @@ namespace LadderApp
         public void ReorganizeLines(int numberOfTimes)
         {
             int auxY = 0;
-            int iTabStop = 0;
-            int iLinha = 0;
+            int lineNumber = 0;
             int auxX = 0;
 
             if (visualProgram != null)
@@ -118,7 +106,7 @@ namespace LadderApp
                     }
                     catch (Exception ex)
                     {
-                        SetMessage(ex.Message);
+                        ShowMessageInStatus(ex.Message);
                     }
                     VisualLine previsousVisualLine = visualProgram.Lines[visualProgram.Lines.Count - 1];
 
@@ -130,14 +118,12 @@ namespace LadderApp
                         if (previsousVisualLine != null)
                             previsousVisualLine.NextLine = visualLine;
                         visualLine.PreviousLine = previsousVisualLine;
-                        visualLine.tabStop = iTabStop;
                         visualLine.YPosition = auxY;
-                        visualLine.LineNumber = iLinha;
+                        visualLine.LineNumber = lineNumber;
                         visualLine.LineBegin.Invalidate();
                         visualLine.AdjustPositioning();
                         auxY += visualLine.BackgroundLine.XYSize.Height;
-                        iTabStop = visualLine.tabStop;
-                        iLinha++;
+                        lineNumber++;
                         previsousVisualLine = visualLine;
 
                         visualLine.BackgroundLine.Invalidate();
@@ -299,11 +285,11 @@ namespace LadderApp
                         if (visualInstruction != null && SelectedVisualLine != null)
                             if (!visualInstruction.IsDisposed)
                             {
-                                this.SuspendLayout();
-                                this.SelectNextControl(visualInstruction, false, true, false, false);
+                                SuspendLayout();
+                                SelectNextControl(visualInstruction, false, true, false, false);
                                 SelectedVisualLine.RemoveVisualInstruction(visualInstruction);
-                                this.ReorganizeLines();
-                                this.ResumeLayout();
+                                ReorganizeLines();
+                                ResumeLayout();
                                 SelectedVisualLine.BackgroundLine.Invalidate();
                             }
                     }
@@ -311,52 +297,52 @@ namespace LadderApp
             }
         }
 
-        public List<Instruction> VariosSelecionados(VisualInstructionUserControl _cL, VisualLine _lCL)
+        public List<Instruction> VariosSelecionados(VisualInstructionUserControl visualInstruction, VisualLine visualLine)
         {
-            OperationCode _cI = _cL.OpCode;
+            OperationCode opCode = visualInstruction.OpCode;
             List<Instruction> instructions = new List<Instruction>();
-            List<VisualInstructionUserControl> _lstCL = null;
+            List<VisualInstructionUserControl> visualInstructions = null;
 
-            switch (_cI)
+            switch (opCode)
             {
                 case OperationCode.ParallelBranchBegin:
                 case OperationCode.ParallelBranchNext:
                 case OperationCode.ParallelBranchEnd:
-                    int _indicePosInicial = 0;
-                    int _indicePosFinal = 0;
+                    int initialPositionIndex = 0;
+                    int finalPositionIndex = 0;
 
                     /// verifica em qual lista o controle esta presente (simbolos/saida)
-                    if (SelectedVisualLine.visualInstructions.Contains(_cL))
-                        _lstCL = SelectedVisualLine.visualInstructions;
-                    else if (SelectedVisualLine.visualOutputInstructions.Contains(_cL))
-                        _lstCL = SelectedVisualLine.visualOutputInstructions;
+                    if (SelectedVisualLine.visualInstructions.Contains(visualInstruction))
+                        visualInstructions = SelectedVisualLine.visualInstructions;
+                    else if (SelectedVisualLine.visualOutputInstructions.Contains(visualInstruction))
+                        visualInstructions = SelectedVisualLine.visualOutputInstructions;
                     else
                         return instructions;
 
                     /// define a posicao inicial a partir da posicao
                     /// do controle na lista
-                    _indicePosInicial = _lstCL.IndexOf(_cL);
+                    initialPositionIndex = visualInstructions.IndexOf(visualInstruction);
 
-                    if (_cI == OperationCode.ParallelBranchEnd)
+                    if (opCode == OperationCode.ParallelBranchEnd)
                     {
                         /// se for paralelo final, inverte a posicial inicial/final
-                        _indicePosFinal = _indicePosInicial;
+                        finalPositionIndex = initialPositionIndex;
                         /// se for paralelo final, a posicao inicial e
                         /// o paralelo inical
-                        _indicePosInicial = _lstCL.IndexOf(_cL.Aponta2PI);
+                        initialPositionIndex = visualInstructions.IndexOf(visualInstruction.PointToParallelBegin);
                     }
                     else
                         /// senao for final aponta para o proximo item de paralelo
-                        _indicePosFinal = _lstCL.IndexOf(_cL.Aponta2proxPP);
+                        finalPositionIndex = visualInstructions.IndexOf(visualInstruction.PointToNextParallelPoint);
 
                     /// pega todos os controles dentro da faixa inicial / final
-                    for (int i = _indicePosInicial; i <= _indicePosFinal; i++)
+                    for (int i = initialPositionIndex; i <= finalPositionIndex; i++)
                     {
-                        instructions.Add(_lstCL[i].Instruction);
+                        instructions.Add(visualInstructions[i].Instruction);
                     }
                     break;
                 default:
-                    instructions.Add(_cL.Instruction);
+                    instructions.Add(visualInstruction.Instruction);
                     break;
             }
             return instructions;
@@ -364,20 +350,20 @@ namespace LadderApp
 
         private void mnuClearAddress_Click(object sender, EventArgs e)
         {
-            OperationCode _cI = VisualInstruction.OpCode;
+            OperationCode opCode = VisualInstruction.OpCode;
             if ((!VisualInstruction.IsDisposed) &&
-                 (_cI != OperationCode.LineBegin &&
-                 _cI != OperationCode.ParallelBranchBegin &&
-                 _cI != OperationCode.ParallelBranchEnd))
+                 (opCode != OperationCode.LineBegin &&
+                 opCode != OperationCode.ParallelBranchBegin &&
+                 opCode != OperationCode.ParallelBranchEnd))
             {
                 VisualInstruction.SetOperand(0, null);
                 VisualInstruction.Refresh();
             }
         }
 
-        private void LadderForm_Scroll(object sender, ScrollEventArgs e)
-        {
-        }
+        //private void LadderForm_Scroll(object sender, ScrollEventArgs e)
+        //{
+        //}
 
         private void mnuToggleBit_Click(object sender, EventArgs e)
         {
@@ -461,6 +447,5 @@ namespace LadderApp
             projectForm.Program.SimulateLadder();
             this.Invalidate(true);
         }
-
     }
 }
