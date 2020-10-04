@@ -1,6 +1,5 @@
 # LadderApp [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Z2CDXWJ4L25GQ&item_name=LadderApp+development&currency_code=USD)
 
-
 ## A brief history and context
 
 This project was finalized at the end of 2010 as my undergraduate thesis in Information Systems. It reflects some of my areas of interest (development, object-oriented programming, industrial automation, microcontrollers).
@@ -59,3 +58,6 @@ I have many ideas for this project, and some of them are:
 Enjoy.
 
 Tales Wallace Souza
+[![Github Badge](https://img.shields.io/badge/-Github-000?style=flat-square&logo=Github&logoColor=white&link=https://github.com/taleswsouza)](https://github.com/taleswsouza)
+[![Linkedin Badge](https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/taleswsouza/)](https://www.linkedin.com/in/taleswsouza/)
+[![Twitter Badge](https://img.shields.io/badge/-Twitter-1ca0f1?style=flat-square&labelColor=1ca0f1&logo=twitter&logoColor=white&link=https://twitter.com/fagnerpsantos)](https://twitter.com/taleswsouza)

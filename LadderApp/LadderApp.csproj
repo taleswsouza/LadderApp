@@ -237,13 +237,13 @@
     <None Include="PLC\enderecos.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\funcoes.h" />
+    <None Include="PLC\functions.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\SetupHardware.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\funcoes.c" />
+    <None Include="PLC\functions.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\interrupcao.c" />

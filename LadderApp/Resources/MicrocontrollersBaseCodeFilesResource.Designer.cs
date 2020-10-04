@@ -68,12 +68,13 @@ namespace LadderApp.Resources {
         /////====================================================================================
         ///
         ///
-        ///#ifndef DEFINICAO_H_
-        ///#define DEFINICAO_H_
+        ///#ifndef DEFINITIONS_H
+        ///#define DEFINITIONS_H
+        ///
         ///#define RECARGA_CCR0 10000
         /////====================================================================================
         ///// Includes
-        /////===================================================================== [rest of string was truncated]&quot;;.
+        /////================================================================= [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string definicaoH {
             get {
@@ -201,7 +202,8 @@ namespace LadderApp.Resources {
         ///	{
         /////-----------------------------------------------------------------------
         ///#EXEC_TIMER_TYPE_0_FUNCTION_C#
-        /////-----------------------------------------------------------------------        /// [rest of string was truncated]&quot;;.
+        /////-----------------------------------------------------------------------
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ExecTemporizador_funcoesC {
             get {
@@ -332,12 +334,12 @@ namespace LadderApp.Resources {
         ///// Autor: Silvano Fonseca Paganoto
         ///// Data: 15/09/2010
         /////====================================================================================
-        ///#ifndef FUNCOES_H_
-        ///#define FUNCOES_H_
+        ///#ifndef FUNCTIONS_H
+        ///#define FUNCTIONS_H
         /////====================================================================================
         ///// Includes
         /////====================================================================================
-        ///#i [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string funcoesH {
             get {
@@ -392,12 +394,12 @@ namespace LadderApp.Resources {
         ///// Data: 15/09/2010
         /////====================================================================================
         ///
-        ///#ifndef USUARIO_H_
-        ///#define USUARIO_H_
+        ///#ifndef LADDERPROGRAM_H
+        ///#define LADDERPROGRAM_H
         ///
         /////====================================================================================
         ///// Includes
-        /////======================================================================== [rest of string was truncated]&quot;;.
+        /////============================================================== [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ladderprogramH {
             get {

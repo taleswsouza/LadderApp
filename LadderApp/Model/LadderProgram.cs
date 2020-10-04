@@ -781,7 +781,7 @@ namespace LadderApp
                 else
                     contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTIMER_FUNCTION_H#", "");
 
-                msp430gcc.CreateFile("funcoes.h", contentFunctionsDotHFile);
+                msp430gcc.CreateFile("functions.h", contentFunctionsDotHFile);
 
 
                 /// Prepara USUARIO
@@ -878,7 +878,7 @@ namespace LadderApp
                 {
                     contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_FUNCTION_C#", "");
                 }
-                msp430gcc.CreateFile("funcoes.c", contentFunctionsDotCFile);
+                msp430gcc.CreateFile("functions.c", contentFunctionsDotCFile);
                 msp430gcc.CompilesMsp430ViaGcc("funcoes");
 
 

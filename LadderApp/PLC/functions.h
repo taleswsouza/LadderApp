@@ -3,8 +3,8 @@
 // Autor: Silvano Fonseca Paganoto
 // Data: 15/09/2010
 //====================================================================================
-#ifndef FUNCOES_H_
-#define FUNCOES_H_
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 //====================================================================================
 // Includes
 //====================================================================================
@@ -19,4 +19,4 @@
 #EXECCOUNTER_FUNCTION_H#
 
 
-#endif /* FUCOES_H_ */
+#endif // FUNCTIONS_H
