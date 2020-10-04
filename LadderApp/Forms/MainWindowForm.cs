@@ -518,7 +518,7 @@ namespace LadderApp
                     return;
                 }
 
-                this.InvalidateForm(true);
+                InvalidateForm(true);
 
                 Thread.Sleep(100);
             }
@@ -534,11 +534,11 @@ namespace LadderApp
         {
             if (projectForm.LadderForm.InvokeRequired)
             {
-                this.Invoke(this.InvalidateLadderFormEvent);
+                Invoke(InvalidateLadderFormEvent);
             }
             else
             {
-                this.projectForm.LadderForm.Invalidate(state);
+                projectForm.LadderForm.Invalidate(state);
             }
         }
 

@@ -34,12 +34,12 @@ namespace LadderApp
             }
         }
 
-        public int Preset; // valor de preset
-        public int Accumulated = 0; //Valor acumulado
-        public int ParcialAccumulated = 0; /// valor acumulado parcial para suporte ao simulado no PC
-        public bool Enable = false; // Habilitado
-        public bool Pulse = true; // Pulso (Auxiliar)
-        public bool Done = false; // Contagem realizada (done)
-        public bool Reset = false; // reset do contador
+        public int Preset;
+        public int Accumulated = 0;
+        public int ParcialAccumulated = 0;
+        public bool Enable = false;
+        public bool Pulse = true;
+        public bool Done = false;
+        public bool Reset = false;
     }
 }

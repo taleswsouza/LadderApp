@@ -136,8 +136,8 @@ namespace LadderApp
 
                     if (tempVertical > 0 || tempHorizontal > 0)
                     {
-                        this.VerticalScroll.Value = tempVertical;
-                        this.HorizontalScroll.Value = tempHorizontal;
+                        VerticalScroll.Value = tempVertical;
+                        HorizontalScroll.Value = tempHorizontal;
                     }
                     this.AutoScroll = true;
                 }

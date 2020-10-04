@@ -116,8 +116,6 @@ namespace LadderApp
             }
         }
 
-        /// <summary>
-        /// Para realizar a Parametrização do endereco dentro do código C
         public string GetPortParameterization()
         {
             switch (this.addressType)

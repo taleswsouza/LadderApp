@@ -54,9 +54,9 @@ namespace LadderApp
         {
             index = program.InsertLineAt(index, new Line());
 
-            VisualLine _lc = CreateVisualLine(program.Lines[index]);
+            VisualLine visualLine = CreateVisualLine(program.Lines[index]);
 
-            return InsetLineAt(index, _lc);
+            return InsetLineAt(index, visualLine);
         }
 
 
