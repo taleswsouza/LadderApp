@@ -94,11 +94,11 @@ namespace LadderApp
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ProjetoLadder";
             this.Text = " Project";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProjetoLadder_FormClosing);
-            this.Load += new System.EventHandler(this.ProjetoLadder_Load);
-            this.Shown += new System.EventHandler(this.ProjetoLadder_Shown);
-            this.SizeChanged += new System.EventHandler(this.ProjetoLadder_Resize);
-            this.Resize += new System.EventHandler(this.ProjetoLadder_Resize);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProjectForm_FormClosing);
+            this.Load += new System.EventHandler(this.ProjectForm_Load);
+            this.Shown += new System.EventHandler(this.ProjectForm_Shown);
+            this.SizeChanged += new System.EventHandler(this.ProjectForm_Resize);
+            this.Resize += new System.EventHandler(this.ProjectForm_Resize);
             this.ResumeLayout(false);
 
         }

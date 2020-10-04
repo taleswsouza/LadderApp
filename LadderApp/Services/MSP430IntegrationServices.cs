@@ -1,4 +1,3 @@
-using LadderApp.Exceções;
 using LadderApp.Resources;
 using System;
 using System.Collections.Generic;
@@ -16,27 +15,12 @@ namespace LadderApp
         private List<string> compiledFilenames = new List<string>();
         private List<string> createdFilenames = new List<string>();
         private bool EnabledDeletingIntermediateFiles = false;
-        private String strMMCU = "";
-
+        private String strMMCU = "-mmcu=msp430f2013 ";
         private String strStandardOutput = "";
         private String strStandardError = "";
 
-        private string GetCompiledFilenames()
-        {
-            String filenamesText = "";
-            foreach (String filename in compiledFilenames)
-                filenamesText += filename + " ";
-
-            return filenamesText.Trim();
-        }
-
         public MSP430IntegrationServices()
         {
-            //p.StartInfo = startInfo;
-            //SetDefaults();
-            //compiledFilenames.Clear();
-            //createdFilenames.Clear();
-            //strMMCU = "-mmcu=msp430f2013 ";
         }
 
         public MSP430IntegrationServices(bool deleteIntermediateFiles) : this()
@@ -46,7 +30,15 @@ namespace LadderApp
             compiledFilenames.Clear();
             createdFilenames.Clear();
             EnabledDeletingIntermediateFiles = deleteIntermediateFiles;
-            strMMCU = "-mmcu=msp430f2013 ";
+        }
+
+        private string GetCompiledFilenames()
+        {
+            String filenamesText = "";
+            foreach (String filename in compiledFilenames)
+                filenamesText += filename + " ";
+
+            return filenamesText.Trim();
         }
 
         public bool CreateFile(string filename, string dataContent)
@@ -150,11 +142,10 @@ namespace LadderApp
             return ShowStandardStrings(startInfo.FileName + fileName);
         }
 
-        public bool CompileA43(String fileName)
+        public bool CompilationStepMergeAllDotOFilesAndGenerateElfFile(String fileName)
         {
             try
             {
-                /// Cria o processo para compilar - unindo todos os arquivo .o e gerando o arquivo .elf
                 startInfo.FileName = "msp430-objcopy";
                 startInfo.Arguments = @"-O ihex " + fileName.Replace(' ', '_') + ".elf " + fileName.Replace(' ', '_') + ".a43";
                 p.Start();
@@ -233,7 +224,7 @@ namespace LadderApp
             else
             {
                 if (strStandardError.Contains("Could not initialize the library (port: TIUSB)"))
-                    throw new CouldNotInitializeTIUSBException();
+                    throw new Exception("TIUSB port do not found the microcontroller.");
                 else
                     throw new NotSupportedException();
             }
@@ -309,7 +300,7 @@ namespace LadderApp
                 }
                 else
                 {
-                    CreateFile("Erro.txt", strStandardError);
+                    //CreateFile("Error.txt", strStandardError);
                     MessageBox.Show(strStandardError, "Error message:" + filename);
                     strStandardError = "";
                     return false;

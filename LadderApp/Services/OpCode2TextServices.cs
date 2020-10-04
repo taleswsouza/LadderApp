@@ -10,31 +10,22 @@ namespace LadderApp
     /// </summary>
     public class OpCode2TextServices
     {
-        private String txtInternal = "";
+        private String internalText = "";
         private String txtInternalWithTypeCast = "";
-        public OpCode2TextServices txtCabecalho = null;
-        private Int32 posCabecalho2Internal = 0;
-        private Int32 posCabecalho2InternalWithTypeCast = 0;
+        public OpCode2TextServices Header { get; set; } = null;
 
-        /// <summary>
-        /// Identificador do código interpretável
-        /// </summary>
-        const String idCodigo = "@laddermic.com";
+        private Int32 headerPosition2Internal = 0;
+        private Int32 HeaderPosition2InternalWithTypeCast = 0;
 
-        /// <summary>
-        /// CodigosInterpretaveis2Txt() - Construtor padrão
-        /// </summary>
+        private const String identificationCode = "@laddermic.com";
+
         public OpCode2TextServices()
         {
-            this.Add(idCodigo);
-            posCabecalho2Internal = txtInternal.Length;
-            posCabecalho2InternalWithTypeCast = txtInternalWithTypeCast.Length;
+            this.Add(identificationCode);
+            headerPosition2Internal = internalText.Length;
+            HeaderPosition2InternalWithTypeCast = txtInternalWithTypeCast.Length;
         }
 
-        /// <summary>
-        /// CodigosInterpretaveis2Txt(bool) - Construtor interno somente para o atributo txtCabecalho
-        /// </summary>
-        /// <param name="bCabecalho">Somente para diferenciar do contrutor padrão</param>
         internal OpCode2TextServices(bool bCabecalho)
         {
         }
@@ -46,83 +37,66 @@ namespace LadderApp
             set { bTxtWithTypeCast = value; }
         }
 
-        /// <summary>
-        /// Length - Retorna o tamanha do código interpretável
-        /// </summary>
         public Int32 Length
         {
-            get { return txtInternal.Length; }
+            get { return internalText.Length; }
         }
 
-        /// <summary>
-        /// AddCabecalho() - Adiciona ao código interpretável que será convertido para texto um cabeçalho
-        /// </summary>
-        public void AddCabecalho()
+        public void AddHeader()
         {
-            if (txtCabecalho == null)
-                txtCabecalho = new OpCode2TextServices(true);
+            if (Header == null)
+                Header = new OpCode2TextServices(true);
         }
 
-        /// <summary>
-        /// FinalizaCabecalho() - Finaliza o cabeçalho e o adiciona ao codigo interpretável principal
-        /// </summary>
-        public void FinalizaCabecalho()
+        public void FinalizeHeader()
         {
-            if (txtCabecalho != null)
-                if (txtCabecalho.Length > 0)
+            if (Header != null)
+                if (Header.Length > 0)
                 {
-                    this.txtCabecalho.Insert(txtCabecalho.Length);
-                    this.txtCabecalho.Insert(OperationCode.HeadLenght);
+                    this.Header.Insert(Header.Length);
+                    this.Header.Insert(OperationCode.HeadLenght);
 
-                    txtInternalWithTypeCast = txtInternalWithTypeCast.Insert(this.posCabecalho2InternalWithTypeCast, txtCabecalho.ToStringInternalWithTypeCast() + ", ");
-                    txtInternal = txtInternal.Insert(this.posCabecalho2Internal, txtCabecalho.ToStringInternal());
+                    txtInternalWithTypeCast = txtInternalWithTypeCast.Insert(this.HeaderPosition2InternalWithTypeCast, Header.ToStringInternalWithTypeCast() + ", ");
+                    internalText = internalText.Insert(this.headerPosition2Internal, Header.ToStringInternal());
 
-                    txtCabecalho = null;
+                    Header = null;
                 }
         }
 
-        /// <summary>
-        /// Add(String) - Adiciona uma String ao final do texto do código interpretável
-        /// </summary>
-        /// <param name="_str">String a ser adiocionado no texto do código interpretável</param>
-        public void Add(String _str)
+        public void Add(String text)
         {
-            txtInternal += _str;
-            for(int i = 0; i < _str.Length; i++)
-                txtInternalWithTypeCast += "'" + _str.Substring(i, 1) + "', ";
+            internalText += text;
+            for(int i = 0; i < text.Length; i++)
+                txtInternalWithTypeCast += "'" + text.Substring(i, 1) + "', ";
         }
 
-        /// <summary>
-        /// Add(Int32) - Adiciona um Int32 ao final do texto do código interpretável
-        /// </summary>
-        /// <param name="_num">Int32 a ser adiocionado no texto do código interpretável</param>
-        public void Add(Int32 _num)
+        public void Add(Int32 number)
         {
-            txtInternal += Convert.ToChar(_num);
-            txtInternalWithTypeCast += "(char)" + _num.ToString() + ", ";
+            internalText += Convert.ToChar(number);
+            txtInternalWithTypeCast += "(char)" + number.ToString() + ", ";
         }
 
-        internal void Insert(Int32 _num)
+        internal void Insert(Int32 number)
         {
-            txtInternal = Convert.ToChar(_num) + txtInternal;
-            txtInternalWithTypeCast = "(char)" + _num.ToString() + ", " + txtInternalWithTypeCast;
+            internalText = Convert.ToChar(number) + internalText;
+            txtInternalWithTypeCast = "(char)" + number.ToString() + ", " + txtInternalWithTypeCast;
         }
 
 
-        public void Add(OperationCode _ci)
+        public void Add(OperationCode opCode)
         {
-            Add((Int32)_ci);
+            Add((Int32)opCode);
         }
 
-        internal void Insert(OperationCode _ci)
+        internal void Insert(OperationCode opCode)
         {
-            Insert((Int32)_ci);
+            Insert((Int32)opCode);
         }
 
-        private void Add(Address _end)
+        private void Add(Address address)
         {
-            Add((int)_end.AddressType);
-            Add((int)_end.Id);
+            Add((int)address.AddressType);
+            Add((int)address.Id);
         }
 
         public void Add(Instruction instruction)
@@ -177,7 +151,7 @@ namespace LadderApp
             if (bTxtWithTypeCast)
                 return ToStringInternalWithTypeCast();
             else
-                return "\"" + txtInternal + "\"";
+                return "\"" + internalText + "\"";
         }
 
         internal string ToStringInternalWithTypeCast()
@@ -187,7 +161,7 @@ namespace LadderApp
 
         internal string ToStringInternal()
         {
-            return txtInternal;
+            return internalText;
         }
 
     }

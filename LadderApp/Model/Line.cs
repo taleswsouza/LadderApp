@@ -30,9 +30,6 @@ namespace LadderApp
                 instruction.Dispose();
             }
             Instructions.Clear();
-
-            //LineBeginInstruction.Dispose();
-            //LineEndInstruction.Dispose();
         }
 
         public Instruction InsertToOutputs(InstructionList instructions)
@@ -102,16 +99,12 @@ namespace LadderApp
                     break;
             }
 
-            foreach (Instruction _sb in instructions)
+            foreach (Instruction instruction in instructions)
             {
-                this.Outputs.Insert(index, _sb);
+                this.Outputs.Insert(index, instruction);
                 index++;
             }
-
-            /// retorna o ultimo objeto inserido
             return this.Outputs[index - 1 + auxToPositionInsertedInstruciton];
         }
-
-
     }
 }

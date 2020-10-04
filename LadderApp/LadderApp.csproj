@@ -77,8 +77,6 @@
     <Compile Include="UserControls\VisualInstructionUserControl.Designer.cs">
       <DependentUpon>VisualInstructionUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Exceptions\CouldNotInitializeTIUSBException.cs" />
-    <Compile Include="Exceptions\NotValidOpCodeException.cs" />
     <Compile Include="Forms\EditCommentForm.cs">
       <SubType>Form</SubType>
     </Compile>

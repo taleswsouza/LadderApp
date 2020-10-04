@@ -67,7 +67,6 @@ namespace LadderApp
         {
             int parcialPreset = -1;
 
-            /// executa a rotina para cada temporizador
             foreach (Address address in addressing.ListTimerAddress)
             {
                 if (address.Timer.Reset == true)
@@ -361,7 +360,7 @@ namespace LadderApp
             lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
         }
 
-        private bool SavePasswordIntoLadder(ref OpCode2TextServices txtCodigoInterpretavel)
+        private bool SavePasswordIntoLadder(ref OpCode2TextServices opCode2TextServices)
         {
             String password = "";
             PasswordForm passwordForm = new PasswordForm();
@@ -373,8 +372,8 @@ namespace LadderApp
                 DialogResult result = passwordForm.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    password = passwordForm.txtSenha.Text;
-                    passwordForm.txtSenha.Text = "";
+                    password = passwordForm.txtPassword.Text;
+                    passwordForm.txtPassword.Text = "";
                     passwordForm.Text = "Confirm the new password:";
                     passwordForm.lblPassword.Text = "Confirm the new password:";
                     passwordForm.btnOK.DialogResult = DialogResult.Yes;
@@ -386,17 +385,17 @@ namespace LadderApp
                 }
                 else
                 {
-                    if (password != passwordForm.txtSenha.Text)
+                    if (password != passwordForm.txtPassword.Text)
                     {
                         MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return false;
                     }
                     else
                     {
-                        txtCodigoInterpretavel.AddCabecalho();
-                        txtCodigoInterpretavel.txtCabecalho.Add(OperationCode.HeadPassword0);
-                        txtCodigoInterpretavel.txtCabecalho.Add(password.Length);
-                        txtCodigoInterpretavel.txtCabecalho.Add(password);
+                        opCode2TextServices.AddHeader();
+                        opCode2TextServices.Header.Add(OperationCode.HeadPassword0);
+                        opCode2TextServices.Header.Add(password.Length);
+                        opCode2TextServices.Header.Add(password);
                     }
                 }
             }
@@ -678,8 +677,8 @@ namespace LadderApp
                 if (usedVariableNames.Count > 0)
                 {
                     contentVariableDeclarations += "TPort ";
-                    foreach (String _strDeclaraVariavel in usedVariableNames)
-                        contentVariableDeclarations += _strDeclaraVariavel + ", ";
+                    foreach (String variableName in usedVariableNames)
+                        contentVariableDeclarations += variableName + ", ";
                     contentVariableDeclarations = contentVariableDeclarations.Substring(0, contentVariableDeclarations.Length - 2) + ";" + Environment.NewLine;
                     usedVariableNames.Clear();
                 }
@@ -815,7 +814,7 @@ namespace LadderApp
 
                 if (savePrograInsideExecutable)
                 {
-                    opCode2TextServices.FinalizaCabecalho();
+                    opCode2TextServices.FinalizeHeader();
                     contentOpCodes = "const unsigned char ladderInstructions[" + opCode2TextServices.Length.ToString().Trim() + "] = {" + opCode2TextServices.ToString() + "};";
                     contentMainDotCFile = contentMainDotCFile.Replace("#LADDER_INSTRUCTIONS#", contentOpCodes);
                 }
@@ -899,7 +898,7 @@ namespace LadderApp
                 msp430gcc.CompileELF(this.Name);
 
                 /// CRIA EXECUTAVE E GRAVA NO DISPOSITIVO
-                msp430gcc.CompileA43(this.Name);
+                msp430gcc.CompilationStepMergeAllDotOFilesAndGenerateElfFile(this.Name);
 
                 if (writeProgram)
                     msp430gcc.DownloadViaUSB(this.Name);

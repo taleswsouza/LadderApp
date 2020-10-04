@@ -103,16 +103,16 @@ namespace LadderApp
                     break;
                 case OperationCode.Counter:
                     Operands = new Object[4];
-                    SetOperand(1, (Int32)0); // tipo
+                    SetOperand(1, (Int32)0); // type
                     SetOperand(2, (Int32)0); // preset
-                    SetOperand(3, (Int32)0); // acum
+                    SetOperand(3, (Int32)0); // accum
                     break;
                 case OperationCode.Timer:
                     Operands = new Object[5];
-                    SetOperand(1, (Int32)0); // tipo
+                    SetOperand(1, (Int32)0); // type
                     SetOperand(2, (Int32)0); // preset
-                    SetOperand(3, (Int32)0); // acum
-                    SetOperand(4, (Int32)0); // Base tempo
+                    SetOperand(3, (Int32)0); // accum
+                    SetOperand(4, (Int32)0); // time base
                     break;
             }
             return GetNumberOfOperands();
@@ -315,16 +315,11 @@ namespace LadderApp
                 if (Operands[i] != null)
                     if (Operands[i] is Address)
                     {
-                        /// Verifica se o endereco atual existe na lista de enderecos
-                        /// do programa atual, se existir recupera o opontamento corrigido
-                        /// para o endereco
-                        Object oper = addressing.Find(((Address)Operands[i]));
-                        /// recebido o endereco corrigido valida o endereco a faz as atribui
-                        /// coes necessarias
-                        if (oper != null)
+                        Object operand = addressing.Find(((Address)Operands[i]));
+                        if (operand != null)
                         {
-                            if (ValidateAddress(i, oper))
-                                Operands[i] = oper;
+                            if (ValidateAddress(i, operand))
+                                Operands[i] = operand;
                             else
                             {
                                 Operands[i] = null;

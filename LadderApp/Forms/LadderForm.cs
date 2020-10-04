@@ -213,15 +213,11 @@ namespace LadderApp
         {
             if (e.Button == MouseButtons.Right)
             {
-                /// Enderecamentos e somente sobre controleslivres
                 this.mnuAddressing.Enabled = false;
                 this.mnuAddressing.Visible = false;
 
-                /// Manipular linhas
                 this.mnuInsertLadderLine.Enabled = true;
 
-                /// Extensao de paralelo - acima/abaixo
-                ///    somente sobre simbolos de paralelo
                 this.mnuExtendParallelBranchAbove.Enabled = false;
                 this.mnuExtendParallelBranchAbove.Visible = false;
                 this.mnuExtendParallelBranchBelow.Enabled = false;
@@ -311,7 +307,6 @@ namespace LadderApp
                     int initialPositionIndex = 0;
                     int finalPositionIndex = 0;
 
-                    /// verifica em qual lista o controle esta presente (simbolos/saida)
                     if (SelectedVisualLine.visualInstructions.Contains(visualInstruction))
                         visualInstructions = SelectedVisualLine.visualInstructions;
                     else if (SelectedVisualLine.visualOutputInstructions.Contains(visualInstruction))
@@ -319,23 +314,16 @@ namespace LadderApp
                     else
                         return instructions;
 
-                    /// define a posicao inicial a partir da posicao
-                    /// do controle na lista
                     initialPositionIndex = visualInstructions.IndexOf(visualInstruction);
 
                     if (opCode == OperationCode.ParallelBranchEnd)
                     {
-                        /// se for paralelo final, inverte a posicial inicial/final
                         finalPositionIndex = initialPositionIndex;
-                        /// se for paralelo final, a posicao inicial e
-                        /// o paralelo inical
                         initialPositionIndex = visualInstructions.IndexOf(visualInstruction.PointToParallelBegin);
                     }
                     else
-                        /// senao for final aponta para o proximo item de paralelo
                         finalPositionIndex = visualInstructions.IndexOf(visualInstruction.PointToNextParallelPoint);
 
-                    /// pega todos os controles dentro da faixa inicial / final
                     for (int i = initialPositionIndex; i <= finalPositionIndex; i++)
                     {
                         instructions.Add(visualInstructions[i].Instruction);
@@ -360,10 +348,6 @@ namespace LadderApp
                 VisualInstruction.Refresh();
             }
         }
-
-        //private void LadderForm_Scroll(object sender, ScrollEventArgs e)
-        //{
-        //}
 
         private void mnuToggleBit_Click(object sender, EventArgs e)
         {
@@ -401,7 +385,6 @@ namespace LadderApp
 
             if (result == DialogResult.OK)
             {
-                /// mantem os parametros do ci atualizados
                 sender.SetOperand(1, changeTimerCounterParametersForm.Type);
                 sender.SetOperand(2, changeTimerCounterParametersForm.Preset);
                 sender.SetOperand(3, changeTimerCounterParametersForm.Accumulated);

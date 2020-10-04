@@ -39,13 +39,13 @@ namespace LadderApp
             this.Text = Program.Name;
         }
 
-        private void ProjetoLadder_Resize(object sender, EventArgs e)
+        private void ProjectForm_Resize(object sender, EventArgs e)
         {
             tvnProjectTree.Location = new Point(0, 0);
             tvnProjectTree.Size = new Size(this.Size.Width, this.Size.Height);
         }
 
-        private void ProjetoLadder_Load(object sender, EventArgs e)
+        private void ProjectForm_Load(object sender, EventArgs e)
         {
             tvnProjectTree.TopNode.Expand();
 
@@ -77,13 +77,13 @@ namespace LadderApp
         }
 
 
-        private void ProjetoLadder_Shown(object sender, EventArgs e)
+        private void ProjectForm_Shown(object sender, EventArgs e)
         {
             MainWindowForm mainWindowForm = (MainWindowForm)this.MdiParent;
             mainWindowForm.ResetWindowLayout();
         }
 
-        private void ProjetoLadder_FormClosing(object sender, FormClosingEventArgs e)
+        private void ProjectForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             DialogResult result = MessageBox.Show(String.Format("Do you want to save the project {0}?", Text), "LadderApp", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
@@ -265,7 +265,7 @@ namespace LadderApp
                 {
                     switch (instruction.OpCode)
                     {
-                        /// pporque disso aqui
+                        /// TODO: Why this is this way?
                         case OperationCode.NormallyOpenContact:
                         case OperationCode.NormallyClosedContact:
                         case OperationCode.OutputCoil:

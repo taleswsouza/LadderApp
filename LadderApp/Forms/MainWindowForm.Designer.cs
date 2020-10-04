@@ -169,7 +169,7 @@ namespace LadderApp
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.ShowNewForm);
             // 
@@ -225,7 +225,7 @@ namespace LadderApp
             this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
             this.printPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.printPreviewToolStripMenuItem.Text = "Print Pre&view";
             this.printPreviewToolStripMenuItem.Click += new System.EventHandler(this.printPreviewToolStripMenuItem_Click);
             // 
@@ -746,20 +746,24 @@ namespace LadderApp
             // printToolStripButton
             // 
             this.printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.printToolStripButton.Enabled = false;
             this.printToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripButton.Image")));
             this.printToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.printToolStripButton.Name = "printToolStripButton";
             this.printToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.printToolStripButton.Text = "Print";
+            this.printToolStripButton.Visible = false;
             // 
             // printPreviewToolStripButton
             // 
             this.printPreviewToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.printPreviewToolStripButton.Enabled = false;
             this.printPreviewToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripButton.Image")));
             this.printPreviewToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.printPreviewToolStripButton.Name = "printPreviewToolStripButton";
             this.printPreviewToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.printPreviewToolStripButton.Text = "Print Preview";
+            this.printPreviewToolStripButton.Visible = false;
             this.printPreviewToolStripButton.Click += new System.EventHandler(this.printPreviewToolStripButton_Click);
             // 
             // toolStripSeparator2
@@ -933,8 +937,8 @@ namespace LadderApp
             this.PrintPreviewDialog1.ClientSize = new System.Drawing.Size(400, 300);
             this.PrintPreviewDialog1.Enabled = true;
             this.PrintPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("PrintPreviewDialog1.Icon")));
-            this.PrintPreviewDialog1.Name = "printPreviewDialog2";
-            this.PrintPreviewDialog1.Visible = true;
+            this.PrintPreviewDialog1.Name = "PrintPreviewDialog1";
+            this.PrintPreviewDialog1.Visible = false;
             // 
             // MainWindowForm
             // 
@@ -1027,7 +1031,6 @@ namespace LadderApp
         private System.Windows.Forms.ToolStripButton btnLadderOutputCounter;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
         private System.Windows.Forms.ToolStripButton btnPrint;
-        private System.Windows.Forms.PrintPreviewDialog PrintPreviewDialog1;
         private System.Windows.Forms.ToolStripButton btnSimulateLadder;
         private System.Windows.Forms.ToolStripButton btnLadderOutputReset;
         private System.Windows.Forms.ToolStripMenuItem mnuEditComment;
@@ -1055,6 +1058,7 @@ namespace LadderApp
         private System.Windows.Forms.ToolStripMenuItem mnuMicrocontrollerLadder;
         private System.Windows.Forms.ToolStripMenuItem mnuMicrocontrollerLadderSaveInsideMic;
         private System.Windows.Forms.ToolStripMenuItem mnuMicrocontrollerLadderAskPasswordToRead;
+        private System.Windows.Forms.PrintPreviewDialog PrintPreviewDialog1;
     }
 }
 

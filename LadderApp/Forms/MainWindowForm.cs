@@ -1,5 +1,3 @@
-using LadderApp.CodigoInterpretavel;
-using LadderApp.Exceções;
 using LadderApp.Formularios;
 using LadderApp.Resources;
 using System;
@@ -125,7 +123,7 @@ namespace LadderApp
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            saveFileDialog.Filter = "Arquivos XML (*.xml)|*.xml";
+            saveFileDialog.Filter = "Files XML (*.xml)|*.xml";
             saveFileDialog.FileName = projectForm.Program.Name + ".xml";
             if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
             {
@@ -884,7 +882,7 @@ namespace LadderApp
                 if (VerifyPassword(content))
                     ReadExecutable(content, "No Name");
             }
-            catch (CouldNotInitializeTIUSBException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -913,9 +911,9 @@ namespace LadderApp
                         }
                         else
                         {
-                            if (textToOpCode.password != passwordForm.txtSenha.Text)
+                            if (textToOpCode.password != passwordForm.txtPassword.Text)
                             {
-                                passwordForm.txtSenha.Text = "";
+                                passwordForm.txtPassword.Text = "";
                                 passwordForm.Text = "Type the password (1/2):";
                             }
                             else

@@ -193,9 +193,9 @@ namespace LadderApp
                         xPosition = parallelBranch.parallelBranchBegin.XYPosition.X;
 
                         parallelBranch.accumulatedY = parallelBranch.biggerY;
-                        yPosition = parallelBranch.biggerY + (YSize * (parallelBranch.numVPITratados + 1));
+                        yPosition = parallelBranch.biggerY + (YSize * (parallelBranch.numberOfParallelBranchNext + 1));
 
-                        if (parallelBranch.numVPITratados > 0)
+                        if (parallelBranch.numberOfParallelBranchNext > 0)
                         {
                             visualInstructionAux = parallelBranch.lastParallelBranchNext;
                             visualInstructionAux.LastParallelBranchEnd = false;
@@ -209,7 +209,7 @@ namespace LadderApp
 
                         visualInstructionAux.PointToNextParallelPoint = visualInstruction;
 
-                        parallelBranch.numVPITratados += 1;
+                        parallelBranch.numberOfParallelBranchNext += 1;
                         parallelBranch.lastParallelBranchNext = visualInstruction;
                         lastSizeOfYToFinalParallelBranch = yPosition;
 
@@ -268,7 +268,6 @@ namespace LadderApp
             LineEnd.Location = new Point(xSizeAccumulated, YPosition);
             LineEnd.Size = new Size(this.XSize, sizeOfYToBackgroundDraw);
 
-            //--Desenho de fundo
             BackgroundLine.XYPosition = new Point(XPosition, YPosition);
             BackgroundLine.XYSize = new Size(xSizeAccumulated, sizeOfYToBackgroundDraw);
             BackgroundLine.Location = new Point(XPosition, YPosition);
@@ -383,10 +382,10 @@ namespace LadderApp
             LineBegin.MouseClick += new MouseEventHandler(LineBeginVisualInstruction_Click);
             LineBegin.DeleteLineEvent += new DeleteLineEventHandler(ladderForm.LineBeginVisualInstruction_DeleteLine);
 
-            int indiceInsereSaida = 0;
+            int insertOutputIndex = 0;
             if (visualOutputInstructions.Count > 0)
             {
-                indiceInsereSaida = visualInstructions.Count;
+                insertOutputIndex = visualInstructions.Count;
                 visualInstructions.AddRange(visualOutputInstructions);
             }
 
@@ -398,7 +397,7 @@ namespace LadderApp
             }
 
             if (visualOutputInstructions.Count > 0)
-                visualInstructions.RemoveRange(indiceInsereSaida, visualOutputInstructions.Count);
+                visualInstructions.RemoveRange(insertOutputIndex, visualOutputInstructions.Count);
 
         }
 

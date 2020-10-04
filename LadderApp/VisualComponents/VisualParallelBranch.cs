@@ -12,9 +12,7 @@ namespace LadderApp
 
         public int biggerY = 0;
         public int biggerX = 0;
-        public int numVPITratados = 0;
+        public int numberOfParallelBranchNext = 0;
         public int accumulatedY = 0;
-        //public int _paralelosTratados = 0;
-        //public int _VPI_Tratados = 0;
     }
 }

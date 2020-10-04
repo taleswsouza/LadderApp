@@ -78,10 +78,6 @@ namespace LadderApp
             program.RemoveLineAt(linha);
         }
 
-        /// <summary>
-        /// Insere linha abaixo ou acima da linha selecionada
-        /// </summary>
-        /// <param name="_acima">true - acima / false - abaixo</param>
         public VisualLine CreateVisualLine(Line line)
         {
             VisualLine visualLine = new VisualLine(ladderForm, line);
