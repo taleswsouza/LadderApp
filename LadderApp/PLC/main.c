@@ -9,7 +9,7 @@
 //====================================================================================
 #include "definicao.h"
 #include "setuphardware.h"
-#include "usuario.h"
+#include "ladderprogram.h"
 
 #LADDER_INSTRUCTIONS#
 

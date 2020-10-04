@@ -468,11 +468,11 @@ namespace LadderApp
                             switch (instruction.OpCode)
                             {
                                 case OperationCode.NormallyOpenContact:
-                                    lineText += ((Address)instruction.GetOperand(0)).Acesso;
+                                    lineText += ((Address)instruction.GetOperand(0)).GetVariableBitValueName();
                                     ((Address)instruction.GetOperand(0)).Used = true;
                                     break;
                                 case OperationCode.NormallyClosedContact:
-                                    lineText += "!" + ((Address)instruction.GetOperand(0)).Acesso;
+                                    lineText += "!" + ((Address)instruction.GetOperand(0)).GetVariableBitValueName();
                                     ((Address)instruction.GetOperand(0)).Used = true;
                                     break;
                             }
@@ -505,17 +505,17 @@ namespace LadderApp
 
                             if (instruction.OpCode == OperationCode.OutputCoil)
                             {
-                                operandsInLine.Add(((Address)instruction.GetOperand(0)).Acesso);
+                                operandsInLine.Add(((Address)instruction.GetOperand(0)).GetVariableBitValueName());
                                 ((Address)instruction.GetOperand(0)).Used = true;
                             }
                             else if (instruction.OpCode == OperationCode.Timer)
                             {
-                                operandsInLine.Add(((Address)instruction.GetOperand(0)).Acesso2);
+                                operandsInLine.Add(((Address)instruction.GetOperand(0)).GetEnableBit());
                                 ((Address)instruction.GetOperand(0)).Used = true;
                             }
                             else if (instruction.OpCode == OperationCode.Counter)
                             {
-                                operandsInLine.Add(((Address)instruction.GetOperand(0)).Acesso2);
+                                operandsInLine.Add(((Address)instruction.GetOperand(0)).GetEnableBit());
                                 functionsAfterLine += " ExecContador(&" + ((Address)instruction.GetOperand(0)).Name + ");";
                                 ((Address)instruction.GetOperand(0)).Used = true;
                             }
@@ -583,8 +583,8 @@ namespace LadderApp
             if (result == DialogResult.OK)
             {
                 /// declarações
-                string contentUserDotHFile = "";
-                string contentUserDotCFile = "";
+                string contentLadderProgramDotHFile = "";
+                string contentLadderProgramDotCFile = "";
                 string contentFunctionsDotHFile = "";
                 string contentFunctionsDotCFile = "";
                 string contentAddressesDotHFile = "";
@@ -786,27 +786,27 @@ namespace LadderApp
 
                 /// Prepara USUARIO
                 if (timerPresent)
-                    contentUserDotHFile = MicrocontrollersBaseCodeFilesResource.usuarioH.Replace("#EXEC_TIMERS_USER_H#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioH);
+                    contentLadderProgramDotHFile = MicrocontrollersBaseCodeFilesResource.ladderprogramH.Replace("#EXEC_TIMERS_USER_H#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioH);
                 else
-                    contentUserDotHFile = MicrocontrollersBaseCodeFilesResource.usuarioH.Replace("#EXEC_TIMERS_USER_H#", "");
+                    contentLadderProgramDotHFile = MicrocontrollersBaseCodeFilesResource.ladderprogramH.Replace("#EXEC_TIMERS_USER_H#", "");
 
-                msp430gcc.CreateFile("usuario.h", contentUserDotHFile);
+                msp430gcc.CreateFile("ladderprogram.h", contentLadderProgramDotHFile);
 
-                contentUserDotCFile = MicrocontrollersBaseCodeFilesResource.usuarioC;
+                contentLadderProgramDotCFile = MicrocontrollersBaseCodeFilesResource.ladderprogramC;
                 if (timerPresent)
                 {
-                    contentUserDotCFile = contentUserDotCFile.Replace("#EXEC_TIMERS_USER_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioC);
-                    contentUserDotCFile = contentUserDotCFile.Replace("#TIMERS_USER_C#", contentTimers);
+                    contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#EXEC_TIMERS_USER_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioC);
+                    contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#TIMERS_USER_C#", contentTimers);
                 }
                 else
-                    contentUserDotCFile = contentUserDotCFile.Replace("#EXEC_TIMERS_USER_C#", "");
+                    contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#EXEC_TIMERS_USER_C#", "");
 
-                contentUserDotCFile = contentUserDotCFile.Replace("#LADDER#", doc);
-                contentUserDotCFile = contentUserDotCFile.Replace("#PARAMETERIZATION#", contentParameterization);
-                contentUserDotCFile.Trim();
+                contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#LADDER#", doc);
+                contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#PARAMETERIZATION#", contentParameterization);
+                contentLadderProgramDotCFile.Trim();
 
-                msp430gcc.CreateFile("usuario.c", contentUserDotCFile);
-                msp430gcc.CompilesMsp430ViaGcc("usuario");
+                msp430gcc.CreateFile("ladderprogram.c", contentLadderProgramDotCFile);
+                msp430gcc.CompilesMsp430ViaGcc("ladderprogram");
 
 
                 /// Prepara MAIN

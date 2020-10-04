@@ -342,6 +342,7 @@ namespace LadderApp
             InsertInstructionDirect(this.visualInstructions, this.LineBegin, line.Instructions);
             InsertInstructionDirect(this.visualOutputInstructions, this.LineBegin, line.Outputs);
 
+            BackgroundLine.Parent = ladderForm;
             BackgroundLine.OpCode = OperationCode.BackgroundLine;
             BackgroundLine.TabStop = false;
             BackgroundLine.VisualLine = this;

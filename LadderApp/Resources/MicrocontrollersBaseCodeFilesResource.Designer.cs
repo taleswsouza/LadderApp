@@ -201,8 +201,7 @@ namespace LadderApp.Resources {
         ///	{
         /////-----------------------------------------------------------------------
         ///#EXEC_TIMER_TYPE_0_FUNCTION_C#
-        /////-----------------------------------------------------------------------
-        ///#EXEC [rest of string was truncated]&quot;;.
+        /////-----------------------------------------------------------------------        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ExecTemporizador_funcoesC {
             get {
@@ -317,9 +316,9 @@ namespace LadderApp.Resources {
         /////====================================================================================
         ///#include &quot;funcoes.h&quot;
         ///
-        ///#EXECTEMPORIZADOR_C#
+        ///#EXEC_TIMER_FUNCTION_C#
         ///
-        ///#EXE [rest of string was truncated]&quot;;.
+        ///# [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string funcoesC {
             get {
@@ -356,13 +355,53 @@ namespace LadderApp.Resources {
         /////====================================================================================
         ///// Includes
         /////====================================================================================
-        ///#include &quot;usuario.h&quot;
+        ///#include &quot;ladderprogram.h&quot;
         ///
-        ///unsigned char AccMs = 0 [rest of string was truncated]&quot;;.
+        ///unsigned char Acc [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string interrupcaoC {
             get {
                 return ResourceManager.GetString("interrupcaoC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //====================================================================================
+        ///// Arquivo da rotina do usuário
+        ///// Autor: Silvano Fonseca Paganoto
+        ///// Data: 15/09/2010
+        /////====================================================================================
+        ///
+        /////====================================================================================
+        ///// Includes
+        /////====================================================================================
+        ///#include &quot;ladderprogram.h&quot;
+        ///
+        /////======================= [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ladderprogramC {
+            get {
+                return ResourceManager.GetString("ladderprogramC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //====================================================================================
+        ///// Arquivo de protótipo das funções do programa do usuario
+        ///// Autor: Silvano Fonseca Paganoto
+        ///// Data: 15/09/2010
+        /////====================================================================================
+        ///
+        ///#ifndef USUARIO_H_
+        ///#define USUARIO_H_
+        ///
+        /////====================================================================================
+        ///// Includes
+        /////======================================================================== [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ladderprogramH {
+            get {
+                return ResourceManager.GetString("ladderprogramH", resourceCulture);
             }
         }
         
@@ -378,7 +417,7 @@ namespace LadderApp.Resources {
         /////====================================================================================
         ///#include &quot;definicao.h&quot;
         ///#include &quot;setuphardware.h&quot;
-        ///#include &quot;usua [rest of string was truncated]&quot;;.
+        ///#include &quot;ladd [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mainC {
             get {
@@ -423,46 +462,6 @@ namespace LadderApp.Resources {
         internal static string setupHardwareH {
             get {
                 return ResourceManager.GetString("setupHardwareH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
-        ///// Arquivo da rotina do usuário
-        ///// Autor: Silvano Fonseca Paganoto
-        ///// Data: 15/09/2010
-        /////====================================================================================
-        ///
-        /////====================================================================================
-        ///// Includes
-        /////====================================================================================
-        ///#include &quot;usuario.h&quot;
-        ///
-        /////============================= [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string usuarioC {
-            get {
-                return ResourceManager.GetString("usuarioC", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
-        ///// Arquivo de protótipo das funções do programa do usuario
-        ///// Autor: Silvano Fonseca Paganoto
-        ///// Data: 15/09/2010
-        /////====================================================================================
-        ///
-        ///#ifndef USUARIO_H_
-        ///#define USUARIO_H_
-        ///
-        /////====================================================================================
-        ///// Includes
-        /////======================================================================== [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string usuarioH {
-            get {
-                return ResourceManager.GetString("usuarioH", resourceCulture);
             }
         }
     }

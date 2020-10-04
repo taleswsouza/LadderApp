@@ -65,12 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OperationCode\OperationCode.cs" />
-    <Compile Include="Services\Text2OpCodeServices.cs" />
     <Compile Include="Resources\MicrocontrollersBaseCodeFilesResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MicrocontrollersBaseCodeFilesResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\Text2OpCodeServices.cs" />
     <Compile Include="UserControls\VisualInstructionUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -219,7 +219,7 @@
     <Compile Include="Services\OpCode2TextServices.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\usuario.h" />
+    <None Include="PLC\ladderprogram.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\main.c" />
@@ -228,7 +228,7 @@
     <None Include="PLC\SetupHardware.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\Usuario.c" />
+    <None Include="PLC\ladderprogram.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\definicao.h" />

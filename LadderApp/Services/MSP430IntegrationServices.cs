@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace LadderApp
@@ -15,7 +17,7 @@ namespace LadderApp
         private List<string> compiledFilenames = new List<string>();
         private List<string> createdFilenames = new List<string>();
         private bool EnabledDeletingIntermediateFiles = false;
-        private String strMMCU = "-mmcu=msp430f2013 ";
+        private String strMMCU = "-mmcu=msp430f2013";
         private String strStandardOutput = "";
         private String strStandardError = "";
 
@@ -80,18 +82,10 @@ namespace LadderApp
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="fileNameWithoutExtension"></param>
-        /// <returns></returns>
-        /// <remarks>Eclipse: Menu Project/Properties/"C/C++ Settings"/Tool Settings/mspgcc GCC C Compiler/Command:
-        /// msp430-gcc
-        /// ./All Options: -I"C:\mspgcc\msp430\include" -Os -Wall -c -fmessage-length=0 -mmcu=msp430x2013</remarks>
         public bool CompilesMsp430ViaGcc(String fileNameWithoutExtension)
         {
             startInfo.FileName = "msp430-gcc.exe";
-            startInfo.Arguments = @"-IC:\mspgcc\msp430\include -Os -Wall -c -fmessage-length=0 " + strMMCU + "-o" + fileNameWithoutExtension + @".o .\" + fileNameWithoutExtension + @".c";
+            startInfo.Arguments = $@"-IC:\mspgcc\msp430\include -Os -Wall -c -fmessage-length=0 {strMMCU} -o{fileNameWithoutExtension}.o .\{fileNameWithoutExtension}.c";
             p.Start();
             ReadStandardStrings();
             p.WaitForExit();
@@ -104,7 +98,7 @@ namespace LadderApp
             try
             {
                 if (EnabledDeletingIntermediateFiles)
-                    File.Delete(Application.StartupPath + @"\" + fileNameWithoutExtension + ".c");
+                    File.Delete($@"{Application.StartupPath}\{fileNameWithoutExtension}.c");
             }
             catch (Exception ex)
             {
@@ -115,19 +109,12 @@ namespace LadderApp
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        /// <remarks>Eclipse: Menu Project/Properties/"C/C++ Settings"/Build Steps/Post-build steps/Command:
-        /// msp430-objcopy -O ihex  ${ProjName}.elf ${ProjName}.a43;msp430-size  ${ProjName}.elf</remarks>
         public bool CompileELF(String fileName)
         {
             try
             {
                 startInfo.FileName = "msp430-gcc.exe";
-                startInfo.Arguments = @"-Os " + strMMCU + "-o" + fileName.Replace(' ', '_') + ".elf " + this.GetCompiledFilenames();
+                startInfo.Arguments = $@"-Os {strMMCU} -o{GetFileNameWithoutSpace(fileName)}.elf {GetCompiledFilenames()}";
                 p.Start();
                 ReadStandardStrings();
                 p.WaitForExit();
@@ -142,12 +129,17 @@ namespace LadderApp
             return ShowStandardStrings(startInfo.FileName + fileName);
         }
 
+        private static string GetFileNameWithoutSpace(string fileName)
+        {
+            return fileName.Replace(' ', '_');
+        }
+
         public bool CompilationStepMergeAllDotOFilesAndGenerateElfFile(String fileName)
         {
             try
             {
                 startInfo.FileName = "msp430-objcopy";
-                startInfo.Arguments = @"-O ihex " + fileName.Replace(' ', '_') + ".elf " + fileName.Replace(' ', '_') + ".a43";
+                startInfo.Arguments = $@"-O ihex {GetFileNameWithoutSpace(fileName)}.elf {GetFileNameWithoutSpace(fileName)}.a43";
                 p.Start();
                 ReadStandardStrings();
                 p.WaitForExit();
@@ -161,17 +153,17 @@ namespace LadderApp
                 try
                 {
                     if (EnabledDeletingIntermediateFiles)
-                        File.Delete(Application.StartupPath + @"\" + fileName.Replace(' ', '_') + ".elf");
+                        File.Delete($@"{Application.StartupPath}\{GetFileNameWithoutSpace(fileName)}.elf");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "LadderApp" + fileName.Replace(' ', '_') + ".elf", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "LadderApp" + GetFileNameWithoutSpace(fileName) + ".elf", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
                 try
                 {
                     startInfo.FileName = "msp430-strip";
-                    startInfo.Arguments = @"-s " + fileName.Replace(' ', '_') + ".a43";
+                    startInfo.Arguments = $@"-s {GetFileNameWithoutSpace(fileName)}.a43";
                     p.Start();
                     ReadStandardStrings();
                     p.WaitForExit();
@@ -191,7 +183,7 @@ namespace LadderApp
             try
             {
                 startInfo.FileName = "msp430-jtag";
-                startInfo.Arguments = @"--spy-bi-wire --backend=ti --lpt=TIUSB -m -p -v " + fileName + ".a43";
+                startInfo.Arguments = $@"--spy-bi-wire --backend=ti --lpt=TIUSB -m -p -v {fileName}.a43";
                 p.Start();
                 ReadStandardStrings();
                 p.WaitForExit();
@@ -228,7 +220,7 @@ namespace LadderApp
                 else
                     throw new NotSupportedException();
             }
-            return ConvertHex2String(Application.StartupPath + @"\dump.a43");
+            return ConvertHex2String($@"{Application.StartupPath}\dump.a43");
         }
 
         private string ConvertHex2TITxt(String filePath)
