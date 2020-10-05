@@ -754,19 +754,19 @@ namespace LadderApp
                 MSP430IntegrationServices msp430gcc = new MSP430IntegrationServices(false);
 
                 /// Prepara ENDERECOS
-                contentAddressesDotHFile = MicrocontrollersBaseCodeFilesResource.enderecosH;
+                contentAddressesDotHFile = MicrocontrollersBaseCodeFilesResource.addressesH;
                 contentAddressesDotHFile = contentAddressesDotHFile.Replace("#VARIABLE_DECLARATIONS#", contentVariableDeclarations);
                 contentAddressesDotHFile.Trim();
 
-                msp430gcc.CreateFile("enderecos.h", contentAddressesDotHFile);
+                msp430gcc.CreateFile("addresses.h", contentAddressesDotHFile);
 
 
                 /// Prepara DEFINICAO
-                msp430gcc.CreateFile("definicao.h", MicrocontrollersBaseCodeFilesResource.definicaoH);
+                msp430gcc.CreateFile("definitions.h", MicrocontrollersBaseCodeFilesResource.definitionsH);
 
 
                 /// Prepara SETUPHARDWARE
-                msp430gcc.CreateFile("setuphardware.h", MicrocontrollersBaseCodeFilesResource.setupHardwareH);
+                msp430gcc.CreateFile("hardwaresetup.h", MicrocontrollersBaseCodeFilesResource.hardwaresetupH);
 
 
                 /// Prepara FUNCOES
@@ -883,16 +883,16 @@ namespace LadderApp
 
 
                 /// Prepara SETUPHARDARE
-                contentHardwareSetupDotCFile = MicrocontrollersBaseCodeFilesResource.setupHardwareC.Replace("#IO_HARDWARE_SETUP_C#", contentIOSetup);
+                contentHardwareSetupDotCFile = MicrocontrollersBaseCodeFilesResource.hardwaresetupC.Replace("#IO_HARDWARE_SETUP_C#", contentIOSetup);
                 contentHardwareSetupDotCFile = contentHardwareSetupDotCFile.Replace("#READ_INPUTS#", contentReadInputs);
                 contentHardwareSetupDotCFile = contentHardwareSetupDotCFile.Replace("#WRITE_OUTPUTS#", contentWriteOutputs);
-                msp430gcc.CreateFile("setuphardware.c", contentHardwareSetupDotCFile);
-                msp430gcc.CompilesMsp430ViaGcc("setuphardware");
+                msp430gcc.CreateFile("hardwaresetup.c", contentHardwareSetupDotCFile);
+                msp430gcc.CompilesMsp430ViaGcc("hardwaresetup");
 
 
                 /// Prepara INTERRUPCAO
-                msp430gcc.CreateFile("interrupcao.c", MicrocontrollersBaseCodeFilesResource.interrupcaoC);
-                msp430gcc.CompilesMsp430ViaGcc("interrupcao");
+                msp430gcc.CreateFile("interruption.c", MicrocontrollersBaseCodeFilesResource.interruptionC);
+                msp430gcc.CompilesMsp430ViaGcc("interruption");
 
                 /// CRIA ELF
                 msp430gcc.CompileELF(this.Name);

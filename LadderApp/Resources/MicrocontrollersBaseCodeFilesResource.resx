@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="definicaoH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\definicao.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="definitionsH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\definitions.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="enderecosH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\enderecos.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="addressesH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\addresses.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ExecContador_funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\PLC\ExecContador.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -160,17 +160,17 @@
   <data name="funcoesH" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\PLC\functions.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="interrupcaoC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\interrupcao.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="interruptionC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\interruption.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="mainC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\PLC\main.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="setupHardwareC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\setupHardware.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="hardwaresetupC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\hardwaresetup.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="setupHardwareH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\setupHardware.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="hardwaresetupH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\hardwaresetup.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ladderprogramC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\PLC\ladderprogram.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

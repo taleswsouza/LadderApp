@@ -7,8 +7,8 @@
 //====================================================================================
 // Includes
 //====================================================================================
-#include "definicao.h"
-#include "setuphardware.h"
+#include "definitions.h"
+#include "hardwaresetup.h"
 #include "ladderprogram.h"
 
 #LADDER_INSTRUCTIONS#

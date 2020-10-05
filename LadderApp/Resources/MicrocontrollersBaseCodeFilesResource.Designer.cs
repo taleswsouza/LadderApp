@@ -62,6 +62,25 @@ namespace LadderApp.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to //====================================================================================
+        ///// Arquivo da Lista endereçso do usados no microcontrolador
+        ///// Autor: Silvano Fonseca Paganoto
+        ///// Data: 15/09/2010
+        /////====================================================================================
+        ///#ifndef ENDERECOS_H_
+        ///#define ENDERECOS_H_
+        ///
+        /////====================================================================================
+        ///// Includes
+        /////===================================================================== [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string addressesH {
+            get {
+                return ResourceManager.GetString("addressesH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //====================================================================================
         ///// Arquivo de definição geral
         ///// Autor: Silvano Fonseca Paganoto
         ///// Data: 15/09/2010
@@ -76,28 +95,9 @@ namespace LadderApp.Resources {
         ///// Includes
         /////================================================================= [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string definicaoH {
+        internal static string definitionsH {
             get {
-                return ResourceManager.GetString("definicaoH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
-        ///// Arquivo da Lista endereçso do usados no microcontrolador
-        ///// Autor: Silvano Fonseca Paganoto
-        ///// Data: 15/09/2010
-        /////====================================================================================
-        ///#ifndef ENDERECOS_H_
-        ///#define ENDERECOS_H_
-        ///
-        /////====================================================================================
-        ///// Includes
-        /////===================================================================== [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string enderecosH {
-            get {
-                return ResourceManager.GetString("enderecosH", resourceCulture);
+                return ResourceManager.GetString("definitionsH", resourceCulture);
             }
         }
         
@@ -202,8 +202,7 @@ namespace LadderApp.Resources {
         ///	{
         /////-----------------------------------------------------------------------
         ///#EXEC_TIMER_TYPE_0_FUNCTION_C#
-        /////-----------------------------------------------------------------------
-        /// [rest of string was truncated]&quot;;.
+        /////-----------------------------------------------------------------------        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ExecTemporizador_funcoesC {
             get {
@@ -316,11 +315,10 @@ namespace LadderApp.Resources {
         /////====================================================================================
         ///// Includes
         /////====================================================================================
-        ///#include &quot;funcoes.h&quot;
+        ///#include &quot;functions.h&quot;
         ///
         ///#EXEC_TIMER_FUNCTION_C#
-        ///
-        ///# [rest of string was truncated]&quot;;.
+        ///        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string funcoesC {
             get {
@@ -349,6 +347,46 @@ namespace LadderApp.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to //====================================================================================
+        ///// Arquivo de configuração do hardware
+        ///// Autor: Silvano Fonseca Paganoto
+        ///// Data: 15/09/2010
+        /////====================================================================================
+        ///
+        /////====================================================================================
+        ///// Includes
+        /////====================================================================================
+        ///#include &quot;hardwaresetup.h&quot;
+        ///
+        /////================ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string hardwaresetupC {
+            get {
+                return ResourceManager.GetString("hardwaresetupC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //====================================================================================
+        ///// Arquivo de protótipo das funções para configuração de hardware
+        ///// Autor: Silvano Fonseca Paganoto
+        ///// Data: 15/09/2010
+        /////====================================================================================
+        ///
+        ///#ifndef SETUPHARDWARE_H_
+        ///#define SETUPHARDWARE_H_
+        ///
+        /////====================================================================================
+        ///// Includes
+        /////===================================================== [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string hardwaresetupH {
+            get {
+                return ResourceManager.GetString("hardwaresetupH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //====================================================================================
         ///// Arquivo de interrupções do sistema
         ///// Autor: Silvano Fonseca Paganoto
         ///// Data: 15/09/2010
@@ -361,9 +399,9 @@ namespace LadderApp.Resources {
         ///
         ///unsigned char Acc [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string interrupcaoC {
+        internal static string interruptionC {
             get {
-                return ResourceManager.GetString("interrupcaoC", resourceCulture);
+                return ResourceManager.GetString("interruptionC", resourceCulture);
             }
         }
         
@@ -417,53 +455,13 @@ namespace LadderApp.Resources {
         /////====================================================================================
         ///// Includes
         /////====================================================================================
-        ///#include &quot;definicao.h&quot;
-        ///#include &quot;setuphardware.h&quot;
-        ///#include &quot;ladd [rest of string was truncated]&quot;;.
+        ///#include &quot;definitions.h&quot;
+        ///#include &quot;hardwaresetup.h&quot;
+        ///#include &quot;la [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mainC {
             get {
                 return ResourceManager.GetString("mainC", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
-        ///// Arquivo de configuração do hardware
-        ///// Autor: Silvano Fonseca Paganoto
-        ///// Data: 15/09/2010
-        /////====================================================================================
-        ///
-        /////====================================================================================
-        ///// Includes
-        /////====================================================================================
-        ///#include &quot;setuphardware.h&quot;
-        ///
-        /////================ [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string setupHardwareC {
-            get {
-                return ResourceManager.GetString("setupHardwareC", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
-        ///// Arquivo de protótipo das funções para configuração de hardware
-        ///// Autor: Silvano Fonseca Paganoto
-        ///// Data: 15/09/2010
-        /////====================================================================================
-        ///
-        ///#ifndef SETUPHARDWARE_H_
-        ///#define SETUPHARDWARE_H_
-        ///
-        /////====================================================================================
-        ///// Includes
-        /////===================================================== [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string setupHardwareH {
-            get {
-                return ResourceManager.GetString("setupHardwareH", resourceCulture);
             }
         }
     }

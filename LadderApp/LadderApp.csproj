@@ -225,28 +225,28 @@
     <None Include="PLC\main.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\SetupHardware.c" />
+    <None Include="PLC\hardwaresetup.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\ladderprogram.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\definicao.h" />
+    <None Include="PLC\definitions.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\enderecos.h" />
+    <None Include="PLC\addresses.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\functions.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\SetupHardware.h" />
+    <None Include="PLC\hardwaresetup.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\functions.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\interrupcao.c" />
+    <None Include="PLC\interruption.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\ExecContador.funcoes.c" />
