@@ -771,13 +771,13 @@ namespace LadderApp
 
                 /// Prepara FUNCOES
                 if (counterPresent) /// CONTADOR
-                    contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.funcoesH.Replace("#EXECCOUNTER_FUNCTION_H#", MicrocontrollersBaseCodeFilesResource.ExecContador_funcoesH);
+                    contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.functionsH.Replace("#EXECCOUNTER_FUNCTION_H#", MicrocontrollersBaseCodeFilesResource.execcounter_functionsH);
                 else
-                    contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.funcoesH.Replace("#EXECCOUNTER_FUNCTION_H#", "");
+                    contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.functionsH.Replace("#EXECCOUNTER_FUNCTION_H#", "");
 
 
                 if (timerPresent) /// TEMPORIZADOR
-                    contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTIMER_FUNCTION_H#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_funcoesH);
+                    contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTIMER_FUNCTION_H#", MicrocontrollersBaseCodeFilesResource.exectimer_functionsH);
                 else
                     contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTIMER_FUNCTION_H#", "");
 
@@ -786,20 +786,20 @@ namespace LadderApp
 
                 /// Prepara USUARIO
                 if (timerPresent)
-                    contentLadderProgramDotHFile = MicrocontrollersBaseCodeFilesResource.ladderprogramH.Replace("#EXEC_TIMERS_USER_H#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioH);
+                    contentLadderProgramDotHFile = MicrocontrollersBaseCodeFilesResource.ladderprogramH.Replace("#EXEC_TIMERS_LADDERPROGRAM_H#", MicrocontrollersBaseCodeFilesResource.exectimer_functions_ladderprogramH);
                 else
-                    contentLadderProgramDotHFile = MicrocontrollersBaseCodeFilesResource.ladderprogramH.Replace("#EXEC_TIMERS_USER_H#", "");
+                    contentLadderProgramDotHFile = MicrocontrollersBaseCodeFilesResource.ladderprogramH.Replace("#EXEC_TIMERS_LADDERPROGRAM_H#", "");
 
                 msp430gcc.CreateFile("ladderprogram.h", contentLadderProgramDotHFile);
 
                 contentLadderProgramDotCFile = MicrocontrollersBaseCodeFilesResource.ladderprogramC;
                 if (timerPresent)
                 {
-                    contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#EXEC_TIMERS_USER_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizadores_usuarioC);
-                    contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#TIMERS_USER_C#", contentTimers);
+                    contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#EXEC_TIMERS_LADDERPROGRAM_C#", MicrocontrollersBaseCodeFilesResource.exectimer_functions_ladderprogramC);
+                    contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#TIMERS_LADDERPROGRAM_C#", contentTimers);
                 }
                 else
-                    contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#EXEC_TIMERS_USER_C#", "");
+                    contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#EXEC_TIMERS_LADDERPROGRAM_C#", "");
 
                 contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#LADDER#", doc);
                 contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#PARAMETERIZATION#", contentParameterization);
@@ -842,35 +842,35 @@ namespace LadderApp
                 /// Prepara FUNCOES
                 if (counterPresent) /// CONTADOR
                 {
-                    contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.funcoesC.Replace("#EXEC_COUNTER_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecContador_funcoesC);
+                    contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.functionsC.Replace("#EXEC_COUNTER_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.execcounter_functionsC);
 
                     /// TIPOS DE TEMPORIZADORES USADOS
                     if (usedCounterTypes.Contains(0))
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_0_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecContador_Tipo0_funcoesC);
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_0_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.execcounter_ctu_type0_functionsC);
                     else
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_0_FUNCTION_C#", "");
 
                     if (usedCounterTypes.Contains(1))
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_1_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecContador_Tipo1_funcoesC);
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_1_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.execcounter_ctd_type1_functionsC);
                     else
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_1_FUNCTION_C#", "");
                 }
                 else
-                    contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.funcoesC.Replace("#EXEC_COUNTER_FUNCTION_C#", "");
+                    contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.functionsC.Replace("#EXEC_COUNTER_FUNCTION_C#", "");
 
 
                 if (timerPresent) /// TEMPORIZADOR
                 {
-                    contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_funcoesC);
+                    contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.exectimer_functionsC);
 
                     /// TIPOS DE TEMPORIZADORES USADOS
                     if (usedTimerTypes.Contains(0))
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_0_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_Tipo0_funcoes);
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_0_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.exectimer_ton_type0_functions);
                     else
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_0_FUNCTION_C#", "");
 
                     if (usedTimerTypes.Contains(1))
-                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_1_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.ExecTemporizador_Tipo1_funcoes);
+                        contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_1_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.exectimer_tof_type1_functions);
                     else
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_1_FUNCTION_C#", "");
                 }
@@ -879,7 +879,7 @@ namespace LadderApp
                     contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_FUNCTION_C#", "");
                 }
                 msp430gcc.CreateFile("functions.c", contentFunctionsDotCFile);
-                msp430gcc.CompilesMsp430ViaGcc("funcoes");
+                msp430gcc.CompilesMsp430ViaGcc("functions");
 
 
                 /// Prepara SETUPHARDARE
@@ -895,7 +895,7 @@ namespace LadderApp
                 msp430gcc.CompilesMsp430ViaGcc("interruption");
 
                 /// CRIA ELF
-                msp430gcc.CompileELF(this.Name);
+                msp430gcc.CompileELF(Name);
 
                 /// CRIA EXECUTAVE E GRAVA NO DISPOSITIVO
                 msp430gcc.CompilationStepMergeAllDotOFilesAndGenerateElfFile(this.Name);

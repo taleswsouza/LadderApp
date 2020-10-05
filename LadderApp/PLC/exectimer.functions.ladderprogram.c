@@ -3,5 +3,5 @@
 //====================================================================================
 void ExecTemporizadores(void)
 {
-#TIMERS_USER_C#
+#TIMERS_LADDERPROGRAM_C#
 }

@@ -124,40 +124,40 @@
   <data name="addressesH" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\PLC\addresses.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ExecContador_funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\ExecContador.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="execcounter_functionsC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\execcounter.functions.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ExecContador_funcoesH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\ExecContador.funcoes.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="execcounter_functionsH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\execcounter.functions.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ExecContador_Tipo0_funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\ExecContador_Tipo0.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="execcounter_ctu_type0_functionsC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\execcounter.ctu.type0.functions.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ExecContador_Tipo1_funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\ExecContador_Tipo1.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="execcounter_ctd_type1_functionsC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\execcounter.ctd.type1.functions.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ExecTemporizador_funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\ExecTemporizador.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="exectimer_functionsC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\exectimer.functions.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ExecTemporizador_funcoesH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\ExecTemporizador.funcoes.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="exectimer_functionsH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\exectimer.functions.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ExecTemporizador_Tipo0_funcoes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\ExecTemporizador_Tipo0.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="exectimer_ton_type0_functions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\exectimer.ton.type0.functions.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ExecTemporizador_Tipo1_funcoes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\ExecTemporizador_Tipo1.funcoes.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="exectimer_tof_type1_functions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\exectimer.tof.type1.functions.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ExecTemporizadores_usuarioC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\ExecTemporizadores.usuario.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="exectimer_functions_ladderprogramC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\exectimer.functions.ladderprogram.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ExecTemporizadores_usuarioH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PLC\ExecTemporizadores.usuario.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="exectimer_functions_ladderprogramH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\PLC\exectimer.functions.ladderprogram.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="funcoesC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="functionsC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\PLC\functions.c;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="funcoesH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="functionsH" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\PLC\functions.h;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="interruptionC" type="System.Resources.ResXFileRef, System.Windows.Forms">

@@ -18,7 +18,7 @@ void Parametros(void)
 }
 
 
-#EXEC_TIMERS_USER_C#
+#EXEC_TIMERS_LADDERPROGRAM_C#
 
 //====================================================================================
 // Rotina de Execução do programa do usúario

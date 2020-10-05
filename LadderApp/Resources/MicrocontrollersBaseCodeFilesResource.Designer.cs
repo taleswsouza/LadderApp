@@ -102,35 +102,30 @@ namespace LadderApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
-        ///// Rotina de execução do contador
-        /////====================================================================================
-        ///void ExecContador(TContador *Contador)
-        ///{
-        ///	switch (Contador-&gt;Tipo)
-        ///	{
-        ///#EXEC_COUNTER_TYPE_0_FUNCTION_C#
-        ///#EXEC_COUNTER_TYPE_1_FUNCTION_C#
-        ///	default:
+        ///   Looks up a localized string similar to 	case 1: // Contador Decrescente
+        ///		if (Contador-&gt;Reset == 1)
+        ///		{
+        ///			Contador-&gt;Acumulado = Contador-&gt;Preset;
+        ///		}
+        ///		if (Contador-&gt;EN == 1 &amp;&amp; Contador-&gt;Pulso == 1)
+        ///		{
+        ///			Contador-&gt;Pulso = 0;
+        ///			if (Contador-&gt;Acumulado &gt; 0)
+        ///			{
+        ///				Contador-&gt;Acumulado--;
+        ///				if (Contador-&gt;Acumulado == 0)
+        ///					Contador-&gt;DN = 1;
+        ///
+        ///				else
+        ///					Contador-&gt;DN = 0;
+        ///			}
+        ///		}
         ///		break;
-        ///	}
-        ///	if (Contador-&gt;EN == 0)
-        ///		Contador-&gt;Pulso = 1;
-        ///}
         ///.
         /// </summary>
-        internal static string ExecContador_funcoesC {
+        internal static string execcounter_ctd_type1_functionsC {
             get {
-                return ResourceManager.GetString("ExecContador_funcoesC", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to void ExecContador(TContador *Contador);.
-        /// </summary>
-        internal static string ExecContador_funcoesH {
-            get {
-                return ResourceManager.GetString("ExecContador_funcoesH", resourceCulture);
+                return ResourceManager.GetString("execcounter_ctd_type1_functionsC", resourceCulture);
             }
         }
         
@@ -157,37 +152,66 @@ namespace LadderApp.Resources {
         ///		break;
         ///.
         /// </summary>
-        internal static string ExecContador_Tipo0_funcoesC {
+        internal static string execcounter_ctu_type0_functionsC {
             get {
-                return ResourceManager.GetString("ExecContador_Tipo0_funcoesC", resourceCulture);
+                return ResourceManager.GetString("execcounter_ctu_type0_functionsC", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 	case 1: // Contador Decrescente
-        ///		if (Contador-&gt;Reset == 1)
-        ///		{
-        ///			Contador-&gt;Acumulado = Contador-&gt;Preset;
-        ///		}
-        ///		if (Contador-&gt;EN == 1 &amp;&amp; Contador-&gt;Pulso == 1)
-        ///		{
-        ///			Contador-&gt;Pulso = 0;
-        ///			if (Contador-&gt;Acumulado &gt; 0)
-        ///			{
-        ///				Contador-&gt;Acumulado--;
-        ///				if (Contador-&gt;Acumulado == 0)
-        ///					Contador-&gt;DN = 1;
-        ///
-        ///				else
-        ///					Contador-&gt;DN = 0;
-        ///			}
-        ///		}
+        ///   Looks up a localized string similar to //====================================================================================
+        ///// Rotina de execução do contador
+        /////====================================================================================
+        ///void ExecContador(TContador *Contador)
+        ///{
+        ///	switch (Contador-&gt;Tipo)
+        ///	{
+        ///#EXEC_COUNTER_TYPE_0_FUNCTION_C#
+        ///#EXEC_COUNTER_TYPE_1_FUNCTION_C#
+        ///	default:
         ///		break;
+        ///	}
+        ///	if (Contador-&gt;EN == 0)
+        ///		Contador-&gt;Pulso = 1;
+        ///}
         ///.
         /// </summary>
-        internal static string ExecContador_Tipo1_funcoesC {
+        internal static string execcounter_functionsC {
             get {
-                return ResourceManager.GetString("ExecContador_Tipo1_funcoesC", resourceCulture);
+                return ResourceManager.GetString("execcounter_functionsC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to void ExecContador(TContador *Contador);.
+        /// </summary>
+        internal static string execcounter_functionsH {
+            get {
+                return ResourceManager.GetString("execcounter_functionsH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //====================================================================================
+        ///// Rotina de execução do temporizador
+        /////====================================================================================
+        ///void ExecTemporizadores(void)
+        ///{
+        ///#TIMERS_LADDERPROGRAM_C#
+        ///}.
+        /// </summary>
+        internal static string exectimer_functions_ladderprogramC {
+            get {
+                return ResourceManager.GetString("exectimer_functions_ladderprogramC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to void ExecTemporizadores(void);.
+        /// </summary>
+        internal static string exectimer_functions_ladderprogramH {
+            get {
+                return ResourceManager.GetString("exectimer_functions_ladderprogramH", resourceCulture);
             }
         }
         
@@ -202,11 +226,12 @@ namespace LadderApp.Resources {
         ///	{
         /////-----------------------------------------------------------------------
         ///#EXEC_TIMER_TYPE_0_FUNCTION_C#
-        /////-----------------------------------------------------------------------        /// [rest of string was truncated]&quot;;.
+        /////-----------------------------------------------------------------------
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExecTemporizador_funcoesC {
+        internal static string exectimer_functionsC {
             get {
-                return ResourceManager.GetString("ExecTemporizador_funcoesC", resourceCulture);
+                return ResourceManager.GetString("exectimer_functionsC", resourceCulture);
             }
         }
         
@@ -214,36 +239,9 @@ namespace LadderApp.Resources {
         ///   Looks up a localized string similar to void ExecTemporizador(TTemporizador *Temporizador);
         ///.
         /// </summary>
-        internal static string ExecTemporizador_funcoesH {
+        internal static string exectimer_functionsH {
             get {
-                return ResourceManager.GetString("ExecTemporizador_funcoesH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 	case 0:// TON ====================================================================
-        ///
-        ///		if ((Temporizador-&gt;EN) &amp;&amp; (!Temporizador-&gt;Reset))
-        ///		{
-        ///			//-------------------------------------------------------
-        ///			if (Sistema.Evento10ms == 1)
-        ///			{
-        ///				(Temporizador-&gt;Parcial)++;
-        ///				switch (Temporizador-&gt;Base)
-        ///				{
-        ///				case 0:
-        ///					EventoPresente = 1;
-        ///					break;
-        ///				case 1:
-        ///					if ((Temporizador-&gt;Parcial) &gt;= 10)
-        ///						EventoPresente = 1;
-        ///					break;
-        ///				case 2:
-        ///					if ((Temporizador-&gt;Parcial) &gt;= [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ExecTemporizador_Tipo0_funcoes {
-            get {
-                return ResourceManager.GetString("ExecTemporizador_Tipo0_funcoes", resourceCulture);
+                return ResourceManager.GetString("exectimer_functionsH", resourceCulture);
             }
         }
         
@@ -275,33 +273,36 @@ namespace LadderApp.Resources {
         ///				case 3:
         ///					if  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExecTemporizador_Tipo1_funcoes {
+        internal static string exectimer_tof_type1_functions {
             get {
-                return ResourceManager.GetString("ExecTemporizador_Tipo1_funcoes", resourceCulture);
+                return ResourceManager.GetString("exectimer_tof_type1_functions", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
-        ///// Rotina de execução do temporizador
-        /////====================================================================================
-        ///void ExecTemporizadores(void)
-        ///{
-        ///#TIMERS_USER_C#
-        ///}.
+        ///   Looks up a localized string similar to 	case 0:// TON ====================================================================
+        ///
+        ///		if ((Temporizador-&gt;EN) &amp;&amp; (!Temporizador-&gt;Reset))
+        ///		{
+        ///			//-------------------------------------------------------
+        ///			if (Sistema.Evento10ms == 1)
+        ///			{
+        ///				(Temporizador-&gt;Parcial)++;
+        ///				switch (Temporizador-&gt;Base)
+        ///				{
+        ///				case 0:
+        ///					EventoPresente = 1;
+        ///					break;
+        ///				case 1:
+        ///					if ((Temporizador-&gt;Parcial) &gt;= 10)
+        ///						EventoPresente = 1;
+        ///					break;
+        ///				case 2:
+        ///					if ((Temporizador-&gt;Parcial) &gt;= [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExecTemporizadores_usuarioC {
+        internal static string exectimer_ton_type0_functions {
             get {
-                return ResourceManager.GetString("ExecTemporizadores_usuarioC", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to void ExecTemporizadores(void);.
-        /// </summary>
-        internal static string ExecTemporizadores_usuarioH {
-            get {
-                return ResourceManager.GetString("ExecTemporizadores_usuarioH", resourceCulture);
+                return ResourceManager.GetString("exectimer_ton_type0_functions", resourceCulture);
             }
         }
         
@@ -318,11 +319,12 @@ namespace LadderApp.Resources {
         ///#include &quot;functions.h&quot;
         ///
         ///#EXEC_TIMER_FUNCTION_C#
-        ///        /// [rest of string was truncated]&quot;;.
+        ///
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string funcoesC {
+        internal static string functionsC {
             get {
-                return ResourceManager.GetString("funcoesC", resourceCulture);
+                return ResourceManager.GetString("functionsC", resourceCulture);
             }
         }
         
@@ -339,9 +341,9 @@ namespace LadderApp.Resources {
         /////====================================================================================
         /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string funcoesH {
+        internal static string functionsH {
             get {
-                return ResourceManager.GetString("funcoesH", resourceCulture);
+                return ResourceManager.GetString("functionsH", resourceCulture);
             }
         }
         

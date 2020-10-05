@@ -19,6 +19,6 @@
 //====================================================================================
 void Parametros(void);
 void ExecPrograma(void);
-#EXEC_TIMERS_USER_H#
+#EXEC_TIMERS_LADDERPROGRAM_H#
 
 #endif
