@@ -213,7 +213,7 @@ namespace LadderApp
             this.Name = "DiagramaLadder";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ladder";
-            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.LadderForm_Scroll);
+            //this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.LadderForm_Scroll);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LadderForm_MouseClick);
             this.Resize += new System.EventHandler(this.DiagramaLadder_Resize);
             this.statusBar.ResumeLayout(false);

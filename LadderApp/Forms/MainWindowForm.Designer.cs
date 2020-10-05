@@ -219,7 +219,6 @@ namespace LadderApp
             this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
             this.printToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.printToolStripMenuItem.Text = "&Print";
-            this.printToolStripMenuItem.Visible = false;
             // 
             // printPreviewToolStripMenuItem
             // 
@@ -228,7 +227,7 @@ namespace LadderApp
             this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
             this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.printPreviewToolStripMenuItem.Text = "Print Pre&view";
-            this.printPreviewToolStripMenuItem.Visible = false;
+            this.printPreviewToolStripMenuItem.Click += new System.EventHandler(this.printPreviewToolStripMenuItem_Click);
             // 
             // printSetupToolStripMenuItem
             // 
@@ -410,7 +409,7 @@ namespace LadderApp
             this.toolStripSeparator13.Name = "toolStripSeparator13";
             this.toolStripSeparator13.Size = new System.Drawing.Size(200, 6);
             // 
-            // mnuNormallyOpenContact
+            // mnuLadderNormallyOpenContact
             // 
             this.mnuLadderNormallyOpenContact.Name = "mnuLadderNormallyOpenContact";
             this.mnuLadderNormallyOpenContact.Size = new System.Drawing.Size(203, 22);
@@ -494,7 +493,7 @@ namespace LadderApp
             this.mnuMicrocontrollerOptionsJtagParallel,
             this.mnuMicrocontrollerLadder});
             this.mnuMicrocontrollerOptions.Name = "mnuMicrocontrollerOptions";
-            this.mnuMicrocontrollerOptions.Size = new System.Drawing.Size(180, 22);
+            this.mnuMicrocontrollerOptions.Size = new System.Drawing.Size(161, 22);
             this.mnuMicrocontrollerOptions.Text = "Options";
             // 
             // mnuMicrocontrollerOptionsJtagUsb
@@ -531,6 +530,7 @@ namespace LadderApp
             this.mnuMicrocontrollerLadderSaveInsideMic.Size = new System.Drawing.Size(186, 22);
             this.mnuMicrocontrollerLadderSaveInsideMic.Text = "Save";
             this.mnuMicrocontrollerLadderSaveInsideMic.CheckedChanged += new System.EventHandler(this.mnuMicrocontrollerLadderSaveInsideMic_CheckedChanged);
+            this.mnuMicrocontrollerLadderSaveInsideMic.Click += new System.EventHandler(this.mnuMicrocontrollerLadderSaveInsideMic_Click);
             // 
             // mnuMicrocontrollerLadderAskPasswordToRead
             // 
@@ -545,27 +545,27 @@ namespace LadderApp
             this.mnuMicrocontrollerCommunicationDownload,
             this.mnuMicrocontrollerCommunicationUpload});
             this.mnuMicrocontrollerCommunication.Name = "mnuMicrocontrollerCommunication";
-            this.mnuMicrocontrollerCommunication.Size = new System.Drawing.Size(180, 22);
+            this.mnuMicrocontrollerCommunication.Size = new System.Drawing.Size(161, 22);
             this.mnuMicrocontrollerCommunication.Text = "Communication";
             // 
             // mnuMicrocontrollerCommunicationDownload
             // 
             this.mnuMicrocontrollerCommunicationDownload.Name = "mnuMicrocontrollerCommunicationDownload";
-            this.mnuMicrocontrollerCommunicationDownload.Size = new System.Drawing.Size(180, 22);
+            this.mnuMicrocontrollerCommunicationDownload.Size = new System.Drawing.Size(177, 22);
             this.mnuMicrocontrollerCommunicationDownload.Text = "&Download program";
             this.mnuMicrocontrollerCommunicationDownload.Click += new System.EventHandler(this.mnuMicrocontrollerCommunicationDownload_Click);
             // 
             // mnuMicrocontrollerCommunicationUpload
             // 
             this.mnuMicrocontrollerCommunicationUpload.Name = "mnuMicrocontrollerCommunicationUpload";
-            this.mnuMicrocontrollerCommunicationUpload.Size = new System.Drawing.Size(180, 22);
+            this.mnuMicrocontrollerCommunicationUpload.Size = new System.Drawing.Size(177, 22);
             this.mnuMicrocontrollerCommunicationUpload.Text = "&Upload program";
             this.mnuMicrocontrollerCommunicationUpload.Click += new System.EventHandler(this.mnuMicrocontrollerCommunicationUpload_Click);
             // 
             // mnuMicrocontrollerBuild
             // 
             this.mnuMicrocontrollerBuild.Name = "mnuMicrocontrollerBuild";
-            this.mnuMicrocontrollerBuild.Size = new System.Drawing.Size(180, 22);
+            this.mnuMicrocontrollerBuild.Size = new System.Drawing.Size(161, 22);
             this.mnuMicrocontrollerBuild.Text = "Build";
             this.mnuMicrocontrollerBuild.Click += new System.EventHandler(this.mnuMicrocontrollerBuild_Click);
             // 
@@ -586,7 +586,7 @@ namespace LadderApp
             // newWindowToolStripMenuItem
             // 
             this.newWindowToolStripMenuItem.Name = "newWindowToolStripMenuItem";
-            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.newWindowToolStripMenuItem.Text = "&New Window";
             this.newWindowToolStripMenuItem.Visible = false;
             this.newWindowToolStripMenuItem.Click += new System.EventHandler(this.ShowNewForm);
@@ -594,7 +594,7 @@ namespace LadderApp
             // cascadeToolStripMenuItem
             // 
             this.cascadeToolStripMenuItem.Name = "cascadeToolStripMenuItem";
-            this.cascadeToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.cascadeToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.cascadeToolStripMenuItem.Text = "&Cascade";
             this.cascadeToolStripMenuItem.Visible = false;
             this.cascadeToolStripMenuItem.Click += new System.EventHandler(this.CascadeToolStripMenuItem_Click);
@@ -602,7 +602,7 @@ namespace LadderApp
             // tileVerticalToolStripMenuItem
             // 
             this.tileVerticalToolStripMenuItem.Name = "tileVerticalToolStripMenuItem";
-            this.tileVerticalToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.tileVerticalToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.tileVerticalToolStripMenuItem.Text = "Tile &Vertical";
             this.tileVerticalToolStripMenuItem.Visible = false;
             this.tileVerticalToolStripMenuItem.Click += new System.EventHandler(this.TileVerticleToolStripMenuItem_Click);
@@ -610,7 +610,7 @@ namespace LadderApp
             // tileHorizontalToolStripMenuItem
             // 
             this.tileHorizontalToolStripMenuItem.Name = "tileHorizontalToolStripMenuItem";
-            this.tileHorizontalToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.tileHorizontalToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.tileHorizontalToolStripMenuItem.Text = "Tile &Horizontal";
             this.tileHorizontalToolStripMenuItem.Visible = false;
             this.tileHorizontalToolStripMenuItem.Click += new System.EventHandler(this.TileHorizontalToolStripMenuItem_Click);
@@ -618,14 +618,14 @@ namespace LadderApp
             // mnuWindowResetLayout
             // 
             this.mnuWindowResetLayout.Name = "mnuWindowResetLayout";
-            this.mnuWindowResetLayout.Size = new System.Drawing.Size(154, 22);
+            this.mnuWindowResetLayout.Size = new System.Drawing.Size(188, 22);
             this.mnuWindowResetLayout.Text = "&Reset Window Layout";
             this.mnuWindowResetLayout.Click += new System.EventHandler(this.mnuWindowResetLayout_Click);
             // 
             // closeAllToolStripMenuItem
             // 
             this.closeAllToolStripMenuItem.Name = "closeAllToolStripMenuItem";
-            this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.closeAllToolStripMenuItem.Text = "C&lose All";
             this.closeAllToolStripMenuItem.Visible = false;
             this.closeAllToolStripMenuItem.Click += new System.EventHandler(this.CloseAllToolStripMenuItem_Click);
@@ -633,7 +633,7 @@ namespace LadderApp
             // arrangeIconsToolStripMenuItem
             // 
             this.arrangeIconsToolStripMenuItem.Name = "arrangeIconsToolStripMenuItem";
-            this.arrangeIconsToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.arrangeIconsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.arrangeIconsToolStripMenuItem.Text = "&Arrange Icons";
             this.arrangeIconsToolStripMenuItem.Visible = false;
             this.arrangeIconsToolStripMenuItem.Click += new System.EventHandler(this.ArrangeIconsToolStripMenuItem_Click);
@@ -746,6 +746,7 @@ namespace LadderApp
             // printToolStripButton
             // 
             this.printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.printToolStripButton.Enabled = false;
             this.printToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripButton.Image")));
             this.printToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.printToolStripButton.Name = "printToolStripButton";
@@ -756,12 +757,14 @@ namespace LadderApp
             // printPreviewToolStripButton
             // 
             this.printPreviewToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.printPreviewToolStripButton.Enabled = false;
             this.printPreviewToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripButton.Image")));
             this.printPreviewToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.printPreviewToolStripButton.Name = "printPreviewToolStripButton";
             this.printPreviewToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.printPreviewToolStripButton.Text = "Print Preview";
             this.printPreviewToolStripButton.Visible = false;
+            this.printPreviewToolStripButton.Click += new System.EventHandler(this.printPreviewToolStripButton_Click);
             // 
             // toolStripSeparator2
             // 
@@ -914,7 +917,6 @@ namespace LadderApp
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(36, 22);
             this.btnPrint.Text = "Print";
-            this.btnPrint.Visible = false;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
             // btnSimulateLadder
@@ -935,7 +937,7 @@ namespace LadderApp
             this.PrintPreviewDialog1.ClientSize = new System.Drawing.Size(400, 300);
             this.PrintPreviewDialog1.Enabled = true;
             this.PrintPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("PrintPreviewDialog1.Icon")));
-            this.PrintPreviewDialog1.Name = "printPreviewDialog2";
+            this.PrintPreviewDialog1.Name = "PrintPreviewDialog1";
             this.PrintPreviewDialog1.Visible = false;
             // 
             // MainWindowForm
@@ -952,7 +954,7 @@ namespace LadderApp
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Ladder to microcontrollers";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EditorLadder_FormClosed);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindowForm_FormClosed);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
@@ -1029,7 +1031,6 @@ namespace LadderApp
         private System.Windows.Forms.ToolStripButton btnLadderOutputCounter;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
         private System.Windows.Forms.ToolStripButton btnPrint;
-        private System.Windows.Forms.PrintPreviewDialog PrintPreviewDialog1;
         private System.Windows.Forms.ToolStripButton btnSimulateLadder;
         private System.Windows.Forms.ToolStripButton btnLadderOutputReset;
         private System.Windows.Forms.ToolStripMenuItem mnuEditComment;
@@ -1057,6 +1058,7 @@ namespace LadderApp
         private System.Windows.Forms.ToolStripMenuItem mnuMicrocontrollerLadder;
         private System.Windows.Forms.ToolStripMenuItem mnuMicrocontrollerLadderSaveInsideMic;
         private System.Windows.Forms.ToolStripMenuItem mnuMicrocontrollerLadderAskPasswordToRead;
+        private System.Windows.Forms.PrintPreviewDialog PrintPreviewDialog1;
     }
 }
 

@@ -28,165 +28,165 @@ namespace LadderApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Bits per port");
-            this.lblFabricante = new System.Windows.Forms.Label();
-            this.lblSerie = new System.Windows.Forms.Label();
-            this.lblModelo = new System.Windows.Forms.Label();
-            this.lblQtdPortas = new System.Windows.Forms.Label();
-            this.lblBits = new System.Windows.Forms.Label();
-            this.btnCancelar = new System.Windows.Forms.Button();
-            this.ArvorePinos = new System.Windows.Forms.TreeView();
-            this.grpConfiguraPino = new System.Windows.Forms.GroupBox();
-            this.rbOutro = new System.Windows.Forms.RadioButton();
-            this.rbSaida = new System.Windows.Forms.RadioButton();
-            this.rbEntrada = new System.Windows.Forms.RadioButton();
-            this.rbEntradaOuSaida = new System.Windows.Forms.RadioButton();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Pin/bit per port");
+            this.lblManufacturer = new System.Windows.Forms.Label();
+            this.lblSeries = new System.Windows.Forms.Label();
+            this.lblModel = new System.Windows.Forms.Label();
+            this.lblNumberOfPorts = new System.Windows.Forms.Label();
+            this.lblPinsConfiguration = new System.Windows.Forms.Label();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.tvnPinsTree = new System.Windows.Forms.TreeView();
+            this.grpPinConfiguration = new System.Windows.Forms.GroupBox();
+            this.rbUnavailable = new System.Windows.Forms.RadioButton();
+            this.rbOutput = new System.Windows.Forms.RadioButton();
+            this.rbInput = new System.Windows.Forms.RadioButton();
+            this.rbNotUsed = new System.Windows.Forms.RadioButton();
             this.btnOK = new System.Windows.Forms.Button();
-            this.btnAplicar = new System.Windows.Forms.Button();
-            this.lblQtdBitsPorta = new System.Windows.Forms.Label();
-            this.grpConfiguraPino.SuspendLayout();
+            this.btnApply = new System.Windows.Forms.Button();
+            this.lblNumberOfBitsPerPort = new System.Windows.Forms.Label();
+            this.grpPinConfiguration.SuspendLayout();
             this.SuspendLayout();
             // 
-            // lblFabricante
+            // lblManufacturer
             // 
-            this.lblFabricante.AutoSize = true;
-            this.lblFabricante.Location = new System.Drawing.Point(11, 13);
-            this.lblFabricante.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblFabricante.Name = "lblFabricante";
-            this.lblFabricante.Size = new System.Drawing.Size(73, 13);
-            this.lblFabricante.TabIndex = 1;
-            this.lblFabricante.Text = "Manufacturer:";
+            this.lblManufacturer.AutoSize = true;
+            this.lblManufacturer.Location = new System.Drawing.Point(11, 13);
+            this.lblManufacturer.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblManufacturer.Name = "lblManufacturer";
+            this.lblManufacturer.Size = new System.Drawing.Size(73, 13);
+            this.lblManufacturer.TabIndex = 1;
+            this.lblManufacturer.Text = "Manufacturer:";
             // 
-            // lblSerie
+            // lblSeries
             // 
-            this.lblSerie.AutoSize = true;
-            this.lblSerie.Location = new System.Drawing.Point(11, 39);
-            this.lblSerie.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblSerie.Name = "lblSerie";
-            this.lblSerie.Size = new System.Drawing.Size(39, 13);
-            this.lblSerie.TabIndex = 3;
-            this.lblSerie.Text = "Series:";
+            this.lblSeries.AutoSize = true;
+            this.lblSeries.Location = new System.Drawing.Point(11, 39);
+            this.lblSeries.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblSeries.Name = "lblSeries";
+            this.lblSeries.Size = new System.Drawing.Size(39, 13);
+            this.lblSeries.TabIndex = 3;
+            this.lblSeries.Text = "Series:";
             // 
-            // lblModelo
+            // lblModel
             // 
-            this.lblModelo.AutoSize = true;
-            this.lblModelo.ForeColor = System.Drawing.Color.Red;
-            this.lblModelo.Location = new System.Drawing.Point(11, 65);
-            this.lblModelo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblModelo.Name = "lblModelo";
-            this.lblModelo.Size = new System.Drawing.Size(39, 13);
-            this.lblModelo.TabIndex = 5;
-            this.lblModelo.Text = "Model:";
+            this.lblModel.AutoSize = true;
+            this.lblModel.ForeColor = System.Drawing.Color.Red;
+            this.lblModel.Location = new System.Drawing.Point(11, 65);
+            this.lblModel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblModel.Name = "lblModel";
+            this.lblModel.Size = new System.Drawing.Size(39, 13);
+            this.lblModel.TabIndex = 5;
+            this.lblModel.Text = "Model:";
             // 
-            // lblQtdPortas
+            // lblNumberOfPorts
             // 
-            this.lblQtdPortas.AutoSize = true;
-            this.lblQtdPortas.Location = new System.Drawing.Point(11, 91);
-            this.lblQtdPortas.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblQtdPortas.Name = "lblQtdPortas";
-            this.lblQtdPortas.Size = new System.Drawing.Size(85, 13);
-            this.lblQtdPortas.TabIndex = 7;
-            this.lblQtdPortas.Text = "Number of ports:";
+            this.lblNumberOfPorts.AutoSize = true;
+            this.lblNumberOfPorts.Location = new System.Drawing.Point(11, 91);
+            this.lblNumberOfPorts.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblNumberOfPorts.Name = "lblNumberOfPorts";
+            this.lblNumberOfPorts.Size = new System.Drawing.Size(85, 13);
+            this.lblNumberOfPorts.TabIndex = 7;
+            this.lblNumberOfPorts.Text = "Number of ports:";
             // 
-            // lblBits
+            // lblPinsConfiguration
             // 
-            this.lblBits.AutoSize = true;
-            this.lblBits.Location = new System.Drawing.Point(194, 8);
-            this.lblBits.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblBits.Name = "lblBits";
-            this.lblBits.Size = new System.Drawing.Size(94, 13);
-            this.lblBits.TabIndex = 8;
-            this.lblBits.Text = "Pins configuration:";
+            this.lblPinsConfiguration.AutoSize = true;
+            this.lblPinsConfiguration.Location = new System.Drawing.Point(194, 8);
+            this.lblPinsConfiguration.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblPinsConfiguration.Name = "lblPinsConfiguration";
+            this.lblPinsConfiguration.Size = new System.Drawing.Size(94, 13);
+            this.lblPinsConfiguration.TabIndex = 8;
+            this.lblPinsConfiguration.Text = "Pins configuration:";
             // 
-            // btnCancelar
+            // btnCancel
             // 
-            this.btnCancelar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancelar.Location = new System.Drawing.Point(277, 288);
-            this.btnCancelar.Margin = new System.Windows.Forms.Padding(2);
-            this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(69, 32);
-            this.btnCancelar.TabIndex = 11;
-            this.btnCancelar.Text = "Cancel";
-            this.btnCancelar.UseVisualStyleBackColor = true;
-            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(277, 288);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(69, 32);
+            this.btnCancel.TabIndex = 11;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // ArvorePinos
+            // tvnPinsTree
             // 
-            this.ArvorePinos.Location = new System.Drawing.Point(194, 27);
-            this.ArvorePinos.Margin = new System.Windows.Forms.Padding(2);
-            this.ArvorePinos.Name = "ArvorePinos";
-            treeNode7.Name = "NoPinos";
-            treeNode7.Text = "Bits per port";
-            this.ArvorePinos.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode7});
-            this.ArvorePinos.Size = new System.Drawing.Size(221, 243);
-            this.ArvorePinos.TabIndex = 12;
-            this.ArvorePinos.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ArvorePortas_AfterSelect);
-            this.ArvorePinos.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.ArvorePortas_NodeMouseClick);
+            this.tvnPinsTree.Location = new System.Drawing.Point(194, 27);
+            this.tvnPinsTree.Margin = new System.Windows.Forms.Padding(2);
+            this.tvnPinsTree.Name = "tvnPinsTree";
+            treeNode1.Name = "tvnPinsNode";
+            treeNode1.Text = "Pin/bit per port";
+            this.tvnPinsTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1});
+            this.tvnPinsTree.Size = new System.Drawing.Size(221, 243);
+            this.tvnPinsTree.TabIndex = 12;
+            this.tvnPinsTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvnPinsTree_AfterSelect);
+            this.tvnPinsTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvnPinsTree_NodeMouseClick);
             // 
-            // grpConfiguraPino
+            // grpPinConfiguration
             // 
-            this.grpConfiguraPino.Controls.Add(this.rbOutro);
-            this.grpConfiguraPino.Controls.Add(this.rbSaida);
-            this.grpConfiguraPino.Controls.Add(this.rbEntrada);
-            this.grpConfiguraPino.Controls.Add(this.rbEntradaOuSaida);
-            this.grpConfiguraPino.Location = new System.Drawing.Point(11, 186);
-            this.grpConfiguraPino.Margin = new System.Windows.Forms.Padding(2);
-            this.grpConfiguraPino.Name = "grpConfiguraPino";
-            this.grpConfiguraPino.Padding = new System.Windows.Forms.Padding(2);
-            this.grpConfiguraPino.Size = new System.Drawing.Size(178, 84);
-            this.grpConfiguraPino.TabIndex = 13;
-            this.grpConfiguraPino.TabStop = false;
-            this.grpConfiguraPino.Text = "Bit Configuration x:";
-            this.grpConfiguraPino.Visible = false;
+            this.grpPinConfiguration.Controls.Add(this.rbUnavailable);
+            this.grpPinConfiguration.Controls.Add(this.rbOutput);
+            this.grpPinConfiguration.Controls.Add(this.rbInput);
+            this.grpPinConfiguration.Controls.Add(this.rbNotUsed);
+            this.grpPinConfiguration.Location = new System.Drawing.Point(11, 186);
+            this.grpPinConfiguration.Margin = new System.Windows.Forms.Padding(2);
+            this.grpPinConfiguration.Name = "grpPinConfiguration";
+            this.grpPinConfiguration.Padding = new System.Windows.Forms.Padding(2);
+            this.grpPinConfiguration.Size = new System.Drawing.Size(178, 84);
+            this.grpPinConfiguration.TabIndex = 13;
+            this.grpPinConfiguration.TabStop = false;
+            this.grpPinConfiguration.Text = "Bit Configuration x:";
+            this.grpPinConfiguration.Visible = false;
             // 
-            // rbOutro
+            // rbUnavailable
             // 
-            this.rbOutro.AutoSize = true;
-            this.rbOutro.Location = new System.Drawing.Point(89, 18);
-            this.rbOutro.Margin = new System.Windows.Forms.Padding(2);
-            this.rbOutro.Name = "rbOutro";
-            this.rbOutro.Size = new System.Drawing.Size(81, 17);
-            this.rbOutro.TabIndex = 3;
-            this.rbOutro.TabStop = true;
-            this.rbOutro.Text = "Unavailable";
-            this.rbOutro.UseVisualStyleBackColor = true;
+            this.rbUnavailable.AutoSize = true;
+            this.rbUnavailable.Location = new System.Drawing.Point(89, 18);
+            this.rbUnavailable.Margin = new System.Windows.Forms.Padding(2);
+            this.rbUnavailable.Name = "rbUnavailable";
+            this.rbUnavailable.Size = new System.Drawing.Size(81, 17);
+            this.rbUnavailable.TabIndex = 3;
+            this.rbUnavailable.TabStop = true;
+            this.rbUnavailable.Text = "Unavailable";
+            this.rbUnavailable.UseVisualStyleBackColor = true;
             // 
-            // rbSaida
+            // rbOutput
             // 
-            this.rbSaida.AutoSize = true;
-            this.rbSaida.Location = new System.Drawing.Point(5, 61);
-            this.rbSaida.Margin = new System.Windows.Forms.Padding(2);
-            this.rbSaida.Name = "rbSaida";
-            this.rbSaida.Size = new System.Drawing.Size(57, 17);
-            this.rbSaida.TabIndex = 2;
-            this.rbSaida.TabStop = true;
-            this.rbSaida.Text = "Output";
-            this.rbSaida.UseVisualStyleBackColor = true;
+            this.rbOutput.AutoSize = true;
+            this.rbOutput.Location = new System.Drawing.Point(5, 61);
+            this.rbOutput.Margin = new System.Windows.Forms.Padding(2);
+            this.rbOutput.Name = "rbOutput";
+            this.rbOutput.Size = new System.Drawing.Size(57, 17);
+            this.rbOutput.TabIndex = 2;
+            this.rbOutput.TabStop = true;
+            this.rbOutput.Text = "Output";
+            this.rbOutput.UseVisualStyleBackColor = true;
             // 
-            // rbEntrada
+            // rbInput
             // 
-            this.rbEntrada.AutoSize = true;
-            this.rbEntrada.Location = new System.Drawing.Point(5, 39);
-            this.rbEntrada.Margin = new System.Windows.Forms.Padding(2);
-            this.rbEntrada.Name = "rbEntrada";
-            this.rbEntrada.Size = new System.Drawing.Size(49, 17);
-            this.rbEntrada.TabIndex = 1;
-            this.rbEntrada.TabStop = true;
-            this.rbEntrada.Text = "Input";
-            this.rbEntrada.UseVisualStyleBackColor = true;
+            this.rbInput.AutoSize = true;
+            this.rbInput.Location = new System.Drawing.Point(5, 39);
+            this.rbInput.Margin = new System.Windows.Forms.Padding(2);
+            this.rbInput.Name = "rbInput";
+            this.rbInput.Size = new System.Drawing.Size(49, 17);
+            this.rbInput.TabIndex = 1;
+            this.rbInput.TabStop = true;
+            this.rbInput.Text = "Input";
+            this.rbInput.UseVisualStyleBackColor = true;
             // 
-            // rbEntradaOuSaida
+            // rbNotUsed
             // 
-            this.rbEntradaOuSaida.AutoSize = true;
-            this.rbEntradaOuSaida.Location = new System.Drawing.Point(5, 17);
-            this.rbEntradaOuSaida.Margin = new System.Windows.Forms.Padding(2);
-            this.rbEntradaOuSaida.Name = "rbEntradaOuSaida";
-            this.rbEntradaOuSaida.Size = new System.Drawing.Size(70, 17);
-            this.rbEntradaOuSaida.TabIndex = 0;
-            this.rbEntradaOuSaida.TabStop = true;
-            this.rbEntradaOuSaida.Text = "Not Used";
-            this.rbEntradaOuSaida.UseVisualStyleBackColor = true;
+            this.rbNotUsed.AutoSize = true;
+            this.rbNotUsed.Location = new System.Drawing.Point(5, 17);
+            this.rbNotUsed.Margin = new System.Windows.Forms.Padding(2);
+            this.rbNotUsed.Name = "rbNotUsed";
+            this.rbNotUsed.Size = new System.Drawing.Size(70, 17);
+            this.rbNotUsed.TabIndex = 0;
+            this.rbNotUsed.TabStop = true;
+            this.rbNotUsed.Text = "Not Used";
+            this.rbNotUsed.UseVisualStyleBackColor = true;
             // 
             // btnOK
             // 
@@ -200,51 +200,51 @@ namespace LadderApp
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // btnAplicar
+            // btnApply
             // 
-            this.btnAplicar.Location = new System.Drawing.Point(82, 288);
-            this.btnAplicar.Margin = new System.Windows.Forms.Padding(2);
-            this.btnAplicar.Name = "btnAplicar";
-            this.btnAplicar.Size = new System.Drawing.Size(69, 32);
-            this.btnAplicar.TabIndex = 15;
-            this.btnAplicar.Text = "Apply";
-            this.btnAplicar.UseVisualStyleBackColor = true;
-            this.btnAplicar.Click += new System.EventHandler(this.btnAplicar_Click);
+            this.btnApply.Location = new System.Drawing.Point(82, 288);
+            this.btnApply.Margin = new System.Windows.Forms.Padding(2);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(69, 32);
+            this.btnApply.TabIndex = 15;
+            this.btnApply.Text = "Apply";
+            this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
-            // lblQtdBitsPorta
+            // lblNumberOfBitsPerPort
             // 
-            this.lblQtdBitsPorta.AutoSize = true;
-            this.lblQtdBitsPorta.Location = new System.Drawing.Point(12, 117);
-            this.lblQtdBitsPorta.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblQtdBitsPorta.Name = "lblQtdBitsPorta";
-            this.lblQtdBitsPorta.Size = new System.Drawing.Size(117, 13);
-            this.lblQtdBitsPorta.TabIndex = 17;
-            this.lblQtdBitsPorta.Text = "Number of bits per port:";
+            this.lblNumberOfBitsPerPort.AutoSize = true;
+            this.lblNumberOfBitsPerPort.Location = new System.Drawing.Point(12, 117);
+            this.lblNumberOfBitsPerPort.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblNumberOfBitsPerPort.Name = "lblNumberOfBitsPerPort";
+            this.lblNumberOfBitsPerPort.Size = new System.Drawing.Size(117, 13);
+            this.lblNumberOfBitsPerPort.TabIndex = 17;
+            this.lblNumberOfBitsPerPort.Text = "Number of bits per port:";
             // 
-            // frmDispositivo
+            // DeviceForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancelar;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(435, 331);
-            this.Controls.Add(this.lblQtdBitsPorta);
-            this.Controls.Add(this.btnAplicar);
+            this.Controls.Add(this.lblNumberOfBitsPerPort);
+            this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnOK);
-            this.Controls.Add(this.grpConfiguraPino);
-            this.Controls.Add(this.ArvorePinos);
-            this.Controls.Add(this.btnCancelar);
-            this.Controls.Add(this.lblBits);
-            this.Controls.Add(this.lblQtdPortas);
-            this.Controls.Add(this.lblModelo);
-            this.Controls.Add(this.lblSerie);
-            this.Controls.Add(this.lblFabricante);
+            this.Controls.Add(this.grpPinConfiguration);
+            this.Controls.Add(this.tvnPinsTree);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.lblPinsConfiguration);
+            this.Controls.Add(this.lblNumberOfPorts);
+            this.Controls.Add(this.lblModel);
+            this.Controls.Add(this.lblSeries);
+            this.Controls.Add(this.lblManufacturer);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "frmDispositivo";
+            this.Name = "DeviceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Device";
-            this.grpConfiguraPino.ResumeLayout(false);
-            this.grpConfiguraPino.PerformLayout();
+            this.grpPinConfiguration.ResumeLayout(false);
+            this.grpPinConfiguration.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -252,20 +252,20 @@ namespace LadderApp
 
         #endregion
 
-        private System.Windows.Forms.Label lblFabricante;
-        private System.Windows.Forms.Label lblSerie;
-        private System.Windows.Forms.Label lblModelo;
-        private System.Windows.Forms.Label lblQtdPortas;
-        private System.Windows.Forms.Label lblBits;
-        private System.Windows.Forms.Button btnCancelar;
-        private System.Windows.Forms.TreeView ArvorePinos;
-        private System.Windows.Forms.GroupBox grpConfiguraPino;
-        private System.Windows.Forms.RadioButton rbOutro;
-        private System.Windows.Forms.RadioButton rbSaida;
-        private System.Windows.Forms.RadioButton rbEntrada;
-        private System.Windows.Forms.RadioButton rbEntradaOuSaida;
+        private System.Windows.Forms.Label lblManufacturer;
+        private System.Windows.Forms.Label lblSeries;
+        private System.Windows.Forms.Label lblModel;
+        private System.Windows.Forms.Label lblNumberOfPorts;
+        private System.Windows.Forms.Label lblPinsConfiguration;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.TreeView tvnPinsTree;
+        private System.Windows.Forms.GroupBox grpPinConfiguration;
+        private System.Windows.Forms.RadioButton rbUnavailable;
+        private System.Windows.Forms.RadioButton rbOutput;
+        private System.Windows.Forms.RadioButton rbInput;
+        private System.Windows.Forms.RadioButton rbNotUsed;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Button btnAplicar;
-        private System.Windows.Forms.Label lblQtdBitsPorta;
+        private System.Windows.Forms.Button btnApply;
+        private System.Windows.Forms.Label lblNumberOfBitsPerPort;
     }
 }

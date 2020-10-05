@@ -7,9 +7,9 @@ void ExecTemporizador(TTemporizador *Temporizador)
 	switch (Temporizador->Tipo)
 	{
 //-----------------------------------------------------------------------
-#EXECTEMPORIZADOR_TIPO0#
+#EXEC_TIMER_TYPE_0_FUNCTION_C#
 //-----------------------------------------------------------------------
-#EXECTEMPORIZADOR_TIPO1#
+#EXEC_TIMER_TYPE_1_FUNCTION_C#
 	default:
 		break;
 	}

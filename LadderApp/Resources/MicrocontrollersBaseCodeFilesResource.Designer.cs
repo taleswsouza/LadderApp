@@ -62,27 +62,6 @@ namespace LadderApp.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to //====================================================================================
-        ///// Arquivo de definição geral
-        ///// Autor: Silvano Fonseca Paganoto
-        ///// Data: 15/09/2010
-        /////====================================================================================
-        ///
-        ///
-        ///#ifndef DEFINICAO_H_
-        ///#define DEFINICAO_H_
-        ///#define RECARGA_CCR0 10000
-        /////====================================================================================
-        ///// Includes
-        /////===================================================================== [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string definicaoH {
-            get {
-                return ResourceManager.GetString("definicaoH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
         ///// Arquivo da Lista endereçso do usados no microcontrolador
         ///// Autor: Silvano Fonseca Paganoto
         ///// Data: 15/09/2010
@@ -94,42 +73,59 @@ namespace LadderApp.Resources {
         ///// Includes
         /////===================================================================== [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string enderecosH {
+        internal static string addressesH {
             get {
-                return ResourceManager.GetString("enderecosH", resourceCulture);
+                return ResourceManager.GetString("addressesH", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to //====================================================================================
-        ///// Rotina de execução do contador
+        ///// Arquivo de definição geral
+        ///// Autor: Silvano Fonseca Paganoto
+        ///// Data: 15/09/2010
         /////====================================================================================
-        ///void ExecContador(TContador *Contador)
-        ///{
-        ///	switch (Contador-&gt;Tipo)
-        ///	{
-        ///#EXECCONTADOR_TIPO0#
-        ///#EXECCONTADOR_TIPO1#
-        ///	default:
-        ///		break;
-        ///	}
-        ///	if (Contador-&gt;EN == 0)
-        ///		Contador-&gt;Pulso = 1;
-        ///}
-        ///.
+        ///
+        ///
+        ///#ifndef DEFINITIONS_H
+        ///#define DEFINITIONS_H
+        ///
+        ///#define RECARGA_CCR0 10000
+        /////====================================================================================
+        ///// Includes
+        /////================================================================= [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExecContador_funcoesC {
+        internal static string definitionsH {
             get {
-                return ResourceManager.GetString("ExecContador_funcoesC", resourceCulture);
+                return ResourceManager.GetString("definitionsH", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to void ExecContador(TContador *Contador);.
+        ///   Looks up a localized string similar to 	case 1: // Contador Decrescente
+        ///		if (Contador-&gt;Reset == 1)
+        ///		{
+        ///			Contador-&gt;Acumulado = Contador-&gt;Preset;
+        ///		}
+        ///		if (Contador-&gt;EN == 1 &amp;&amp; Contador-&gt;Pulso == 1)
+        ///		{
+        ///			Contador-&gt;Pulso = 0;
+        ///			if (Contador-&gt;Acumulado &gt; 0)
+        ///			{
+        ///				Contador-&gt;Acumulado--;
+        ///				if (Contador-&gt;Acumulado == 0)
+        ///					Contador-&gt;DN = 1;
+        ///
+        ///				else
+        ///					Contador-&gt;DN = 0;
+        ///			}
+        ///		}
+        ///		break;
+        ///.
         /// </summary>
-        internal static string ExecContador_funcoesH {
+        internal static string execcounter_ctd_type1_functionsC {
             get {
-                return ResourceManager.GetString("ExecContador_funcoesH", resourceCulture);
+                return ResourceManager.GetString("execcounter_ctd_type1_functionsC", resourceCulture);
             }
         }
         
@@ -156,37 +152,66 @@ namespace LadderApp.Resources {
         ///		break;
         ///.
         /// </summary>
-        internal static string ExecContador_Tipo0_funcoesC {
+        internal static string execcounter_ctu_type0_functionsC {
             get {
-                return ResourceManager.GetString("ExecContador_Tipo0_funcoesC", resourceCulture);
+                return ResourceManager.GetString("execcounter_ctu_type0_functionsC", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 	case 1: // Contador Decrescente
-        ///		if (Contador-&gt;Reset == 1)
-        ///		{
-        ///			Contador-&gt;Acumulado = Contador-&gt;Preset;
-        ///		}
-        ///		if (Contador-&gt;EN == 1 &amp;&amp; Contador-&gt;Pulso == 1)
-        ///		{
-        ///			Contador-&gt;Pulso = 0;
-        ///			if (Contador-&gt;Acumulado &gt; 0)
-        ///			{
-        ///				Contador-&gt;Acumulado--;
-        ///				if (Contador-&gt;Acumulado == 0)
-        ///					Contador-&gt;DN = 1;
-        ///
-        ///				else
-        ///					Contador-&gt;DN = 0;
-        ///			}
-        ///		}
+        ///   Looks up a localized string similar to //====================================================================================
+        ///// Rotina de execução do contador
+        /////====================================================================================
+        ///void ExecContador(TContador *Contador)
+        ///{
+        ///	switch (Contador-&gt;Tipo)
+        ///	{
+        ///#EXEC_COUNTER_TYPE_0_FUNCTION_C#
+        ///#EXEC_COUNTER_TYPE_1_FUNCTION_C#
+        ///	default:
         ///		break;
+        ///	}
+        ///	if (Contador-&gt;EN == 0)
+        ///		Contador-&gt;Pulso = 1;
+        ///}
         ///.
         /// </summary>
-        internal static string ExecContador_Tipo1_funcoesC {
+        internal static string execcounter_functionsC {
             get {
-                return ResourceManager.GetString("ExecContador_Tipo1_funcoesC", resourceCulture);
+                return ResourceManager.GetString("execcounter_functionsC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to void ExecContador(TContador *Contador);.
+        /// </summary>
+        internal static string execcounter_functionsH {
+            get {
+                return ResourceManager.GetString("execcounter_functionsH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //====================================================================================
+        ///// Rotina de execução do temporizador
+        /////====================================================================================
+        ///void ExecTemporizadores(void)
+        ///{
+        ///#TIMERS_LADDERPROGRAM_C#
+        ///}.
+        /// </summary>
+        internal static string exectimer_functions_ladderprogramC {
+            get {
+                return ResourceManager.GetString("exectimer_functions_ladderprogramC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to void ExecTemporizadores(void);.
+        /// </summary>
+        internal static string exectimer_functions_ladderprogramH {
+            get {
+                return ResourceManager.GetString("exectimer_functions_ladderprogramH", resourceCulture);
             }
         }
         
@@ -200,13 +225,13 @@ namespace LadderApp.Resources {
         ///	switch (Temporizador-&gt;Tipo)
         ///	{
         /////-----------------------------------------------------------------------
-        ///#EXECTEMPORIZADOR_TIPO0#
+        ///#EXEC_TIMER_TYPE_0_FUNCTION_C#
         /////-----------------------------------------------------------------------
-        ///#EXEC [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExecTemporizador_funcoesC {
+        internal static string exectimer_functionsC {
             get {
-                return ResourceManager.GetString("ExecTemporizador_funcoesC", resourceCulture);
+                return ResourceManager.GetString("exectimer_functionsC", resourceCulture);
             }
         }
         
@@ -214,36 +239,9 @@ namespace LadderApp.Resources {
         ///   Looks up a localized string similar to void ExecTemporizador(TTemporizador *Temporizador);
         ///.
         /// </summary>
-        internal static string ExecTemporizador_funcoesH {
+        internal static string exectimer_functionsH {
             get {
-                return ResourceManager.GetString("ExecTemporizador_funcoesH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 	case 0:// TON ====================================================================
-        ///
-        ///		if ((Temporizador-&gt;EN) &amp;&amp; (!Temporizador-&gt;Reset))
-        ///		{
-        ///			//-------------------------------------------------------
-        ///			if (Sistema.Evento10ms == 1)
-        ///			{
-        ///				(Temporizador-&gt;Parcial)++;
-        ///				switch (Temporizador-&gt;Base)
-        ///				{
-        ///				case 0:
-        ///					EventoPresente = 1;
-        ///					break;
-        ///				case 1:
-        ///					if ((Temporizador-&gt;Parcial) &gt;= 10)
-        ///						EventoPresente = 1;
-        ///					break;
-        ///				case 2:
-        ///					if ((Temporizador-&gt;Parcial) &gt;= [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ExecTemporizador_Tipo0_funcoes {
-            get {
-                return ResourceManager.GetString("ExecTemporizador_Tipo0_funcoes", resourceCulture);
+                return ResourceManager.GetString("exectimer_functionsH", resourceCulture);
             }
         }
         
@@ -275,33 +273,36 @@ namespace LadderApp.Resources {
         ///				case 3:
         ///					if  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExecTemporizador_Tipo1_funcoes {
+        internal static string exectimer_tof_type1_functions {
             get {
-                return ResourceManager.GetString("ExecTemporizador_Tipo1_funcoes", resourceCulture);
+                return ResourceManager.GetString("exectimer_tof_type1_functions", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
-        ///// Rotina de execução do temporizador
-        /////====================================================================================
-        ///void ExecTemporizadores(void)
-        ///{
-        ///#TEMPORIZADORES#
-        ///}.
+        ///   Looks up a localized string similar to 	case 0:// TON ====================================================================
+        ///
+        ///		if ((Temporizador-&gt;EN) &amp;&amp; (!Temporizador-&gt;Reset))
+        ///		{
+        ///			//-------------------------------------------------------
+        ///			if (Sistema.Evento10ms == 1)
+        ///			{
+        ///				(Temporizador-&gt;Parcial)++;
+        ///				switch (Temporizador-&gt;Base)
+        ///				{
+        ///				case 0:
+        ///					EventoPresente = 1;
+        ///					break;
+        ///				case 1:
+        ///					if ((Temporizador-&gt;Parcial) &gt;= 10)
+        ///						EventoPresente = 1;
+        ///					break;
+        ///				case 2:
+        ///					if ((Temporizador-&gt;Parcial) &gt;= [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExecTemporizadores_usuarioC {
+        internal static string exectimer_ton_type0_functions {
             get {
-                return ResourceManager.GetString("ExecTemporizadores_usuarioC", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to void ExecTemporizadores(void);.
-        /// </summary>
-        internal static string ExecTemporizadores_usuarioH {
-            get {
-                return ResourceManager.GetString("ExecTemporizadores_usuarioH", resourceCulture);
+                return ResourceManager.GetString("exectimer_ton_type0_functions", resourceCulture);
             }
         }
         
@@ -315,15 +316,15 @@ namespace LadderApp.Resources {
         /////====================================================================================
         ///// Includes
         /////====================================================================================
-        ///#include &quot;funcoes.h&quot;
+        ///#include &quot;functions.h&quot;
         ///
-        ///#EXECTEMPORIZADOR_C#
+        ///#EXEC_TIMER_FUNCTION_C#
         ///
-        ///#EXE [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string funcoesC {
+        internal static string functionsC {
             get {
-                return ResourceManager.GetString("funcoesC", resourceCulture);
+                return ResourceManager.GetString("functionsC", resourceCulture);
             }
         }
         
@@ -333,56 +334,16 @@ namespace LadderApp.Resources {
         ///// Autor: Silvano Fonseca Paganoto
         ///// Data: 15/09/2010
         /////====================================================================================
-        ///#ifndef FUNCOES_H_
-        ///#define FUNCOES_H_
+        ///#ifndef FUNCTIONS_H
+        ///#define FUNCTIONS_H
         /////====================================================================================
         ///// Includes
         /////====================================================================================
-        ///#i [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string funcoesH {
+        internal static string functionsH {
             get {
-                return ResourceManager.GetString("funcoesH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
-        ///// Arquivo de interrupções do sistema
-        ///// Autor: Silvano Fonseca Paganoto
-        ///// Data: 15/09/2010
-        /////====================================================================================/*
-        ///
-        /////====================================================================================
-        ///// Includes
-        /////====================================================================================
-        ///#include &quot;usuario.h&quot;
-        ///
-        ///unsigned char AccMs = 0 [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string interrupcaoC {
-            get {
-                return ResourceManager.GetString("interrupcaoC", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to //====================================================================================
-        ///// Arquivo principal
-        ///// Autor: Silvano Fonseca Paganoto
-        ///// Data: 15/09/2010
-        /////====================================================================================
-        ///
-        /////====================================================================================
-        ///// Includes
-        /////====================================================================================
-        ///#include &quot;definicao.h&quot;
-        ///#include &quot;setuphardware.h&quot;
-        ///#include &quot;usua [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string mainC {
-            get {
-                return ResourceManager.GetString("mainC", resourceCulture);
+                return ResourceManager.GetString("functionsH", resourceCulture);
             }
         }
         
@@ -396,13 +357,13 @@ namespace LadderApp.Resources {
         /////====================================================================================
         ///// Includes
         /////====================================================================================
-        ///#include &quot;setuphardware.h&quot;
+        ///#include &quot;hardwaresetup.h&quot;
         ///
         /////================ [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string setupHardwareC {
+        internal static string hardwaresetupC {
             get {
-                return ResourceManager.GetString("setupHardwareC", resourceCulture);
+                return ResourceManager.GetString("hardwaresetupC", resourceCulture);
             }
         }
         
@@ -420,9 +381,29 @@ namespace LadderApp.Resources {
         ///// Includes
         /////===================================================== [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string setupHardwareH {
+        internal static string hardwaresetupH {
             get {
-                return ResourceManager.GetString("setupHardwareH", resourceCulture);
+                return ResourceManager.GetString("hardwaresetupH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //====================================================================================
+        ///// Arquivo de interrupções do sistema
+        ///// Autor: Silvano Fonseca Paganoto
+        ///// Data: 15/09/2010
+        /////====================================================================================/*
+        ///
+        /////====================================================================================
+        ///// Includes
+        /////====================================================================================
+        ///#include &quot;ladderprogram.h&quot;
+        ///
+        ///unsigned char Acc [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string interruptionC {
+            get {
+                return ResourceManager.GetString("interruptionC", resourceCulture);
             }
         }
         
@@ -436,13 +417,13 @@ namespace LadderApp.Resources {
         /////====================================================================================
         ///// Includes
         /////====================================================================================
-        ///#include &quot;usuario.h&quot;
+        ///#include &quot;ladderprogram.h&quot;
         ///
-        /////============================= [rest of string was truncated]&quot;;.
+        /////======================= [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string usuarioC {
+        internal static string ladderprogramC {
             get {
-                return ResourceManager.GetString("usuarioC", resourceCulture);
+                return ResourceManager.GetString("ladderprogramC", resourceCulture);
             }
         }
         
@@ -453,16 +434,36 @@ namespace LadderApp.Resources {
         ///// Data: 15/09/2010
         /////====================================================================================
         ///
-        ///#ifndef USUARIO_H_
-        ///#define USUARIO_H_
+        ///#ifndef LADDERPROGRAM_H
+        ///#define LADDERPROGRAM_H
         ///
         /////====================================================================================
         ///// Includes
-        /////======================================================================== [rest of string was truncated]&quot;;.
+        /////============================================================== [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string usuarioH {
+        internal static string ladderprogramH {
             get {
-                return ResourceManager.GetString("usuarioH", resourceCulture);
+                return ResourceManager.GetString("ladderprogramH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //====================================================================================
+        ///// Arquivo principal
+        ///// Autor: Silvano Fonseca Paganoto
+        ///// Data: 15/09/2010
+        /////====================================================================================
+        ///
+        /////====================================================================================
+        ///// Includes
+        /////====================================================================================
+        ///#include &quot;definitions.h&quot;
+        ///#include &quot;hardwaresetup.h&quot;
+        ///#include &quot;la [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mainC {
+            get {
+                return ResourceManager.GetString("mainC", resourceCulture);
             }
         }
     }

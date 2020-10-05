@@ -13,7 +13,7 @@ namespace LadderApp
     public delegate void VisualInstructionSelectedEventHandler(VisualInstructionUserControl sender, VisualLine lCL);
     public delegate void AskToChangeAddressEventHandler(VisualInstructionUserControl sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object[] faixa);
 
-    public partial class VisualInstructionUserControl : BasicUserControl
+    public partial class VisualInstructionUserControl : UserControl
 
     {
         public event ChangeLineEventHandler ChangeLineEvent;
@@ -21,13 +21,15 @@ namespace LadderApp
         public event VisualInstructionSelectedEventHandler VisualInstructionSelectedEvent;
         public event AskToChangeAddressEventHandler AskToChangeAddressEvent;
 
+        private Graphics graphics;
+
         private List<Panel> insertionIndicatorList = new List<Panel>();
 
         private Color penColor = Color.Blue;
+
         private Pen linePen = new Pen(Color.Blue, 1);
         private Pen textPen = new Pen(Color.Blue, 1);
         private Pen selectionPen = new Pen(Color.Black, 3);
-
         private Pen pen = new Pen(Color.Blue, 1);
 
         private SolidBrush energizedBrush = new SolidBrush(Color.FromArgb(0, 255, 0));
@@ -37,78 +39,92 @@ namespace LadderApp
         private SolidBrush symbolTextBrush = new SolidBrush(Color.Blue);
         private SolidBrush commentTextBrush = new SolidBrush(Color.Black);
 
-        Font textFont = new Font(FontFamily.GenericSansSerif.Name, 10, FontStyle.Regular, GraphicsUnit.Pixel);
+        private Font textFont = new Font(FontFamily.GenericSansSerif.Name, 10, FontStyle.Regular, GraphicsUnit.Pixel);
+
+        private List<VisualInstructionUserControl> parallelBranchList;
+
+        public VisualLine VisualLine { get; set; }
+
+        public Instruction Instruction { get; private set; }
+        public bool Selected { get; set; } = false;
+        public Size XYSize { get; set; }
+        public Point XYPosition { get; set; }
+        private bool lastParallelBranchEnd = false;
+        public bool LastParallelBranchEnd { get => lastParallelBranchEnd; set { if (OpCode == OperationCode.ParallelBranchNext) { lastParallelBranchEnd = value; }  } }
+        public Point XYConnection { get; private set; }
+
+        public OperationCode OpCode
+        {
+            get
+            {
+                if (Instruction != null)
+                    return Instruction.OpCode;
+                else
+                    return OperationCode.None;
+
+            }
+
+            set => Instruction.OpCode = value;
+        }
+
+        public Object GetOperand(int posicao)
+        {
+            return Instruction.GetOperand(posicao);
+        }
+
+        public void SetOperand(int operandIndex, Object value)
+        {
+            Instruction.SetOperand(operandIndex, value);
+        }
+
+        public bool IsAllOperandsOk()
+        {
+            return ((IInstruction)Instruction).IsAllOperandsOk();
+        }
 
         [FlagsAttribute]
-        private enum TipoSelecaoFlag : short
+        private enum SelectionType : short
         {
-            Fundo = 1,
-            Borda = 2
+            Background = 1,
+            Border = 2
         };
 
-        private Graphics graphics;
 
-        private VisualLine visualLine;
-        public VisualLine VisualLine { get => visualLine; set => visualLine = value; }
+        private Rectangle rectSelection;
+        private Rectangle rectInstruction;
+        private Rectangle rectEnergized;
 
+        private int xTotalHorizontal = 0;
+        private int yTotalVertical = 0;
 
-        List<VisualInstructionUserControl> visualInstructions;
+        private int xHorizontalHalf = 0;
+        private int yVerticalHalf = 0;
 
-        private bool ultimoVPI = false;
-        public bool UltimoVPI
-        {
-            get { return ultimoVPI; }
-            set
-            {
-                if (OpCode == OperationCode.ParallelBranchNext)
-                    ultimoVPI = value;
-            }
-        }
+        private int xInstructionHorizotalBegin = 0;
+        private int xInstructionHorizotalEnd = 0;
 
-        private new Point xyConexao;
-        public new Point XYConexao
-        {
-            get { return xyConexao; }
-        }
-
-        private Rectangle rectSelecao;
-        private Rectangle rectSimbolo;
-        private Rectangle rectEnergizado;
-
-        public int yTamSimboloPadrao = 0;
-
-        // Posicionamento
-        int xTotalHorizontal = 0;
-        int yTotalVertical = 0;
-
-        int xMeioHorizontal = 0;
-        int yMeioVertical = 0;
-
-        int xInicioHSimbolo = 0;
-        int xFimHSimbolo = 0;
-
-        int yInicioVSimbolo = 0;
-        int yFimVSimbolo = 0;
+        private int yInstructionVerticalBegin = 0;
+        private int yInstructionVerticalEnd = 0;
 
 
-        int xInicioHSimboloBobina = 0;
-        int xFimHSimboloBobina = 0;
+        private int xCoilInstructionHorizontalBegin = 0;
+        private int xCoilInstructionHorizontalEnd = 0;
 
-        int yTercoVertical = 0;
-        int yQuartoVertical = 0;
-        int yQuintoVertical = 0;
-        int ySextoVertical = 0;
+        private int yThirdVertical = 0;
+        private int yFourthVertical = 0;
+        private int yFifthVertical = 0;
+        private int ySixthVertical = 0;
 
-        int xQuintoHorizontal = 0;
-        int xSextoHorizontal = 0;
-        int xDecimoHorizontal = 0;
+        private int xFifthHorizontal = 0;
+        private int xSixthHorizontal = 0;
+        private int xTenthHorizontal = 0;
 
-        Point xy1;
-        Point xy2;
-        Point xy3;
+        private Point xy1;
+        private Point xy2;
+        private Point xy3;
 
-        private VisualInstructionUserControl aponta2PI = null;
-        public VisualInstructionUserControl Aponta2PI
+        private VisualInstructionUserControl pointToParallelBegin = null;
+        public VisualInstructionUserControl PointToParallelBegin
         {
             get
             {
@@ -117,19 +133,19 @@ namespace LadderApp
                     case OperationCode.ParallelBranchBegin:
                     case OperationCode.ParallelBranchNext:
                     case OperationCode.ParallelBranchEnd:
-                        return aponta2PI;
+                        return pointToParallelBegin;
                     default:
                         return null;
                 }
             }
             set
             {
-                aponta2PI = value;
+                pointToParallelBegin = value;
             }
         }
 
-        private VisualInstructionUserControl aponta2PF = null;
-        public VisualInstructionUserControl Aponta2PF
+        private VisualInstructionUserControl pointToParallelEnd = null;
+        public VisualInstructionUserControl PointToParallelEnd
         {
             get
             {
@@ -138,24 +154,20 @@ namespace LadderApp
                     case OperationCode.ParallelBranchBegin:
                     case OperationCode.ParallelBranchNext:
                     case OperationCode.ParallelBranchEnd:
-                        return aponta2PF;
+                        return pointToParallelEnd;
                     default:
                         return null;
                 }
             }
             set
             {
-                aponta2PF = value;
+                pointToParallelEnd = value;
             }
         }
 
-        /// <summary>
-        /// aponta para o proximo PP ponto do paralelo
-        /// se e PI o proximo e o VPI se e VPI o proximo e
-        /// VPI ou PF
-        /// </summary>
-        private VisualInstructionUserControl aponta2proxPP = null;
-        public VisualInstructionUserControl Aponta2proxPP
+        private VisualInstructionUserControl pointToNextParallelPoint = null;
+
+        public VisualInstructionUserControl PointToNextParallelPoint
         {
             get
             {
@@ -164,122 +176,105 @@ namespace LadderApp
                     case OperationCode.ParallelBranchBegin:
                     case OperationCode.ParallelBranchNext:
                     case OperationCode.ParallelBranchEnd:
-                        return aponta2proxPP;
+                        return pointToNextParallelPoint;
                     default:
                         return null;
                 }
             }
             set
             {
-                aponta2proxPP = value;
+                pointToNextParallelPoint = value;
             }
         }
 
         public VisualInstructionUserControl()
         {
             InitializeComponent();
-            instruction = new Instruction();
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            this.BackColor = Color.Transparent;
+            BackColor = Color.Transparent;
+            Instruction = new Instruction();
         }
 
-        public VisualInstructionUserControl(Instruction intruction)
+        public VisualInstructionUserControl(Instruction intruction) : this()
         {
-            InitializeComponent();
-            this.instruction = intruction;
-            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            this.BackColor = Color.Transparent;
+            this.Instruction = intruction;
         }
 
-        public VisualInstructionUserControl(OperationCode _ci)
+        public VisualInstructionUserControl(OperationCode opCode) : this()
         {
-            InitializeComponent();
-            instruction = new Instruction(_ci);
-            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            this.BackColor = Color.Transparent;
+            Instruction = new Instruction(opCode);
         }
 
 
-        ///<sumary>
-        /// <para>AtualizaVariaveisDesenho()</para>
-        /// <para>Atualiza todas as variaveis do objeto relativas a:</para>
-        /// <para> - desenho</para>
-        /// <para> - selecao</para>
-        /// <para> - ponto de conexao (para desenho de fundo)</para>
-        ///</sumary>
-        private void AtualizaVariaveisDesenho()
+        private void UpdateVariables()
         {
-            xTotalHorizontal = this.Size.Width;
-            yTotalVertical = this.Size.Height;
+            xTotalHorizontal = Size.Width;
+            yTotalVertical = Size.Height;
 
-            xMeioHorizontal = xTotalHorizontal / 2;
-            yMeioVertical = yTotalVertical / 2;
+            xHorizontalHalf = xTotalHorizontal / 2;
+            yVerticalHalf = yTotalVertical / 2;
 
-            xQuintoHorizontal = xTotalHorizontal / 5;
-            xSextoHorizontal = xTotalHorizontal / 6;
+            xFifthHorizontal = xTotalHorizontal / 5;
+            xSixthHorizontal = xTotalHorizontal / 6;
 
-            xInicioHSimbolo = xQuintoHorizontal * 2;
-            xFimHSimbolo = 3 * xQuintoHorizontal;
+            xInstructionHorizotalBegin = xFifthHorizontal * 2;
+            xInstructionHorizotalEnd = 3 * xFifthHorizontal;
 
-            yTercoVertical = yTotalVertical / 3;
-            yQuartoVertical = yTotalVertical / 4;
-            yQuintoVertical = yTotalVertical / 5;
-            ySextoVertical = yTotalVertical / 6;
+            yThirdVertical = yTotalVertical / 3;
+            yFourthVertical = yTotalVertical / 4;
+            yFifthVertical = yTotalVertical / 5;
+            ySixthVertical = yTotalVertical / 6;
 
-            yInicioVSimbolo = yTercoVertical;
-            yFimVSimbolo = 2 * yTercoVertical;
+            yInstructionVerticalBegin = yThirdVertical;
+            yInstructionVerticalEnd = 2 * yThirdVertical;
 
-            xInicioHSimboloBobina = xSextoHorizontal * 2;
-            xFimHSimboloBobina = 4 * xSextoHorizontal;
+            xCoilInstructionHorizontalBegin = xSixthHorizontal * 2;
+            xCoilInstructionHorizontalEnd = 4 * xSixthHorizontal;
 
-            xDecimoHorizontal = xTotalHorizontal / 10;
+            xTenthHorizontal = xTotalHorizontal / 10;
 
-            // Geral selecao
-            rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
+            rectSelection = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
 
             switch (OpCode)
             {
                 case OperationCode.None:
                     break;
                 case OperationCode.LineBegin:
-                    xyConexao = new Point(xDecimoHorizontal * 7, (VisualLine.YSize / 2));
-                    //Selecao
-                    rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
+                    XYConnection = new Point(xTenthHorizontal * 7, (VisualLine.YSize / 2));
+                    rectSelection = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
                 case OperationCode.LineEnd:
-                    xyConexao = new Point(0, (VisualLine.YSize / 2));
+                    XYConnection = new Point(0, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.NormallyOpenContact:
                     //Selecao
-                    rectSelecao = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
+                    rectSelection = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
                 case OperationCode.NormallyClosedContact:
                     break;
                 case OperationCode.OutputCoil:
                     break;
                 case OperationCode.Timer:
-                    rectSimbolo = new Rectangle(2, 2, xTotalHorizontal - 4, yTotalVertical - 4);
+                    rectInstruction = new Rectangle(2, 2, xTotalHorizontal - 4, yTotalVertical - 4);
                     break;
                 case OperationCode.Counter:
-                    rectSimbolo = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
+                    rectInstruction = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
                 case OperationCode.ParallelBranchBegin:
-                    // selecao em torno do ponto de conexao
-                    rectSelecao = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, (VisualLine.YSize / 2) - 3);
+                    rectSelection = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, (VisualLine.YSize / 2) - 3);
 
-                    xyConexao = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
+                    XYConnection = new Point(xHorizontalHalf, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.ParallelBranchEnd:
-                    rectSelecao = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, yTotalVertical - (VisualLine.YSize / 2) - 3);
-                    xyConexao = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
+                    rectSelection = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, yTotalVertical - (VisualLine.YSize / 2) - 3);
+                    XYConnection = new Point(xHorizontalHalf, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.ParallelBranchNext:
-                    // selecao em torno do ponto de conexao
-                    rectSelecao = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, (VisualLine.YSize / 2) - 3);
-                    if (ultimoVPI)
-                        xyConexao = new Point(xMeioHorizontal, yMeioVertical);
+                    rectSelection = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, (VisualLine.YSize / 2) - 3);
+                    if (LastParallelBranchEnd)
+                        XYConnection = new Point(xHorizontalHalf, yVerticalHalf);
                     else
-                        xyConexao = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
+                        XYConnection = new Point(xHorizontalHalf, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.BackgroundLine:
                     break;
@@ -288,26 +283,18 @@ namespace LadderApp
             }
         }
 
-        public void SalvaVPI2PF(List<VisualInstructionUserControl> _lstVPI)
+        public void AssociateParallelBranchList(List<VisualInstructionUserControl> parallelBranchList)
         {
             if (OpCode == OperationCode.ParallelBranchEnd)
             {
-                if (visualInstructions == null)
-                    visualInstructions = new List<VisualInstructionUserControl>();
-                else
-                    visualInstructions.Clear();
+                this.parallelBranchList = parallelBranchList;
 
-
-                foreach (VisualInstructionUserControl _simbAux in _lstVPI)
-                {
-                    visualInstructions.Add(_simbAux);
-                }
             }
         }
 
-        private void DesenhaContatoNA()
+        private void DrawNormallyOpenContact()
         {
-            if (instruction.IsAllOperandsOk())
+            if (Instruction.IsAllOperandsOk())
             {
                 if (this.OpCode == OperationCode.NormallyOpenContact &&
                 ((Address)GetOperand(0)).Value == true)
@@ -315,52 +302,50 @@ namespace LadderApp
             }
 
             // -| Linha horizontal anterior ao simbolo
-            xy1 = new Point(0, yMeioVertical);
-            xy2 = new Point(xInicioHSimbolo, yMeioVertical);
+            xy1 = new Point(0, yVerticalHalf);
+            xy2 = new Point(xInstructionHorizotalBegin, yVerticalHalf);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // |- Linha horizontal posterior ao simbolo
-            xy1 = new Point(xFimHSimbolo, yMeioVertical);
-            xy2 = new Point(this.Width, yMeioVertical);
+            xy1 = new Point(xInstructionHorizotalEnd, yVerticalHalf);
+            xy2 = new Point(this.Width, yVerticalHalf);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            ///////////////////////////////
             // -| Primeiro barra do simbolo
-            xy1 = new Point(xInicioHSimbolo, yInicioVSimbolo);
-            xy2 = new Point(xInicioHSimbolo, yFimVSimbolo);
+            xy1 = new Point(xInstructionHorizotalBegin, yInstructionVerticalBegin);
+            xy2 = new Point(xInstructionHorizotalBegin, yInstructionVerticalEnd);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // para compor a primeira barra estilo colchete (barra horizontal superior)
-            xy1 = new Point(xInicioHSimbolo - xDecimoHorizontal, yInicioVSimbolo);
-            xy2 = new Point(xInicioHSimbolo, yInicioVSimbolo);
+            xy1 = new Point(xInstructionHorizotalBegin - xTenthHorizontal, yInstructionVerticalBegin);
+            xy2 = new Point(xInstructionHorizotalBegin, yInstructionVerticalBegin);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // para compor a primeira barra estilo colchete (barra horizontal inferior)
-            xy1 = new Point(xInicioHSimbolo - xDecimoHorizontal, yFimVSimbolo);
-            xy2 = new Point(xInicioHSimbolo, yFimVSimbolo);
+            xy1 = new Point(xInstructionHorizotalBegin - xTenthHorizontal, yInstructionVerticalEnd);
+            xy2 = new Point(xInstructionHorizotalBegin, yInstructionVerticalEnd);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            //////////////////////////////
             // |- Segunda barra do simbolo
-            xy1 = new Point(xFimHSimbolo, yInicioVSimbolo);
-            xy2 = new Point(xFimHSimbolo, yFimVSimbolo);
+            xy1 = new Point(xInstructionHorizotalEnd, yInstructionVerticalBegin);
+            xy2 = new Point(xInstructionHorizotalEnd, yInstructionVerticalEnd);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // para compor a segunda barra estilo colchete (barra horizontal superior)
-            xy1 = new Point(xFimHSimbolo + xDecimoHorizontal, yInicioVSimbolo);
-            xy2 = new Point(xFimHSimbolo, yInicioVSimbolo);
+            xy1 = new Point(xInstructionHorizotalEnd + xTenthHorizontal, yInstructionVerticalBegin);
+            xy2 = new Point(xInstructionHorizotalEnd, yInstructionVerticalBegin);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // para compor a segunda barra estilo colchete (barra horizontal inferior)
-            xy1 = new Point(xFimHSimbolo + xDecimoHorizontal, yFimVSimbolo);
-            xy2 = new Point(xFimHSimbolo, yFimVSimbolo);
+            xy1 = new Point(xInstructionHorizotalEnd + xTenthHorizontal, yInstructionVerticalEnd);
+            xy2 = new Point(xInstructionHorizotalEnd, yInstructionVerticalEnd);
             graphics.DrawLine(linePen, xy1, xy2);
 
             DrawAddress();
             DrawComment();
         }
 
-        private void DesenhaContatoNF()
+        private void DrawNormallyClosedContact()
         {
             if (IsAllOperandsOk())
             {
@@ -372,12 +357,12 @@ namespace LadderApp
                 DrawEnergized();
 
 
-            DesenhaContatoNA();
+            DrawNormallyOpenContact();
 
 
             // barra do NF
-            xy1 = new Point(xInicioHSimbolo - xDecimoHorizontal, yFimVSimbolo);
-            xy2 = new Point(xFimHSimbolo + xDecimoHorizontal, yInicioVSimbolo);
+            xy1 = new Point(xInstructionHorizotalBegin - xTenthHorizontal, yInstructionVerticalEnd);
+            xy2 = new Point(xInstructionHorizotalEnd + xTenthHorizontal, yInstructionVerticalBegin);
             graphics.DrawLine(linePen, xy1, xy2);
         }
 
@@ -394,28 +379,28 @@ namespace LadderApp
             Point[] pontosCurva = new Point[3];
 
             // Linha horizontal anterior ao simbolo
-            xy1 = new Point(0, yMeioVertical);
-            xy2 = new Point(xInicioHSimboloBobina, yMeioVertical);
+            xy1 = new Point(0, yVerticalHalf);
+            xy2 = new Point(xCoilInstructionHorizontalBegin, yVerticalHalf);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal posterior ao simbolo
-            xy1 = new Point(xFimHSimboloBobina, yMeioVertical);
-            xy2 = new Point(this.Width, yMeioVertical);
+            xy1 = new Point(xCoilInstructionHorizontalEnd, yVerticalHalf);
+            xy2 = new Point(this.Width, yVerticalHalf);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // ( do simbolo
-            xy1 = new Point(xInicioHSimboloBobina + xDecimoHorizontal, yInicioVSimbolo);
-            xy2 = new Point(xInicioHSimboloBobina, yMeioVertical);
-            xy3 = new Point(xInicioHSimboloBobina + xDecimoHorizontal, yFimVSimbolo);
+            xy1 = new Point(xCoilInstructionHorizontalBegin + xTenthHorizontal, yInstructionVerticalBegin);
+            xy2 = new Point(xCoilInstructionHorizontalBegin, yVerticalHalf);
+            xy3 = new Point(xCoilInstructionHorizontalBegin + xTenthHorizontal, yInstructionVerticalEnd);
             pontosCurva[0] = xy1;
             pontosCurva[1] = xy2;
             pontosCurva[2] = xy3;
             graphics.DrawCurve(linePen, pontosCurva, 0.7F);
 
             // ) do simbolo
-            xy1 = new Point(xFimHSimboloBobina - xDecimoHorizontal, yInicioVSimbolo);
-            xy2 = new Point(xFimHSimboloBobina, yMeioVertical);
-            xy3 = new Point(xFimHSimboloBobina - xDecimoHorizontal, yFimVSimbolo);
+            xy1 = new Point(xCoilInstructionHorizontalEnd - xTenthHorizontal, yInstructionVerticalBegin);
+            xy2 = new Point(xCoilInstructionHorizontalEnd, yVerticalHalf);
+            xy3 = new Point(xCoilInstructionHorizontalEnd - xTenthHorizontal, yInstructionVerticalEnd);
             pontosCurva[0] = xy1;
             pontosCurva[1] = xy2;
             pontosCurva[2] = xy3;
@@ -429,7 +414,7 @@ namespace LadderApp
         {
             DrawOutputCoil();
 
-            xy1 = new Point(xMeioHorizontal - (int)(textFont.Size / 2.0F), yMeioVertical - (int)(textFont.Size / 2.0F));
+            xy1 = new Point(xHorizontalHalf - (int)(textFont.Size / 2.0F), yVerticalHalf - (int)(textFont.Size / 2.0F));
             graphics.DrawString(text, textFont, symbolTextBrush, xy1.X, xy1.Y);
         }
 
@@ -437,8 +422,8 @@ namespace LadderApp
         private void DrawParallelBranchBegin()
         {
             // Linha vertical
-            xy1 = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
-            xy2 = new Point(xMeioHorizontal, yTotalVertical);
+            xy1 = new Point(xHorizontalHalf, (VisualLine.YSize / 2));
+            xy2 = new Point(xHorizontalHalf, yTotalVertical);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal
@@ -450,8 +435,8 @@ namespace LadderApp
         private void DrawParallelBranchEnd()
         {
             // Linha vertical
-            xy1 = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
-            xy2 = new Point(xMeioHorizontal, (yTotalVertical - (VisualLine.YSize / 2)));
+            xy1 = new Point(xHorizontalHalf, (VisualLine.YSize / 2));
+            xy2 = new Point(xHorizontalHalf, (yTotalVertical - (VisualLine.YSize / 2)));
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha horizontal 1
@@ -461,18 +446,18 @@ namespace LadderApp
 
             // Linha horizontal 2
             xy1 = new Point(0, (yTotalVertical - (VisualLine.YSize / 2)));
-            xy2 = new Point(xMeioHorizontal, (yTotalVertical - (VisualLine.YSize / 2)));
+            xy2 = new Point(xHorizontalHalf, (yTotalVertical - (VisualLine.YSize / 2)));
             graphics.DrawLine(linePen, xy1, xy2);
 
-            if (visualInstructions != null)
+            if (parallelBranchList != null)
             {
-                foreach (VisualInstructionUserControl visualInstruction in visualInstructions)
+                foreach (VisualInstructionUserControl visualInstruction in parallelBranchList)
                 {
 
                     //?? talvez passar xy3 para _xyConexao
-                    xy3 = visualInstruction.xyConexao;
-                    xy1 = new Point(0, ((visualInstruction.PosicaoXY.Y + xy3.Y) - this.PosicaoXY.Y));
-                    xy2 = new Point(xMeioHorizontal, ((visualInstruction.PosicaoXY.Y + xy3.Y) - this.PosicaoXY.Y));
+                    xy3 = visualInstruction.XYConnection;
+                    xy1 = new Point(0, ((visualInstruction.XYPosition.Y + xy3.Y) - this.XYPosition.Y));
+                    xy2 = new Point(xHorizontalHalf, ((visualInstruction.XYPosition.Y + xy3.Y) - this.XYPosition.Y));
                     graphics.DrawLine(linePen, xy1, xy2);
                 }
             }
@@ -480,28 +465,28 @@ namespace LadderApp
 
         private void DrawParallelBranchNext()
         {
-            if (ultimoVPI)
+            if (LastParallelBranchEnd)
             {
                 // Linha | do L
-                xy1 = new Point(xMeioHorizontal, 0);
-                xy2 = new Point(xMeioHorizontal, yMeioVertical);
+                xy1 = new Point(xHorizontalHalf, 0);
+                xy2 = new Point(xHorizontalHalf, yVerticalHalf);
                 graphics.DrawLine(linePen, xy1, xy2);
 
                 // Linha _ do L
-                xy1 = new Point(xMeioHorizontal, yMeioVertical);
-                xy2 = new Point(xTotalHorizontal, yMeioVertical);
+                xy1 = new Point(xHorizontalHalf, yVerticalHalf);
+                xy2 = new Point(xTotalHorizontal, yVerticalHalf);
                 graphics.DrawLine(linePen, xy1, xy2);
 
             }
             else
             {
                 // Linha | do L
-                xy1 = new Point(xMeioHorizontal, 0);
-                xy2 = new Point(xMeioHorizontal, yTotalVertical);
+                xy1 = new Point(xHorizontalHalf, 0);
+                xy2 = new Point(xHorizontalHalf, yTotalVertical);
                 graphics.DrawLine(linePen, xy1, xy2);
 
                 // Linha horizontal
-                xy1 = new Point(xMeioHorizontal, (VisualLine.YSize / 2));
+                xy1 = new Point(xHorizontalHalf, (VisualLine.YSize / 2));
                 xy2 = new Point(xTotalHorizontal, (VisualLine.YSize / 2));
                 graphics.DrawLine(linePen, xy1, xy2);
             }
@@ -512,22 +497,22 @@ namespace LadderApp
             Font fontTexto = new Font(FontFamily.GenericSansSerif.Name, 12, FontStyle.Regular, GraphicsUnit.Pixel);
 
             // Linha vertical
-            xy1 = new Point(xDecimoHorizontal * 7, 0);
-            xy2 = new Point(xDecimoHorizontal * 7, yTotalVertical);
+            xy1 = new Point(xTenthHorizontal * 7, 0);
+            xy2 = new Point(xTenthHorizontal * 7, yTotalVertical);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha |-
-            xy1 = new Point(xDecimoHorizontal * 7, (VisualLine.YSize / 2));
+            xy1 = new Point(xTenthHorizontal * 7, (VisualLine.YSize / 2));
             xy2 = new Point(xTotalHorizontal, (VisualLine.YSize / 2));
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Posicao numero da linha
-            xy1 = new Point(xMeioHorizontal, yMeioVertical);
+            xy1 = new Point(xHorizontalHalf, yVerticalHalf);
 
             if (IsAllOperandsOk())
             {
                 // Endereco
-                RectangleF _recTxtLinha = new RectangleF(0F, (float)((VisualLine.YSize / 2) - textFont.Height), (float)(xDecimoHorizontal * 7), (float)(textFont.Height));
+                RectangleF _recTxtLinha = new RectangleF(0F, (float)((VisualLine.YSize / 2) - textFont.Height), (float)(xTenthHorizontal * 7), (float)(textFont.Height));
                 StringFormat _stringFormat = new StringFormat();
                 _stringFormat.Alignment = StringAlignment.Center;
                 _stringFormat.LineAlignment = StringAlignment.Center;
@@ -540,13 +525,13 @@ namespace LadderApp
         private void DrawLineEnd()
         {
             // Linha vertical
-            xy1 = new Point(xDecimoHorizontal, 0);
-            xy2 = new Point(xDecimoHorizontal, yTotalVertical);
+            xy1 = new Point(xTenthHorizontal, 0);
+            xy2 = new Point(xTenthHorizontal, yTotalVertical);
             graphics.DrawLine(linePen, xy1, xy2);
 
             // Linha |-
             xy1 = new Point(0, (VisualLine.YSize / 2));
-            xy2 = new Point(xDecimoHorizontal, (VisualLine.YSize / 2));
+            xy2 = new Point(xTenthHorizontal, (VisualLine.YSize / 2));
             graphics.DrawLine(linePen, xy1, xy2);
         }
 
@@ -610,15 +595,13 @@ namespace LadderApp
             };
             RectangleF titleRectangle = new RectangleF(1F, 3F, (float)xTotalHorizontal, (float)(textFont.Height));
             graphics.DrawString(title, textFont, symbolTextBrush, titleRectangle, format);
-            graphics.DrawRectangle(linePen, rectSimbolo);
+            graphics.DrawRectangle(linePen, rectInstruction);
 
-            /// para indicar comentário no quadro de saida
             if (IsAllOperandsOk())
                 if (((Address)GetOperand(0)).Comment.Trim() != "")
                 {
-                    /// será usado para apresenta um tooltip
                     this.Tag = ((Address)GetOperand(0)).Comment;
-                    /// para indicar comentário - desenha uma elipse no canto sup. dir.
+
                     graphics.DrawEllipse(new Pen(Color.Black), (xTotalHorizontal - 8 - 3), 3, 7, 7);
                     graphics.FillEllipse(new SolidBrush(Color.Yellow), (xTotalHorizontal - 8 - 3), 3, 7, 7);
                 }
@@ -635,69 +618,65 @@ namespace LadderApp
 
         private void DrawBackground()
         {
-            // Variaveis auxiliares para posicionamento
-            //  dos controles
-            int _posX = 0; // linhaAtual.posX;  // auxiliar para posX
-            int _posY = 0; // linhaAtual.posY;  // auxiliar para posY
-            int _posYOriginal = VisualLine.YPosition;
+            int xPosition = 0;
+            int yPosition = 0;
+            int originalYPosition = VisualLine.YPosition;
 
 
             VisualParallelBranch visualParallelBranch = null;
             List<VisualParallelBranch> visualParallelBranchList = new List<VisualParallelBranch>();
 
-            VisualInstructionUserControl _simbAntAux = null;
-            VisualInstructionUserControl _simbAnt2DesenhoAux = null;
-
-            _simbAnt2DesenhoAux = VisualLine.LineBegin;
+            VisualInstructionUserControl previousInstruction = null;
+            VisualInstructionUserControl previousInstructionToDraw = VisualLine.LineBegin;
 
             graphics.Clear(Color.White);
             if (VisualLine.visualInstructions.Count > 0)
             {
-                foreach (VisualInstructionUserControl simbAux in VisualLine.visualInstructions)
+                foreach (VisualInstructionUserControl visualInstruction in VisualLine.visualInstructions)
                 {
 
-                    if (simbAux.OpCode == OperationCode.ParallelBranchBegin ||
-                        simbAux.OpCode == OperationCode.ParallelBranchNext ||
-                        simbAux.OpCode == OperationCode.ParallelBranchEnd)
+                    if (visualInstruction.OpCode == OperationCode.ParallelBranchBegin ||
+                        visualInstruction.OpCode == OperationCode.ParallelBranchNext ||
+                        visualInstruction.OpCode == OperationCode.ParallelBranchEnd)
                     {
-                        switch (simbAux.OpCode)
+                        switch (visualInstruction.OpCode)
                         {
                             case OperationCode.ParallelBranchBegin:
                                 visualParallelBranch = new VisualParallelBranch();
-                                visualParallelBranch.par = simbAux;
+                                visualParallelBranch.parallelBranchBegin = visualInstruction;
 
                                 visualParallelBranchList.Add(visualParallelBranch);
                                 break;
                             case OperationCode.ParallelBranchEnd:
 
-                                simbAux.Refresh();
+                                visualInstruction.Refresh();
 
-                                visualParallelBranch.lstVPI.Insert(0, visualParallelBranch.par);
+                                visualParallelBranch.parallelBranchList.Insert(0, visualParallelBranch.parallelBranchBegin);
 
-                                foreach (VisualInstructionUserControl _simb2PF in visualParallelBranch.lstVPI)
+                                foreach (VisualInstructionUserControl _simb2PF in visualParallelBranch.parallelBranchList)
                                 {
-                                    _posX = _simb2PF.PosicaoXY.X + _simb2PF.XYConexao.X;
-                                    _posY = _simb2PF.PosicaoXY.Y + _simb2PF.XYConexao.Y;
-                                    _posY -= _posYOriginal;
-                                    xy1 = new Point(_posX, _posY);
+                                    xPosition = _simb2PF.XYPosition.X + _simb2PF.XYConnection.X;
+                                    yPosition = _simb2PF.XYPosition.Y + _simb2PF.XYConnection.Y;
+                                    yPosition -= originalYPosition;
+                                    xy1 = new Point(xPosition, yPosition);
 
-                                    _posX = simbAux.PosicaoXY.X + simbAux.XYConexao.X;
-                                    _posY = _simb2PF.PosicaoXY.Y + _simb2PF.XYConexao.Y;
-                                    _posY -= _posYOriginal;
-                                    xy2 = new Point(_posX, _posY);
+                                    xPosition = visualInstruction.XYPosition.X + visualInstruction.XYConnection.X;
+                                    yPosition = _simb2PF.XYPosition.Y + _simb2PF.XYConnection.Y;
+                                    yPosition -= originalYPosition;
+                                    xy2 = new Point(xPosition, yPosition);
 
                                     graphics.DrawLine(pen, xy1, xy2);
                                 }
 
-                                _posX = simbAux.PosicaoXY.X + simbAux.XYConexao.X;
-                                _posY = visualParallelBranch.lstVPI[visualParallelBranch.lstVPI.Count - 1].PosicaoXY.Y + visualParallelBranch.lstVPI[visualParallelBranch.lstVPI.Count - 1].XYConexao.Y;
-                                _posY -= _posYOriginal;
-                                xy1 = new Point(_posX, _posY);
+                                xPosition = visualInstruction.XYPosition.X + visualInstruction.XYConnection.X;
+                                yPosition = visualParallelBranch.parallelBranchList[visualParallelBranch.parallelBranchList.Count - 1].XYPosition.Y + visualParallelBranch.parallelBranchList[visualParallelBranch.parallelBranchList.Count - 1].XYConnection.Y;
+                                yPosition -= originalYPosition;
+                                xy1 = new Point(xPosition, yPosition);
 
-                                _posX = simbAux.PosicaoXY.X + simbAux.XYConexao.X;
-                                _posY = simbAux.PosicaoXY.Y + simbAux.XYConexao.Y;
-                                _posY -= _posYOriginal;
-                                xy2 = new Point(_posX, _posY);
+                                xPosition = visualInstruction.XYPosition.X + visualInstruction.XYConnection.X;
+                                yPosition = visualInstruction.XYPosition.Y + visualInstruction.XYConnection.Y;
+                                yPosition -= originalYPosition;
+                                xy2 = new Point(xPosition, yPosition);
 
                                 graphics.DrawLine(pen, xy1, xy2);
 
@@ -708,52 +687,52 @@ namespace LadderApp
                                     visualParallelBranch = visualParallelBranchList[visualParallelBranchList.Count - 1];
                                 break;
                             case OperationCode.ParallelBranchNext:
-                                visualParallelBranch.lstVPI.Add(simbAux);
+                                visualParallelBranch.parallelBranchList.Add(visualInstruction);
                                 break;
                             default:
                                 break;
                         }
 
-                        if (simbAux.OpCode != OperationCode.ParallelBranchEnd)
+                        if (visualInstruction.OpCode != OperationCode.ParallelBranchEnd)
                         {
-                            _posX = _simbAnt2DesenhoAux.PosicaoXY.X + _simbAnt2DesenhoAux.XYConexao.X;
-                            _posY = _simbAnt2DesenhoAux.PosicaoXY.Y + _simbAnt2DesenhoAux.XYConexao.Y;
-                            _posY -= _posYOriginal;
-                            xy1 = new Point(_posX, _posY);
+                            xPosition = previousInstructionToDraw.XYPosition.X + previousInstructionToDraw.XYConnection.X;
+                            yPosition = previousInstructionToDraw.XYPosition.Y + previousInstructionToDraw.XYConnection.Y;
+                            yPosition -= originalYPosition;
+                            xy1 = new Point(xPosition, yPosition);
 
-                            _posX = simbAux.PosicaoXY.X + simbAux.XYConexao.X;
-                            _posY = simbAux.PosicaoXY.Y + simbAux.XYConexao.Y;
-                            _posY -= _posYOriginal;
-                            xy2 = new Point(_posX, _posY);
+                            xPosition = visualInstruction.XYPosition.X + visualInstruction.XYConnection.X;
+                            yPosition = visualInstruction.XYPosition.Y + visualInstruction.XYConnection.Y;
+                            yPosition -= originalYPosition;
+                            xy2 = new Point(xPosition, yPosition);
 
                             graphics.DrawLine(pen, xy1, xy2);
                         }
 
 
-                        if (visualParallelBranchList.Count > 0 && simbAux.OpCode == OperationCode.ParallelBranchEnd)
-                            if (visualParallelBranch.lstVPI.Count > 0)
-                                _simbAnt2DesenhoAux = visualParallelBranch.lstVPI[visualParallelBranch.lstVPI.Count - 1];
+                        if (visualParallelBranchList.Count > 0 && visualInstruction.OpCode == OperationCode.ParallelBranchEnd)
+                            if (visualParallelBranch.parallelBranchList.Count > 0)
+                                previousInstructionToDraw = visualParallelBranch.parallelBranchList[visualParallelBranch.parallelBranchList.Count - 1];
                             else
-                                _simbAnt2DesenhoAux = visualParallelBranch.par;
+                                previousInstructionToDraw = visualParallelBranch.parallelBranchBegin;
                         else
-                            _simbAnt2DesenhoAux = simbAux;
+                            previousInstructionToDraw = visualInstruction;
 
                     }
-                    _simbAntAux = simbAux;
+                    previousInstruction = visualInstruction;
                 }
             }
 
-            _posX = _simbAnt2DesenhoAux.PosicaoXY.X + _simbAnt2DesenhoAux.XYConexao.X;
-            _posY = _simbAnt2DesenhoAux.PosicaoXY.Y + _simbAnt2DesenhoAux.XYConexao.Y;
-            _posY -= _posYOriginal;
+            xPosition = previousInstructionToDraw.XYPosition.X + previousInstructionToDraw.XYConnection.X;
+            yPosition = previousInstructionToDraw.XYPosition.Y + previousInstructionToDraw.XYConnection.Y;
+            yPosition -= originalYPosition;
 
 
-            xy1 = new Point(_posX, _posY);
+            xy1 = new Point(xPosition, yPosition);
 
-            _posX = VisualLine.LineEnd.PosicaoXY.X + VisualLine.LineEnd.XYConexao.X;
-            _posY = VisualLine.LineEnd.PosicaoXY.Y + VisualLine.LineEnd.XYConexao.Y;
-            _posY -= _posYOriginal;
-            xy2 = new Point(_posX, _posY);
+            xPosition = VisualLine.LineEnd.XYPosition.X + VisualLine.LineEnd.XYConnection.X;
+            yPosition = VisualLine.LineEnd.XYPosition.Y + VisualLine.LineEnd.XYConnection.Y;
+            yPosition -= originalYPosition;
+            xy2 = new Point(xPosition, yPosition);
 
             graphics.DrawLine(pen, xy1, xy2);
         }
@@ -776,8 +755,8 @@ namespace LadderApp
             String secondLineComment = "";
 
             Size neededSize = TextRenderer.MeasureText(comment, textFont);
-            RectangleF commentRectangle = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(yFimVSimbolo + 2)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)neededSize.Height));
-            if (neededSize.Width > ((xTotalHorizontal - (xDecimoHorizontal / 2) - 3)) + 1)
+            RectangleF commentRectangle = new RectangleF(new PointF((float)(xTenthHorizontal / 2), (float)(yInstructionVerticalEnd + 2)), new SizeF((float)(xTotalHorizontal - (xTenthHorizontal / 2) - 3), (float)neededSize.Height));
+            if (neededSize.Width > ((xTotalHorizontal - (xTenthHorizontal / 2) - 3)) + 1)
             {
                 commentLinesNeeded = 2;
                 for (int i = 0; i < 20; i++)
@@ -785,10 +764,10 @@ namespace LadderApp
                     secondLineComment = comment.Substring(comment.Length - 1, 1) + secondLineComment;
                     comment = comment.Remove(comment.Length - 1, 1);
                     neededSize = TextRenderer.MeasureText(comment, textFont);
-                    if (neededSize.Width < (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
+                    if (neededSize.Width < (xTotalHorizontal - (xTenthHorizontal / 2) - 3))
                     {
                         neededSize = TextRenderer.MeasureText(secondLineComment, textFont);
-                        if (neededSize.Width > (xTotalHorizontal - (xDecimoHorizontal / 2) - 3))
+                        if (neededSize.Width > (xTotalHorizontal - (xTenthHorizontal / 2) - 3))
                         {
                             secondLineComment = secondLineComment.Substring(0, comment.Length - 3) + " ...";
                         }
@@ -817,23 +796,22 @@ namespace LadderApp
         private void DrawAddress()
         {
             String addressName = "";
-            RectangleF _recTxtEnd;
+            RectangleF addressTextRectangle;
 
             switch (this.OpCode)
             {
                 case OperationCode.Timer:
                 case OperationCode.Counter:
-                    _recTxtEnd = new RectangleF((float)(xMeioHorizontal / 2), (float)this.yQuintoVertical, (float)xMeioHorizontal, (float)textFont.GetHeight());
+                    addressTextRectangle = new RectangleF((float)(xHorizontalHalf / 2), (float)this.yFifthVertical, (float)xHorizontalHalf, (float)textFont.GetHeight());
                     break;
                 default:
-                    _recTxtEnd = new RectangleF(new PointF((float)(xDecimoHorizontal / 2), (float)(3)), new SizeF((float)(xTotalHorizontal - (xDecimoHorizontal / 2) - 3), (float)textFont.GetHeight()));
+                    addressTextRectangle = new RectangleF(new PointF((float)(xTenthHorizontal / 2), (float)(3)), new SizeF((float)(xTotalHorizontal - (xTenthHorizontal / 2) - 3), (float)textFont.GetHeight()));
                     break;
             }
 
-            // Endereco
-            StringFormat _stringFormat = new StringFormat();
-            _stringFormat.Alignment = StringAlignment.Center;
-            _stringFormat.LineAlignment = StringAlignment.Center;
+            StringFormat format = new StringFormat();
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
 
 
             if (GetOperand(0) != null)
@@ -844,55 +822,54 @@ namespace LadderApp
                 addressName = "?";
 
 
-            graphics.DrawString(addressName, textFont, symbolTextBrush, _recTxtEnd, _stringFormat);
+            graphics.DrawString(addressName, textFont, symbolTextBrush, addressTextRectangle, format);
 
         }
 
         private void DrawPreset()
         {
-            String _txtPreset = "";
-            Int32 _intPreset = -1;
-            RectangleF _recTxtPreset;
+            String presetText = "";
+            RectangleF presetTextRectangle;
 
+            Int32 preset = -1;
             switch (this.OpCode)
             {
                 case OperationCode.Counter:
                     if (IsAllOperandsOk())
-                        _intPreset = (Int32)((Address)GetOperand(0)).Counter.Preset;
-                    _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
+                        preset = (Int32)((Address)GetOperand(0)).Counter.Preset;
+                    presetTextRectangle = new RectangleF((float)(0), (float)(2 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
-                        _intPreset = (Int32)((Address)GetOperand(0)).Timer.Preset;
-                    _recTxtPreset = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
+                        preset = (Int32)((Address)GetOperand(0)).Timer.Preset;
+                    presetTextRectangle = new RectangleF((float)(0), (float)(3 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
-                    _recTxtPreset = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
+                    presetTextRectangle = new RectangleF((float)(0), (float)(2 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
             }
 
-            // Endereco
-            StringFormat _stringFormat = new StringFormat();
-            _stringFormat.Alignment = StringAlignment.Center;
-            _stringFormat.LineAlignment = StringAlignment.Center;
+            StringFormat format = new StringFormat();
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
 
 
-            if (_intPreset != -1)
+            if (preset != -1)
             {
-                _txtPreset = "PR: " + _intPreset.ToString();
+                presetText = "PR: " + preset.ToString();
             }
             else
-                _txtPreset = "PR: ?";
+                presetText = "PR: ?";
 
-            graphics.DrawString(_txtPreset, textFont, symbolTextBrush, _recTxtPreset, _stringFormat);
+            graphics.DrawString(presetText, textFont, symbolTextBrush, presetTextRectangle, format);
 
         }
 
         private void DrawTimeBase()
         {
-            String _txtBaseTempo = "";
-            Int32 _intBaseTempo = -1;
-            RectangleF _recTxtBaseTempo;
+            String timeBaseText = "";
+            Int32 timeBase = -1;
+            RectangleF timeBaseTextRectangle;
 
             switch (this.OpCode)
             {
@@ -900,36 +877,35 @@ namespace LadderApp
                     return;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
-                        _intBaseTempo = (Int32)((Address)GetOperand(0)).Timer.TimeBase;
-                    _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
+                        timeBase = (Int32)((Address)GetOperand(0)).Timer.TimeBase;
+                    timeBaseTextRectangle = new RectangleF((float)(0), (float)(2 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
-                    _recTxtBaseTempo = new RectangleF((float)(0), (float)(2 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
+                    timeBaseTextRectangle = new RectangleF((float)(0), (float)(2 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
             }
 
-            // Endereco
-            StringFormat _stringFormat = new StringFormat();
-            _stringFormat.Alignment = StringAlignment.Center;
-            _stringFormat.LineAlignment = StringAlignment.Center;
+            StringFormat format = new StringFormat();
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
 
 
-            if (_intBaseTempo != -1)
+            if (timeBase != -1)
             {
-                _txtBaseTempo = "BT: ";
-                switch (_intBaseTempo)
+                timeBaseText = "BT: ";
+                switch (timeBase)
                 {
                     case 0:
-                        _txtBaseTempo += "10 ms";
+                        timeBaseText += "10 ms";
                         break;
                     case 1:
-                        _txtBaseTempo += "100 ms";
+                        timeBaseText += "100 ms";
                         break;
                     case 2:
-                        _txtBaseTempo += "1 s";
+                        timeBaseText += "1 s";
                         break;
                     case 3:
-                        _txtBaseTempo += "1 m";
+                        timeBaseText += "1 m";
                         break;
                     default:
                         break;
@@ -937,69 +913,63 @@ namespace LadderApp
 
             }
             else
-                _txtBaseTempo = "BT: ?";
+                timeBaseText = "BT: ?";
 
-            graphics.DrawString(_txtBaseTempo, textFont, symbolTextBrush, _recTxtBaseTempo, _stringFormat);
+            graphics.DrawString(timeBaseText, textFont, symbolTextBrush, timeBaseTextRectangle, format);
         }
 
-        /// <summary>
-        /// Desenha o valor de acumulado para os quadros de saida
-        ///<remarks>incluido modificação para uso da classe SimulaContador</remarks>
-        /// </summary>
         private void DrawAccumulated()
         {
-            String _txtAcum = "AC: ?";
-            Int32 _intAcum = -1;
-            RectangleF _recTxtAcum;
+            String accumulatedText = "AC: ?";
+            Int32 accumulated = -1;
+            RectangleF accumulatedTextRectangle;
 
             switch (this.OpCode)
             {
                 case OperationCode.Counter:
                     if (IsAllOperandsOk())
-                        _intAcum = (Int32)((Address)GetOperand(0)).Counter.Accumulated;
-                    _recTxtAcum = new RectangleF((float)(0), (float)(3 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
+                        accumulated = (Int32)((Address)GetOperand(0)).Counter.Accumulated;
+                    accumulatedTextRectangle = new RectangleF((float)(0), (float)(3 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
-                        _intAcum = (Int32)((Address)GetOperand(0)).Timer.Accumulated;
-                    _recTxtAcum = new RectangleF((float)(0), (float)(4 * this.yQuintoVertical + 2), xTotalHorizontal, (float)(textFont.Height));
+                        accumulated = (Int32)((Address)GetOperand(0)).Timer.Accumulated;
+                    accumulatedTextRectangle = new RectangleF((float)(0), (float)(4 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
-                    _recTxtAcum = new RectangleF((float)(xMeioHorizontal / 2), (float)(3 * this.yQuintoVertical + 2), xMeioHorizontal, (float)(textFont.Height));
+                    accumulatedTextRectangle = new RectangleF((float)(xHorizontalHalf / 2), (float)(3 * this.yFifthVertical + 2), xHorizontalHalf, (float)(textFont.Height));
                     break;
             }
 
-            // Endereco
-            StringFormat _stringFormat = new StringFormat();
-            _stringFormat.Alignment = StringAlignment.Center;
-            _stringFormat.LineAlignment = StringAlignment.Center;
+            StringFormat format = new StringFormat();
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
 
 
-            if (_intAcum != -1)
+            if (accumulated != -1)
             {
-                _txtAcum = "AC: " + _intAcum.ToString();
+                accumulatedText = "AC: " + accumulated.ToString();
             }
             else
-                _txtAcum = "AC: ?";
+                accumulatedText = "AC: ?";
 
-            graphics.DrawString(_txtAcum, textFont, symbolTextBrush, _recTxtAcum, _stringFormat);
+            graphics.DrawString(accumulatedText, textFont, symbolTextBrush, accumulatedTextRectangle, format);
 
         }
 
-        private void DrawSelectedVisualInstruction(TipoSelecaoFlag tipoSelecao)
+        private void DrawSelectedVisualInstruction(SelectionType selectionTime)
         {
-            //borda no objeto inteiro
-            switch (tipoSelecao)
+            switch (selectionTime)
             {
-                case TipoSelecaoFlag.Borda:
-                    graphics.DrawRectangle(selectionPen, rectSelecao);
+                case SelectionType.Border:
+                    graphics.DrawRectangle(selectionPen, rectSelection);
                     break;
-                case TipoSelecaoFlag.Fundo:
-                    graphics.FillRectangle(selectionBrush, rectSelecao);
+                case SelectionType.Background:
+                    graphics.FillRectangle(selectionBrush, rectSelection);
                     break;
                 default:
-                    graphics.FillRectangle(selectionBrush, rectSelecao);
-                    graphics.DrawRectangle(selectionPen, rectSelecao);
+                    graphics.FillRectangle(selectionBrush, rectSelection);
+                    graphics.DrawRectangle(selectionPen, rectSelection);
                     break;
             }
         }
@@ -1007,13 +977,11 @@ namespace LadderApp
 
         private void DrawEnergized()
         {
-            // Sobre a linha horizontal antes do simbolo
-            rectEnergizado = new Rectangle(Convert.ToInt32(selectionPen.Width), (yTotalVertical - ySextoVertical) / 2, xInicioHSimbolo - Convert.ToInt32(selectionPen.Width), ySextoVertical);
-            graphics.FillRectangle(energizedBrush, rectEnergizado);
+            rectEnergized = new Rectangle(Convert.ToInt32(selectionPen.Width), (yTotalVertical - ySixthVertical) / 2, xInstructionHorizotalBegin - Convert.ToInt32(selectionPen.Width), ySixthVertical);
+            graphics.FillRectangle(energizedBrush, rectEnergized);
 
-            // Sobre a linha horizontal depois do simbolo
-            rectEnergizado = new Rectangle(xFimHSimbolo, (yTotalVertical - ySextoVertical) / 2, xTotalHorizontal - xFimHSimbolo - Convert.ToInt32(selectionPen.Width), ySextoVertical);
-            graphics.FillRectangle(energizedBrush, rectEnergizado);
+            rectEnergized = new Rectangle(xInstructionHorizotalEnd, (yTotalVertical - ySixthVertical) / 2, xTotalHorizontal - xInstructionHorizotalEnd - Convert.ToInt32(selectionPen.Width), ySixthVertical);
+            graphics.FillRectangle(energizedBrush, rectEnergized);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -1021,7 +989,7 @@ namespace LadderApp
             base.OnPaint(e);
         }
 
-        public override void DrawInstruction()
+        public void DrawInstruction()
         {
             if (graphics == null)
             {
@@ -1029,7 +997,7 @@ namespace LadderApp
             }
 
             if (Selected)
-                DrawSelectedVisualInstruction(TipoSelecaoFlag.Fundo);
+                DrawSelectedVisualInstruction(SelectionType.Background);
             else
                 graphics.Clear(Color.White);
 
@@ -1045,10 +1013,10 @@ namespace LadderApp
                     DrawLineEnd();
                     break;
                 case OperationCode.NormallyOpenContact:
-                    DesenhaContatoNA();
+                    DrawNormallyOpenContact();
                     break;
                 case OperationCode.NormallyClosedContact:
-                    DesenhaContatoNF();
+                    DrawNormallyClosedContact();
                     break;
                 case OperationCode.OutputCoil:
                     DrawOutputCoil();
@@ -1079,14 +1047,14 @@ namespace LadderApp
             }
 
             if (this.Selected)
-                DrawSelectedVisualInstruction(TipoSelecaoFlag.Borda);
+                DrawSelectedVisualInstruction(SelectionType.Border);
 
         }
 
         private void VisualInstruction_Load(object sender, EventArgs e)
         {
             graphics = Graphics.FromHwnd(Handle);
-            AtualizaVariaveisDesenho();
+            UpdateVariables();
         }
 
         private void VisualInstruction_Paint(object sender, PaintEventArgs e)
@@ -1109,7 +1077,7 @@ namespace LadderApp
                     VisualInstructionSelectedEvent(this, VisualLine);
 
                 LadderForm ladderForm = (LadderForm)this.Parent;
-                ladderForm.SetMessage(this.Location.ToString() + " - " + this.Size.ToString() + " - " + this.TabStop.ToString() + " - " + this.TabIndex.ToString() + " - " + this.OpCode.ToString());
+                ladderForm.ShowMessageInStatus(this.Location.ToString() + " - " + this.Size.ToString() + " - " + this.TabStop.ToString() + " - " + this.TabIndex.ToString() + " - " + this.OpCode.ToString());
 
                 this.Refresh();
             }
@@ -1126,12 +1094,12 @@ namespace LadderApp
 
         private void VisualInstruction_Resize(object sender, EventArgs e)
         {
-            AtualizaVariaveisDesenho();
+            UpdateVariables();
         }
 
         private void VisualInstruction_SizeChanged(object sender, EventArgs e)
         {
-            AtualizaVariaveisDesenho();
+            UpdateVariables();
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -1162,60 +1130,12 @@ namespace LadderApp
             }
         }
 
-        /// <summary>
-        /// Retorna o simbolobasico do objeto
-        /// </summary>
-        public Instruction Instruction
-        {
-            get { return instruction; }
-        }
-
-        //private void txtGeral_Enter(object sender, EventArgs e)
-        //{
-        //    ((Label)sender).BackColor = Color.Black;
-        //    ((Label)sender).ForeColor = Color.White;
-        //}
-
-        //private void txtGeral_Leave(object sender, EventArgs e)
-        //{
-        //    ((Label)sender).BackColor = Color.Transparent;
-        //    ((Label)sender).ForeColor = Color.Black;
-        //}
-
-        //private void txtEndereco_DoubleClick(object sender, EventArgs e)
-        //{
-        //    /// caso o evento nao este alocado, nao executa
-        //    if (AskToChangeAddressEvent == null)
-        //        return;
-
-        //    switch (OpCode)
-        //    {
-        //        case OperationCode.NormallyOpenContact:
-        //        case OperationCode.NormallyClosedContact:
-        //            AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
-        //            break;
-        //        case OperationCode.OutputCoil:
-        //            AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
-        //            break;
-        //        case OperationCode.Timer:
-        //        case OperationCode.Counter:
-        //            AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
-        //            break;
-        //    }
-        //}
-
-        //private void txtGeral_Click(object sender, EventArgs e)
-        //{
-        //    ((Label)sender).Select();
-        //}
-
         private void VisualInstruction_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             switch (OpCode)
             {
                 case OperationCode.NormallyOpenContact:
                 case OperationCode.NormallyClosedContact:
-                    //                    SolicitaMudarEndereco(this, new Rectangle(0, 0, 0, 0), (new EnderecamentoLadder()).GetType(), 0, 0, null);
                     break;
                 case OperationCode.OutputCoil:
                     break;

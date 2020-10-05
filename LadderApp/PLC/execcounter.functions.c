@@ -5,8 +5,8 @@ void ExecContador(TContador *Contador)
 {
 	switch (Contador->Tipo)
 	{
-#EXECCONTADOR_TIPO0#
-#EXECCONTADOR_TIPO1#
+#EXEC_COUNTER_TYPE_0_FUNCTION_C#
+#EXEC_COUNTER_TYPE_1_FUNCTION_C#
 	default:
 		break;
 	}

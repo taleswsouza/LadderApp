@@ -4,21 +4,21 @@
 // Data: 15/09/2010
 //====================================================================================
 
-#ifndef USUARIO_H_
-#define USUARIO_H_
+#ifndef LADDERPROGRAM_H
+#define LADDERPROGRAM_H
 
 //====================================================================================
 // Includes
 //====================================================================================
-#include "definicao.h"
-#include "setuphardware.h"
-#include "funcoes.h"
+#include "definitions.h"
+#include "hardwaresetup.h"
+#include "functions.h"
 
 //====================================================================================
 // Protótipo
 //====================================================================================
 void Parametros(void);
 void ExecPrograma(void);
-#EXECTEMPORIZADORES_H#
+#EXEC_TIMERS_LADDERPROGRAM_H#
 
 #endif

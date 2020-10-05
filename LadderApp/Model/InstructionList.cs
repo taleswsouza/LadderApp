@@ -20,7 +20,7 @@ namespace LadderApp
         public bool Contains(OperationCode opCode)
         {
             operationCode = opCode;
-            bool _bResult = this.Exists(ProcuraCodigoInterpretavel);
+            bool _bResult = this.Exists(FindInstruction);
             operationCode = OperationCode.None;
             return _bResult;
         }
@@ -33,7 +33,7 @@ namespace LadderApp
         /// false - se algum operanto estiver null</returns>
         public bool ContainsAllOperandos()
         {
-            return this.TrueForAll(VerificaSeSimboloTemTodosOperandos);
+            return this.TrueForAll(VerifyAllInstructionsHasNotNullOperands);
         }
 
 
@@ -94,7 +94,7 @@ namespace LadderApp
         }
 
 
-        public void InsereParaleloProximo()//bool _bAposPrimeiro)
+        public void InsertParallelBranchNext()
         {
             for(int i = (this.Count - 1); i >= 0; i--)
             {
@@ -103,33 +103,33 @@ namespace LadderApp
         }
 
 
-        public void InsereParalelo(TipoInsercaoParalelo _tIP)
+        public void InsertParallelBranch(ParallelBranchInsertionType parallelBranchInsertionType)
         {
-            InsereParaleloProximo();
+            InsertParallelBranchNext();
 
-            switch (_tIP)
+            switch (parallelBranchInsertionType)
             {
-                case TipoInsercaoParalelo.PARALELO_INICIADO:
+                case ParallelBranchInsertionType.ParallelBranchInitialized:
                     this[0].OpCode = OperationCode.ParallelBranchBegin;
                     break;
-                case TipoInsercaoParalelo.PARALELO_FINALIZADO:
+                case ParallelBranchInsertionType.ParallelBranchFinalized:
                     this.Add(new Instruction(OperationCode.ParallelBranchEnd));
                     break;
-                case TipoInsercaoParalelo.PARALELO_COMPLETO:
+                case ParallelBranchInsertionType.ParallelBranchCompleted:
                     this[0].OpCode = OperationCode.ParallelBranchBegin;
                     this.Add(new Instruction(OperationCode.ParallelBranchEnd));
                     break;
             }
         }
 
-        public void ValidaOperandos(Addressing _ep)
+        public void ValidateOperands(Addressing addressing)
         {
             foreach(Instruction instruction in this)
-                instruction.ValidateInstructionOperands(_ep);
+                instruction.ValidateInstructionOperands(addressing);
         }
 
 
-        private bool ProcuraCodigoInterpretavel(Instruction instruction)
+        private bool FindInstruction(Instruction instruction)
         {
             if (instruction.OpCode== operationCode)
                 return true;
@@ -137,25 +137,23 @@ namespace LadderApp
                 return false;
         }
 
-        private static bool VerificaSeSimboloTemTodosOperandos(Instruction instruction)
+        private static bool VerifyAllInstructionsHasNotNullOperands(Instruction instruction)
         {
-            bool _bResult = true;
             for (int i = 0; i < instruction.GetNumberOfOperands(); i++)
             {
                 if (instruction.GetOperand(i) == null)
                 {
-                    _bResult = false;
-                    break;
+                    return false;
                 }
             }
-            return _bResult;
+            return true;
         }
       
-        public enum TipoInsercaoParalelo
+        public enum ParallelBranchInsertionType
         {
-            PARALELO_INICIADO,
-            PARALELO_FINALIZADO,
-            PARALELO_COMPLETO
+            ParallelBranchInitialized,
+            ParallelBranchFinalized,
+            ParallelBranchCompleted
         }
     }
 }

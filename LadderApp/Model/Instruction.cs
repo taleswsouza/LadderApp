@@ -103,38 +103,20 @@ namespace LadderApp
                     break;
                 case OperationCode.Counter:
                     Operands = new Object[4];
-                    SetOperand(1, (Int32)0); // tipo
+                    SetOperand(1, (Int32)0); // type
                     SetOperand(2, (Int32)0); // preset
-                    SetOperand(3, (Int32)0); // acum
+                    SetOperand(3, (Int32)0); // accum
                     break;
                 case OperationCode.Timer:
                     Operands = new Object[5];
-                    SetOperand(1, (Int32)0); // tipo
+                    SetOperand(1, (Int32)0); // type
                     SetOperand(2, (Int32)0); // preset
-                    SetOperand(3, (Int32)0); // acum
-                    SetOperand(4, (Int32)0); // Base tempo
+                    SetOperand(3, (Int32)0); // accum
+                    SetOperand(4, (Int32)0); // time base
                     break;
             }
             return GetNumberOfOperands();
         }
-
-        //private Size TamanhoXY;
-        //[XmlIgnore]
-        //public Size tamanhoXY
-        //{
-        //    get { return TamanhoXY; }
-        //    set { TamanhoXY = new Size(0, 0); }
-        //}
-
-        //private Point positionXY;
-        //public Point PositionXY { get => positionXY; set => positionXY = new Point(0, 0); }
-
-        //[XmlIgnore]
-        //public Point XYConexao
-        //{
-        //    get { return new Point(0, 0); }
-        //}
-
 
         public void Dispose()
         {
@@ -144,7 +126,7 @@ namespace LadderApp
 
         private bool ValidateAddress(int index, Object newOperand)
         {
-            bool _bEndereco = false;
+            bool isAddress = false;
 
             Address address = null;
             if (newOperand != null)
@@ -164,12 +146,12 @@ namespace LadderApp
                     break;
                 case OperationCode.LineBegin:
                     if (newOperand != null)
-                        if (newOperand.GetType().ToString() != "System.Int32")
+                        if (newOperand is Int32 == false)
                             isValid = false;
                     break;
                 case OperationCode.NormallyOpenContact:
                 case OperationCode.NormallyClosedContact:
-                    _bEndereco = true;
+                    isAddress = true;
                     if (address != null)
                     {
                         switch (address.AddressType)
@@ -190,7 +172,7 @@ namespace LadderApp
                         isValid = false;
                     break;
                 case OperationCode.OutputCoil:
-                    _bEndereco = true;
+                    isAddress = true;
                     if (address != null)
                     {
                         switch (address.AddressType)
@@ -210,7 +192,7 @@ namespace LadderApp
                 case OperationCode.Timer:
                     if (address != null && index == 0)
                     {
-                        _bEndereco = true;
+                        isAddress = true;
                         switch (address.AddressType)
                         {
                             case AddressTypeEnum.DigitalMemoryTimer:
@@ -239,7 +221,7 @@ namespace LadderApp
                 case OperationCode.Counter:
                     if (address != null && index == 0)
                     {
-                        _bEndereco = true;
+                        isAddress = true;
                         switch (address.AddressType)
                         {
                             case AddressTypeEnum.DigitalMemoryCounter:
@@ -271,7 +253,7 @@ namespace LadderApp
                     isValid = false;
                     break;
                 case OperationCode.Reset:
-                    _bEndereco = true;
+                    isAddress = true;
                     if (address != null)
                     {
                         switch (address.AddressType)
@@ -293,7 +275,7 @@ namespace LadderApp
                     break;
             }
 
-            if (_bEndereco)
+            if (isAddress)
             {
                 Address currentOperand = null;
                 if (IsAllOperandsOk())
@@ -333,16 +315,11 @@ namespace LadderApp
                 if (Operands[i] != null)
                     if (Operands[i] is Address)
                     {
-                        /// Verifica se o endereco atual existe na lista de enderecos
-                        /// do programa atual, se existir recupera o opontamento corrigido
-                        /// para o endereco
-                        Object oper = addressing.Find(((Address)Operands[i]));
-                        /// recebido o endereco corrigido valida o endereco a faz as atribui
-                        /// coes necessarias
-                        if (oper != null)
+                        Object operand = addressing.Find(((Address)Operands[i]));
+                        if (operand != null)
                         {
-                            if (ValidateAddress(i, oper))
-                                Operands[i] = oper;
+                            if (ValidateAddress(i, operand))
+                                Operands[i] = operand;
                             else
                             {
                                 Operands[i] = null;

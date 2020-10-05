@@ -65,20 +65,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OperationCode\OperationCode.cs" />
-    <Compile Include="Services\Text2OpCodeServices.cs" />
     <Compile Include="Resources\MicrocontrollersBaseCodeFilesResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MicrocontrollersBaseCodeFilesResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\Text2OpCodeServices.cs" />
     <Compile Include="UserControls\VisualInstructionUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\VisualInstructionUserControl.Designer.cs">
       <DependentUpon>VisualInstructionUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Exceptions\CouldNotInitializeTIUSBException.cs" />
-    <Compile Include="Exceptions\NotValidOpCodeException.cs" />
     <Compile Include="Forms\EditCommentForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,10 +140,6 @@
     <Compile Include="Model\LadderProgram.cs" />
     <Compile Include="VisualComponents\VisualProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="UserControls\BasicUserControl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>BasicUserControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\VisualInstructionUserControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>VisualInstructionUserControl.cs</DependentUpon>
@@ -211,9 +205,6 @@
     <Compile Include="Forms\ProjectForm.Designer.cs">
       <DependentUpon>ProjectForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\BasicUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Resources\VisualResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -228,55 +219,55 @@
     <Compile Include="Services\OpCode2TextServices.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\usuario.h" />
+    <None Include="PLC\ladderprogram.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PLC\main.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\SetupHardware.c" />
+    <None Include="PLC\hardwaresetup.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\Usuario.c" />
+    <None Include="PLC\ladderprogram.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\definicao.h" />
+    <None Include="PLC\definitions.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\enderecos.h" />
+    <None Include="PLC\addresses.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\funcoes.h" />
+    <None Include="PLC\functions.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\SetupHardware.h" />
+    <None Include="PLC\hardwaresetup.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\funcoes.c" />
+    <None Include="PLC\functions.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\interrupcao.c" />
+    <None Include="PLC\interruption.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\ExecContador.funcoes.c" />
+    <None Include="PLC\execcounter.functions.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\ExecTemporizadores.usuario.c" />
+    <None Include="PLC\exectimer.functions.ladderprogram.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\ExecContador.funcoes.h" />
+    <None Include="PLC\execcounter.functions.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="PLC\ExecTemporizadores.usuario.h" />
+    <None Include="PLC\exectimer.functions.ladderprogram.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PLC\ExecContador_Tipo0.funcoes.c" />
-    <None Include="PLC\ExecContador_Tipo1.funcoes.c" />
-    <None Include="PLC\ExecTemporizador.funcoes.c" />
-    <None Include="PLC\ExecTemporizador.funcoes.h" />
-    <None Include="PLC\ExecTemporizador_Tipo0.funcoes.c" />
-    <None Include="PLC\ExecTemporizador_Tipo1.funcoes.c" />
+    <None Include="PLC\execcounter.ctu.type0.functions.c" />
+    <None Include="PLC\execcounter.ctd.type1.functions.c" />
+    <None Include="PLC\exectimer.functions.c" />
+    <None Include="PLC\exectimer.functions.h" />
+    <None Include="PLC\exectimer.ton.type0.functions.c" />
+    <None Include="PLC\exectimer.tof.type1.functions.c" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

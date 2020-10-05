@@ -7,8 +7,8 @@
 //====================================================================================
 // Includes
 //====================================================================================
-#include "funcoes.h"
+#include "functions.h"
 
-#EXECTEMPORIZADOR_C#
+#EXEC_TIMER_FUNCTION_C#
 
-#EXECCONTADOR_C#
+#EXEC_COUNTER_FUNCTION_C#

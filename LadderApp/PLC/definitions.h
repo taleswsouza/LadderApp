@@ -5,8 +5,9 @@
 //====================================================================================
 
 
-#ifndef DEFINICAO_H_
-#define DEFINICAO_H_
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
+
 #define RECARGA_CCR0 10000
 //====================================================================================
 // Includes
@@ -100,4 +101,4 @@ typedef struct
 	};
 } TContador;
 
-#endif
+#endif // DEFINITIONS_H

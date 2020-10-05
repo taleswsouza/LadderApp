@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace LadderApp
@@ -48,11 +45,9 @@ namespace LadderApp
                         case AddressTypeEnum.DigitalMemory:
                             break;
                         case AddressTypeEnum.DigitalMemoryTimer:
-                            Acesso2 = "T" + Id.ToString() + ".EN";
                             Timer = new Timer();
                             break;
                         case AddressTypeEnum.DigitalMemoryCounter:
-                            Acesso2 = "C" + Id.ToString() + ".EN";
                             Counter = new Counter();
                             break;
                         default:
@@ -97,85 +92,10 @@ namespace LadderApp
             }
         }
 
-        [XmlIgnore]
-        public String EnderecoRaiz
-        {
-            get
-            {
-                switch (this.addressType)
-                {
-                    case AddressTypeEnum.DigitalInput:
-                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
-                    case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
-                    case AddressTypeEnum.DigitalMemory:
-                        return "M" + ((Id / NumberOfBitsByPort) + 1);
-                    case AddressTypeEnum.DigitalMemoryTimer:
-                        return "T" + Id.ToString();
-                    case AddressTypeEnum.DigitalMemoryCounter:
-                        return "C" + Id.ToString();
-                    default:
-                        return "ERROR";
-                }
-            }
-        }
-
-        /// <summary>
-        /// Para realizar a Parametrização do endereco dentro do código C
-        [XmlIgnore]
-        public String Parametro
-        {
-            get
-            {
-                switch (this.addressType)
-                {
-                    case AddressTypeEnum.DigitalInput:
-                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 0";
-                    case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 1";
-                    default:
-                        return "ERROR";
-                }
-            }
-            //set { parametro = value; }
-        }
-
-        /// <summary>
-        /// Para realizar o acesso do endereco dentro do código C
-        /// </summary>
-        [XmlIgnore]
-        public String Acesso
-        {
-            get
-            {
-                switch (this.addressType)
-                {
-                    case AddressTypeEnum.DigitalInput:
-                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_IN.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort));
-                    case AddressTypeEnum.DigitalOutput:
-                        return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_OUT.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort));
-                    case AddressTypeEnum.DigitalMemory:
-                        return "M" + ((Id / NumberOfBitsByPort) + 1) + ".Bit" + (Id - (Int16)(Id / NumberOfBitsByPort) * NumberOfBitsByPort);
-                    case AddressTypeEnum.DigitalMemoryTimer:
-                        return "T" + Id.ToString() + ".DN";
-                    case AddressTypeEnum.DigitalMemoryCounter:
-                        return "C" + Id.ToString() + ".DN";
-                    default:
-                        return "ERROR";
-                }
-            }
-        }
-        [XmlElement(ElementName = "Acesso2", Order = 8, IsNullable = false, Type = typeof(String))]
-        public string Acesso2 { get; set; } = "";
         [XmlElement(ElementName = "value", Order = 4, IsNullable = false, Type = typeof(Boolean))]
         public bool Value { get; set; } = false;
         [XmlIgnore]
         public bool Used { get; set; } = false;
-
-        public override string ToString()
-        {
-            return this.name;
-        }
 
         [XmlElement(ElementName = "BitsPorta", Order = 3, IsNullable = false, Type = typeof(int))]
         public int NumberOfBitsByPort { get; set; } = 0;
@@ -192,5 +112,67 @@ namespace LadderApp
         {
             return $"{Name}{(Comment == "" ? "" : " - " + Comment)}";
         }
+
+        public string GetPortParameterization()
+        {
+            switch (this.addressType)
+            {
+                case AddressTypeEnum.DigitalInput:
+                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 0";
+                case AddressTypeEnum.DigitalOutput:
+                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 1";
+                default:
+                    return "ERROR";
+            }
+        }
+
+        public string GetVariableName()
+        {
+            switch (this.addressType)
+            {
+                case AddressTypeEnum.DigitalInput:
+                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
+                case AddressTypeEnum.DigitalOutput:
+                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
+                case AddressTypeEnum.DigitalMemory:
+                    return "M" + ((Id / NumberOfBitsByPort) + 1);
+                case AddressTypeEnum.DigitalMemoryTimer:
+                    return "T" + Id.ToString();
+                case AddressTypeEnum.DigitalMemoryCounter:
+                    return "C" + Id.ToString();
+                default:
+                    return "ERROR";
+            }
+        }
+
+        public string GetEnableBit()
+        {
+            return $"{GetVariableName()}.EN";
+        }
+
+        public string GetVariableBitValueName()
+        {
+            switch (this.addressType)
+            {
+                case AddressTypeEnum.DigitalInput:
+                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_IN.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort));
+                case AddressTypeEnum.DigitalOutput:
+                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_OUT.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort));
+                case AddressTypeEnum.DigitalMemory:
+                    return "M" + ((Id / NumberOfBitsByPort) + 1) + ".Bit" + (Id - (Int16)(Id / NumberOfBitsByPort) * NumberOfBitsByPort);
+                case AddressTypeEnum.DigitalMemoryTimer:
+                    return $"{GetVariableName()}.DN";
+                case AddressTypeEnum.DigitalMemoryCounter:
+                    return $"{GetVariableName()}.DN";
+                default:
+                    return "ERROR";
+            }
+        }
+
+        public override string ToString()
+        {
+            return this.name;
+        }
+
     }
 }

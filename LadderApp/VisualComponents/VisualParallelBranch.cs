@@ -6,15 +6,13 @@ namespace LadderApp
 {
     public class VisualParallelBranch
     {
-        public VisualInstructionUserControl par = null;
-        public VisualInstructionUserControl ultimoVPI = null;
-        public List<VisualInstructionUserControl> lstVPI = new List<VisualInstructionUserControl>();
+        public VisualInstructionUserControl parallelBranchBegin = null;
+        public VisualInstructionUserControl lastParallelBranchNext = null;
+        public List<VisualInstructionUserControl> parallelBranchList = new List<VisualInstructionUserControl>();
 
-        public int maiorY = 0;
-        public int maiorX = 0;
-        public int numVPITratados = 0;
-        public int _yAcum = 0;
-        public int _paralelosTratados = 0;
-        public int _VPI_Tratados = 0;
+        public int biggerY = 0;
+        public int biggerX = 0;
+        public int numberOfParallelBranchNext = 0;
+        public int accumulatedY = 0;
     }
 }

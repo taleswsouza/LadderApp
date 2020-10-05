@@ -17,7 +17,7 @@ namespace LadderApp.Formularios
 
         private void frmSenha_Load(object sender, EventArgs e)
         {
-            txtSenha.Focus();
+            txtPassword.Focus();
         }
     }
 }

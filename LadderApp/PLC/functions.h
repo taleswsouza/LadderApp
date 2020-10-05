@@ -1,28 +1,22 @@
 //====================================================================================
-// Arquivo de protótipo das funções para configuração de hardware
+// Arquivo de prototipo das funções do sistema
 // Autor: Silvano Fonseca Paganoto
 // Data: 15/09/2010
 //====================================================================================
-
-#ifndef SETUPHARDWARE_H_
-#define SETUPHARDWARE_H_
-
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 //====================================================================================
 // Includes
 //====================================================================================
-#include "definicao.h"
-#include "enderecos.h"
+#include "definitions.h"
+#include "hardwaresetup.h"
+
 
 //====================================================================================
 // Prototipos
 //====================================================================================
-void SetupSistema(void);
-void SetupIO(void);
-void SetupTemporizador(void);
-void SetupContador(void);
-void ExecContador(TContador *Contador);
-void LeEntradas(void);
-void ExecPrograma(void);
-void EscreveSaidas(void);
+#EXECTIMER_FUNCTION_H#
+#EXECCOUNTER_FUNCTION_H#
 
-#endif
+
+#endif // FUNCTIONS_H
