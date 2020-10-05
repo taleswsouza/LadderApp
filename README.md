@@ -57,12 +57,14 @@ I have many ideas for this project, and some of them are:
 
 Other ideas being born that need to be better thought (only a local to write my brainstorm):
 
-- LadderProcessor
+- **LadderProcessor**
 	- Decouple the ladder language processor from the interface, turn it independent
 	- Create a CLI to interact with it
-	- In the future, compile a ladder program to run over a VM (like [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine), [GraalVM](https://www.graalvm.org/)  or [BEAM](https://en.wikipedia.org/wiki/BEAM_(Erlang_virtual_machine)))
-- OPC UA Client
-	- Provide to the LadderProcessor to connect to OPC UA Server (like [KEPServer EX](https://www.kepware.com/en-us/products/kepserverex/features/opc-ua-server-interface/). The idea is to enable Ladder Processor to act as a PLC over other PLCs - a ladder program with the feature platform-independent PLC execution.
+	- In the future, compile a ladder program to run over a VM, like [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine), [GraalVM](https://www.graalvm.org/)  or [BEAM](https://en.wikipedia.org/wiki/BEAM_(Erlang_virtual_machine))
+- **OPC UA Client**
+	- Provide to the LadderProcessor capability to connect to an OPC UA Server, like [KEPServer EX](https://www.kepware.com/en-us/products/kepserverex/features/opc-ua-server-interface/). The idea is to enable the **LadderProcessor** to act as a PLC over other PLCs, a ladder program processor with the feature of PLC execution and platform-independent integration capabilities (read and write).
+- **Market PLC Style tool**
+	- Today's style was based on my bits of knowledge of the RSLogix 5 tool. The idea is to allow the user to change the appearance, names, and style in the front-end to a specific market ladder tool, like Rockwell, Siemens, etc.
 
 
 Enjoy.
