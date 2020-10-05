@@ -47,13 +47,23 @@ The application allows the user to simulate the execution of the ladder code dir
 
 I have many ideas for this project, and some of them are:
 
-- English translation (on going);
-- Include unit testing;
-- Big code refactoring;
-- Extend the "base" microcontroller code to others platforms [Arduino](https://www.arduino.cc/), PIC, STM32, ...;
-- Allow to type the program textually and create a "compiler front-end" that checks the syntax and semantics of the ladder language(using [ANTLR](https://www.antlr.org/));
-- Migrate to SaaS;
+- English translation (on going)
+- Include unit testing
+- Big code refactoring
+- Extend the "base" microcontroller code to others platforms [Arduino](https://www.arduino.cc/), PIC, STM32, ...
+- Allow to type the program textually and create a "compiler front-end" that checks the syntax and semantics of the ladder language(using [ANTLR](https://www.antlr.org/))
+- Migrate to SaaS
 - Internationalization
+
+Other ideas being born that need to be better thought (only a local to write my brainstorm):
+
+- LadderProcessor
+	- Decouple the ladder language processor from the interface, turn it independent
+	- Create a CLI to interact with it
+	- In the future, compile a ladder program to run over a VM (like [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine), [GraalVM](https://www.graalvm.org/)  or [BEAM](https://en.wikipedia.org/wiki/BEAM_(Erlang_virtual_machine)))
+- OPC UA Client
+	- Provide to the LadderProcessor to connect to OPC UA Server (like [KEPServer EX](https://www.kepware.com/en-us/products/kepserverex/features/opc-ua-server-interface/). The idea is to enable Ladder Processor to act as a PLC over other PLCs - a ladder program with the feature platform-independent PLC execution.
+
 
 Enjoy.
 
