@@ -293,19 +293,19 @@ namespace LadderApp
             }
         }
 
-        public List<Instruction> VariosSelecionados(VisualInstructionUserControl visualInstruction, VisualLine visualLine)
+        public List<Instruction> VariosSelecionados(VisualInstructionUserControl visualInstruction)
         {
             OperationCode opCode = visualInstruction.OpCode;
             List<Instruction> instructions = new List<Instruction>();
-            List<VisualInstructionUserControl> visualInstructions = null;
+            List<VisualInstructionUserControl> visualInstructions;
 
             switch (opCode)
             {
                 case OperationCode.ParallelBranchBegin:
                 case OperationCode.ParallelBranchNext:
                 case OperationCode.ParallelBranchEnd:
-                    int initialPositionIndex = 0;
-                    int finalPositionIndex = 0;
+                    int initialPositionIndex;
+                    int finalPositionIndex;
 
                     if (SelectedVisualLine.visualInstructions.Contains(visualInstruction))
                         visualInstructions = SelectedVisualLine.visualInstructions;
@@ -356,7 +356,7 @@ namespace LadderApp
             this.Invalidate(true);
         }
 
-        public void ControleSelecionado_SolicitaMudarEndereco(VisualInstructionUserControl sender, Rectangle rect, Type tipo, int valorMax, int valorMin, params object[] faixa)
+        public void VisualInstruction_AskToChangeAddress(VisualInstructionUserControl sender)
         {
             if (!sender.IsAllOperandsOk())
             {

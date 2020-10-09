@@ -26,9 +26,9 @@ namespace LadderApp
             HeaderPosition2InternalWithTypeCast = txtInternalWithTypeCast.Length;
         }
 
-        internal OpCode2TextServices(bool bCabecalho)
-        {
-        }
+        //internal OpCode2TextServices(bool bCabecalho)
+        //{
+        //}
 
         private bool bTxtWithTypeCast = true;
         public bool TxtWithTypeCast
@@ -45,7 +45,7 @@ namespace LadderApp
         public void AddHeader()
         {
             if (Header == null)
-                Header = new OpCode2TextServices(true);
+                Header = new OpCode2TextServices();
         }
 
         public void FinalizeHeader()

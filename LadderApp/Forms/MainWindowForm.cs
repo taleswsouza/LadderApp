@@ -155,10 +155,10 @@ namespace LadderApp
                             case OperationCode.ParallelBranchBegin:
                             case OperationCode.ParallelBranchNext:
                             case OperationCode.ParallelBranchEnd:
-                                instructions = projectForm.LadderForm.VariosSelecionados(projectForm.LadderForm.VisualInstruction, projectForm.LadderForm.SelectedVisualLine);
+                                instructions = projectForm.LadderForm.VariosSelecionados(projectForm.LadderForm.VisualInstruction);
                                 break;
                             default:
-                                instructions = projectForm.LadderForm.VariosSelecionados(projectForm.LadderForm.VisualInstruction, projectForm.LadderForm.SelectedVisualLine);
+                                instructions = projectForm.LadderForm.VariosSelecionados(projectForm.LadderForm.VisualInstruction);
                                 break;
                         }
 

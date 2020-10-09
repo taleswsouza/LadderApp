@@ -551,7 +551,7 @@ namespace LadderApp
             visualInstructions[index].VisualInstructionSelectedEvent += new VisualInstructionSelectedEventHandler(ladderForm.VisualInstruction_Selected);
             visualInstructions[index].MouseClick += new MouseEventHandler(VisualInstruction_Click);
             visualInstructions[index].KeyDown += new KeyEventHandler(ladderForm.VisualInstruction_KeyDown);
-            visualInstructions[index].AskToChangeAddressEvent += new AskToChangeAddressEventHandler(ladderForm.ControleSelecionado_SolicitaMudarEndereco);
+            visualInstructions[index].AskToChangeAddressEvent += new AskToChangeAddressEventHandler(ladderForm.VisualInstruction_AskToChangeAddress);
             visualInstructions[index].Parent = this.ladderForm;
             visualInstructions[index].Visible = false;
             visualInstructions[index].CreateControl();
