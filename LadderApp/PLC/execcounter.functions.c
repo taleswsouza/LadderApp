@@ -1,15 +1,15 @@
 //====================================================================================
 // Rotina de execução do contador
 //====================================================================================
-void ExecContador(TContador *Contador)
+void ExecuteCounter(TCounter *Counter)
 {
-	switch (Contador->Tipo)
+	switch (Counter->Type)
 	{
 #EXEC_COUNTER_TYPE_0_FUNCTION_C#
 #EXEC_COUNTER_TYPE_1_FUNCTION_C#
 	default:
 		break;
 	}
-	if (Contador->EN == 0)
-		Contador->Pulso = 1;
+	if (Counter->Enable == 0)
+		Counter->Pulse = 1;
 }

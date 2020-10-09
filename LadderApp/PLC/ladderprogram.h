@@ -17,8 +17,8 @@
 //====================================================================================
 // Protótipo
 //====================================================================================
-void Parametros(void);
-void ExecPrograma(void);
+void StartupParameterization(void);
+void ExecuteLadderProgram(void);
 #EXEC_TIMERS_LADDERPROGRAM_H#
 
 #endif

@@ -16,24 +16,24 @@ unsigned char AccMs = 0, Acc100Ms = 0, AccSeg = 0;
 //====================================================================================
 interrupt(TIMERA0_VECTOR) isr()
 {
-	CCR0 += RECARGA_CCR0; // Add Offset to CCR0
+	CCR0 += RECHARGE_CCR0; // Add Offset to CCR0
 
 	AccMs++;
-	Sys.Evento10ms = 1;
+	Sys.Event10ms = 1;
 	if (AccMs >= 10)
 	{
 		AccMs = 0;
 		Acc100Ms++;
-		Sys.Evento100ms = 1;
+		Sys.Event100ms = 1;
 		if (Acc100Ms >= 10)
 		{
 			Acc100Ms = 0;
 			AccSeg++;
-			Sys.Evento1s = 1;
+			Sys.Event1s = 1;
 			if (AccSeg >= 60)
 			{
 				AccSeg = 0;
-				Sys.Evento1m = 1;
+				Sys.Event1m = 1;
 			}
 		}
 	}

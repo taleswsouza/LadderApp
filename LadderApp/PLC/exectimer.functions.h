@@ -1,1 +1,1 @@
-void ExecTemporizador(TTemporizador *Temporizador);
+void ExecuteTimer(TTimer *Timer);

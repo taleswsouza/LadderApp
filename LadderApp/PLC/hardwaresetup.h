@@ -16,13 +16,13 @@
 //====================================================================================
 // Prototipos
 //====================================================================================
-void SetupSistema(void);
-void SetupIO(void);
-void SetupTemporizador(void);
-void SetupContador(void);
-void ExecContador(TContador *Contador);
-void LeEntradas(void);
-void ExecPrograma(void);
-void EscreveSaidas(void);
+void SystemSetup(void);
+void IOSetup(void);
+//void TimerSetup(void);
+//void SetupCounter(void);
+void ExecuteCounter(TCounter *Counter);
+void ReadInputs(void);
+void ExecuteLadderProgram(void);
+void WriteOutputs(void);
 
 #endif

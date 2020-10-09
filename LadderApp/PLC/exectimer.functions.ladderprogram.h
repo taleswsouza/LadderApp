@@ -1,1 +1,1 @@
-void ExecTemporizadores(void);
+void ExecuteTimers(void);

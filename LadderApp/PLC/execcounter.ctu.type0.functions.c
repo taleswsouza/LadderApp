@@ -1,20 +1,20 @@
-	case 0: // Contador Crescente
-		if (Contador->Reset == 1)
+	case 0: // Counter Crescente
+		if (Counter->Reset == 1)
 		{
-			Contador->DN = 0;
-			Contador->Acumulado = 0;
-			Contador->Reset = 0;
+			Counter->Done = 0;
+			Counter->Accumulated = 0;
+			Counter->Reset = 0;
 		}
-		if (Contador->EN == 1 && Contador->Pulso == 1)
+		if (Counter->Enable == 1 && Counter->Pulse == 1)
 		{
-			Contador->Pulso = 0;
-			if (Contador->Acumulado <= 255)
+			Counter->Pulse = 0;
+			if (Counter->Accumulated <= 255)
 			{
-				Contador->Acumulado++;
-				if (Contador->Acumulado >= Contador->Preset)
-					Contador->DN = 1;
+				Counter->Accumulated++;
+				if (Counter->Accumulated >= Counter->Preset)
+					Counter->Done = 1;
 				else
-					Contador->DN = 0;
+					Counter->Done = 0;
 			}
 		}
 		break;

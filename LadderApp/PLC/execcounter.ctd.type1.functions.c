@@ -1,19 +1,19 @@
-	case 1: // Contador Decrescente
-		if (Contador->Reset == 1)
+	case 1: // Counter Decrescente
+		if (Counter->Reset == 1)
 		{
-			Contador->Acumulado = Contador->Preset;
+			Counter->Accumulated = Counter->Preset;
 		}
-		if (Contador->EN == 1 && Contador->Pulso == 1)
+		if (Counter->Enable == 1 && Counter->Pulse == 1)
 		{
-			Contador->Pulso = 0;
-			if (Contador->Acumulado > 0)
+			Counter->Pulse = 0;
+			if (Counter->Accumulated > 0)
 			{
-				Contador->Acumulado--;
-				if (Contador->Acumulado == 0)
-					Contador->DN = 1;
+				Counter->Accumulated--;
+				if (Counter->Accumulated == 0)
+					Counter->Done = 1;
 
 				else
-					Contador->DN = 0;
+					Counter->Done = 0;
 			}
 		}
 		break;

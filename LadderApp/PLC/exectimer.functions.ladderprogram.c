@@ -1,7 +1,7 @@
 //====================================================================================
 // Rotina de execução do temporizador
 //====================================================================================
-void ExecTemporizadores(void)
+void ExecuteTimers(void)
 {
 #TIMERS_LADDERPROGRAM_C#
 }

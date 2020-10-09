@@ -32,7 +32,7 @@ namespace LadderApp.Formularios
             }
         }
 
-        private void AlteraTemporizadorContador_Load(object sender, EventArgs e)
+        private void ChangeTimerCounterParametersForm_Load(object sender, EventArgs e)
         {
             switch (this.OpCode)
             {

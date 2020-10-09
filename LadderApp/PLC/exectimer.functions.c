@@ -1,17 +1,17 @@
 //====================================================================================
 // Rotina de execução do temporizador
 //====================================================================================
-void ExecTemporizador(TTemporizador *Temporizador)
+void ExecuteTimer(TTimer *Timer)
 {
-	char EventoPresente = 0;
-	switch (Temporizador->Tipo)
+	char EventPresent = 0;
+	switch (Timer->Type)
 	{
 //-----------------------------------------------------------------------
 #EXEC_TIMER_TYPE_0_FUNCTION_C#
 //-----------------------------------------------------------------------
 #EXEC_TIMER_TYPE_1_FUNCTION_C#
-	default:
-		break;
+		default:
+			break;
 	}
-	EventoPresente = 0;
+	EventPresent = 0;
 }
