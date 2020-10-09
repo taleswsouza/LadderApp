@@ -28,9 +28,6 @@ namespace LadderApp.Formularios
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtTitle = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.txtAccumulated = new System.Windows.Forms.NumericUpDown();
             this.txtPreset = new System.Windows.Forms.NumericUpDown();
             this.lblTimeBase = new System.Windows.Forms.Label();
@@ -38,44 +35,13 @@ namespace LadderApp.Formularios
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.cmbType = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.txtAccumulated)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPreset)).BeginInit();
             this.SuspendLayout();
-            // 
-            // txtTitulo
-            // 
-            this.txtTitle.AutoSize = true;
-            this.txtTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTitle.Location = new System.Drawing.Point(92, 5);
-            this.txtTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(71, 20);
-            this.txtTitle.TabIndex = 0;
-            this.txtTitle.Text = "lblTitle";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(54, 75);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(64, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Preset (PR):";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 105);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(95, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Accumulated (AC):";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtAccumulated
             // 
@@ -166,6 +132,17 @@ namespace LadderApp.Formularios
             this.cmbType.Size = new System.Drawing.Size(92, 21);
             this.cmbType.TabIndex = 10;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(24, 105);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(95, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Accumulated (AC):";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -184,13 +161,24 @@ namespace LadderApp.Formularios
             this.label5.TabIndex = 13;
             this.label5.Text = "(0...255)";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(54, 75);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(64, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Preset (PR):";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // ChangeTimerCounterParametersForm
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(254, 211);
+            this.ClientSize = new System.Drawing.Size(265, 206);
             this.Controls.Add(this.cmbType);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
@@ -200,7 +188,6 @@ namespace LadderApp.Formularios
             this.Controls.Add(this.txtAccumulated);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtTitle);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -217,10 +204,6 @@ namespace LadderApp.Formularios
         }
 
         #endregion
-
-        private System.Windows.Forms.Label txtTitle;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown txtAccumulated;
         private System.Windows.Forms.NumericUpDown txtPreset;
         private System.Windows.Forms.Label lblTimeBase;
@@ -228,7 +211,9 @@ namespace LadderApp.Formularios
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.ComboBox cmbType;
+        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label1;
     }
 }
