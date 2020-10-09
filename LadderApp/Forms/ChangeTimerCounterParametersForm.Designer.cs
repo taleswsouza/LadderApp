@@ -28,7 +28,7 @@ namespace LadderApp.Formularios
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtTitulo = new System.Windows.Forms.Label();
+            this.txtTitle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtAccumulated = new System.Windows.Forms.NumericUpDown();
@@ -46,14 +46,14 @@ namespace LadderApp.Formularios
             // 
             // txtTitulo
             // 
-            this.txtTitulo.AutoSize = true;
-            this.txtTitulo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTitulo.Location = new System.Drawing.Point(92, 5);
-            this.txtTitulo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.txtTitulo.Name = "txtTitulo";
-            this.txtTitulo.Size = new System.Drawing.Size(71, 20);
-            this.txtTitulo.TabIndex = 0;
-            this.txtTitulo.Text = "lblTitulo";
+            this.txtTitle.AutoSize = true;
+            this.txtTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTitle.Location = new System.Drawing.Point(92, 5);
+            this.txtTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.Size = new System.Drawing.Size(71, 20);
+            this.txtTitle.TabIndex = 0;
+            this.txtTitle.Text = "lblTitle";
             // 
             // label1
             // 
@@ -200,7 +200,7 @@ namespace LadderApp.Formularios
             this.Controls.Add(this.txtAccumulated);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtTitulo);
+            this.Controls.Add(this.txtTitle);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -208,7 +208,7 @@ namespace LadderApp.Formularios
             this.Name = "ChangeTimerCounterParametersForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Change Timer/Counter";
-            this.Load += new System.EventHandler(this.AlteraTemporizadorContador_Load);
+            this.Load += new System.EventHandler(this.ChangeTimerCounterParametersForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.txtAccumulated)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPreset)).EndInit();
             this.ResumeLayout(false);
@@ -218,7 +218,7 @@ namespace LadderApp.Formularios
 
         #endregion
 
-        private System.Windows.Forms.Label txtTitulo;
+        private System.Windows.Forms.Label txtTitle;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown txtAccumulated;

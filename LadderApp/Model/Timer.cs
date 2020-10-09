@@ -6,7 +6,7 @@ namespace LadderApp
 {
     public class Timer
     {
-        public int Type = 0; // 0 = Contador Crescente, 1 = Contador Decrescente,...
+        public int Type = 0; // 0 = Counter Crescente, 1 = Counter Decrescente,...
         public int TimeBase; // 0 = "10 ms", 1 = "100 ms", 2 = "1 s", 3 = "1 m"
 
         public int ParcialPreset

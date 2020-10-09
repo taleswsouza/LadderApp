@@ -8,7 +8,7 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-#define RECARGA_CCR0 10000
+#define RECHARGE_CCR0 10000
 //====================================================================================
 // Includes
 //====================================================================================
@@ -18,7 +18,7 @@
 #include <legacymsp430.h> // #include <signal.h>
 
 //====================================================================================
-// Tipo definido para as portas
+// type for ports
 //====================================================================================
 typedef union
 {
@@ -37,68 +37,68 @@ typedef union
 } TPort;
 
 //====================================================================================
-// Tipo definido para as portas
+// type for system
 //====================================================================================
 typedef union
 {
 	unsigned char Byte;
 	struct
 	{
-		unsigned char Evento10ms :1; // tempo de 1 milisegundo
-		unsigned char Evento100ms :1; // tempo de 100 milisegundo
-		unsigned char Evento1s :1; // tempo de 1 segundo
-		unsigned char Evento1m :1; // tempo de 1 minuto
+		unsigned char Event10ms :1;
+		unsigned char Event100ms :1;
+		unsigned char Event1s :1;
+		unsigned char Event1m :1;
 		unsigned char Bit4 :1;
 		unsigned char Bit5 :1;
 		unsigned char Bit6 :1;
 		unsigned char Bit7 :1;
 	};
-} TSistema;
+} TSystem;
 
 //====================================================================================
-// Tipo definido para Temporizadores
+// type for timers
 //====================================================================================
 typedef struct
 {
-	unsigned int Preset; // valor de preset
-	unsigned int Acumulado; //Valor acumulado
-	unsigned int Parcial; //Valor parcial
+	unsigned int Preset;
+	unsigned int Accumulated;
+	unsigned int Parcial;
 	union
 	{
 		unsigned char Config;
 		struct
 		{
-			unsigned char Tipo :2; // 0 = TON, 1 = TOFF,...
-			unsigned char Base :2; // Base de tempo: 0 = milisegundos, 1 = 100milisegundos, 2 = segundos, 3 = minutos
-			unsigned char EN :1; // Habilitado
-			unsigned char DN :1; // Temporização realizada (done)
+			unsigned char Type :2; // 0 = TON, 1 = TOFF,...
+			unsigned char TimeBase :2; // TimeBase de tempo: 0 = milisegundos, 1 = 100milisegundos, 2 = segundos, 3 = minutos
+			unsigned char Enable :1; // Habilitado
+			unsigned char Done :1; // Temporização realizada (done)
 			unsigned char Reset :1; // reset do contador
 			unsigned char Bit7 :1; // reserva
 		};
 	};
-} TTemporizador;
+} TTimer;
 
 //====================================================================================
-// Tipo definido para Contadores
+// type for counters
 //====================================================================================
 typedef struct
 {
 	unsigned char Preset; // valor de preset
-	unsigned char Acumulado; //Valor acumulado
+	unsigned char Accumulated; //Valor acumulado
 	union
 	{
 		unsigned char Config;
 		struct
 		{
-			unsigned char Tipo :2; // 0 = Contador Crescente, 1 = Contador Decrescente,...
-			unsigned char EN :1; // Habilitado
-			unsigned char Pulso :1; // Pulso (Auxiliar)
-			unsigned char DN :1; // Contagem realizada (done)
+			unsigned char Type :2; // 0 = Counter Crescente, 1 = Counter Decrescente,...
+			unsigned char Enable :1; // Habilitado
+			unsigned char Pulse :1; // Pulse (Auxiliar)
+			unsigned char Done :1; // Contagem realizada (done)
 			unsigned char Reset :1; // reset do contador
 			unsigned char Bit6 :1; // reserva
 			unsigned char Bit7 :1; // reserva
 		};
 	};
-} TContador;
+} TCounter;
 
 #endif // DEFINITIONS_H

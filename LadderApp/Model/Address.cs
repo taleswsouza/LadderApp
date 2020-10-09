@@ -147,7 +147,7 @@ namespace LadderApp
 
         public string GetEnableBit()
         {
-            return $"{GetVariableName()}.EN";
+            return $"{GetVariableName()}.Enable";
         }
 
         public string GetVariableBitValueName()
@@ -161,9 +161,9 @@ namespace LadderApp
                 case AddressTypeEnum.DigitalMemory:
                     return "M" + ((Id / NumberOfBitsByPort) + 1) + ".Bit" + (Id - (Int16)(Id / NumberOfBitsByPort) * NumberOfBitsByPort);
                 case AddressTypeEnum.DigitalMemoryTimer:
-                    return $"{GetVariableName()}.DN";
+                    return $"{GetVariableName()}.Done";
                 case AddressTypeEnum.DigitalMemoryCounter:
-                    return $"{GetVariableName()}.DN";
+                    return $"{GetVariableName()}.Done";
                 default:
                     return "ERROR";
             }

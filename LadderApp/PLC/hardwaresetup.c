@@ -12,13 +12,13 @@
 //====================================================================================
 // Rotina de configuração do sistema
 //====================================================================================
-void SetupSistema(void)
+void SystemSetup(void)
 {
 	WDTCTL = WDTPW + WDTHOLD; // Stop WDT
 	//------------------------------------------------------------------
 	// Configuração do TIMER A0
 	CCTL0 = CCIE; // CCR0 interrupt enabled
-	CCR0 = RECARGA_CCR0;
+	CCR0 = RECHARGE_CCR0;
 	TACTL = TASSEL_2 + MC_2; // SMCLK, contmode
 	//------------------------------------------------------------------
 	// Habilitação das interrupções
@@ -29,7 +29,7 @@ void SetupSistema(void)
 //====================================================================================
 // Configuração de IO
 //====================================================================================
-void SetupIO(void)
+void IOSetup(void)
 {
 #IO_HARDWARE_SETUP_C#
 }
@@ -37,17 +37,17 @@ void SetupIO(void)
 //====================================================================================
 // Rotina de Leitura das entradas
 //====================================================================================
-void LeEntradas(void)
+void ReadInputs(void)
 {
 #READ_INPUTS#
-	Sistema.Byte = Sys.Byte;
+	System.Byte = Sys.Byte;
 	Sys.Byte = 0;
 }
 
 //====================================================================================
 // Rotina de Escrita nas Saídas
 //====================================================================================
-void EscreveSaidas(void)
+void WriteOutputs(void)
 {
 #WRITE_OUTPUTS#
 }

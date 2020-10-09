@@ -18,15 +18,15 @@
 //====================================================================================
 int main(void)
 {
-	Parametros();
-	SetupSistema();
-	SetupIO();
+	StartupParameterization();
+	SystemSetup();
+	IOSetup();
 	while (1)
 	{
-		LeEntradas();
+		ReadInputs();
 		#EXEC_TIMERS_CALL#
-		ExecPrograma();
-		EscreveSaidas();
+		ExecuteLadderProgram();
+		WriteOutputs();
 	}
 }
 

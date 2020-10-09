@@ -102,22 +102,22 @@ namespace LadderApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 	case 1: // Contador Decrescente
-        ///		if (Contador-&gt;Reset == 1)
+        ///   Looks up a localized string similar to 	case 1: // Counter Decrescente
+        ///		if (Counter-&gt;Reset == 1)
         ///		{
-        ///			Contador-&gt;Acumulado = Contador-&gt;Preset;
+        ///			Counter-&gt;Accumulated = Counter-&gt;Preset;
         ///		}
-        ///		if (Contador-&gt;EN == 1 &amp;&amp; Contador-&gt;Pulso == 1)
+        ///		if (Counter-&gt;Enable == 1 &amp;&amp; Counter-&gt;Pulse == 1)
         ///		{
-        ///			Contador-&gt;Pulso = 0;
-        ///			if (Contador-&gt;Acumulado &gt; 0)
+        ///			Counter-&gt;Pulse = 0;
+        ///			if (Counter-&gt;Accumulated &gt; 0)
         ///			{
-        ///				Contador-&gt;Acumulado--;
-        ///				if (Contador-&gt;Acumulado == 0)
-        ///					Contador-&gt;DN = 1;
+        ///				Counter-&gt;Accumulated--;
+        ///				if (Counter-&gt;Accumulated == 0)
+        ///					Counter-&gt;Done = 1;
         ///
         ///				else
-        ///					Contador-&gt;DN = 0;
+        ///					Counter-&gt;Done = 0;
         ///			}
         ///		}
         ///		break;
@@ -130,23 +130,23 @@ namespace LadderApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 	case 0: // Contador Crescente
-        ///		if (Contador-&gt;Reset == 1)
+        ///   Looks up a localized string similar to 	case 0: // Counter Crescente
+        ///		if (Counter-&gt;Reset == 1)
         ///		{
-        ///			Contador-&gt;DN = 0;
-        ///			Contador-&gt;Acumulado = 0;
-        ///			Contador-&gt;Reset = 0;
+        ///			Counter-&gt;Done = 0;
+        ///			Counter-&gt;Accumulated = 0;
+        ///			Counter-&gt;Reset = 0;
         ///		}
-        ///		if (Contador-&gt;EN == 1 &amp;&amp; Contador-&gt;Pulso == 1)
+        ///		if (Counter-&gt;Enable == 1 &amp;&amp; Counter-&gt;Pulse == 1)
         ///		{
-        ///			Contador-&gt;Pulso = 0;
-        ///			if (Contador-&gt;Acumulado &lt;= 255)
+        ///			Counter-&gt;Pulse = 0;
+        ///			if (Counter-&gt;Accumulated &lt;= 255)
         ///			{
-        ///				Contador-&gt;Acumulado++;
-        ///				if (Contador-&gt;Acumulado &gt;= Contador-&gt;Preset)
-        ///					Contador-&gt;DN = 1;
+        ///				Counter-&gt;Accumulated++;
+        ///				if (Counter-&gt;Accumulated &gt;= Counter-&gt;Preset)
+        ///					Counter-&gt;Done = 1;
         ///				else
-        ///					Contador-&gt;DN = 0;
+        ///					Counter-&gt;Done = 0;
         ///			}
         ///		}
         ///		break;
@@ -162,17 +162,17 @@ namespace LadderApp.Resources {
         ///   Looks up a localized string similar to //====================================================================================
         ///// Rotina de execução do contador
         /////====================================================================================
-        ///void ExecContador(TContador *Contador)
+        ///void ExecuteCounter(TCounter *Counter)
         ///{
-        ///	switch (Contador-&gt;Tipo)
+        ///	switch (Counter-&gt;Type)
         ///	{
         ///#EXEC_COUNTER_TYPE_0_FUNCTION_C#
         ///#EXEC_COUNTER_TYPE_1_FUNCTION_C#
         ///	default:
         ///		break;
         ///	}
-        ///	if (Contador-&gt;EN == 0)
-        ///		Contador-&gt;Pulso = 1;
+        ///	if (Counter-&gt;Enable == 0)
+        ///		Counter-&gt;Pulse = 1;
         ///}
         ///.
         /// </summary>
@@ -183,7 +183,7 @@ namespace LadderApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to void ExecContador(TContador *Contador);.
+        ///   Looks up a localized string similar to void ExecuteCounter(TCounter *Counter);.
         /// </summary>
         internal static string execcounter_functionsH {
             get {
@@ -195,7 +195,7 @@ namespace LadderApp.Resources {
         ///   Looks up a localized string similar to //====================================================================================
         ///// Rotina de execução do temporizador
         /////====================================================================================
-        ///void ExecTemporizadores(void)
+        ///void ExecuteTimers(void)
         ///{
         ///#TIMERS_LADDERPROGRAM_C#
         ///}.
@@ -207,7 +207,7 @@ namespace LadderApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to void ExecTemporizadores(void);.
+        ///   Looks up a localized string similar to void ExecuteTimers(void);.
         /// </summary>
         internal static string exectimer_functions_ladderprogramH {
             get {
@@ -219,10 +219,10 @@ namespace LadderApp.Resources {
         ///   Looks up a localized string similar to //====================================================================================
         ///// Rotina de execução do temporizador
         /////====================================================================================
-        ///void ExecTemporizador(TTemporizador *Temporizador)
+        ///void ExecuteTimer(TTimer *Timer)
         ///{
-        ///	char EventoPresente = 0;
-        ///	switch (Temporizador-&gt;Tipo)
+        ///	char EventPresent = 0;
+        ///	switch (Timer-&gt;Type)
         ///	{
         /////-----------------------------------------------------------------------
         ///#EXEC_TIMER_TYPE_0_FUNCTION_C#
@@ -236,7 +236,7 @@ namespace LadderApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to void ExecTemporizador(TTemporizador *Temporizador);
+        ///   Looks up a localized string similar to void ExecuteTimer(TTimer *Timer);
         ///.
         /// </summary>
         internal static string exectimer_functionsH {
@@ -247,28 +247,28 @@ namespace LadderApp.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to 	case 1: // TOFF
-        ///		if (Temporizador-&gt;EN)
+        ///		if (Timer-&gt;Enable)
         ///		{
-        ///			Temporizador-&gt;Acumulado = Temporizador-&gt;Preset;
-        ///			Temporizador-&gt;DN = 1;
+        ///			Timer-&gt;Accumulated = Timer-&gt;Preset;
+        ///			Timer-&gt;Done = 1;
         ///		}
         ///		else
         ///		{
-        ///			if (Sistema.Evento10ms)
+        ///			if (System.Evento10ms)
         ///			{
-        ///				(Temporizador-&gt;Parcial)++;
-        ///				switch (Temporizador-&gt;Base)
+        ///				(Timer-&gt;Parcial)++;
+        ///				switch (Timer-&gt;TimeBase)
         ///				{
         ///				case 0:
-        ///					EventoPresente = 1;
+        ///					EventPresent = 1;
         ///					break;
         ///				case 1:
-        ///					if ((Temporizador-&gt;Parcial) &gt;= 10)
-        ///						EventoPresente = 1;
+        ///					if ((Timer-&gt;Parcial) &gt;= 10)
+        ///						EventPresent = 1;
         ///					break;
         ///				case 2:
-        ///					if ((Temporizador-&gt;Parcial) &gt;= 100)
-        ///						EventoPresente = 1;
+        ///					if ((Timer-&gt;Parcial) &gt;= 100)
+        ///						EventPresent = 1;
         ///					break;
         ///				case 3:
         ///					if  [rest of string was truncated]&quot;;.
@@ -282,23 +282,23 @@ namespace LadderApp.Resources {
         /// <summary>
         ///   Looks up a localized string similar to 	case 0:// TON ====================================================================
         ///
-        ///		if ((Temporizador-&gt;EN) &amp;&amp; (!Temporizador-&gt;Reset))
+        ///		if ((Timer-&gt;Enable) &amp;&amp; (!Timer-&gt;Reset))
         ///		{
         ///			//-------------------------------------------------------
-        ///			if (Sistema.Evento10ms == 1)
+        ///			if (System.Evento10ms == 1)
         ///			{
-        ///				(Temporizador-&gt;Parcial)++;
-        ///				switch (Temporizador-&gt;Base)
+        ///				(Timer-&gt;Parcial)++;
+        ///				switch (Timer-&gt;TimeBase)
         ///				{
         ///				case 0:
-        ///					EventoPresente = 1;
+        ///					EventPresent = 1;
         ///					break;
         ///				case 1:
-        ///					if ((Temporizador-&gt;Parcial) &gt;= 10)
-        ///						EventoPresente = 1;
+        ///					if ((Timer-&gt;Parcial) &gt;= 10)
+        ///						EventPresent = 1;
         ///					break;
         ///				case 2:
-        ///					if ((Temporizador-&gt;Parcial) &gt;= [rest of string was truncated]&quot;;.
+        ///					if ((Timer-&gt;Parcial) &gt;= [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string exectimer_ton_type0_functions {
             get {

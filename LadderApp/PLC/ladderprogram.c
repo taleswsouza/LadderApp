@@ -12,7 +12,7 @@
 //====================================================================================
 // Rotina de parametros de inicialização
 //====================================================================================
-void Parametros(void)
+void StartupParameterization(void)
 {
 #PARAMETERIZATION#
 }
@@ -23,7 +23,7 @@ void Parametros(void)
 //====================================================================================
 // Rotina de Execução do programa do usúario
 //====================================================================================
-void ExecPrograma(void)
+void ExecuteLadderProgram(void)
 {
 #LADDER#
 }

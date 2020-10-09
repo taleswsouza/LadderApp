@@ -78,7 +78,7 @@ namespace LadderApp
 
                 switch (address.Timer.Type)
                 {
-                    case 0: // TON - Contador Crescente
+                    case 0: // TON - Counter Crescente
                         if (address.Timer.Enable && !address.Timer.Reset)
                         {
                             address.Timer.ParcialAccumulated++;
@@ -103,7 +103,7 @@ namespace LadderApp
                         }
                         break;
 
-                    case 1: // TOF - Contador Decrescente
+                    case 1: // TOF - Counter Decrescente
                         if (address.Timer.Enable || address.Timer.Reset)
                         {
                             address.Value = true; /// DONE = true
@@ -113,7 +113,7 @@ namespace LadderApp
                         }
                         else
                         {
-                            if (address.Value) // DN habilitado - temporizador contando
+                            if (address.Value) // Done habilitado - temporizador contando
                                 address.Timer.ParcialAccumulated++;
 
                             if (address.Timer.ParcialAccumulated >= address.Timer.ParcialPreset)
@@ -176,12 +176,12 @@ namespace LadderApp
         public Address auxToggleBitPulse = null;
 
 
-        public void ExecutaSimuladoContadores(Instruction instruction, Address counterAddress)
+        public void ExecuteCountersSimulator(Instruction instruction, Address counterAddress)
         {
 
             switch (counterAddress.Counter.Type)
             {
-                case 0: // Contador Crescente
+                case 0: // Counter Crescente
                     if (counterAddress.Counter.Reset == true)
                     {
                         counterAddress.Value = false;
@@ -203,7 +203,7 @@ namespace LadderApp
                     }
                     break;
 
-                case 1: // Contador Decrescente
+                case 1: // Counter Decrescente
                     if (counterAddress.Counter.Reset == true)
                     {
                         counterAddress.Counter.Accumulated = counterAddress.Counter.Preset;
@@ -302,7 +302,7 @@ namespace LadderApp
                             else if (instruction.OpCode == OperationCode.Counter)
                             {
                                 ((Address)instruction.GetOperand(0)).Counter.Enable = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
-                                ExecutaSimuladoContadores(instruction, ((Address)instruction.GetOperand(0)));
+                                ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
                             }
                             else if (instruction.OpCode == OperationCode.Reset)
                             {
@@ -312,7 +312,7 @@ namespace LadderApp
                                     {
                                         case AddressTypeEnum.DigitalMemoryCounter:
                                             ((Address)instruction.GetOperand(0)).Counter.Reset = true;
-                                            ExecutaSimuladoContadores(instruction, ((Address)instruction.GetOperand(0)));
+                                            ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
                                             break;
 
                                         case AddressTypeEnum.DigitalMemoryTimer:
@@ -516,7 +516,7 @@ namespace LadderApp
                             else if (instruction.OpCode == OperationCode.Counter)
                             {
                                 operandsInLine.Add(((Address)instruction.GetOperand(0)).GetEnableBit());
-                                functionsAfterLine += " ExecContador(&" + ((Address)instruction.GetOperand(0)).Name + ");";
+                                functionsAfterLine += " ExecuteCounter(&" + ((Address)instruction.GetOperand(0)).Name + ");";
                                 ((Address)instruction.GetOperand(0)).Used = true;
                             }
                             else if (instruction.OpCode == OperationCode.Reset)
@@ -527,7 +527,7 @@ namespace LadderApp
                                 switch (((Address)instruction.GetOperand(0)).AddressType)
                                 {
                                     case AddressTypeEnum.DigitalMemoryCounter:
-                                        operandsInLine2MaybeWithAddress.Add("ExecContador(&" + ((Address)instruction.GetOperand(0)).Name + ");");
+                                        operandsInLine2MaybeWithAddress.Add("ExecuteCounter(&" + ((Address)instruction.GetOperand(0)).Name + ");");
                                         break;
                                     default:
                                         break;
@@ -690,10 +690,10 @@ namespace LadderApp
                     if (address.Used)
                     {
                         timerPresent = true;
-                        contentParameterization += "\t" + address.Name + ".Tipo = " + address.Timer.Type.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.Name + ".Base = " + address.Timer.TimeBase.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Type = " + address.Timer.Type.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".TimeBase = " + address.Timer.TimeBase.ToString() + ";" + Environment.NewLine;
                         contentParameterization += "\t" + address.Name + ".Preset = " + address.Timer.Preset.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.Name + ".Acumulado = 0;" + Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Accumulated = 0;" + Environment.NewLine;
                         contentParameterization += Environment.NewLine;
 
                         /// prerapara a declaração dos endereços
@@ -706,14 +706,14 @@ namespace LadderApp
                     }
                 }
 
-                /// Prepara a lista de endereços do tipo TTemporizador  - que será declarada
+                /// Prepara a lista de endereços do tipo TTimer  - que será declarada
                 if (usedVariableNames.Count > 0)
                 {
-                    contentVariableDeclarations += "TTemporizador ";
+                    contentVariableDeclarations += "TTimer ";
                     foreach (String variableName in usedVariableNames)
                     {
                         contentVariableDeclarations += variableName + ", ";
-                        contentTimers += "ExecTemporizador(&" + variableName + ");" + Environment.NewLine;
+                        contentTimers += "ExecuteTimer(&" + variableName + ");" + Environment.NewLine;
                     }
                     contentVariableDeclarations = contentVariableDeclarations.Substring(0, contentVariableDeclarations.Length - 2) + ";" + Environment.NewLine;
                     usedVariableNames.Clear();
@@ -726,9 +726,9 @@ namespace LadderApp
                     if (address.Used)
                     {
                         counterPresent = true;
-                        contentParameterization += "\t" + address.Name + ".Tipo = " + address.Counter.Type.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Type = " + address.Counter.Type.ToString() + ";" + Environment.NewLine;
                         contentParameterization += "\t" + address.Name + ".Preset = " + address.Counter.Preset.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.Name + ".Acumulado = 0;" + Environment.NewLine;
+                        contentParameterization += "\t" + address.Name + ".Accumulated = 0;" + Environment.NewLine;
                         contentParameterization += Environment.NewLine;
 
                         /// prerapara a declaração dos endereços
@@ -741,10 +741,10 @@ namespace LadderApp
                     }
                 }
 
-                /// Prepara a lista de endereços do tipo TContador  - que será declarada
+                /// Prepara a lista de endereços do tipo TCounter  - que será declarada
                 if (usedVariableNames.Count > 0)
                 {
-                    contentVariableDeclarations += "TContador ";
+                    contentVariableDeclarations += "TCounter ";
                     foreach (String variableDeclaration in usedVariableNames)
                         contentVariableDeclarations += variableDeclaration + ", ";
                     contentVariableDeclarations = contentVariableDeclarations.Substring(0, contentVariableDeclarations.Length - 2) + ";" + Environment.NewLine;
@@ -828,7 +828,7 @@ namespace LadderApp
 
                 if (timerPresent)
                 {
-                    contentMainDotCFile = contentMainDotCFile.Replace("#EXEC_TIMERS_CALL#", "ExecTemporizadores();");
+                    contentMainDotCFile = contentMainDotCFile.Replace("#EXEC_TIMERS_CALL#", "ExecuteTimers();");
                 }
                 else
                 {

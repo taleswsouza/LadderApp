@@ -1,46 +1,46 @@
 	case 0:// TON ====================================================================
 
-		if ((Temporizador->EN) && (!Temporizador->Reset))
+		if ((Timer->Enable) && (!Timer->Reset))
 		{
 			//-------------------------------------------------------
-			if (Sistema.Evento10ms == 1)
+			if (System.Event10ms == 1)
 			{
-				(Temporizador->Parcial)++;
-				switch (Temporizador->Base)
+				(Timer->Parcial)++;
+				switch (Timer->TimeBase)
 				{
 				case 0:
-					EventoPresente = 1;
+					EventPresent = 1;
 					break;
 				case 1:
-					if ((Temporizador->Parcial) >= 10)
-						EventoPresente = 1;
+					if ((Timer->Parcial) >= 10)
+						EventPresent = 1;
 					break;
 				case 2:
-					if ((Temporizador->Parcial) >= 100)
-						EventoPresente = 1;
+					if ((Timer->Parcial) >= 100)
+						EventPresent = 1;
 					break;
 				case 3:
-					if ((Temporizador->Parcial) >= 6000)
-						EventoPresente = 1;
+					if ((Timer->Parcial) >= 6000)
+						EventPresent = 1;
 					break;
 				}
-				if (EventoPresente == 1)
+				if (EventPresent == 1)
 				{
-					(Temporizador->Acumulado)++;
-					(Temporizador->Parcial) = 0;
+					(Timer->Accumulated)++;
+					(Timer->Parcial) = 0;
 				}
 			}
 			//-------------------------------------------------------
-			if (Temporizador->Acumulado >= Temporizador->Preset)
+			if (Timer->Accumulated >= Timer->Preset)
 			{
-				Temporizador->Acumulado = Temporizador->Preset;
-				Temporizador->DN = 1;
+				Timer->Accumulated = Timer->Preset;
+				Timer->Done = 1;
 			}
 		}
 		else
 		{
-			Temporizador->DN = 0;
-			Temporizador->Acumulado = 0;
-			Temporizador->Parcial = 0;
+			Timer->Done = 0;
+			Timer->Accumulated = 0;
+			Timer->Parcial = 0;
 		}
 		break;
