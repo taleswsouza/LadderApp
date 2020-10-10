@@ -78,7 +78,7 @@ namespace LadderApp
 
                 switch (address.Timer.Type)
                 {
-                    case 0: // TON - Counter Crescente
+                    case 0: // TON
                         if (address.Timer.Enable && !address.Timer.Reset)
                         {
                             address.Timer.ParcialAccumulated++;
@@ -96,14 +96,14 @@ namespace LadderApp
                         }
                         else
                         {
-                            address.Value = false; /// DONE = false
+                            address.Value = false; 
                             address.Timer.Accumulated = 0;
                             address.Timer.ParcialAccumulated = 0;
                             address.Timer.Reset = false;
                         }
                         break;
 
-                    case 1: // TOF - Counter Decrescente
+                    case 1: // TOF
                         if (address.Timer.Enable || address.Timer.Reset)
                         {
                             address.Value = true; /// DONE = true
@@ -113,7 +113,7 @@ namespace LadderApp
                         }
                         else
                         {
-                            if (address.Value) // Done habilitado - temporizador contando
+                            if (address.Value) // Done enabled - timer counting
                                 address.Timer.ParcialAccumulated++;
 
                             if (address.Timer.ParcialAccumulated >= address.Timer.ParcialPreset)
@@ -181,7 +181,7 @@ namespace LadderApp
 
             switch (counterAddress.Counter.Type)
             {
-                case 0: // Counter Crescente
+                case 0: // Counter acending
                     if (counterAddress.Counter.Reset == true)
                     {
                         counterAddress.Value = false;
@@ -203,7 +203,7 @@ namespace LadderApp
                     }
                     break;
 
-                case 1: // Counter Decrescente
+                case 1: // Counter descending
                     if (counterAddress.Counter.Reset == true)
                     {
                         counterAddress.Counter.Accumulated = counterAddress.Counter.Preset;
@@ -419,8 +419,6 @@ namespace LadderApp
 
             opCode2TextServices.Add(OperationCode.None);
 
-            /// caso senha para inserir senha
-            /// realiza recuperação da senha
             if (savePrograInsideExecutable && savePassword)
             {
                 result = MessageBox.Show("Are you sure you want to write a password to the executable to be generated?", "Request password", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
@@ -582,7 +580,6 @@ namespace LadderApp
 
             if (result == DialogResult.OK)
             {
-                /// declarações
                 string contentLadderProgramDotHFile = "";
                 string contentLadderProgramDotCFile = "";
                 string contentFunctionsDotHFile = "";
@@ -607,43 +604,14 @@ namespace LadderApp
                 List<int> usedTimerTypes = new List<int>();
                 List<int> usedCounterTypes = new List<int>();
 
-                /// 1. prepara a configuração para as portas de entrada.
-                /// 2. levantamento das portas que foram usadas no programa
-                foreach (Address address in addressing.ListInputAddress)
-                    if (address.GetPortParameterization() != "" && address.Used == true)
-                    {
-                        inputsPresent = true;
-                        /// 1.1. Adiciona os parametros dos endereços usados no programa
-                        contentParameterization += "\t" + address.GetPortParameterization() + ";" + Environment.NewLine;
+                PrepareParameterizationForInputPorts(ref contentParameterization, ref inputsPresent, usedPorts);
 
-                        /// 2.1. prerapara a declaração dos endereços
-                        if (!usedPorts.Contains(address.GetVariableName()))
-                            usedPorts.Add(address.GetVariableName());
-                    }
-                contentParameterization += Environment.NewLine;
+                PrepareParameterizationForOutputAddress(ref contentParameterization, ref outputsPresent, usedPorts);
 
-                /// 1. prepara a configuração para as portas de saida.
-                /// 2. levantamento das portas que foram usadas no programa
-                foreach (Address address in addressing.ListOutputAddress)
-                    if (address.GetPortParameterization() != "" && address.Used == true)
-                    {
-                        outputsPresent = true;
-                        /// 1.1. Adiciona os parametros dos endereços usados no programa
-                        contentParameterization += "\t" + address.GetPortParameterization() + ";" + Environment.NewLine;
-
-                        /// 2.1. prerapara a declaração dos endereços
-                        if (!usedPorts.Contains(address.GetVariableName()))
-                            usedPorts.Add(address.GetVariableName());
-                    }
-                contentParameterization += Environment.NewLine;
-
-                /// prepara a declaração das portas que foram usadas no programa
-                for (int i = 0; i < usedPorts.Count; i++)
-                    usedVariableNames.Add(usedPorts[i] + "_IN, " + usedPorts[i] + "_OUT, " + usedPorts[i] + "_DIR");
+                PrepareVariableDeclarationForInputOrOutPutUsedInProgram(usedVariableNames, usedPorts);
 
                 for (int i = 0; i < usedPorts.Count; i++)
                 {
-                    /// Escreve rotina SetupIO(void)
                     contentIOSetup += usedPorts[i] + "OUT = 0; // Init Output data of port" + Environment.NewLine;
                     contentIOSetup += usedPorts[i] + "DIR = " + usedPorts[i] + "_DIR.Byte; // Init of Port1 Data-Direction Reg (Out=1 / Inp=0)" + Environment.NewLine;
                     contentIOSetup += usedPorts[i] + "SEL = 0; // Port-Modules:" + Environment.NewLine;
@@ -653,27 +621,22 @@ namespace LadderApp
 
                     if (inputsPresent)
                     {
-                        /// Escreve rotina LeEntradas(void)
                         contentReadInputs += usedPorts[i] + "_IN.Byte = " + usedPorts[i] + "IN;" + Environment.NewLine;
                     }
 
                     if (outputsPresent)
                     {
-                        /// Escreve rotina LEscreveSaidas(void)
                         contentWriteOutputs += usedPorts[i] + "OUT = " + usedPorts[i] + "_OUT.Byte; // Write Output data of port1" + Environment.NewLine;
                     }
                 }
 
-                /// prepara composição de parametros e declaração de variáveis
                 foreach (Address address in addressing.ListMemoryAddress)
                     if (address.Used)
                     {
-                        /// prerapara a declaração dos endereços
                         if (!usedVariableNames.Contains(address.GetVariableName()))
                             usedVariableNames.Add(address.GetVariableName());
                     }
 
-                /// Prepara a lista de endereços do tipo TPort - que será declarada
                 if (usedVariableNames.Count > 0)
                 {
                     contentVariableDeclarations += "TPort ";
@@ -683,7 +646,7 @@ namespace LadderApp
                     usedVariableNames.Clear();
                 }
 
-                /// Adiciona os parametros dos endereços usados no programa
+                /// timer
                 contentParameterization += "// timer parameters" + Environment.NewLine;
                 foreach (Address address in addressing.ListTimerAddress)
                 {
@@ -696,17 +659,16 @@ namespace LadderApp
                         contentParameterization += "\t" + address.Name + ".Accumulated = 0;" + Environment.NewLine;
                         contentParameterization += Environment.NewLine;
 
-                        /// prerapara a declaração dos endereços
+                        /// prepare variable declaration
                         if (!usedVariableNames.Contains(address.GetVariableName()))
                             usedVariableNames.Add(address.GetVariableName());
 
-                        /// prerapara verificação dos tipos de temporizadores usados
                         if (!usedTimerTypes.Contains(address.Timer.Type))
                             usedTimerTypes.Add(address.Timer.Type);
                     }
                 }
 
-                /// Prepara a lista de endereços do tipo TTimer  - que será declarada
+                /// timers
                 if (usedVariableNames.Count > 0)
                 {
                     contentVariableDeclarations += "TTimer ";
@@ -720,7 +682,7 @@ namespace LadderApp
                 }
 
 
-                /// Adiciona os parametros dos endereços usados no programa
+                /// counters
                 foreach (Address address in addressing.ListCounterAddress)
                 {
                     if (address.Used)
@@ -731,17 +693,16 @@ namespace LadderApp
                         contentParameterization += "\t" + address.Name + ".Accumulated = 0;" + Environment.NewLine;
                         contentParameterization += Environment.NewLine;
 
-                        /// prerapara a declaração dos endereços
+                        /// prepare variable declaration
                         if (!usedVariableNames.Contains(address.GetVariableName()))
                             usedVariableNames.Add(address.GetVariableName());
 
-                        /// prerapara verificação dos tipos de temporizadores usados
                         if (!usedCounterTypes.Contains(address.Counter.Type))
                             usedCounterTypes.Add(address.Counter.Type);
                     }
                 }
 
-                /// Prepara a lista de endereços do tipo TCounter  - que será declarada
+                /// Prepare TCounter to be declared
                 if (usedVariableNames.Count > 0)
                 {
                     contentVariableDeclarations += "TCounter ";
@@ -761,22 +722,19 @@ namespace LadderApp
                 msp430gcc.CreateFile("addresses.h", contentAddressesDotHFile);
 
 
-                /// Prepara DEFINICAO
                 msp430gcc.CreateFile("definitions.h", MicrocontrollersBaseCodeFilesResource.definitionsH);
 
 
-                /// Prepara SETUPHARDWARE
                 msp430gcc.CreateFile("hardwaresetup.h", MicrocontrollersBaseCodeFilesResource.hardwaresetupH);
 
 
-                /// Prepara FUNCOES
-                if (counterPresent) /// CONTADOR
+                if (counterPresent)
                     contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.functionsH.Replace("#EXECCOUNTER_FUNCTION_H#", MicrocontrollersBaseCodeFilesResource.execcounter_functionsH);
                 else
                     contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.functionsH.Replace("#EXECCOUNTER_FUNCTION_H#", "");
 
 
-                if (timerPresent) /// TEMPORIZADOR
+                if (timerPresent)
                     contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTIMER_FUNCTION_H#", MicrocontrollersBaseCodeFilesResource.exectimer_functionsH);
                 else
                     contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTIMER_FUNCTION_H#", "");
@@ -784,7 +742,6 @@ namespace LadderApp
                 msp430gcc.CreateFile("functions.h", contentFunctionsDotHFile);
 
 
-                /// Prepara USUARIO
                 if (timerPresent)
                     contentLadderProgramDotHFile = MicrocontrollersBaseCodeFilesResource.ladderprogramH.Replace("#EXEC_TIMERS_LADDERPROGRAM_H#", MicrocontrollersBaseCodeFilesResource.exectimer_functions_ladderprogramH);
                 else
@@ -809,7 +766,6 @@ namespace LadderApp
                 msp430gcc.CompilesMsp430ViaGcc("ladderprogram");
 
 
-                /// Prepara MAIN
                 contentMainDotCFile = MicrocontrollersBaseCodeFilesResource.mainC;
 
                 if (savePrograInsideExecutable)
@@ -822,8 +778,7 @@ namespace LadderApp
                     contentMainDotCFile = contentMainDotCFile.Replace("#LADDER_INSTRUCTIONS#", "");
                 contentMainDotCFile.Trim();
 
-                ///// criar classe para tratar codigos interpretaveis
-                //msp430gcc.CreateFile("codigos.txt", contentOpCodes);
+                //msp430gcc.CreateFile("opcodes.txt", contentOpCodes);
 
 
                 if (timerPresent)
@@ -839,12 +794,10 @@ namespace LadderApp
                 msp430gcc.CompilesMsp430ViaGcc("main");
 
 
-                /// Prepara FUNCOES
-                if (counterPresent) /// CONTADOR
+                if (counterPresent)
                 {
                     contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.functionsC.Replace("#EXEC_COUNTER_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.execcounter_functionsC);
 
-                    /// TIPOS DE TEMPORIZADORES USADOS
                     if (usedCounterTypes.Contains(0))
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_0_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.execcounter_ctu_type0_functionsC);
                     else
@@ -859,11 +812,10 @@ namespace LadderApp
                     contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.functionsC.Replace("#EXEC_COUNTER_FUNCTION_C#", "");
 
 
-                if (timerPresent) /// TEMPORIZADOR
+                if (timerPresent)
                 {
                     contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.exectimer_functionsC);
 
-                    /// TIPOS DE TEMPORIZADORES USADOS
                     if (usedTimerTypes.Contains(0))
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_0_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.exectimer_ton_type0_functions);
                     else
@@ -882,7 +834,6 @@ namespace LadderApp
                 msp430gcc.CompilesMsp430ViaGcc("functions");
 
 
-                /// Prepara SETUPHARDARE
                 contentHardwareSetupDotCFile = MicrocontrollersBaseCodeFilesResource.hardwaresetupC.Replace("#IO_HARDWARE_SETUP_C#", contentIOSetup);
                 contentHardwareSetupDotCFile = contentHardwareSetupDotCFile.Replace("#READ_INPUTS#", contentReadInputs);
                 contentHardwareSetupDotCFile = contentHardwareSetupDotCFile.Replace("#WRITE_OUTPUTS#", contentWriteOutputs);
@@ -890,14 +841,11 @@ namespace LadderApp
                 msp430gcc.CompilesMsp430ViaGcc("hardwaresetup");
 
 
-                /// Prepara INTERRUPCAO
                 msp430gcc.CreateFile("interruption.c", MicrocontrollersBaseCodeFilesResource.interruptionC);
                 msp430gcc.CompilesMsp430ViaGcc("interruption");
 
-                /// CRIA ELF
                 msp430gcc.CompileELF(Name);
 
-                /// CRIA EXECUTAVE E GRAVA NO DISPOSITIVO
                 msp430gcc.CompilationStepMergeAllDotOFilesAndGenerateElfFile(this.Name);
 
                 if (writeProgram)
@@ -905,6 +853,47 @@ namespace LadderApp
             }
 
             return true;
+        }
+
+        private static void PrepareVariableDeclarationForInputOrOutPutUsedInProgram(List<string> usedVariableNames, List<string> usedPorts)
+        {
+            for (int i = 0; i < usedPorts.Count; i++)
+                usedVariableNames.Add(usedPorts[i] + "_IN, " + usedPorts[i] + "_OUT, " + usedPorts[i] + "_DIR");
+        }
+
+        private void PrepareParameterizationForOutputAddress(ref string contentParameterization, ref bool outputsPresent, List<string> usedPorts)
+        {
+            /// 1. prepare to setup output ports
+            foreach (Address address in addressing.ListOutputAddress)
+                if (address.GetPortParameterization() != "" && address.Used == true)
+                {
+                    outputsPresent = true;
+                    /// 1.1. add input ports to parameterization
+                    contentParameterization += "\t" + address.GetPortParameterization() + ";" + Environment.NewLine;
+
+                    /// 2.1. prepare input ports to variable declaration
+                    if (!usedPorts.Contains(address.GetVariableName()))
+                        usedPorts.Add(address.GetVariableName());
+                }
+            contentParameterization += Environment.NewLine;
+        }
+
+        private void PrepareParameterizationForInputPorts(ref string contentParameterization, ref bool inputsPresent, List<string> usedPorts)
+        {
+            /// 1. Prepare Parameterization For Input ports.
+            /// 2. include these ports in usedPorts list
+            foreach (Address address in addressing.ListInputAddress)
+                if (address.GetPortParameterization() != "" && address.Used == true)
+                {
+                    inputsPresent = true;
+                    /// 1.1. add parameterization for each input address
+                    contentParameterization += "\t" + address.GetPortParameterization() + ";" + Environment.NewLine;
+
+                    /// 2.1. prepare variable declaration to each input address
+                    if (!usedPorts.Contains(address.GetVariableName()))
+                        usedPorts.Add(address.GetVariableName());
+                }
+            contentParameterization += Environment.NewLine;
         }
 
         public bool VerifyProgram()
@@ -935,7 +924,6 @@ namespace LadderApp
                 return false;
 
 
-            /// 2.1 - Verifica se todos os simbolos tem os operandos minimos atribuidos
             if (!instructions.ContainsAllOperandos())
                 return false;
 

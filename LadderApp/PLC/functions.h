@@ -1,19 +1,19 @@
 //====================================================================================
-// Arquivo de prototipo das funções do sistema
-// Autor: Silvano Fonseca Paganoto
-// Data: 15/09/2010
+// Functions prototype
+// Author: Silvano Fonseca Paganoto
+// Date: 15/09/2010
 //====================================================================================
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 //====================================================================================
-// Includes
+// includes
 //====================================================================================
 #include "definitions.h"
 #include "hardwaresetup.h"
 
 
 //====================================================================================
-// Prototipos
+// prototypes
 //====================================================================================
 #EXECTIMER_FUNCTION_H#
 #EXECCOUNTER_FUNCTION_H#

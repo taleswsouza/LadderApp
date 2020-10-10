@@ -1,7 +1,7 @@
 //====================================================================================
-// Arquivo de protótipo das funções do programa do usuario
-// Autor: Silvano Fonseca Paganoto
-// Data: 15/09/2010
+// ladder program prototypes
+// Author: Silvano Fonseca Paganoto
+// Date: 15/09/2010
 //====================================================================================
 
 #ifndef LADDERPROGRAM_H
@@ -15,7 +15,7 @@
 #include "functions.h"
 
 //====================================================================================
-// Protótipo
+// prototypes
 //====================================================================================
 void StartupParameterization(void);
 void ExecuteLadderProgram(void);

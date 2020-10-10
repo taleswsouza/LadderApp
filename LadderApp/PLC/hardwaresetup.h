@@ -1,7 +1,7 @@
 //====================================================================================
-// Arquivo de protótipo das funções para configuração de hardware
-// Autor: Silvano Fonseca Paganoto
-// Data: 15/09/2010
+// functions prototypes for hardware configuration
+// Author: Silvano Fonseca Paganoto
+// Date: 15/09/2010
 //====================================================================================
 
 #ifndef SETUPHARDWARE_H_
@@ -14,7 +14,7 @@
 #include "addresses.h"
 
 //====================================================================================
-// Prototipos
+// prototypes
 //====================================================================================
 void SystemSetup(void);
 void IOSetup(void);

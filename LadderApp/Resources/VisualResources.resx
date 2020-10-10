@@ -129,6 +129,6 @@ Reset and release device...
 </value>
   </data>
   <data name="SaveTheProjectQuestion" xml:space="preserve">
-    <value>Tem certeza que deseja fechar o projeto %% ?</value>
+    <value>Are you sure want to save the project %% ?</value>
   </data>
 </root>

@@ -1,6 +1,6 @@
 //====================================================================================
-// Arquivo de definição geral
-// Autor: Silvano Fonseca Paganoto
+// General definitions
+// Author: Silvano Fonseca Paganoto
 // Data: 15/09/2010
 //====================================================================================
 
@@ -68,12 +68,12 @@ typedef struct
 		unsigned char Config;
 		struct
 		{
-			unsigned char Type :2; // 0 = TON, 1 = TOFF,...
-			unsigned char TimeBase :2; // TimeBase de tempo: 0 = milisegundos, 1 = 100milisegundos, 2 = segundos, 3 = minutos
-			unsigned char Enable :1; // Habilitado
-			unsigned char Done :1; // Temporização realizada (done)
-			unsigned char Reset :1; // reset do contador
-			unsigned char Bit7 :1; // reserva
+			unsigned char Type :2;		// 0 = TON, 1 = TOF,...
+			unsigned char TimeBase :2;	// 0 = 10ms, 1 = 100ms, 2 = 1s, 3 = 1m
+			unsigned char Enable :1;
+			unsigned char Done :1;
+			unsigned char Reset :1;
+			unsigned char Bit7 :1;		// spare
 		};
 	};
 } TTimer;
@@ -83,20 +83,20 @@ typedef struct
 //====================================================================================
 typedef struct
 {
-	unsigned char Preset; // valor de preset
-	unsigned char Accumulated; //Valor acumulado
+	unsigned char Preset;
+	unsigned char Accumulated;
 	union
 	{
 		unsigned char Config;
 		struct
 		{
-			unsigned char Type :2; // 0 = Counter Crescente, 1 = Counter Decrescente,...
-			unsigned char Enable :1; // Habilitado
-			unsigned char Pulse :1; // Pulse (Auxiliar)
-			unsigned char Done :1; // Contagem realizada (done)
-			unsigned char Reset :1; // reset do contador
-			unsigned char Bit6 :1; // reserva
-			unsigned char Bit7 :1; // reserva
+			unsigned char Type :2;	// 0 = ascending counter, 1 = descending counter
+			unsigned char Enable :1;
+			unsigned char Pulse :1;
+			unsigned char Done :1;
+			unsigned char Reset :1;
+			unsigned char Bit6 :1;	// spare
+			unsigned char Bit7 :1;	// spare
 		};
 	};
 } TCounter;

@@ -96,7 +96,7 @@ namespace LadderApp
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblStatusBar = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -128,6 +128,7 @@ namespace LadderApp
             // 
             // menuStrip
             // 
+            this.menuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileMenu,
             this.editMenu,
@@ -169,7 +170,7 @@ namespace LadderApp
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(154, 30);
             this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.ShowNewForm);
             // 
@@ -179,14 +180,14 @@ namespace LadderApp
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(154, 30);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenFile);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(151, 6);
             // 
             // saveToolStripMenuItem
             // 
@@ -194,21 +195,21 @@ namespace LadderApp
             this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(154, 30);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveFile);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(154, 30);
             this.saveAsToolStripMenuItem.Text = "Save &As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(151, 6);
             this.toolStripSeparator4.Visible = false;
             // 
             // printToolStripMenuItem
@@ -217,7 +218,7 @@ namespace LadderApp
             this.printToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
             this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(154, 30);
             this.printToolStripMenuItem.Text = "&Print";
             // 
             // printPreviewToolStripMenuItem
@@ -225,26 +226,26 @@ namespace LadderApp
             this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
             this.printPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(154, 30);
             this.printPreviewToolStripMenuItem.Text = "Print Pre&view";
             this.printPreviewToolStripMenuItem.Click += new System.EventHandler(this.printPreviewToolStripMenuItem_Click);
             // 
             // printSetupToolStripMenuItem
             // 
             this.printSetupToolStripMenuItem.Name = "printSetupToolStripMenuItem";
-            this.printSetupToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.printSetupToolStripMenuItem.Size = new System.Drawing.Size(154, 30);
             this.printSetupToolStripMenuItem.Text = "Print Setup";
             this.printSetupToolStripMenuItem.Visible = false;
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(151, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(154, 30);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolsStripMenuItem_Click);
             // 
@@ -270,7 +271,7 @@ namespace LadderApp
             this.undoToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.undoToolStripMenuItem.Text = "&Undo";
             this.undoToolStripMenuItem.Visible = false;
             // 
@@ -280,14 +281,14 @@ namespace LadderApp
             this.redoToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.redoToolStripMenuItem.Text = "&Redo";
             this.redoToolStripMenuItem.Visible = false;
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(165, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(173, 6);
             this.toolStripSeparator6.Visible = false;
             // 
             // cutToolStripMenuItem
@@ -296,7 +297,7 @@ namespace LadderApp
             this.cutToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
             this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.cutToolStripMenuItem.Text = "Cu&t";
             this.cutToolStripMenuItem.Click += new System.EventHandler(this.CutToolStripMenuItem_Click);
             // 
@@ -306,7 +307,7 @@ namespace LadderApp
             this.copyToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.copyToolStripMenuItem.Text = "&Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.CopyToolStripMenuItem_Click);
             // 
@@ -316,20 +317,20 @@ namespace LadderApp
             this.pasteToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
             this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.pasteToolStripMenuItem.Text = "&Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.PasteToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(165, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(173, 6);
             // 
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
             this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.selectAllToolStripMenuItem.Text = "Select &All";
             this.selectAllToolStripMenuItem.Visible = false;
             // 
@@ -337,7 +338,7 @@ namespace LadderApp
             // 
             this.mnuEditComment.Name = "mnuEditComment";
             this.mnuEditComment.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.mnuEditComment.Size = new System.Drawing.Size(168, 22);
+            this.mnuEditComment.Size = new System.Drawing.Size(176, 30);
             this.mnuEditComment.Text = "&Edit comment";
             this.mnuEditComment.Click += new System.EventHandler(this.mnuEditComment_Click);
             // 
@@ -655,7 +656,7 @@ namespace LadderApp
             this.contentsToolStripMenuItem.Enabled = false;
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.contentsToolStripMenuItem.Text = "&Contents";
             this.contentsToolStripMenuItem.Visible = false;
             this.contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
@@ -665,7 +666,7 @@ namespace LadderApp
             this.indexToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("indexToolStripMenuItem.Image")));
             this.indexToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
-            this.indexToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.indexToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.indexToolStripMenuItem.Text = "&Content";
             this.indexToolStripMenuItem.Click += new System.EventHandler(this.indexToolStripMenuItem_Click);
             // 
@@ -675,26 +676,27 @@ namespace LadderApp
             this.searchToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("searchToolStripMenuItem.Image")));
             this.searchToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            this.searchToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.searchToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.searchToolStripMenuItem.Text = "&Search";
             this.searchToolStripMenuItem.Visible = false;
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(165, 6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(173, 6);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.aboutToolStripMenuItem.Text = "&About ...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // statusStrip
             // 
+            this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel});
+            this.lblStatusBar});
             this.statusStrip.Location = new System.Drawing.Point(0, 536);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
@@ -702,11 +704,11 @@ namespace LadderApp
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "StatusStrip";
             // 
-            // toolStripStatusLabel
+            // lblStatusBar
             // 
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
-            this.toolStripStatusLabel.Text = "Status";
+            this.lblStatusBar.Name = "lblStatusBar";
+            this.lblStatusBar.Size = new System.Drawing.Size(39, 17);
+            this.lblStatusBar.Text = "Status";
             // 
             // newToolStripButton
             // 
@@ -714,7 +716,7 @@ namespace LadderApp
             this.newToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripButton.Image")));
             this.newToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.newToolStripButton.Name = "newToolStripButton";
-            this.newToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.newToolStripButton.Size = new System.Drawing.Size(28, 28);
             this.newToolStripButton.Text = "New";
             this.newToolStripButton.Click += new System.EventHandler(this.ShowNewForm);
             // 
@@ -724,7 +726,7 @@ namespace LadderApp
             this.openToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripButton.Image")));
             this.openToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripButton.Name = "openToolStripButton";
-            this.openToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.openToolStripButton.Size = new System.Drawing.Size(28, 28);
             this.openToolStripButton.Text = "Open";
             this.openToolStripButton.Click += new System.EventHandler(this.OpenFile);
             // 
@@ -734,14 +736,14 @@ namespace LadderApp
             this.saveToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripButton.Image")));
             this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.saveToolStripButton.Name = "saveToolStripButton";
-            this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.saveToolStripButton.Size = new System.Drawing.Size(28, 28);
             this.saveToolStripButton.Text = "Save";
             this.saveToolStripButton.Click += new System.EventHandler(this.SaveFile);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
             // 
             // printToolStripButton
             // 
@@ -750,7 +752,7 @@ namespace LadderApp
             this.printToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripButton.Image")));
             this.printToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.printToolStripButton.Name = "printToolStripButton";
-            this.printToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.printToolStripButton.Size = new System.Drawing.Size(28, 28);
             this.printToolStripButton.Text = "Print";
             this.printToolStripButton.Visible = false;
             // 
@@ -761,7 +763,7 @@ namespace LadderApp
             this.printPreviewToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripButton.Image")));
             this.printPreviewToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.printPreviewToolStripButton.Name = "printPreviewToolStripButton";
-            this.printPreviewToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.printPreviewToolStripButton.Size = new System.Drawing.Size(28, 28);
             this.printPreviewToolStripButton.Text = "Print Preview";
             this.printPreviewToolStripButton.Visible = false;
             this.printPreviewToolStripButton.Click += new System.EventHandler(this.printPreviewToolStripButton_Click);
@@ -769,7 +771,7 @@ namespace LadderApp
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
             this.toolStripSeparator2.Visible = false;
             // 
             // helpToolStripButton
@@ -779,12 +781,13 @@ namespace LadderApp
             this.helpToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("helpToolStripButton.Image")));
             this.helpToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
             this.helpToolStripButton.Name = "helpToolStripButton";
-            this.helpToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.helpToolStripButton.Size = new System.Drawing.Size(28, 28);
             this.helpToolStripButton.Text = "Help";
             this.helpToolStripButton.Visible = false;
             // 
             // toolStrip
             // 
+            this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripButton,
             this.openToolStripButton,
@@ -809,14 +812,14 @@ namespace LadderApp
             this.btnSimulateLadder});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(843, 25);
+            this.toolStrip.Size = new System.Drawing.Size(843, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "ToolStrip";
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 31);
             // 
             // btnLadderLine
             // 
@@ -824,7 +827,7 @@ namespace LadderApp
             this.btnLadderLine.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderLine.Image")));
             this.btnLadderLine.ImageTransparentColor = System.Drawing.Color.White;
             this.btnLadderLine.Name = "btnLadderLine";
-            this.btnLadderLine.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderLine.Size = new System.Drawing.Size(28, 28);
             this.btnLadderLine.Text = "Line";
             this.btnLadderLine.Click += new System.EventHandler(this.btnLadderLine_Click);
             // 
@@ -834,7 +837,7 @@ namespace LadderApp
             this.btnLadderPararellBranch.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderPararellBranch.Image")));
             this.btnLadderPararellBranch.ImageTransparentColor = System.Drawing.Color.White;
             this.btnLadderPararellBranch.Name = "btnLadderPararellBranch";
-            this.btnLadderPararellBranch.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderPararellBranch.Size = new System.Drawing.Size(28, 28);
             this.btnLadderPararellBranch.Text = "Parallel Branch";
             this.btnLadderPararellBranch.Click += new System.EventHandler(this.btnLadderPararellBranch_Click);
             // 
@@ -844,7 +847,7 @@ namespace LadderApp
             this.btnLadderNormallyOpenContact.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderNormallyOpenContact.Image")));
             this.btnLadderNormallyOpenContact.ImageTransparentColor = System.Drawing.Color.White;
             this.btnLadderNormallyOpenContact.Name = "btnLadderNormallyOpenContact";
-            this.btnLadderNormallyOpenContact.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderNormallyOpenContact.Size = new System.Drawing.Size(28, 28);
             this.btnLadderNormallyOpenContact.Text = "Normally open contact";
             this.btnLadderNormallyOpenContact.Click += new System.EventHandler(this.btnLadderNormallyOpenContact_Click);
             // 
@@ -854,14 +857,14 @@ namespace LadderApp
             this.btnLadderNormallyClosedContact.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderNormallyClosedContact.Image")));
             this.btnLadderNormallyClosedContact.ImageTransparentColor = System.Drawing.Color.White;
             this.btnLadderNormallyClosedContact.Name = "btnLadderNormallyClosedContact";
-            this.btnLadderNormallyClosedContact.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderNormallyClosedContact.Size = new System.Drawing.Size(28, 28);
             this.btnLadderNormallyClosedContact.Text = "Normally closed contact";
             this.btnLadderNormallyClosedContact.Click += new System.EventHandler(this.btnLadderNormallyClosedContact_Click);
             // 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
-            this.toolStripSeparator11.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator11.Size = new System.Drawing.Size(6, 31);
             // 
             // btnLadderOutputCoil
             // 
@@ -869,7 +872,7 @@ namespace LadderApp
             this.btnLadderOutputCoil.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderOutputCoil.Image")));
             this.btnLadderOutputCoil.ImageTransparentColor = System.Drawing.Color.White;
             this.btnLadderOutputCoil.Name = "btnLadderOutputCoil";
-            this.btnLadderOutputCoil.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderOutputCoil.Size = new System.Drawing.Size(28, 28);
             this.btnLadderOutputCoil.Text = "Output coil";
             this.btnLadderOutputCoil.Click += new System.EventHandler(this.btnLadderOutputCoil_Click);
             // 
@@ -879,7 +882,7 @@ namespace LadderApp
             this.btnLadderOutputTimer.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderOutputTimer.Image")));
             this.btnLadderOutputTimer.ImageTransparentColor = System.Drawing.Color.White;
             this.btnLadderOutputTimer.Name = "btnLadderOutputTimer";
-            this.btnLadderOutputTimer.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderOutputTimer.Size = new System.Drawing.Size(28, 28);
             this.btnLadderOutputTimer.Text = "Timer";
             this.btnLadderOutputTimer.Click += new System.EventHandler(this.btnLadderOutputTimer_Click);
             // 
@@ -889,7 +892,7 @@ namespace LadderApp
             this.btnLadderOutputCounter.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderOutputCounter.Image")));
             this.btnLadderOutputCounter.ImageTransparentColor = System.Drawing.Color.White;
             this.btnLadderOutputCounter.Name = "btnLadderOutputCounter";
-            this.btnLadderOutputCounter.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderOutputCounter.Size = new System.Drawing.Size(28, 28);
             this.btnLadderOutputCounter.Text = "Counter";
             this.btnLadderOutputCounter.Click += new System.EventHandler(this.btnLadderOutputCounter_Click);
             // 
@@ -899,14 +902,14 @@ namespace LadderApp
             this.btnLadderOutputReset.Image = ((System.Drawing.Image)(resources.GetObject("btnLadderOutputReset.Image")));
             this.btnLadderOutputReset.ImageTransparentColor = System.Drawing.Color.White;
             this.btnLadderOutputReset.Name = "btnLadderOutputReset";
-            this.btnLadderOutputReset.Size = new System.Drawing.Size(23, 22);
+            this.btnLadderOutputReset.Size = new System.Drawing.Size(28, 28);
             this.btnLadderOutputReset.Text = "Reset";
             this.btnLadderOutputReset.Click += new System.EventHandler(this.btnLadderOutputReset_Click);
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 31);
             // 
             // btnPrint
             // 
@@ -915,7 +918,7 @@ namespace LadderApp
             this.btnPrint.Image = ((System.Drawing.Image)(resources.GetObject("btnPrint.Image")));
             this.btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(36, 22);
+            this.btnPrint.Size = new System.Drawing.Size(36, 28);
             this.btnPrint.Text = "Print";
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
@@ -926,7 +929,7 @@ namespace LadderApp
             this.btnSimulateLadder.Image = ((System.Drawing.Image)(resources.GetObject("btnSimulateLadder.Image")));
             this.btnSimulateLadder.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSimulateLadder.Name = "btnSimulateLadder";
-            this.btnSimulateLadder.Size = new System.Drawing.Size(57, 22);
+            this.btnSimulateLadder.Size = new System.Drawing.Size(57, 28);
             this.btnSimulateLadder.Text = "Simulate";
             this.btnSimulateLadder.Click += new System.EventHandler(this.btnSimulateLadder_Click);
             // 
@@ -977,7 +980,7 @@ namespace LadderApp
         private System.Windows.Forms.ToolStripMenuItem printSetupToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.ToolStripStatusLabel lblStatusBar;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tileHorizontalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fileMenu;

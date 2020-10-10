@@ -6,36 +6,20 @@ namespace LadderApp
 {
     public class InstructionList : List<Instruction>, IList<Instruction>
     {
-        /// <summary>
-        /// suporte - utilizado na funcao "ProcuraCodigoInterpretavel()" - carrega
-        /// o codigointerpretavel para as iteracoes da funcao
-        /// </summary>
         private OperationCode operationCode = OperationCode.None;
 
-        /// <summary>
-        /// Verifica se a lista contem o codigointerpretavel do parametro
-        /// </summary>
-        /// <param name="opCode">codigo interpretavel a ser verificado na lista</param>
-        /// <returns>true - codigo encontrado na lista / false - codigno nao encontrado na lista</returns>
         public bool Contains(OperationCode opCode)
         {
             operationCode = opCode;
-            bool _bResult = this.Exists(FindInstruction);
+            bool result = this.Exists(FindInstruction);
             operationCode = OperationCode.None;
-            return _bResult;
+            return result;
         }
 
-        /// <summary>
-        /// Verifica se todos os operandos especificados por instrucao
-        /// (codigointerpretave) estao atribuidos
-        /// </summary>
-        /// <returns>true - se todos os operandos estao atribuidos /
-        /// false - se algum operanto estiver null</returns>
         public bool ContainsAllOperandos()
         {
             return this.TrueForAll(VerifyAllInstructionsHasNotNullOperands);
         }
-
 
         public bool HasDuplicatedTimers(List<Address> usedTimers)
         {

@@ -8,6 +8,10 @@ namespace LadderApp
     {
         public Device()
         {
+        }
+
+        public Device(bool value)
+        {
             DefaultInitialization();
         }
 

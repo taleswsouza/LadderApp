@@ -247,7 +247,7 @@ namespace LadderApp
                     XYConnection = new Point(0, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.NormallyOpenContact:
-                    //Selecao
+                    //selection
                     rectSelection = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
                 case OperationCode.NormallyClosedContact:

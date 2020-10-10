@@ -21,14 +21,14 @@ namespace LadderApp
             AddressType = addressType;
             Id = index;
             this.device = device;
-            NumberOfBitsByPort = device.NumberBitsByPort;
+            //NumberOfBitsByPort = device.NumberBitsByPort;
         }
 
-        [XmlElement(Order = 1, ElementName = "id")]
+        [XmlElement(ElementName = "id")]
         public int Id { get; set; } = 0;
 
         private AddressTypeEnum addressType = AddressTypeEnum.None;
-        [XmlElement(Order = 5, ElementName = "type")]
+        [XmlElement(ElementName = "type")]
         public AddressTypeEnum AddressType
         {
             get { return addressType; }
@@ -62,7 +62,7 @@ namespace LadderApp
         }
 
         private String name = "";
-        [XmlElement(Order = 2)]
+        //[XmlElement()]
         public String Name
         {
             get
@@ -80,7 +80,7 @@ namespace LadderApp
         }
 
         private String comment = "";
-        [XmlElement(ElementName = "comment", Order = 6, IsNullable = true, Type = typeof(String))]
+        [XmlElement(ElementName = "comment", IsNullable = true, Type = typeof(String))]
         public String Comment
         {
             get { return comment; }
@@ -92,13 +92,14 @@ namespace LadderApp
             }
         }
 
-        [XmlElement(ElementName = "value", Order = 4, IsNullable = false, Type = typeof(Boolean))]
+        [XmlElement(ElementName = "value", IsNullable = false, Type = typeof(Boolean))]
         public bool Value { get; set; } = false;
         [XmlIgnore]
         public bool Used { get; set; } = false;
 
-        [XmlElement(ElementName = "BitsPorta", Order = 3, IsNullable = false, Type = typeof(int))]
-        public int NumberOfBitsByPort { get; set; } = 0;
+        //[XmlElement(ElementName = "BitsPorta", Order = 3, IsNullable = false, Type = typeof(int))]
+        [XmlIgnore]
+        public int NumberOfBitsByPort { get { return device.NumberBitsByPort; } private set { } }
 
         private Device device = null;
         public void SetDevice(Device device) => this.device = device;

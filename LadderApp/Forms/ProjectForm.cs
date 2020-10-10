@@ -51,7 +51,7 @@ namespace LadderApp
 
             if (Status == ProgramStatus.NotInitialized)
             {
-                Program.device = new Device();
+                Program.device = new Device(true);
 
                 AlocateIOAddressing();
 
@@ -62,7 +62,7 @@ namespace LadderApp
             else
             {
                 if (Program.device == null)
-                    Program.device = new Device();
+                    Program.device = new Device(true);
                 AlocateIOAddressing();
 
                 AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, Program.addressing.ListMemoryAddress.Count);
@@ -218,7 +218,7 @@ namespace LadderApp
             tvnProjectTree.EndUpdate();
         }
 
-        public int AlocateAddressingMemoryAndTimerAndCounter(List<Address> adresses, AddressTypeEnum type, int numberOfAddresses)
+        public int AlocateAddressingMemoryAndTimerAndCounter(List<Address> addresses, AddressTypeEnum type, int numberOfAddresses)
         {
             IndicateAddressUsed(this.Program, type);
 
@@ -226,28 +226,29 @@ namespace LadderApp
             nodeToUpdate.Clear();
 
 
-            int currentNumber = adresses.Count;
+            int currentNumber = addresses.Count;
             if (currentNumber == 0 || currentNumber < numberOfAddresses)
             {
                 for (int i = currentNumber + 1; i <= numberOfAddresses; i++)
-                    adresses.Add(new Address(type, i, Program.device));
+                    addresses.Add(new Address(type, i, Program.device));
             }
             else if (currentNumber > numberOfAddresses)
             {
                 for (int i = (currentNumber - 1); i >= numberOfAddresses; i--)
                 {
-                    if (!adresses[i].Used)
+                    if (!addresses[i].Used)
                     {
-                        adresses[i] = null;
-                        adresses.RemoveAt(i);
+                        addresses[i] = null;
+                        addresses.RemoveAt(i);
                     }
                     else
                         break;
                 }
             }
 
-            foreach (Address address in adresses)
+            foreach (Address address in addresses)
             {
+                address.SetDevice(Program.device);
                 nodeToUpdate.Add(address.Name, address.GetNameAndComment());
                 nodeToUpdate[address.Name].Tag = address;
                 address.EditedCommentEvent += new EditedCommentEventHandler(Address_EditedComment);
