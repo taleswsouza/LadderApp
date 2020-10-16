@@ -47,7 +47,7 @@ The application allows the user to simulate the execution of the ladder code dir
 
 I have many ideas for this project, and some of them are:
 
-- English translation (on going)
+:heavy_check_mark: English translation (on going)
 - Include unit testing
 - Big code refactoring
 - Extend the "base" microcontroller code to others platforms [Arduino](https://www.arduino.cc/), PIC, STM32, ...
