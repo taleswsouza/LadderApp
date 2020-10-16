@@ -1,4 +1,4 @@
-	case 1: // Counter Decrescente
+	case 1: // descending counter
 		if (Counter->Reset == 1)
 		{
 			Counter->Accumulated = Counter->Preset;

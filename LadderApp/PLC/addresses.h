@@ -1,18 +1,18 @@
 //====================================================================================
-// Arquivo da Lista endereçso do usados no microcontrolador
-// Autor: Silvano Fonseca Paganoto
-// Data: 15/09/2010
+// Used address at microcontroller
+// Author: Silvano Fonseca Paganoto
+// Date: 15/09/2010
 //====================================================================================
 #ifndef ENDERECOS_H_
 #define ENDERECOS_H_
 
 //====================================================================================
-// Includes
+// includes
 //====================================================================================
 #include "definitions.h"
 
 //====================================================================================
-// Variáveis Globais
+// global variables
 //====================================================================================
 TSystem System, Sys;
 #VARIABLE_DECLARATIONS#

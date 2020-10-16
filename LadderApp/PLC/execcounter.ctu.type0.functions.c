@@ -1,4 +1,4 @@
-	case 0: // Counter Crescente
+	case 0: // ascending counter
 		if (Counter->Reset == 1)
 		{
 			Counter->Done = 0;

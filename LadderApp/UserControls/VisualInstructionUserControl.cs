@@ -10,8 +10,8 @@ namespace LadderApp
 {
     public delegate void ChangeLineEventHandler(VisualInstructionUserControl sender, System.Windows.Forms.Keys e);
     public delegate void DeleteLineEventHandler(VisualLine sender);
-    public delegate void VisualInstructionSelectedEventHandler(VisualInstructionUserControl sender, VisualLine lCL);
-    public delegate void AskToChangeAddressEventHandler(VisualInstructionUserControl sender, Rectangle rect, Type tipo, Int32 valorMax, Int32 valorMin, params Object[] faixa);
+    public delegate void VisualInstructionSelectedEventHandler(VisualInstructionUserControl sender, VisualLine visualLine);
+    public delegate void AskToChangeAddressEventHandler(VisualInstructionUserControl sender);
 
     public partial class VisualInstructionUserControl : UserControl
 
@@ -247,7 +247,7 @@ namespace LadderApp
                     XYConnection = new Point(0, (VisualLine.YSize / 2));
                     break;
                 case OperationCode.NormallyOpenContact:
-                    //Selecao
+                    //selection
                     rectSelection = new Rectangle(1, 1, xTotalHorizontal - 3, yTotalVertical - 3);
                     break;
                 case OperationCode.NormallyClosedContact:
@@ -301,42 +301,42 @@ namespace LadderApp
                     DrawEnergized();
             }
 
-            // -| Linha horizontal anterior ao simbolo
+            // -| Horizontal line, before the instruction
             xy1 = new Point(0, yVerticalHalf);
             xy2 = new Point(xInstructionHorizotalBegin, yVerticalHalf);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // |- Linha horizontal posterior ao simbolo
+            // |- Horizontal line, after the instruction
             xy1 = new Point(xInstructionHorizotalEnd, yVerticalHalf);
             xy2 = new Point(this.Width, yVerticalHalf);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // -| Primeiro barra do simbolo
+            // -| The right vertical bar of instruction 
             xy1 = new Point(xInstructionHorizotalBegin, yInstructionVerticalBegin);
             xy2 = new Point(xInstructionHorizotalBegin, yInstructionVerticalEnd);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // para compor a primeira barra estilo colchete (barra horizontal superior)
+            // small horizontal bar for the inverted-bracket-style bar at rigth (top horizontal bar)
             xy1 = new Point(xInstructionHorizotalBegin - xTenthHorizontal, yInstructionVerticalBegin);
             xy2 = new Point(xInstructionHorizotalBegin, yInstructionVerticalBegin);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // para compor a primeira barra estilo colchete (barra horizontal inferior)
+            // small horizontal bar for the inverted-bracket-style bar at rigth (bottom horizontal bar)
             xy1 = new Point(xInstructionHorizotalBegin - xTenthHorizontal, yInstructionVerticalEnd);
             xy2 = new Point(xInstructionHorizotalBegin, yInstructionVerticalEnd);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // |- Segunda barra do simbolo
+            // |- The left vertical bar of instruction 
             xy1 = new Point(xInstructionHorizotalEnd, yInstructionVerticalBegin);
             xy2 = new Point(xInstructionHorizotalEnd, yInstructionVerticalEnd);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // para compor a segunda barra estilo colchete (barra horizontal superior)
+            // small horizontal bar for the inverted-bracket-style bar at left (top horizontal bar)
             xy1 = new Point(xInstructionHorizotalEnd + xTenthHorizontal, yInstructionVerticalBegin);
             xy2 = new Point(xInstructionHorizotalEnd, yInstructionVerticalBegin);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // para compor a segunda barra estilo colchete (barra horizontal inferior)
+            // small horizontal bar for the inverted-bracket-style bar at rigth (bottom horizontal bar)
             xy1 = new Point(xInstructionHorizotalEnd + xTenthHorizontal, yInstructionVerticalEnd);
             xy2 = new Point(xInstructionHorizotalEnd, yInstructionVerticalEnd);
             graphics.DrawLine(linePen, xy1, xy2);
@@ -360,7 +360,7 @@ namespace LadderApp
             DrawNormallyOpenContact();
 
 
-            // barra do NF
+            // |/| closing bar to normally closed contact instruction
             xy1 = new Point(xInstructionHorizotalBegin - xTenthHorizontal, yInstructionVerticalEnd);
             xy2 = new Point(xInstructionHorizotalEnd + xTenthHorizontal, yInstructionVerticalBegin);
             graphics.DrawLine(linePen, xy1, xy2);
@@ -378,17 +378,17 @@ namespace LadderApp
 
             Point[] pontosCurva = new Point[3];
 
-            // Linha horizontal anterior ao simbolo
+            // The horizontal line before instruction
             xy1 = new Point(0, yVerticalHalf);
             xy2 = new Point(xCoilInstructionHorizontalBegin, yVerticalHalf);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // Linha horizontal posterior ao simbolo
+            // The horizontal line after instruction
             xy1 = new Point(xCoilInstructionHorizontalEnd, yVerticalHalf);
             xy2 = new Point(this.Width, yVerticalHalf);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // ( do simbolo
+            // ( - right parentheses of coil instruction
             xy1 = new Point(xCoilInstructionHorizontalBegin + xTenthHorizontal, yInstructionVerticalBegin);
             xy2 = new Point(xCoilInstructionHorizontalBegin, yVerticalHalf);
             xy3 = new Point(xCoilInstructionHorizontalBegin + xTenthHorizontal, yInstructionVerticalEnd);
@@ -397,7 +397,7 @@ namespace LadderApp
             pontosCurva[2] = xy3;
             graphics.DrawCurve(linePen, pontosCurva, 0.7F);
 
-            // ) do simbolo
+            // ) - left parentheses of coil instruction
             xy1 = new Point(xCoilInstructionHorizontalEnd - xTenthHorizontal, yInstructionVerticalBegin);
             xy2 = new Point(xCoilInstructionHorizontalEnd, yVerticalHalf);
             xy3 = new Point(xCoilInstructionHorizontalEnd - xTenthHorizontal, yInstructionVerticalEnd);
@@ -421,12 +421,12 @@ namespace LadderApp
 
         private void DrawParallelBranchBegin()
         {
-            // Linha vertical
+            // vertical line
             xy1 = new Point(xHorizontalHalf, (VisualLine.YSize / 2));
             xy2 = new Point(xHorizontalHalf, yTotalVertical);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // Linha horizontal
+            // horizontal line
             xy1 = new Point(0, (VisualLine.YSize / 2));
             xy2 = new Point(xTotalHorizontal, (VisualLine.YSize / 2));
             graphics.DrawLine(linePen, xy1, xy2);
@@ -434,17 +434,17 @@ namespace LadderApp
 
         private void DrawParallelBranchEnd()
         {
-            // Linha vertical
+            // vertical line
             xy1 = new Point(xHorizontalHalf, (VisualLine.YSize / 2));
             xy2 = new Point(xHorizontalHalf, (yTotalVertical - (VisualLine.YSize / 2)));
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // Linha horizontal 1
+            // horizontal line 1
             xy1 = new Point(0, (VisualLine.YSize / 2));
             xy2 = new Point(xTotalHorizontal, (VisualLine.YSize / 2));
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // Linha horizontal 2
+            // horizontal line 2
             xy1 = new Point(0, (yTotalVertical - (VisualLine.YSize / 2)));
             xy2 = new Point(xHorizontalHalf, (yTotalVertical - (VisualLine.YSize / 2)));
             graphics.DrawLine(linePen, xy1, xy2);
@@ -453,8 +453,6 @@ namespace LadderApp
             {
                 foreach (VisualInstructionUserControl visualInstruction in parallelBranchList)
                 {
-
-                    //?? talvez passar xy3 para _xyConexao
                     xy3 = visualInstruction.XYConnection;
                     xy1 = new Point(0, ((visualInstruction.XYPosition.Y + xy3.Y) - this.XYPosition.Y));
                     xy2 = new Point(xHorizontalHalf, ((visualInstruction.XYPosition.Y + xy3.Y) - this.XYPosition.Y));
@@ -467,12 +465,12 @@ namespace LadderApp
         {
             if (LastParallelBranchEnd)
             {
-                // Linha | do L
+                // | - Vertical line of the 'L' from parallel
                 xy1 = new Point(xHorizontalHalf, 0);
                 xy2 = new Point(xHorizontalHalf, yVerticalHalf);
                 graphics.DrawLine(linePen, xy1, xy2);
 
-                // Linha _ do L
+                // _ - Horizontal line of the 'L' from parallel
                 xy1 = new Point(xHorizontalHalf, yVerticalHalf);
                 xy2 = new Point(xTotalHorizontal, yVerticalHalf);
                 graphics.DrawLine(linePen, xy1, xy2);
@@ -480,12 +478,12 @@ namespace LadderApp
             }
             else
             {
-                // Linha | do L
+                // | - Vertical line of the 'L' from parallel
                 xy1 = new Point(xHorizontalHalf, 0);
                 xy2 = new Point(xHorizontalHalf, yTotalVertical);
                 graphics.DrawLine(linePen, xy1, xy2);
 
-                // Linha horizontal
+                // horizontal line
                 xy1 = new Point(xHorizontalHalf, (VisualLine.YSize / 2));
                 xy2 = new Point(xTotalHorizontal, (VisualLine.YSize / 2));
                 graphics.DrawLine(linePen, xy1, xy2);
@@ -494,42 +492,42 @@ namespace LadderApp
 
         private void DrawLineBegin()
         {
-            Font fontTexto = new Font(FontFamily.GenericSansSerif.Name, 12, FontStyle.Regular, GraphicsUnit.Pixel);
+            Font textFont = new Font(FontFamily.GenericSansSerif.Name, 12, FontStyle.Regular, GraphicsUnit.Pixel);
 
-            // Linha vertical
+            // vertical line
             xy1 = new Point(xTenthHorizontal * 7, 0);
             xy2 = new Point(xTenthHorizontal * 7, yTotalVertical);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // Linha |-
+            // line |-
             xy1 = new Point(xTenthHorizontal * 7, (VisualLine.YSize / 2));
             xy2 = new Point(xTotalHorizontal, (VisualLine.YSize / 2));
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // Posicao numero da linha
+            // number of line position
             xy1 = new Point(xHorizontalHalf, yVerticalHalf);
 
             if (IsAllOperandsOk())
             {
-                // Endereco
-                RectangleF _recTxtLinha = new RectangleF(0F, (float)((VisualLine.YSize / 2) - textFont.Height), (float)(xTenthHorizontal * 7), (float)(textFont.Height));
-                StringFormat _stringFormat = new StringFormat();
-                _stringFormat.Alignment = StringAlignment.Center;
-                _stringFormat.LineAlignment = StringAlignment.Center;
+                // Address
+                RectangleF lineTextRectangle = new RectangleF(0F, (float)((VisualLine.YSize / 2) - this.textFont.Height), (float)(xTenthHorizontal * 7), (float)(this.textFont.Height));
+                StringFormat format = new StringFormat();
+                format.Alignment = StringAlignment.Center;
+                format.LineAlignment = StringAlignment.Center;
 
                 if (GetOperand(0) != null)
-                    graphics.DrawString(GetOperand(0).ToString().PadLeft(4, '0'), textFont, symbolTextBrush, _recTxtLinha, _stringFormat);
+                    graphics.DrawString(GetOperand(0).ToString().PadLeft(4, '0'), this.textFont, symbolTextBrush, lineTextRectangle, format);
             }
         }
 
         private void DrawLineEnd()
         {
-            // Linha vertical
+            // vertical line
             xy1 = new Point(xTenthHorizontal, 0);
             xy2 = new Point(xTenthHorizontal, yTotalVertical);
             graphics.DrawLine(linePen, xy1, xy2);
 
-            // Linha |-
+            // horizontal line
             xy1 = new Point(0, (VisualLine.YSize / 2));
             xy2 = new Point(xTenthHorizontal, (VisualLine.YSize / 2));
             graphics.DrawLine(linePen, xy1, xy2);
@@ -1141,7 +1139,7 @@ namespace LadderApp
                     break;
                 case OperationCode.Timer:
                 case OperationCode.Counter:
-                    AskToChangeAddressEvent(this, new Rectangle(0, 0, 0, 0), (new Address()).GetType(), 0, 0, null);
+                    AskToChangeAddressEvent(this);
                     break;
             }
         }

@@ -4,10 +4,6 @@ using System.Text;
 
 namespace LadderApp
 {
-    /// <summary>
-    /// CodigosInterpretaveis2Txt - permite converter códigos interpretáveis em texto que serão gravados no
-    ///     programa ladder
-    /// </summary>
     public class OpCode2TextServices
     {
         private String internalText = "";
@@ -26,10 +22,6 @@ namespace LadderApp
             HeaderPosition2InternalWithTypeCast = txtInternalWithTypeCast.Length;
         }
 
-        internal OpCode2TextServices(bool bCabecalho)
-        {
-        }
-
         private bool bTxtWithTypeCast = true;
         public bool TxtWithTypeCast
         {
@@ -45,7 +37,7 @@ namespace LadderApp
         public void AddHeader()
         {
             if (Header == null)
-                Header = new OpCode2TextServices(true);
+                Header = new OpCode2TextServices();
         }
 
         public void FinalizeHeader()

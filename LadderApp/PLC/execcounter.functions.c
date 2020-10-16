@@ -1,6 +1,3 @@
-//====================================================================================
-// Rotina de execução do contador
-//====================================================================================
 void ExecuteCounter(TCounter *Counter)
 {
 	switch (Counter->Type)
@@ -10,6 +7,8 @@ void ExecuteCounter(TCounter *Counter)
 	default:
 		break;
 	}
-	if (Counter->Enable == 0)
+	if (Counter->Enable == 0) 
+	{
 		Counter->Pulse = 1;
+	}
 }

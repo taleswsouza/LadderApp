@@ -155,10 +155,10 @@ namespace LadderApp
                             case OperationCode.ParallelBranchBegin:
                             case OperationCode.ParallelBranchNext:
                             case OperationCode.ParallelBranchEnd:
-                                instructions = projectForm.LadderForm.VariosSelecionados(projectForm.LadderForm.VisualInstruction, projectForm.LadderForm.SelectedVisualLine);
+                                instructions = projectForm.LadderForm.VariosSelecionados(projectForm.LadderForm.VisualInstruction);
                                 break;
                             default:
-                                instructions = projectForm.LadderForm.VariosSelecionados(projectForm.LadderForm.VisualInstruction, projectForm.LadderForm.SelectedVisualLine);
+                                instructions = projectForm.LadderForm.VariosSelecionados(projectForm.LadderForm.VisualInstruction);
                                 break;
                         }
 
@@ -380,13 +380,11 @@ namespace LadderApp
 
         private void MainWindowForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            /// para garantir que a thread não estará executando qnd a aplicação fechar
             if (btnSimulateLadder.Checked)
             {
                 btnSimulateLadder.Checked = false;
                 Thread.Sleep(200);
             }
-            /// fecha a aplicação
             Application.Exit();
         }
 
@@ -581,7 +579,7 @@ namespace LadderApp
 
                 LadderProgram program = new LadderProgram();
                 program.Name = projectName;
-                program.device = new Device();
+                program.device = new Device(true);
                 program.addressing.AlocateIOAddressing(program.device);
                 program.addressing.AlocateMemoryAddressing(program.device, program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
                 program.addressing.AlocateMemoryAddressing(program.device, program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
@@ -689,11 +687,11 @@ namespace LadderApp
                             break;
                     }
 
-                    /// fim dos códigos
+                    /// end of codes
                     if (countOfEnds >= 2)
                     {
                         MSP430IntegrationServices p = new MSP430IntegrationServices();
-                        //p.CreateFile("codigosinterpretaveis.txt", content.Substring(content.IndexOf("@laddermic.com"), i - content.IndexOf("@laddermic.com") + 1));
+                        //p.CreateFile("opcode.txt", content.Substring(content.IndexOf("@laddermic.com"), i - content.IndexOf("@laddermic.com") + 1));
                         //position = content.Length;
                         break;
                     }
@@ -837,7 +835,6 @@ namespace LadderApp
         private bool Simulation = false;
         private void btnSimulateLadder_Click(object sender, EventArgs e)
         {
-            /// inverte condição da simulação - habilitada / desabilitada
             Simulation = (Simulation == true ? false : true);
 
             if (Simulation)
@@ -871,6 +868,7 @@ namespace LadderApp
             {
                 MessageBox.Show(ex.Message, "Write Executable");
             }
+            lblStatusBar.Text = "Build succeeded";
         }
 
         private void mnuMicrocontrollerCommunicationUpload_Click(object sender, EventArgs e)

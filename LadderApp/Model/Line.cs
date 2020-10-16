@@ -40,8 +40,8 @@ namespace LadderApp
             switch (Outputs.Count)
             {
                 case 0:
-                    /// case 0: Primeiro simbolo na saida, adiciona apenas um
-                    /// simbolo na saida
+                    /// case 0: First instruction to output, add only one 
+                    /// instruction at output
                     index = 0;
 
                     if (instructions.Count > 1)
@@ -52,19 +52,19 @@ namespace LadderApp
 
                     break;
                 case 1:
-                    /// case 1: Caso ja exista 1 (um) simbolo de saida, insere um 
-                    /// paralelo de forma automatica
+                    /// case 1: If exists one output instruction, insert parallel branch 
+                    /// automatically
 
 
-                    // aqui 0=antes, 1=depois
+                    // here 0=before, 1=after
                     if (index == 0)
                     {
-                        /// prepara para inserir antes do objeto atual
+                        /// prepare to insert before the actual object
                         instructions.InsertParallelBranch(InstructionList.ParallelBranchInsertionType.ParallelBranchInitialized);
 
-                        /// insere PP antes do objeto atual na linha
+                        /// insert parallel branch next before the actual object
                         this.Outputs.Insert(0, new Instruction(OperationCode.ParallelBranchNext));
-                        /// insere PF depois do objeto atual da linha
+                        /// insert parallel branch end after the actual object
                         this.Outputs.Insert(this.Outputs.Count, new Instruction(OperationCode.ParallelBranchEnd));
                     }
                     else
