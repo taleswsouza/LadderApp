@@ -47,13 +47,14 @@ The application allows the user to simulate the execution of the ladder code dir
 
 I have many ideas for this project, and some of them are:
 
-:heavy_check_mark: English translation (on going)
-- Include unit testing
-- Big code refactoring
-- Extend the "base" microcontroller code to others platforms [Arduino](https://www.arduino.cc/), PIC, STM32, ...
-- Allow to type the program textually and create a "compiler front-end" that checks the syntax and semantics of the ladder language(using [ANTLR](https://www.antlr.org/))
-- Migrate to SaaS
-- Internationalization
+:heavy_check_mark: English translation
+:black_circle: small refactoring (on going)
+:black_circle: Include unit testing
+:black_circle: Big code refactoring
+:black_circle: Extend the "base" microcontroller code to others platforms [Arduino](https://www.arduino.cc/), PIC, STM32, ...
+:black_circle: Allow to type the program textually and create a "compiler front-end" that checks the syntax and semantics of the ladder language(using [ANTLR](https://www.antlr.org/))
+:black_circle: Migrate to SaaS
+:black_circle: Internationalization
 
 Other ideas being born that need to be better thought (only a local to write my brainstorm):
 
