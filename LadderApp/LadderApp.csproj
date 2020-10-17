@@ -70,6 +70,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MicrocontrollersBaseCodeFilesResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\LadderSimulatorServices.cs" />
+    <Compile Include="Services\LadderVerificationServices.cs" />
     <Compile Include="Services\Text2OpCodeServices.cs" />
     <Compile Include="UserControls\VisualInstructionUserControl.cs">
       <SubType>UserControl</SubType>

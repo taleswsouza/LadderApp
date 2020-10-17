@@ -1,5 +1,6 @@
 using LadderApp.Formularios;
 using LadderApp.Resources;
+using LadderApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -494,6 +495,7 @@ namespace LadderApp
 
         public void ContinuousSimulationExecution()
         {
+            LadderSimulatorServices simultatorService = new LadderSimulatorServices();
             while (btnSimulateLadder.Checked)
             {
                 if (!IsLadderFormOpen())
@@ -502,15 +504,15 @@ namespace LadderApp
                     return;
                 }
 
-                if (!projectForm.Program.VerifyProgram())
-                {
-                    UncheckBtnSimulateLadder(false);
-                    return;
-                }
+                //if (!projectForm.Program.VerifyProgram())
+                //{
+                //    UncheckBtnSimulateLadder(false);
+                //    return;
+                //}
 
-                projectForm.Program.SimulateTimers();
+                //projectForm.Program.SimulateTimers();
 
-                if (!projectForm.Program.SimulateLadder())
+                if (!simultatorService.SimulateLadder(projectForm.Program))
                 {
                     UncheckBtnSimulateLadder(false);
                     return;
@@ -808,9 +810,10 @@ namespace LadderApp
         {
             if (IsLadderFormOpen())
             {
-                Boolean _bResult = projectForm.Program.VerifyProgram();
+                LadderVerificationServices verificationServices = new LadderVerificationServices();
+                Boolean result = verificationServices.VerifyProgram(projectForm.Program);
 
-                if (_bResult)
+                if (result)
                     MessageBox.Show("OK");
                 else
                     MessageBox.Show("Error");

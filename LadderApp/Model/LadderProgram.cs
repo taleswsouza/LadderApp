@@ -10,6 +10,7 @@ using System.IO;
 using System.ComponentModel;
 using LadderApp.Formularios;
 using LadderApp.Resources;
+using LadderApp.Services;
 
 namespace LadderApp
 {
@@ -28,21 +29,10 @@ namespace LadderApp
         public Device device;
         public List<Line> Lines { get; } = new List<Line>();
 
-        [XmlIgnore]
-        public List<Address> usedTimers = new List<Address>();
-        [XmlIgnore]
-        public List<Address> usedCounters = new List<Address>();
-
-
         public int InsertLineAtEnd(Line line)
         {
             Lines.Add(line);
             return (Lines.Count - 1);
-        }
-
-        public int InsertLineAtBegin(Line line)
-        {
-            return InsertLineAt(0, line);
         }
 
         public int InsertLineAt(int index, Line line)
@@ -61,303 +51,6 @@ namespace LadderApp
         {
             Lines[index].DeleteLine();
             Lines.RemoveAt(index);
-        }
-
-        public void SimulateTimers()
-        {
-            int parcialPreset = -1;
-
-            foreach (Address address in addressing.ListTimerAddress)
-            {
-                if (address.Timer.Reset == true)
-                {
-                    address.Timer.Accumulated = 0;
-                    address.Value = false;
-                    address.Timer.Reset = false;
-                }
-
-                switch (address.Timer.Type)
-                {
-                    case 0: // TON
-                        if (address.Timer.Enable && !address.Timer.Reset)
-                        {
-                            address.Timer.ParcialAccumulated++;
-                            if (address.Timer.ParcialAccumulated >= address.Timer.ParcialPreset)
-                            {
-                                address.Timer.ParcialAccumulated = 0;
-                                address.Timer.Accumulated++;
-
-                                if (address.Timer.Accumulated >= address.Timer.Preset)
-                                {
-                                    address.Value = true; /// DONE = true
-                                    address.Timer.Accumulated = address.Timer.Preset;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            address.Value = false; 
-                            address.Timer.Accumulated = 0;
-                            address.Timer.ParcialAccumulated = 0;
-                            address.Timer.Reset = false;
-                        }
-                        break;
-
-                    case 1: // TOF
-                        if (address.Timer.Enable || address.Timer.Reset)
-                        {
-                            address.Value = true; /// DONE = true
-                            address.Timer.Accumulated = 0;
-                            address.Timer.ParcialAccumulated = 0;
-                            address.Timer.Reset = false;
-                        }
-                        else
-                        {
-                            if (address.Value) // Done enabled - timer counting
-                                address.Timer.ParcialAccumulated++;
-
-                            if (address.Timer.ParcialAccumulated >= address.Timer.ParcialPreset)
-                            {
-                                address.Timer.ParcialAccumulated = 0;
-                                address.Timer.Accumulated++;
-                            }
-
-                            if (address.Timer.Accumulated >= address.Timer.Preset)
-                            {
-                                address.Value = false; /// DONE = false
-                                address.Timer.Accumulated = 0;
-                                address.Timer.ParcialAccumulated = 0;
-                            }
-                        }
-
-                        break;
-
-                    case 2: // RTO
-                        if (address.Timer.Reset)
-                        {
-                            address.Value = false; /// DONE = false
-                            address.Timer.Accumulated = 0;
-                            address.Timer.ParcialAccumulated = 0;
-                        }
-
-                        if (address.Timer.Enable)
-                        {
-                            address.Timer.ParcialAccumulated++;
-                            if (address.Timer.ParcialAccumulated == parcialPreset)
-                            {
-                                address.Timer.ParcialAccumulated = 0;
-
-                                if (address.Timer.Accumulated <= Int32.MaxValue)
-                                {
-                                    if (address.Timer.Accumulated < address.Timer.Preset)
-                                        address.Timer.Accumulated++;
-                                    else
-                                        address.Timer.Accumulated = address.Timer.Preset;
-
-                                    if (address.Timer.Accumulated >= address.Timer.Preset)
-                                        address.Value = true; /// DONE = true
-                                    else
-                                        address.Value = false; /// DONE = false
-                                }
-                            }
-                        }
-                        break;
-                    case 3:
-                        break;
-
-                    default:
-                        break;
-                } /// switch
-            }
-
-        }
-
-        [XmlIgnore]
-        public Address auxToggleBitPulse = null;
-
-
-        public void ExecuteCountersSimulator(Instruction instruction, Address counterAddress)
-        {
-
-            switch (counterAddress.Counter.Type)
-            {
-                case 0: // Counter acending
-                    if (counterAddress.Counter.Reset == true)
-                    {
-                        counterAddress.Value = false;
-                        counterAddress.Counter.Accumulated = 0;
-                        counterAddress.Counter.Reset = false;
-                    }
-                    if (counterAddress.Counter.Enable == true && counterAddress.Counter.Pulse == true)
-                    {
-                        counterAddress.Counter.Pulse = false;
-
-                        if (counterAddress.Counter.Accumulated <= Int32.MaxValue)
-                        {
-                            counterAddress.Counter.Accumulated++;
-                            if (counterAddress.Counter.Accumulated >= counterAddress.Counter.Preset)
-                                counterAddress.Value = true;
-                            else
-                                counterAddress.Value = false;
-                        }
-                    }
-                    break;
-
-                case 1: // Counter descending
-                    if (counterAddress.Counter.Reset == true)
-                    {
-                        counterAddress.Counter.Accumulated = counterAddress.Counter.Preset;
-                        counterAddress.Value = false;
-                        counterAddress.Counter.Reset = false;
-                    }
-                    if (counterAddress.Counter.Enable == true && counterAddress.Counter.Pulse == true)
-                    {
-                        counterAddress.Counter.Pulse = false;
-                        if (counterAddress.Counter.Accumulated > 0)
-                        {
-                            counterAddress.Counter.Accumulated--;
-
-                            if (counterAddress.Counter.Accumulated == 0)
-                                counterAddress.Value = true;
-                            else
-                                counterAddress.Value = false;
-                        }
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-            if (counterAddress.Counter.Enable == false)
-                counterAddress.Counter.Pulse = true;
-
-        }
-
-        private class LineStretchSummary
-        {
-            public bool Initiated { get; set; } = false;
-            public bool Value { get; set; } = true;
-        }
-        public bool SimulateLadder()
-        {
-            if (!VerifyProgram())
-                return false;
-
-            List<LineStretchSummary> lineStretchSummary = new List<LineStretchSummary>();
-            foreach (Line line in this.Lines)
-            {
-                lineStretchSummary.Add(new LineStretchSummary());
-                foreach (Instruction instruction in line.Instructions)
-                {
-                    switch (instruction.OpCode)
-                    {
-                        case OperationCode.ParallelBranchBegin:
-                            lineStretchSummary.Add(new LineStretchSummary());
-                            break;
-                        case OperationCode.ParallelBranchEnd:
-                            MakeOrLogicOverParallelBranchTwoLastLineStretchAndRemoveLastOne(lineStretchSummary);
-
-                            MakeAndLogicOverTwoLastLineStreatchAndRemoveLastOne(lineStretchSummary);
-                            break;
-                        case OperationCode.ParallelBranchNext:
-                            lineStretchSummary.Add(new LineStretchSummary());
-                            break;
-                        default:
-                            bool value = false;
-                            switch (instruction.OpCode)
-                            {
-                                case OperationCode.NormallyOpenContact:
-                                    value = ((Address)instruction.GetOperand(0)).Value;
-                                    break;
-                                case OperationCode.NormallyClosedContact:
-                                    value = !((Address)instruction.GetOperand(0)).Value;
-                                    break;
-                            }
-
-                            if (lineStretchSummary[lineStretchSummary.Count - 1].Initiated)
-                                lineStretchSummary[lineStretchSummary.Count - 1].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value && value;
-                            else
-                                lineStretchSummary[lineStretchSummary.Count - 1].Value = value;
-
-                            lineStretchSummary[lineStretchSummary.Count - 1].Initiated = true;
-                            break;
-                    }
-                }
-
-                foreach (Instruction instruction in line.Outputs)
-                {
-                    switch (instruction.OpCode)
-                    {
-                        case OperationCode.OutputCoil:
-                        case OperationCode.Timer:
-                        case OperationCode.Counter:
-                        case OperationCode.Reset:
-
-                            if (instruction.OpCode == OperationCode.OutputCoil)
-                                ((Address)instruction.GetOperand(0)).Value = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
-                            else if (instruction.OpCode == OperationCode.Timer)
-                            {
-                                ((Address)instruction.GetOperand(0)).Timer.Enable = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
-                            }
-                            else if (instruction.OpCode == OperationCode.Counter)
-                            {
-                                ((Address)instruction.GetOperand(0)).Counter.Enable = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
-                                ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
-                            }
-                            else if (instruction.OpCode == OperationCode.Reset)
-                            {
-                                if ((bool)lineStretchSummary[lineStretchSummary.Count - 1].Value)
-                                {
-                                    switch (((Address)instruction.GetOperand(0)).AddressType)
-                                    {
-                                        case AddressTypeEnum.DigitalMemoryCounter:
-                                            ((Address)instruction.GetOperand(0)).Counter.Reset = true;
-                                            ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
-                                            break;
-
-                                        case AddressTypeEnum.DigitalMemoryTimer:
-                                            ((Address)instruction.GetOperand(0)).Timer.Reset = true;
-                                            break;
-
-                                        default:
-                                            break;
-                                    }
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-
-                }
-                lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
-            }
-
-            if (auxToggleBitPulse != null)
-            {
-                auxToggleBitPulse.Value = auxToggleBitPulse.Value == true ? false : true;
-                auxToggleBitPulse = null;
-            }
-            return true;
-        }
-
-        private static void MakeAndLogicOverTwoLastLineStreatchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
-        {
-            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value && lineStretchSummary[lineStretchSummary.Count - 1].Value;
-            else
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
-            lineStretchSummary[lineStretchSummary.Count - 2].Initiated = true;
-            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
-        }
-
-        private static void MakeOrLogicOverParallelBranchTwoLastLineStretchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
-        {
-            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value || lineStretchSummary[lineStretchSummary.Count - 1].Value;
-            else
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
-            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
         }
 
         private bool SavePasswordIntoLadder(ref OpCode2TextServices opCode2TextServices)
@@ -414,7 +107,8 @@ namespace LadderApp
 
             bool initiated = false;
 
-            if (!VerifyProgram())
+            LadderVerificationServices verificationServices = new LadderVerificationServices();
+            if (!verificationServices.VerifyProgram(this))
                 return false;
 
             opCode2TextServices.Add(OperationCode.None);
@@ -431,7 +125,6 @@ namespace LadderApp
                     return false;
 
             }
-
 
             addressing.CleanUsedIndication();
 
@@ -894,59 +587,6 @@ namespace LadderApp
                         usedPorts.Add(address.GetVariableName());
                 }
             contentParameterization += Environment.NewLine;
-        }
-
-        public bool VerifyProgram()
-        {
-            usedCounters.Clear();
-            usedTimers.Clear();
-            foreach (Line line in this.Lines)
-            {
-                if (!VerifyLine(line))
-                    return false;
-            }
-            return true;
-        }
-
-        private bool VerifyLine(Line line)
-        {
-            InstructionList instructions = new InstructionList();
-            instructions.InsertAllWithClearBefore(line.Outputs);
-            if (instructions.Count > 0)
-            {
-                if (!(instructions.Contains(OperationCode.OutputCoil) ||
-                    instructions.Contains(OperationCode.Timer) ||
-                    instructions.Contains(OperationCode.Counter) ||
-                    instructions.Contains(OperationCode.Reset)))
-                    return false;
-            }
-            else
-                return false;
-
-
-            if (!instructions.ContainsAllOperandos())
-                return false;
-
-            if (!instructions.HasDuplicatedTimers(usedTimers))
-                return false;
-
-            if (!instructions.HasDuplicatedCounters(usedCounters))
-                return false;
-
-            instructions.InsertAllWithClearBefore(line.Instructions);
-
-            if (instructions.Count > 0)
-                if (instructions.Contains(OperationCode.OutputCoil) ||
-                    instructions.Contains(OperationCode.Timer) ||
-                    instructions.Contains(OperationCode.Counter) ||
-                    instructions.Contains(OperationCode.Reset))
-                    return false;
-
-
-            if (!instructions.ContainsAllOperandos())
-                return false;
-
-            return true;
         }
 
         public bool ReindexAddresses()

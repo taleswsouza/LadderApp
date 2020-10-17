@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using LadderApp.Formularios;
+using LadderApp.Services;
 
 namespace LadderApp
 {
@@ -352,7 +353,10 @@ namespace LadderApp
         private void mnuToggleBit_Click(object sender, EventArgs e)
         {
             ((Address)VisualInstruction.GetOperand(0)).Value = ((Address)VisualInstruction.GetOperand(0)).Value == true ? false : true;
-            projectForm.Program.SimulateLadder();
+
+            LadderSimulatorServices simultatorService = new LadderSimulatorServices();
+            simultatorService.SimulateLadder(projectForm.Program);
+            //projectForm.Program.SimulateLadder();
             this.Invalidate(true);
         }
 
@@ -425,9 +429,12 @@ namespace LadderApp
 
         private void mnuToggleBitPulse_Click(object sender, EventArgs e)
         {
-            projectForm.Program.auxToggleBitPulse = ((Address)VisualInstruction.GetOperand(0));
-            projectForm.Program.auxToggleBitPulse.Value = projectForm.Program.auxToggleBitPulse.Value == true ? false : true;
-            projectForm.Program.SimulateLadder();
+            LadderSimulatorServices simultatorService = new LadderSimulatorServices();
+
+            Address toggleBitPulse = (Address)VisualInstruction.GetOperand(0);
+            toggleBitPulse.Value = toggleBitPulse.Value != true;
+            simultatorService.SimulateLadder(projectForm.Program, toggleBitPulse);
+
             this.Invalidate(true);
         }
     }
