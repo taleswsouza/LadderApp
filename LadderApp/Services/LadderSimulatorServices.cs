@@ -8,7 +8,16 @@ namespace LadderApp.Services
 {
     class LadderSimulatorServices
     {
-        private LadderVerificationServices verificationServices = new LadderVerificationServices();
+        private LadderVerificationServices verificationServices;
+
+        public LadderSimulatorServices() : this(new LadderVerificationServices())
+        {
+        }
+
+        public LadderSimulatorServices(LadderVerificationServices verificationServices)
+        {
+            this.verificationServices = verificationServices;
+        }
 
         private class LineStretchSummary
         {

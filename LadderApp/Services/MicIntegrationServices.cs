@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace LadderApp
 {
-    public class MSP430IntegrationServices
+    public class MicIntegrationServices
     {
         private Process p = new Process();
         private ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -21,11 +21,11 @@ namespace LadderApp
         private String strStandardOutput = "";
         private String strStandardError = "";
 
-        public MSP430IntegrationServices()
+        public MicIntegrationServices()
         {
         }
 
-        public MSP430IntegrationServices(bool deleteIntermediateFiles) : this()
+        public MicIntegrationServices(bool deleteIntermediateFiles) : this()
         {
             p.StartInfo = startInfo;
             SetDefaults();

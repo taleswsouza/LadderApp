@@ -61,75 +61,16 @@ namespace LadderApp
             return null;
         }
 
-
-        public List<Address> ListNames(OperationCode opCode)
-        {
-            List<Address> addresses = new List<Address>();
-            List<AddressTypeEnum> addressTypes = new List<AddressTypeEnum>();
-            List<Address> generalList;
-
-            switch (opCode)
-            {
-                case OperationCode.NormallyOpenContact:
-                case OperationCode.NormallyClosedContact:
-                    addressTypes.Add(AddressTypeEnum.DigitalInput);
-                    addressTypes.Add(AddressTypeEnum.DigitalMemory);
-                    addressTypes.Add(AddressTypeEnum.DigitalMemoryCounter);
-                    addressTypes.Add(AddressTypeEnum.DigitalMemoryTimer);
-                    break;
-                case OperationCode.Timer:
-                    addressTypes.Add(AddressTypeEnum.DigitalMemoryTimer);
-                    break;
-                case OperationCode.Counter:
-                    addressTypes.Add(AddressTypeEnum.DigitalMemoryCounter);
-                    break;
-                case OperationCode.OutputCoil:
-                    addressTypes.Add(AddressTypeEnum.DigitalMemory);
-                    addressTypes.Add(AddressTypeEnum.DigitalOutput);
-                    break;
-            }
-
-            foreach (AddressTypeEnum addressType in addressTypes)
-            {
-                switch (addressType)
-                {
-                    case AddressTypeEnum.DigitalMemory:
-                        generalList = ListMemoryAddress;
-                        break;
-                    case AddressTypeEnum.DigitalMemoryCounter:
-                        generalList = ListCounterAddress;
-                        break;
-                    case AddressTypeEnum.DigitalMemoryTimer:
-                        generalList = ListTimerAddress;
-                        break;
-                    case AddressTypeEnum.DigitalInput:
-                        generalList = ListInputAddress;
-                        break;
-                    case AddressTypeEnum.DigitalOutput:
-                        generalList = ListOutputAddress;
-                        break;
-                    default:
-                        return null;
-                }
-
-                foreach (Address address in generalList)
-                    addresses.Add(address);
-            }
-
-            return addresses;
-        }
-
         public void CleanUsedIndication()
         {
-            List<Address> generalList;
             List<AddressTypeEnum> addressTypes = new List<AddressTypeEnum>();
-
             addressTypes.Add(AddressTypeEnum.DigitalMemory);
             addressTypes.Add(AddressTypeEnum.DigitalMemoryCounter);
             addressTypes.Add(AddressTypeEnum.DigitalMemoryTimer);
             addressTypes.Add(AddressTypeEnum.DigitalInput);
             addressTypes.Add(AddressTypeEnum.DigitalOutput);
 
+            List<Address> generalList;
             foreach (AddressTypeEnum addressType in addressTypes)
             {
                 switch (addressType)
@@ -158,51 +99,7 @@ namespace LadderApp
             }
         }
 
-        public List<Address> ListUsedAddressing()
-        {
-            List<Address> generalList;
-            List<AddressTypeEnum> addressTypeList = new List<AddressTypeEnum>();
-            List<Address> resultAddresses = new List<Address>();
-
-            addressTypeList.Add(AddressTypeEnum.DigitalMemory);
-            addressTypeList.Add(AddressTypeEnum.DigitalMemoryCounter);
-            addressTypeList.Add(AddressTypeEnum.DigitalMemoryTimer);
-            addressTypeList.Add(AddressTypeEnum.DigitalInput);
-            addressTypeList.Add(AddressTypeEnum.DigitalOutput);
-
-            foreach (AddressTypeEnum _tp in addressTypeList)
-            {
-
-                switch (_tp)
-                {
-                    case AddressTypeEnum.DigitalMemory:
-                        generalList = ListMemoryAddress;
-                        break;
-                    case AddressTypeEnum.DigitalMemoryCounter:
-                        generalList = ListCounterAddress;
-                        break;
-                    case AddressTypeEnum.DigitalMemoryTimer:
-                        generalList = ListTimerAddress;
-                        break;
-                    case AddressTypeEnum.DigitalInput:
-                        generalList = ListInputAddress;
-                        break;
-                    case AddressTypeEnum.DigitalOutput:
-                        generalList = ListOutputAddress;
-                        break;
-                    default:
-                        return resultAddresses;
-                }
-
-                foreach (Address address in generalList)
-                    if (address.Used == true)
-                        resultAddresses.Add(address);
-            }
-
-            return resultAddresses;
-        }
-
-        public void AlocateIOAddressing(Device device)
+         public void AlocateIOAddressing(Device device)
         {
             this.ListInputAddress.Clear();
             this.ListOutputAddress.Clear();

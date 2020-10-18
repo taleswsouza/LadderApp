@@ -94,10 +94,10 @@ namespace LadderApp
 
         [XmlElement(ElementName = "value", IsNullable = false, Type = typeof(Boolean))]
         public bool Value { get; set; } = false;
+
         [XmlIgnore]
         public bool Used { get; set; } = false;
 
-        //[XmlElement(ElementName = "BitsPorta", Order = 3, IsNullable = false, Type = typeof(int))]
         [XmlIgnore]
         public int NumberOfBitsByPort { get { return device.NumberBitsByPort; } private set { } }
 

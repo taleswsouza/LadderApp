@@ -69,7 +69,7 @@ namespace LadderApp
                 AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, Program.addressing.ListTimerAddress.Count);
                 AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, Program.addressing.ListCounterAddress.Count);
 
-                Program.ReindexAddresses();
+                ReindexAddresses(Program);
             }
 
             //if (!CheckLadderFormIsNotNull())
@@ -294,5 +294,64 @@ namespace LadderApp
                 visualInstruction.Refresh();
             }
         }
+
+
+        public bool ReindexAddresses(LadderProgram program)
+        {
+            foreach (Line line in program.Lines)
+            {
+                foreach (Instruction instruction in line.Instructions)
+                {
+                    switch (instruction.OpCode)
+                    {
+                        case OperationCode.None:
+                        case OperationCode.LineBegin:
+                        case OperationCode.LineEnd:
+                        case OperationCode.ParallelBranchBegin:
+                        case OperationCode.ParallelBranchEnd:
+                        case OperationCode.ParallelBranchNext:
+                            break;
+                        default:
+                            instruction.SetOperand(0, program.addressing.Find((Address)instruction.GetOperand(0)));
+                            break;
+                    }
+                }
+                foreach (Instruction instruction in line.Outputs)
+                {
+                    switch (instruction.OpCode)
+                    {
+                        case OperationCode.None:
+                        case OperationCode.LineBegin:
+                        case OperationCode.LineEnd:
+                        case OperationCode.ParallelBranchBegin:
+                        case OperationCode.ParallelBranchEnd:
+                        case OperationCode.ParallelBranchNext:
+                            break;
+                        default:
+                            instruction.SetOperand(0, program.addressing.Find((Address)instruction.GetOperand(0)));
+
+                            if (instruction.IsAllOperandsOk())
+                            {
+                                if (instruction.OpCode == OperationCode.Counter)
+                                {
+                                    ((Address)instruction.GetOperand(0)).Counter.Type = (Int32)instruction.GetOperand(1);
+                                    ((Address)instruction.GetOperand(0)).Counter.Preset = (Int32)instruction.GetOperand(2);
+                                    ((Address)instruction.GetOperand(0)).Counter.Accumulated = (Int32)instruction.GetOperand(3);
+                                }
+                                else if (instruction.OpCode == OperationCode.Timer)
+                                {
+                                    ((Address)instruction.GetOperand(0)).Timer.Type = (Int32)instruction.GetOperand(1);
+                                    ((Address)instruction.GetOperand(0)).Timer.Preset = (Int32)instruction.GetOperand(2);
+                                    ((Address)instruction.GetOperand(0)).Timer.Accumulated = (Int32)instruction.GetOperand(3);
+                                    ((Address)instruction.GetOperand(0)).Timer.TimeBase = (Int32)instruction.GetOperand(4);
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return true;
+        }
+
     }
 }

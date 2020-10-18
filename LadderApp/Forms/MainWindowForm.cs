@@ -99,7 +99,7 @@ namespace LadderApp
                     case ".a43":
                         try
                         {
-                            MSP430IntegrationServices p = new MSP430IntegrationServices();
+                            MicIntegrationServices p = new MicIntegrationServices();
                             String readContent = p.ConvertHex2String(fileName);
                             if (VerifyPassword(readContent))
                                 ReadExecutable(readContent, fileName.Substring(fileName.LastIndexOf(@"\") + 1, fileName.Length - fileName.LastIndexOf(@"\") - 1));
@@ -150,8 +150,8 @@ namespace LadderApp
                 if (projectForm.LadderForm.VisualInstruction != null)
                     if (!projectForm.LadderForm.VisualInstruction.IsDisposed)
                     {
-                        OperationCode _cI = projectForm.LadderForm.VisualInstruction.OpCode;
-                        switch (_cI)
+                        OperationCode opCode = projectForm.LadderForm.VisualInstruction.OpCode;
+                        switch (opCode)
                         {
                             case OperationCode.ParallelBranchBegin:
                             case OperationCode.ParallelBranchNext:
@@ -692,7 +692,7 @@ namespace LadderApp
                     /// end of codes
                     if (countOfEnds >= 2)
                     {
-                        MSP430IntegrationServices p = new MSP430IntegrationServices();
+                        MicIntegrationServices p = new MicIntegrationServices();
                         //p.CreateFile("opcode.txt", content.Substring(content.IndexOf("@laddermic.com"), i - content.IndexOf("@laddermic.com") + 1));
                         //position = content.Length;
                         break;
@@ -796,7 +796,9 @@ namespace LadderApp
 
             try
             {
-                projectForm.Program.GenerateExecutable(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, true);
+                //projectForm.Program.GenerateExecutable(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, true);
+                ExecutableGeneratorServices executableGeneratorServices = new ExecutableGeneratorServices();
+                executableGeneratorServices.GenerateExecutable(projectForm.Program, mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, true);
 
                 File.Delete(Application.StartupPath + @"\" + projectForm.Program.Name.Replace(' ', '_') + ".a43");
             }
@@ -861,7 +863,8 @@ namespace LadderApp
 
             try
             {
-                projectForm.Program.GenerateExecutable(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, false);
+                ExecutableGeneratorServices executableGeneratorServices = new ExecutableGeneratorServices();
+                executableGeneratorServices.GenerateExecutable(projectForm.Program, mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, false);
                 if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\" + projectForm.Program.Name.Replace(' ', '_') + ".a43"))
                     File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\" + projectForm.Program.Name.Replace(' ', '_') + ".a43");
 
@@ -876,7 +879,7 @@ namespace LadderApp
 
         private void mnuMicrocontrollerCommunicationUpload_Click(object sender, EventArgs e)
         {
-            MSP430IntegrationServices p = new MSP430IntegrationServices();
+            MicIntegrationServices p = new MicIntegrationServices();
             try
             {
                 string content = p.ReadsViaUSB();
