@@ -13,5 +13,7 @@ namespace LadderApp
         bool IsAllOperandsOk();
         Object GetOperand(int position);
         void SetOperand(int position, Object value);
+        Address GetAddress();
+        void SetUsed();
     }
 }

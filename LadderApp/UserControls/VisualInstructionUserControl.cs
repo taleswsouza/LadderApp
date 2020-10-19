@@ -13,7 +13,7 @@ namespace LadderApp
     public delegate void VisualInstructionSelectedEventHandler(VisualInstructionUserControl sender, VisualLine visualLine);
     public delegate void AskToChangeAddressEventHandler(VisualInstructionUserControl sender);
 
-    public partial class VisualInstructionUserControl : UserControl
+    public partial class VisualInstructionUserControl : UserControl, IInstruction
 
     {
         public event ChangeLineEventHandler ChangeLineEvent;
@@ -186,6 +186,8 @@ namespace LadderApp
                 pointToNextParallelPoint = value;
             }
         }
+
+        public object[] Operands { get => Instruction.Operands; set => Instruction.Operands = value; }
 
         public VisualInstructionUserControl()
         {
@@ -1132,9 +1134,9 @@ namespace LadderApp
         {
             switch (OpCode)
             {
-                case OperationCode.NormallyOpenContact:
-                case OperationCode.NormallyClosedContact:
-                    break;
+                //case OperationCode.NormallyOpenContact:
+                //case OperationCode.NormallyClosedContact:
+                //    break;
                 case OperationCode.OutputCoil:
                     break;
                 case OperationCode.Timer:
@@ -1142,6 +1144,21 @@ namespace LadderApp
                     AskToChangeAddressEvent(this);
                     break;
             }
+        }
+
+        public int GetNumberOfOperands()
+        {
+            return Instruction.GetNumberOfOperands();
+        }
+
+        public Address GetAddress()
+        {
+            return Instruction.GetAddress();
+        }
+
+        public void SetUsed()
+        {
+            Instruction.SetUsed();
         }
     }
 }

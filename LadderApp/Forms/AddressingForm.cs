@@ -15,7 +15,7 @@ namespace LadderApp
             InitializeComponent();
         }
 
-        public AddressingForm(Addressing addressing)
+        public AddressingForm(LadderAddressing addressing)
         {
             InitializeComponent();
 

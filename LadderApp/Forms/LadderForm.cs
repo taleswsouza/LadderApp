@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using LadderApp.Formularios;
+using LadderApp.Model.Instructions;
 using LadderApp.Services;
 
 namespace LadderApp
@@ -356,7 +357,6 @@ namespace LadderApp
 
             LadderSimulatorServices simultatorService = new LadderSimulatorServices();
             simultatorService.SimulateLadder(projectForm.Program);
-            //projectForm.Program.SimulateLadder();
             this.Invalidate(true);
         }
 
@@ -372,15 +372,17 @@ namespace LadderApp
             switch (sender.OpCode)
             {
                 case OperationCode.Timer:
-                    changeTimerCounterParametersForm.Type = (Int32)((Address)sender.GetOperand(0)).Timer.Type;
-                    changeTimerCounterParametersForm.Preset = (Int32)((Address)sender.GetOperand(0)).Timer.Preset;
-                    changeTimerCounterParametersForm.Accumulated = (Int32)((Address)sender.GetOperand(0)).Timer.Accumulated;
-                    changeTimerCounterParametersForm.TimeBase = (Int32)((Address)sender.GetOperand(0)).Timer.TimeBase;
+                    TimerInstruction timer = ((TimerInstruction)sender.Instruction);
+                    changeTimerCounterParametersForm.Type = timer.GetBoxType();
+                    changeTimerCounterParametersForm.Preset = timer.GetPreset();
+                    changeTimerCounterParametersForm.Accumulated = timer.GetAccumulated();
+                    changeTimerCounterParametersForm.TimeBase = timer.GetTimeBase();
                     break;
                 case OperationCode.Counter:
-                    changeTimerCounterParametersForm.Type = (Int32)((Address)sender.GetOperand(0)).Counter.Type;
-                    changeTimerCounterParametersForm.Preset = (Int32)((Address)sender.GetOperand(0)).Counter.Preset;
-                    changeTimerCounterParametersForm.Accumulated = (Int32)((Address)sender.GetOperand(0)).Counter.Accumulated;
+                    CounterInstruction counter = ((CounterInstruction)sender.Instruction);
+                    changeTimerCounterParametersForm.Type = counter.GetBoxType();
+                    changeTimerCounterParametersForm.Preset = counter.GetPreset();
+                    changeTimerCounterParametersForm.Accumulated = counter.GetAccumulated();
                     break;
                 default:
                     break;
@@ -389,34 +391,28 @@ namespace LadderApp
 
             if (result == DialogResult.OK)
             {
-                sender.SetOperand(1, changeTimerCounterParametersForm.Type);
-                sender.SetOperand(2, changeTimerCounterParametersForm.Preset);
-                sender.SetOperand(3, changeTimerCounterParametersForm.Accumulated);
+                OutputBoxInstruction outputBox = (OutputBoxInstruction)sender.Instruction;
+                outputBox.setBoxType(changeTimerCounterParametersForm.Type);
+                outputBox.setPreset(changeTimerCounterParametersForm.Preset);
+                outputBox.setAccumulated(changeTimerCounterParametersForm.Accumulated);
+
                 switch (sender.OpCode)
                 {
                     case OperationCode.Timer:
-                        /// mantem os parametros do ci atualizados
-                        sender.SetOperand(4, changeTimerCounterParametersForm.TimeBase);
+                        TimerInstruction timer = (TimerInstruction)outputBox;
+                        timer.SetTimeBase(changeTimerCounterParametersForm.TimeBase);
 
-                        ((Address)sender.GetOperand(0)).Timer.Type = changeTimerCounterParametersForm.Type;
-                        ((Address)sender.GetOperand(0)).Timer.Preset = changeTimerCounterParametersForm.Preset;
-                        ((Address)sender.GetOperand(0)).Timer.Accumulated = changeTimerCounterParametersForm.Accumulated;
-                        ((Address)sender.GetOperand(0)).Timer.TimeBase = changeTimerCounterParametersForm.TimeBase;
-
-                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Timer.Type);
-                        sender.SetOperand(2, ((Address)sender.GetOperand(0)).Timer.Preset);
-                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Timer.Accumulated);
-                        sender.SetOperand(4, ((Address)sender.GetOperand(0)).Timer.TimeBase);
+                        sender.GetAddress().Timer.Type = changeTimerCounterParametersForm.Type;
+                        sender.GetAddress().Timer.Preset = changeTimerCounterParametersForm.Preset;
+                        sender.GetAddress().Timer.Accumulated = changeTimerCounterParametersForm.Accumulated;
+                        sender.GetAddress().Timer.TimeBase = changeTimerCounterParametersForm.TimeBase;
 
                         break;
                     case OperationCode.Counter:
-                        ((Address)sender.GetOperand(0)).Counter.Type = changeTimerCounterParametersForm.Type;
-                        ((Address)sender.GetOperand(0)).Counter.Preset = changeTimerCounterParametersForm.Preset;
-                        ((Address)sender.GetOperand(0)).Counter.Accumulated = changeTimerCounterParametersForm.Accumulated;
+                        sender.GetAddress().Counter.Type = changeTimerCounterParametersForm.Type;
+                        sender.GetAddress().Counter.Preset = changeTimerCounterParametersForm.Preset;
+                        sender.GetAddress().Counter.Accumulated = changeTimerCounterParametersForm.Accumulated;
 
-                        sender.SetOperand(1, ((Address)sender.GetOperand(0)).Counter.Type);
-                        sender.SetOperand(2, ((Address)sender.GetOperand(0)).Counter.Preset);
-                        sender.SetOperand(3, ((Address)sender.GetOperand(0)).Counter.Accumulated);
                         break;
                     default:
                         break;

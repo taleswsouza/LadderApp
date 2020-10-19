@@ -7,13 +7,19 @@ namespace LadderApp
 
     [Serializable]
     [XmlType(TypeName = "address")]
-    public class Address : IOperand
+    public class Address
     {
-        public event ChangedOperandEventHandler ChangedOperandEvent;
+        //public event ChangedOperandEventHandler ChangedOperandEvent;
         public event EditedCommentEventHandler EditedCommentEvent;
 
         public Address()
         {
+        }
+
+        public Address(AddressTypeEnum addressType, int index)
+        {
+            AddressType = addressType;
+            Id = index;
         }
 
         public Address(AddressTypeEnum addressType, int index, Device device)
@@ -21,7 +27,6 @@ namespace LadderApp
             AddressType = addressType;
             Id = index;
             this.device = device;
-            //NumberOfBitsByPort = device.NumberBitsByPort;
         }
 
         [XmlElement(ElementName = "id")]
@@ -55,14 +60,13 @@ namespace LadderApp
                     }
                     addressType = value;
 
-                    if (ChangedOperandEvent != null)
-                        ChangedOperandEvent(this);
+                    //if (ChangedOperandEvent != null)
+                    //    ChangedOperandEvent(this);
                 }
             }
         }
 
         private String name = "";
-        //[XmlElement()]
         public String Name
         {
             get
@@ -170,10 +174,26 @@ namespace LadderApp
             }
         }
 
+
+
         public override string ToString()
         {
             return this.name;
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is Address address &&
+                   Id == address.Id &&
+                   addressType == address.addressType;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = -932076469;
+            hashCode = hashCode * -1521134295 + Id.GetHashCode();
+            hashCode = hashCode * -1521134295 + addressType.GetHashCode();
+            return hashCode;
+        }
     }
 }

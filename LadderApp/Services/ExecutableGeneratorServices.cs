@@ -1,4 +1,5 @@
 ﻿using LadderApp.Formularios;
+using LadderApp.Model;
 using LadderApp.Resources;
 using System;
 using System.Collections.Generic;
@@ -15,26 +16,42 @@ namespace LadderApp.Services
         private MicIntegrationServices micIntegrationServices;
         private OpCode2TextServices opCode2TextServices;
         private LadderVerificationServices verificationServices;
-        private Addressing addressing;
+        private AddressingServices addressingServices;
 
-        public ExecutableGeneratorServices() : this (new LadderVerificationServices(), new OpCode2TextServices(), new MicIntegrationServices(false))
+
+        private LadderAddressing addressing;
+
+        public LadderAddressing GetAddressing()
+        {
+            return addressing;
+        }
+
+        public void SetAddressing(LadderAddressing value)
+        {
+            addressing = value;
+        }
+
+        public ExecutableGeneratorServices() : this(new LadderVerificationServices(), new OpCode2TextServices(), new MicIntegrationServices(false), AddressingServices.Instance)
         {
         }
 
-        public ExecutableGeneratorServices(LadderVerificationServices verificationServices, OpCode2TextServices opCode2TextServices, MicIntegrationServices micIntegrationServices)
+        public ExecutableGeneratorServices(LadderVerificationServices verificationServices, OpCode2TextServices opCode2TextServices, MicIntegrationServices micIntegrationServices, AddressingServices addressingServices)
         {
             this.verificationServices = verificationServices;
             this.opCode2TextServices = opCode2TextServices;
             this.micIntegrationServices = micIntegrationServices;
+            this.addressingServices = addressingServices;
         }
 
-        public bool GenerateExecutable(LadderProgram program, bool savePrograInsideExecutable, bool savePassword, bool writeProgram)
+        public bool GenerateExecutable(LadderProgram program, bool saveProgramInsideExecutable, bool savePassword, string password, bool writeProgram)
         {
-            addressing = program.addressing;
+            SetAddressing(program.addressing);
+            addressingServices.SetAddressing(program.addressing);
+
             String doc = "", lineText = "", lineTestText = "", outputLastOperand = "";
             bool operandInLine = false;
-            List<String> operandsInLine = new List<string>();
-            List<String> operandsInLine2MaybeWithAddress = new List<string>();
+            List<String> outputOperands = new List<string>();
+            List<String> operandsToReset = new List<string>();
             String functionsAfterLine = "";
             DialogResult result;
 
@@ -45,20 +62,15 @@ namespace LadderApp.Services
 
             opCode2TextServices.Add(OperationCode.None);
 
-            if (savePrograInsideExecutable && savePassword)
+            if (saveProgramInsideExecutable && savePassword && !String.IsNullOrEmpty(password))
             {
-                result = MessageBox.Show("Are you sure you want to write a password to the executable to be generated?", "Request password", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.Yes)
-                {
-                    if (!SavePasswordIntoLadder(ref opCode2TextServices))
-                        return false;
-                }
-                else
-                    return false;
-
+                opCode2TextServices.AddHeader();
+                opCode2TextServices.Header.Add(OperationCode.HeadPassword0);
+                opCode2TextServices.Header.Add(password.Length);
+                opCode2TextServices.Header.Add(password);
             }
 
-            addressing.CleanUsedIndication();
+            addressingServices.CleanUsedIndication();
 
             lineText += Environment.NewLine;
             doc += lineText;
@@ -114,43 +126,34 @@ namespace LadderApp.Services
 
                 lineTestText = lineText;
 
-                operandsInLine.Clear();
-                operandsInLine2MaybeWithAddress.Clear();
-                foreach (Instruction instruction in line.Outputs)
+                outputOperands.Clear();
+                operandsToReset.Clear();
+                foreach (IInstruction instruction in line.Outputs)
                 {
                     switch (instruction.OpCode)
                     {
                         case OperationCode.OutputCoil:
                         case OperationCode.Timer:
                         case OperationCode.Counter:
+                            outputOperands.Add(((IOutput)instruction).GetOutputDeclaration());
+                            goto case OperationCode.Reset;
                         case OperationCode.Reset:
-                            opCode2TextServices.Add(instruction);
+                            opCode2TextServices.Add((Instruction)instruction);
+                            instruction.SetUsed();
 
-                            if (instruction.OpCode == OperationCode.OutputCoil)
+                            if (instruction.OpCode == OperationCode.Counter)
                             {
-                                operandsInLine.Add(((Address)instruction.GetOperand(0)).GetVariableBitValueName());
-                                ((Address)instruction.GetOperand(0)).Used = true;
+                                functionsAfterLine += " ExecuteCounter(&" + instruction.GetAddress().Name + ");";
                             }
-                            else if (instruction.OpCode == OperationCode.Timer)
+                            
+                            if (instruction.OpCode == OperationCode.Reset)
                             {
-                                operandsInLine.Add(((Address)instruction.GetOperand(0)).GetEnableBit());
-                                ((Address)instruction.GetOperand(0)).Used = true;
-                            }
-                            else if (instruction.OpCode == OperationCode.Counter)
-                            {
-                                operandsInLine.Add(((Address)instruction.GetOperand(0)).GetEnableBit());
-                                functionsAfterLine += " ExecuteCounter(&" + ((Address)instruction.GetOperand(0)).Name + ");";
-                                ((Address)instruction.GetOperand(0)).Used = true;
-                            }
-                            else if (instruction.OpCode == OperationCode.Reset)
-                            {
-                                operandsInLine2MaybeWithAddress.Add(((Address)instruction.GetOperand(0)).Name + ".Reset = 1;");
-                                ((Address)instruction.GetOperand(0)).Used = true;
+                                operandsToReset.Add(((IOutput)instruction).GetOutputDeclaration());
 
-                                switch (((Address)instruction.GetOperand(0)).AddressType)
+                                switch (instruction.GetAddress().AddressType)
                                 {
                                     case AddressTypeEnum.DigitalMemoryCounter:
-                                        operandsInLine2MaybeWithAddress.Add("ExecuteCounter(&" + ((Address)instruction.GetOperand(0)).Name + ");");
+                                        operandsToReset.Add("ExecuteCounter(&" + instruction.GetAddress().Name + ");");
                                         break;
                                     default:
                                         break;
@@ -162,14 +165,14 @@ namespace LadderApp.Services
                     }
                 }
 
-                if (operandsInLine.Count > 0)
+                if (outputOperands.Count > 0)
                 {
                     operandInLine = true;
                     lineText = "";
-                    foreach (String saidalinha in operandsInLine)
+                    foreach (String outputOperand in outputOperands)
                     {
-                        lineText += saidalinha + " = ";
-                        outputLastOperand = saidalinha;
+                        lineText += outputOperand + " = ";
+                        outputLastOperand = outputOperand;
                     }
                     lineText += lineTestText + ";";
 
@@ -181,13 +184,13 @@ namespace LadderApp.Services
                 }
 
 
-                if (operandsInLine2MaybeWithAddress.Count > 0)
+                if (operandsToReset.Count > 0)
                 {
                     if (operandInLine)
                         lineTestText = outputLastOperand;
 
                     lineText = "if (" + lineTestText + ") {" + Environment.NewLine;
-                    foreach (String maybeOutpustOfLine in operandsInLine2MaybeWithAddress)
+                    foreach (String maybeOutpustOfLine in operandsToReset)
                         lineText += maybeOutpustOfLine + Environment.NewLine;
                     lineText += "}";
                     doc += lineText + Environment.NewLine;
@@ -255,12 +258,16 @@ namespace LadderApp.Services
                     }
                 }
 
-                foreach (Address address in addressing.ListMemoryAddress)
+                foreach (Address address in GetAddressing().ListMemoryAddress)
+                {
                     if (address.Used)
                     {
                         if (!usedVariableNames.Contains(address.GetVariableName()))
+                        {
                             usedVariableNames.Add(address.GetVariableName());
+                        }
                     }
+                }
 
                 if (usedVariableNames.Count > 0)
                 {
@@ -273,7 +280,7 @@ namespace LadderApp.Services
 
                 /// timer
                 contentParameterization += "// timer parameters" + Environment.NewLine;
-                foreach (Address address in addressing.ListTimerAddress)
+                foreach (Address address in GetAddressing().ListTimerAddress)
                 {
                     if (address.Used)
                     {
@@ -308,7 +315,7 @@ namespace LadderApp.Services
 
 
                 /// counters
-                foreach (Address address in addressing.ListCounterAddress)
+                foreach (Address address in GetAddressing().ListCounterAddress)
                 {
                     if (address.Used)
                     {
@@ -393,7 +400,7 @@ namespace LadderApp.Services
 
                 contentMainDotCFile = MicrocontrollersBaseCodeFilesResource.mainC;
 
-                if (savePrograInsideExecutable)
+                if (saveProgramInsideExecutable)
                 {
                     opCode2TextServices.FinalizeHeader();
                     contentOpCodes = "const unsigned char ladderInstructions[" + opCode2TextServices.Length.ToString().Trim() + "] = {" + opCode2TextServices.ToString() + "};";
@@ -483,13 +490,15 @@ namespace LadderApp.Services
         private static void PrepareVariableDeclarationForInputOrOutPutUsedInProgram(List<string> usedVariableNames, List<string> usedPorts)
         {
             for (int i = 0; i < usedPorts.Count; i++)
+            {
                 usedVariableNames.Add(usedPorts[i] + "_IN, " + usedPorts[i] + "_OUT, " + usedPorts[i] + "_DIR");
+            }
         }
 
         private void PrepareParameterizationForOutputAddress(ref string contentParameterization, ref bool outputsPresent, List<string> usedPorts)
         {
             /// 1. prepare to setup output ports
-            foreach (Address address in addressing.ListOutputAddress)
+            foreach (Address address in GetAddressing().ListOutputAddress)
                 if (address.GetPortParameterization() != "" && address.Used == true)
                 {
                     outputsPresent = true;
@@ -507,7 +516,7 @@ namespace LadderApp.Services
         {
             /// 1. Prepare Parameterization For Input ports.
             /// 2. include these ports in usedPorts list
-            foreach (Address address in addressing.ListInputAddress)
+            foreach (Address address in GetAddressing().ListInputAddress)
                 if (address.GetPortParameterization() != "" && address.Used == true)
                 {
                     inputsPresent = true;
@@ -522,47 +531,42 @@ namespace LadderApp.Services
         }
 
 
-        private bool SavePasswordIntoLadder(ref OpCode2TextServices opCode2TextServices)
-        {
-            String password = "";
-            PasswordForm passwordForm = new PasswordForm();
-            passwordForm.Text = "Enter the new password:";
-            passwordForm.lblPassword.Text = "New password:";
+        //private bool SavePasswordIntoLadder(ref OpCode2TextServices opCode2TextServices)
+        //{
+        //    String password = "";
+        //    PasswordForm passwordForm = new PasswordForm();
+        //    passwordForm.Text = "Enter the new password:";
+        //    passwordForm.lblPassword.Text = "New password:";
 
-            for (int i = 0; i < 2; i++)
-            {
-                DialogResult result = passwordForm.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    password = passwordForm.txtPassword.Text;
-                    passwordForm.txtPassword.Text = "";
-                    passwordForm.Text = "Confirm the new password:";
-                    passwordForm.lblPassword.Text = "Confirm the new password:";
-                    passwordForm.btnOK.DialogResult = DialogResult.Yes;
-                }
-                else if (result != DialogResult.Yes)
-                {
-                    MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return false;
-                }
-                else
-                {
-                    if (password != passwordForm.txtPassword.Text)
-                    {
-                        MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return false;
-                    }
-                    else
-                    {
-                        opCode2TextServices.AddHeader();
-                        opCode2TextServices.Header.Add(OperationCode.HeadPassword0);
-                        opCode2TextServices.Header.Add(password.Length);
-                        opCode2TextServices.Header.Add(password);
-                    }
-                }
-            }
-            return true;
-        }
+        //    for (int i = 0; i < 2; i++)
+        //    {
+        //        DialogResult result = passwordForm.ShowDialog();
+        //        if (result == DialogResult.OK)
+        //        {
+        //            password = passwordForm.txtPassword.Text;
+        //            passwordForm.txtPassword.Text = "";
+        //            passwordForm.Text = "Confirm the new password:";
+        //            passwordForm.lblPassword.Text = "Confirm the new password:";
+        //            passwordForm.btnOK.DialogResult = DialogResult.Yes;
+        //        }
+        //        else
+        //        {
+        //            if (password != passwordForm.txtPassword.Text)
+        //            {
+        //                MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //                return false;
+        //            }
+        //            else
+        //            {
+        //                opCode2TextServices.AddHeader();
+        //                opCode2TextServices.Header.Add(OperationCode.HeadPassword0);
+        //                opCode2TextServices.Header.Add(password.Length);
+        //                opCode2TextServices.Header.Add(password);
+        //            }
+        //        }
+        //    }
+        //    return true;
+        //}
 
     }
 }

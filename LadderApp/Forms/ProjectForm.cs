@@ -1,3 +1,5 @@
+using LadderApp.Factorys;
+using LadderApp.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +12,8 @@ namespace LadderApp
 {
     public partial class ProjectForm : Form
     {
+        private AddressingServices addressingServices;
+
         public enum ProgramStatus
         {
             NotInitialized,
@@ -19,9 +23,42 @@ namespace LadderApp
         }
         public ProgramStatus Status { get; set; } = ProgramStatus.NotInitialized;
 
-        public ProjectForm(LadderProgram program) : this()
+        public ProjectForm(LadderProgram program, AddressingServices addressingServices) : this()
         {
             this.Program = program;
+            this.addressingServices = addressingServices;
+            this.addressingServices.SetAddressing(program.addressing);
+
+            if (Status == ProgramStatus.NotInitialized && Program.device == null)
+            {
+                Program.device = DeviceFactory.CreateNewDevice();
+
+                addressingServices.AlocateIOAddressing(Program.device);
+                addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
+
+                addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
+
+                addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
+            }
+            else
+            {
+                Status = ProgramStatus.Open;
+                if (Program.device == null)
+                {
+                    Program.device = DeviceFactory.CreateNewDevice();
+                }
+
+                addressingServices.AlocateIOAddressing(Program.device);
+
+                addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, Program.addressing.ListMemoryAddress.Count);
+
+                addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, Program.addressing.ListTimerAddress.Count);
+
+                addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, Program.addressing.ListCounterAddress.Count);
+
+                addressingServices.ReindexAddresses(Program);
+            }
+
         }
 
         public ProjectForm()
@@ -49,30 +86,11 @@ namespace LadderApp
         {
             tvnProjectTree.TopNode.Expand();
 
-            if (Status == ProgramStatus.NotInitialized)
-            {
-                Program.device = new Device(true);
+            AlocateIOAddressingProjectTree();
+            AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory);
+            AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer);
+            AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter);
 
-                AlocateIOAddressing();
-
-                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
-                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
-                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
-            }
-            else
-            {
-                if (Program.device == null)
-                    Program.device = new Device(true);
-                AlocateIOAddressing();
-
-                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, Program.addressing.ListMemoryAddress.Count);
-                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, Program.addressing.ListTimerAddress.Count);
-                AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, Program.addressing.ListCounterAddress.Count);
-
-                ReindexAddresses(Program);
-            }
-
-            //if (!CheckLadderFormIsNotNull())
             OpenLadderForm();
         }
 
@@ -118,8 +136,10 @@ namespace LadderApp
                             pin.Type = deviceForm.PinTypeList[i];
                             i++;
                         }
-                        Program.device.RealocatePinAddresses();
-                        AlocateIOAddressing();
+                        addressingServices.RealocatePinAddressesByPinTypesFromDevice(Program.device);
+                        addressingServices.AlocateIOAddressing(Program.device);
+
+                        AlocateIOAddressingProjectTree();
                     }
                     break;
                 case "tvnAddressingConfigurationNode":
@@ -127,9 +147,14 @@ namespace LadderApp
                     addressingForm.Owner = this;
                     if (addressingForm.ShowDialog() == DialogResult.OK)
                     {
-                        AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, addressingForm.NumberOfMemoryAddresses);
-                        AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, addressingForm.NumberOfTimerAddresses);
-                        AlocateAddressingMemoryAndTimerAndCounter(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, addressingForm.NumberOfCounterAddresses);
+                        addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, addressingForm.NumberOfMemoryAddresses);
+                        addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, addressingForm.NumberOfTimerAddresses);
+                        addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, addressingForm.NumberOfCounterAddresses);
+
+                        AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory);
+                        AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer);
+                        AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter);
+
                     }
                     break;
                 default:
@@ -178,27 +203,22 @@ namespace LadderApp
             }
         }
 
-        public void AlocateIOAddressing()
+        public void AlocateIOAddressingProjectTree()
         {
             tvnProjectTree.BeginUpdate();
 
             InputsNodes.Clear();
             OutputsNodes.Clear();
 
-            Program.addressing.ListInputAddress.Clear();
-            Program.addressing.ListOutputAddress.Clear();
             foreach (Address address in Program.device.PinAddresses)
             {
-                address.SetDevice(Program.device);
                 switch (address.AddressType)
                 {
                     case AddressTypeEnum.DigitalInput:
-                        Program.addressing.ListInputAddress.Add(address);
                         InputsNodes.Add(address.Name, address.GetNameAndComment());
                         InputsNodes[address.Name].Tag = address;
                         break;
                     case AddressTypeEnum.DigitalOutput:
-                        Program.addressing.ListOutputAddress.Add(address);
                         OutputsNodes.Add(address.Name, address.GetNameAndComment());
                         OutputsNodes[address.Name].Tag = address;
                         break;
@@ -217,72 +237,16 @@ namespace LadderApp
                 nodeToUpdateAddress[position].Text = sender.GetNameAndComment();
             tvnProjectTree.EndUpdate();
         }
-
-        public int AlocateAddressingMemoryAndTimerAndCounter(List<Address> addresses, AddressTypeEnum type, int numberOfAddresses)
+        private void AlocateAddressingMemoryAndTimerAndCounterToProjectTree(List<Address> addresses, AddressTypeEnum type)
         {
-            IndicateAddressUsed(this.Program, type);
-
             TreeNodeCollection nodeToUpdate = GetAddressingNodesByAddressType(type);
             nodeToUpdate.Clear();
-
-
-            int currentNumber = addresses.Count;
-            if (currentNumber == 0 || currentNumber < numberOfAddresses)
-            {
-                for (int i = currentNumber + 1; i <= numberOfAddresses; i++)
-                    addresses.Add(new Address(type, i, Program.device));
-            }
-            else if (currentNumber > numberOfAddresses)
-            {
-                for (int i = (currentNumber - 1); i >= numberOfAddresses; i--)
-                {
-                    if (!addresses[i].Used)
-                    {
-                        addresses[i] = null;
-                        addresses.RemoveAt(i);
-                    }
-                    else
-                        break;
-                }
-            }
-
             foreach (Address address in addresses)
             {
                 address.SetDevice(Program.device);
                 nodeToUpdate.Add(address.Name, address.GetNameAndComment());
                 nodeToUpdate[address.Name].Tag = address;
                 address.EditedCommentEvent += new EditedCommentEventHandler(Address_EditedComment);
-            }
-            return 0;
-        }
-
-        private void IndicateAddressUsed(LadderProgram program, AddressTypeEnum addressType)
-        {
-            program.addressing.CleanUsedIndication();
-            foreach (Line line in program.Lines)
-            {
-                line.Instructions.AddRange(line.Outputs);
-                foreach (Instruction instruction in line.Instructions)
-                {
-                    switch (instruction.OpCode)
-                    {
-                        /// TODO: Why this is this way?
-                        case OperationCode.NormallyOpenContact:
-                        case OperationCode.NormallyClosedContact:
-                        case OperationCode.OutputCoil:
-                        case OperationCode.Timer:
-                        case OperationCode.Counter:
-                        case OperationCode.Reset:
-                            if (instruction.IsAllOperandsOk())
-                            {
-                                Address address = (Address)instruction.GetOperand(0);
-                                if (address.AddressType == addressType)
-                                    address.Used = true;
-                            }
-                            break;
-                    }
-                }
-                line.Instructions.RemoveRange(line.Instructions.Count - line.Outputs.Count, line.Outputs.Count);
             }
         }
 
@@ -294,64 +258,5 @@ namespace LadderApp
                 visualInstruction.Refresh();
             }
         }
-
-
-        public bool ReindexAddresses(LadderProgram program)
-        {
-            foreach (Line line in program.Lines)
-            {
-                foreach (Instruction instruction in line.Instructions)
-                {
-                    switch (instruction.OpCode)
-                    {
-                        case OperationCode.None:
-                        case OperationCode.LineBegin:
-                        case OperationCode.LineEnd:
-                        case OperationCode.ParallelBranchBegin:
-                        case OperationCode.ParallelBranchEnd:
-                        case OperationCode.ParallelBranchNext:
-                            break;
-                        default:
-                            instruction.SetOperand(0, program.addressing.Find((Address)instruction.GetOperand(0)));
-                            break;
-                    }
-                }
-                foreach (Instruction instruction in line.Outputs)
-                {
-                    switch (instruction.OpCode)
-                    {
-                        case OperationCode.None:
-                        case OperationCode.LineBegin:
-                        case OperationCode.LineEnd:
-                        case OperationCode.ParallelBranchBegin:
-                        case OperationCode.ParallelBranchEnd:
-                        case OperationCode.ParallelBranchNext:
-                            break;
-                        default:
-                            instruction.SetOperand(0, program.addressing.Find((Address)instruction.GetOperand(0)));
-
-                            if (instruction.IsAllOperandsOk())
-                            {
-                                if (instruction.OpCode == OperationCode.Counter)
-                                {
-                                    ((Address)instruction.GetOperand(0)).Counter.Type = (Int32)instruction.GetOperand(1);
-                                    ((Address)instruction.GetOperand(0)).Counter.Preset = (Int32)instruction.GetOperand(2);
-                                    ((Address)instruction.GetOperand(0)).Counter.Accumulated = (Int32)instruction.GetOperand(3);
-                                }
-                                else if (instruction.OpCode == OperationCode.Timer)
-                                {
-                                    ((Address)instruction.GetOperand(0)).Timer.Type = (Int32)instruction.GetOperand(1);
-                                    ((Address)instruction.GetOperand(0)).Timer.Preset = (Int32)instruction.GetOperand(2);
-                                    ((Address)instruction.GetOperand(0)).Timer.Accumulated = (Int32)instruction.GetOperand(3);
-                                    ((Address)instruction.GetOperand(0)).Timer.TimeBase = (Int32)instruction.GetOperand(4);
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
-            return true;
-        }
-
     }
 }

@@ -1,3 +1,4 @@
+using LadderApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,10 +7,11 @@ namespace LadderApp
 {
     public class Text2OpCodeServices
     {
+        private AddressingServices addressingServices = AddressingServices.Instance;
+
         private String charConvertedData = "";
 
         private bool validatedHeader = false;
-        public bool askPassword = false;
         public string password = "";
         public int CurrentPosition { get; } = -1;
 
@@ -40,6 +42,8 @@ namespace LadderApp
             }
         }
 
+        public bool AskPassword { get; set; } = false;
+
         public bool ExistsOpCode()
         {
             if (charConvertedData.IndexOf(CodeId) != -1)
@@ -51,11 +55,13 @@ namespace LadderApp
         public bool ExistsHeader()
         {
             if (ExistsOpCode())
+            {
                 if (ReadOperationCode(InitialPosition) == OperationCode.HeadLenght)
                 {
-                    HeaderLenght = (Int32)Convert.ToChar(charConvertedData.Substring(InitialPosition + 1, 1));
+                    HeaderLenght = (int)Convert.ToChar(charConvertedData.Substring(InitialPosition + 1, 1));
                     return true;
                 }
+            }
 
             return false;
         }
@@ -70,7 +76,7 @@ namespace LadderApp
                         switch (ReadOperationCode(i))
                         {
                             case OperationCode.HeadPassword0:
-                                askPassword = true;
+                                AskPassword = true;
                                 i++;
                                 passwordLenght = ReadInteger(i);
                                 i++;
@@ -130,7 +136,7 @@ namespace LadderApp
             return -1;
         }
 
-        public Address ReadAddress(ref Int32 position, Addressing addressing)
+        public Address ReadAddress(ref Int32 position, LadderAddressing addressing)
         {
             Instruction instruction = new Instruction(ReadOperationCode(position));
             switch (instruction.OpCode)
@@ -145,7 +151,7 @@ namespace LadderApp
                     position++;
                     Int32 addressIndex = ReadInteger(position);
                     position++;
-                    return addressing.Find(addressType, addressIndex); ;
+                    return addressingServices.Find(addressType, addressIndex); ;
                 case OperationCode.OutputCoil:
                 case OperationCode.Reset:
                     break;

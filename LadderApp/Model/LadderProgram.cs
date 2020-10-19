@@ -14,7 +14,7 @@ using LadderApp.Services;
 
 namespace LadderApp
 {
-    [XmlInclude(typeof(Addressing))]
+    [XmlInclude(typeof(LadderAddressing))]
     [Serializable]
     public class LadderProgram
     {
@@ -24,7 +24,7 @@ namespace LadderApp
 
         public string Name { get; set; } = "NoName";
 
-        public Addressing addressing = new Addressing();
+        public LadderAddressing addressing = new LadderAddressing();
 
         public Device device;
         public List<Line> Lines { get; } = new List<Line>();

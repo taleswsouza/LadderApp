@@ -21,8 +21,10 @@ namespace LadderApp.Services
 
         private class LineStretchSummary
         {
-            public bool Initiated { get; set; } = false;
-            public bool Value { get; set; } = true;
+            public bool Initiated { get; private set; } = false;
+
+            private bool lineValue = true;
+            public bool LineValue { get => lineValue; set { lineValue = value; Initiated = true; } }
         }
 
         public bool SimulateLadder(LadderProgram program)
@@ -57,23 +59,14 @@ namespace LadderApp.Services
                             lineStretchSummary.Add(new LineStretchSummary());
                             break;
                         default:
-                            bool value = false;
-                            switch (instruction.OpCode)
-                            {
-                                case OperationCode.NormallyOpenContact:
-                                    value = ((Address)instruction.GetOperand(0)).Value;
-                                    break;
-                                case OperationCode.NormallyClosedContact:
-                                    value = !((Address)instruction.GetOperand(0)).Value;
-                                    break;
-                            }
-
                             if (lineStretchSummary[lineStretchSummary.Count - 1].Initiated)
-                                lineStretchSummary[lineStretchSummary.Count - 1].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value && value;
+                            {
+                                lineStretchSummary[lineStretchSummary.Count - 1].LineValue = lineStretchSummary[lineStretchSummary.Count - 1].LineValue && instruction.GetValue();
+                            }
                             else
-                                lineStretchSummary[lineStretchSummary.Count - 1].Value = value;
-
-                            lineStretchSummary[lineStretchSummary.Count - 1].Initiated = true;
+                            {
+                                lineStretchSummary[lineStretchSummary.Count - 1].LineValue = instruction.GetValue();
+                            }
                             break;
                     }
                 }
@@ -88,29 +81,39 @@ namespace LadderApp.Services
                         case OperationCode.Reset:
 
                             if (instruction.OpCode == OperationCode.OutputCoil)
-                                ((Address)instruction.GetOperand(0)).Value = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
+                            {
+                                //((Address)instruction.GetOperand(0)).Value = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+                                instruction.GetAddress().Value = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+                            }
                             else if (instruction.OpCode == OperationCode.Timer)
                             {
-                                ((Address)instruction.GetOperand(0)).Timer.Enable = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
+                                //((Address)instruction.GetOperand(0)).Timer.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+                                instruction.GetAddress().Timer.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
                             }
                             else if (instruction.OpCode == OperationCode.Counter)
                             {
-                                ((Address)instruction.GetOperand(0)).Counter.Enable = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
-                                ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
+                                //((Address)instruction.GetOperand(0)).Counter.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+                                //ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
+                                instruction.GetAddress().Counter.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+                                ExecuteCountersSimulator(instruction, instruction.GetAddress());
                             }
                             else if (instruction.OpCode == OperationCode.Reset)
                             {
-                                if ((bool)lineStretchSummary[lineStretchSummary.Count - 1].Value)
+                                if (lineStretchSummary[lineStretchSummary.Count - 1].LineValue)
                                 {
-                                    switch (((Address)instruction.GetOperand(0)).AddressType)
+                                    //switch (((Address)instruction.GetOperand(0)).AddressType)
+                                    switch (instruction.GetAddress().AddressType)
                                     {
                                         case AddressTypeEnum.DigitalMemoryCounter:
-                                            ((Address)instruction.GetOperand(0)).Counter.Reset = true;
-                                            ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
+                                            //((Address)instruction.GetOperand(0)).Counter.Reset = true;
+                                            //ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
+                                            instruction.GetAddress().Counter.Reset = true;
+                                            ExecuteCountersSimulator(instruction, instruction.GetAddress());
                                             break;
 
                                         case AddressTypeEnum.DigitalMemoryTimer:
-                                            ((Address)instruction.GetOperand(0)).Timer.Reset = true;
+                                            //((Address)instruction.GetOperand(0)).Timer.Reset = true;
+                                            instruction.GetAddress().Timer.Reset = true;
                                             break;
 
                                         default:
@@ -139,19 +142,19 @@ namespace LadderApp.Services
         private static void MakeOrLogicOverParallelBranchTwoLastLineStretchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
         {
             if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value || lineStretchSummary[lineStretchSummary.Count - 1].Value;
+                lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 2].LineValue || lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
             else
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
+                lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
             lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
         }
 
         private static void MakeAndLogicOverTwoLastLineStreatchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
         {
             if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value && lineStretchSummary[lineStretchSummary.Count - 1].Value;
+                lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 2].LineValue && lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
             else
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
-            lineStretchSummary[lineStretchSummary.Count - 2].Initiated = true;
+                lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+            //lineStretchSummary[lineStretchSummary.Count - 2].Initiated = true;
             lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
         }
 

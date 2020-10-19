@@ -1,3 +1,5 @@
+using LadderApp.Model;
+using LadderApp.Model.Instructions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,7 +27,7 @@ namespace LadderApp
         {
             foreach (Instruction instruction in this)
             {
-                if (instruction.OpCode== OperationCode.Timer)
+                if (instruction.OpCode == OperationCode.Timer)
                 {
                     if (usedTimers.Contains((Address)instruction.GetOperand(0)))
                         return false;
@@ -40,7 +42,7 @@ namespace LadderApp
         {
             foreach (Instruction instruction in this)
             {
-                if (instruction.OpCode== OperationCode.Counter)
+                if (instruction.OpCode == OperationCode.Counter)
                 {
                     if (usedCounters.Contains((Address)instruction.GetOperand(0)))
                         return false;
@@ -50,8 +52,8 @@ namespace LadderApp
             }
             return true;
         }
-        
-        
+
+
         public InstructionList InsertAllWithClearBefore(List<Instruction> instructions)
         {
             this.Clear();
@@ -66,21 +68,51 @@ namespace LadderApp
         }
 
 
-        public InstructionList InsertAllWithClearBefore(OperationCode [] _arrayCI)
+        public InstructionList InsertAllWithClearBefore(OperationCode[] opCodes)
         {
             this.Clear();
 
-            if (_arrayCI.Length > 0)
-                foreach (OperationCode _cadaCI in _arrayCI)
-                    this.Add(new Instruction(_cadaCI));
-
+            if (opCodes.Length > 0)
+            {
+                foreach (OperationCode opCode in opCodes)
+                {
+                    if (opCode.Equals(OperationCode.NormallyOpenContact))
+                    {
+                        this.Add(new NormallyOpenContact());
+                    }
+                    else if (opCode.Equals(OperationCode.NormallyClosedContact))
+                    {
+                        this.Add(new NormallyClosedContact());
+                    }
+                    else if (opCode.Equals(OperationCode.OutputCoil))
+                    {
+                        this.Add(new OutputCoil());
+                    }
+                    else if (opCode.Equals(OperationCode.Reset))
+                    {
+                        this.Add(new ResetOutputInstruction());
+                    }
+                    else if (opCode.Equals(OperationCode.Timer))
+                    {
+                        this.Add(new TimerInstruction());
+                    }
+                    else if (opCode.Equals(OperationCode.Counter))
+                    {
+                        this.Add(new CounterInstruction());
+                    }
+                    else
+                    {
+                        this.Add(new Instruction(opCode));
+                    }
+                }
+            }
             return this;
         }
 
 
         public void InsertParallelBranchNext()
         {
-            for(int i = (this.Count - 1); i >= 0; i--)
+            for (int i = (this.Count - 1); i >= 0; i--)
             {
                 this.Insert(i, new Instruction(OperationCode.ParallelBranchNext));
             }
@@ -106,16 +138,16 @@ namespace LadderApp
             }
         }
 
-        public void ValidateOperands(Addressing addressing)
+        public void ValidateOperands()
         {
-            foreach(Instruction instruction in this)
-                instruction.ValidateInstructionOperands(addressing);
+            foreach (Instruction instruction in this)
+                instruction.ValidateInstructionOperands();
         }
 
 
         private bool FindInstruction(Instruction instruction)
         {
-            if (instruction.OpCode== operationCode)
+            if (instruction.OpCode == operationCode)
                 return true;
             else
                 return false;
@@ -132,7 +164,7 @@ namespace LadderApp
             }
             return true;
         }
-      
+
         public enum ParallelBranchInsertionType
         {
             ParallelBranchInitialized,
