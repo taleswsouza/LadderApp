@@ -93,7 +93,8 @@ namespace LadderApp.Services
                                     ((Address)instruction.GetOperand(0)).Counter.Preset = (Int32)instruction.GetOperand(2);
                                     ((Address)instruction.GetOperand(0)).Counter.Accumulated = (Int32)instruction.GetOperand(3);
                                 }
-                                else if (instruction.OpCode == OperationCode.Timer)
+                                
+                                if (instruction.OpCode == OperationCode.Timer)
                                 {
                                     ((Address)instruction.GetOperand(0)).Timer.Type = (Int32)instruction.GetOperand(1);
                                     ((Address)instruction.GetOperand(0)).Timer.Preset = (Int32)instruction.GetOperand(2);
@@ -138,7 +139,9 @@ namespace LadderApp.Services
             if ((currentNumberOfAddress == 0) || (currentNumberOfAddress < numberOfAddress))
             {
                 for (int i = currentNumberOfAddress + 1; i <= numberOfAddress; i++)
+                {
                     addresses.Add(new Address(addressType, i, device));
+                }
             }
             else if (currentNumberOfAddress > numberOfAddress)
             {
@@ -150,7 +153,9 @@ namespace LadderApp.Services
                         addresses.RemoveAt(i);
                     }
                     else
+                    {
                         break;
+                    }
                 }
             }
             return 0;
@@ -164,7 +169,9 @@ namespace LadderApp.Services
             if (currentNumber == 0 || currentNumber < numberOfAddresses)
             {
                 for (int i = currentNumber + 1; i <= numberOfAddresses; i++)
+                {
                     addresses.Add(new Address(type, i, program.device));
+                }
             }
             else if (currentNumber > numberOfAddresses)
             {
@@ -176,7 +183,9 @@ namespace LadderApp.Services
                         addresses.RemoveAt(i);
                     }
                     else
+                    {
                         break;
+                    }
                 }
             }
 

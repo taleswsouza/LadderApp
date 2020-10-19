@@ -53,24 +53,22 @@ namespace LadderApp.Services
                     case OperationCode.NormallyOpenContact:
                     case OperationCode.NormallyClosedContact:
                         countOfEnds = 0;
+                        Instruction instruction = new Instruction((OperationCode)opCode);
+
+                        addressType = (AddressTypeEnum)Convert.ToChar(content.Substring(position + 1, 1));
+                        index = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
+                        address = addressingServices.Find(addressType, index);
+                        if (address == null)
                         {
-                            Instruction instruction = new Instruction((OperationCode)opCode);
-
-                            addressType = (AddressTypeEnum)Convert.ToChar(content.Substring(position + 1, 1));
-                            index = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
+                            program.device.Pins[index - 1].Type = addressType;
+                            addressingServices.RealocatePinAddressesByPinTypesFromDevice(program.device);
+                            addressingServices.AlocateIOAddressing(program.device);
                             address = addressingServices.Find(addressType, index);
-                            if (address == null)
-                            {
-                                program.device.Pins[index - 1].Type = addressType;
-                                addressingServices.RealocatePinAddressesByPinTypesFromDevice(program.device);
-                                addressingServices.AlocateIOAddressing(program.device);
-                                address = addressingServices.Find(addressType, index);
-                            }
-                            instruction.SetOperand(0, address);
-
-                            position += 2;
-                            program.Lines[lineIndex].Instructions.Add(instruction);
                         }
+                        instruction.SetOperand(0, address);
+
+                        position += 2;
+                        program.Lines[lineIndex].Instructions.Add(instruction);
                         break;
                     case OperationCode.OutputCoil:
                     case OperationCode.Reset:

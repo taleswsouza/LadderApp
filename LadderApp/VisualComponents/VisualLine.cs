@@ -128,7 +128,9 @@ namespace LadderApp
                 else
                 {
                     if (biggerX < (xPosition + xSize))
+                    {
                         biggerX = xPosition + xSize;
+                    }
                 }
 
                 switch (visualInstruction.OpCode)
@@ -159,7 +161,9 @@ namespace LadderApp
                         xPosition = parallelBranch.biggerX;
 
                         if (lastSizeOfYToFinalParallelBranch > sizeOfYToBackgroundDraw)
+                        {
                             sizeOfYToBackgroundDraw = lastSizeOfYToFinalParallelBranch;
+                        }
 
                         visualInstruction.AssociateParallelBranchList(parallelBranch.parallelBranchList);
 
@@ -173,12 +177,18 @@ namespace LadderApp
                         visualParallelBranches.RemoveAt(visualParallelBranches.Count - 1);
 
                         if (visualParallelBranches.Count > 0)
+                        {
                             parallelBranch = visualParallelBranches[visualParallelBranches.Count - 1];
+                        }
 
 
                         if (visualParallelBranches.Count > 0)
+                        {
                             if (lastSizeOfYToFinalParallelBranch > parallelBranch.biggerY)
+                            {
                                 parallelBranch.biggerY = lastSizeOfYToFinalParallelBranch;
+                            }
+                        }
 
                         xSizeAccumulated = xPosition + xSize;
                         break;
@@ -231,23 +241,31 @@ namespace LadderApp
                 if ((visualOutputInstructions.Count > 0) && (countInstructions >= (visualInstructions.Count - visualOutputInstructions.Count)))
                 {
                     if (countInstructions == (visualInstructions.Count - visualOutputInstructions.Count))
+                    {
                         accumulatedXAtFirstOutputInstruction = xSizeAccumulated;
+                    }
 
                     if (accumulatedXAtBiggerOutputInstruction < xSizeAccumulated)
+                    {
                         accumulatedXAtBiggerOutputInstruction = xSizeAccumulated;
+                    }
                 }
             }
 
             outputSize = (accumulatedXAtBiggerOutputInstruction - accumulatedXAtFirstOutputInstruction);// -this.tamX;
             if (outputSize == 0)
+            {
                 outputSize = XSize;
+            }
 
             visualInstructions.RemoveRange((visualInstructions.Count - visualOutputInstructions.Count), visualOutputInstructions.Count);
 
             sizeOfYToBackgroundDraw += YSize;
 
             if ((YPosition > YSize) && (sizeOfYToBackgroundDraw > YPosition))
+            {
                 sizeOfYToBackgroundDraw -= YPosition;
+            }
 
             LineBegin.XYPosition = new Point(XPosition, YPosition);
             LineBegin.XYSize = new Size(this.XSize, sizeOfYToBackgroundDraw);
@@ -255,11 +273,17 @@ namespace LadderApp
             LineBegin.Size = new Size(this.XSize, sizeOfYToBackgroundDraw);
 
             if (xSizeAccumulated < (ladderForm.Width - this.XSize))
+            {
                 xSizeAccumulated = (ladderForm.Width - this.XSize);
+            }
 
             if (PreviousLine != null)
+            {
                 if (xSizeAccumulated < PreviousLine.LineEnd.XYPosition.X)
+                {
                     xSizeAccumulated = PreviousLine.LineEnd.XYPosition.X;
+                }
+            }
 
             XPositionToFirstOutputVisualInstruction = xSizeAccumulated - accumulatedXAtFirstOutputInstruction - (outputSize);
 
@@ -299,9 +323,13 @@ namespace LadderApp
                 visualInstruction.Size = new Size(Convert.ToInt32(Convert.ToDouble(visualInstruction.XYSize.Width) * percentageVisualInstructionReduction), visualInstruction.XYSize.Height);
 
                 if (index >= outputToInsertIndex && (visualOutputInstructions.Count > 0))
+                {
                     visualInstruction.Location = new Point(visualInstruction.XYPosition.X + (visualInstruction.XYSize.Width - (Convert.ToInt32(Convert.ToDouble(visualInstruction.XYSize.Width) * percentageVisualInstructionReduction))) / 2 + XPositionToFirstOutputVisualInstruction, visualInstruction.XYPosition.Y);
+                }
                 else
+                {
                     visualInstruction.Location = new Point(visualInstruction.XYPosition.X + (visualInstruction.XYSize.Width - (Convert.ToInt32(Convert.ToDouble(visualInstruction.XYSize.Width) * percentageVisualInstructionReduction))) / 2, visualInstruction.XYPosition.Y);
+                }
 
                 visualInstruction.Visible = true;
                 visualInstruction.Invalidate();
@@ -398,7 +426,9 @@ namespace LadderApp
             }
 
             if (visualOutputInstructions.Count > 0)
+            {
                 visualInstructions.RemoveRange(insertOutputIndex, visualOutputInstructions.Count);
+            }
 
         }
 
@@ -559,7 +589,9 @@ namespace LadderApp
 
             if (instruction.OpCode == OperationCode.Timer ||
                 instruction.OpCode == OperationCode.Counter)
+            {
                 visualInstructions[index].MouseHover += new EventHandler(ladderForm.OutputTypeBox_MouseHover);
+            }
 
             return visualInstructions[index];
         }
@@ -622,9 +654,13 @@ namespace LadderApp
                     ladderForm.mnuAddressing.Visible = true;
 
                     if (visualInstruction.IsAllOperandsOk())
+                    {
                         ladderForm.mnuToggleBit.Enabled = true;
+                    }
                     else
+                    {
                         ladderForm.mnuToggleBit.Enabled = false;
+                    }
 
                     ProjectForm projectForm = ladderForm.projectForm;
                     TreeNode addressingNode = projectForm.tvnProjectTree.Nodes["tvnProjectNode"].Nodes["tvnAddressingNode"];
@@ -666,8 +702,12 @@ namespace LadderApp
                             menu.DropDownItems.Add(eachAddressNode.Text);
 
                             if (address != null)
+                            {
                                 if (address.Name == eachAddressNode.Text)
+                                {
                                     menu.DropDownItems[menu.DropDownItems.Count - 1].Select();
+                                }
+                            }
 
                             menu.DropDownItems[menu.DropDownItems.Count - 1].Name = eachAddressNode.Text;
                             menu.DropDownItems[menu.DropDownItems.Count - 1].Tag = eachAddressNode.Tag;
@@ -794,13 +834,19 @@ namespace LadderApp
             }
 
             for (int i = initialPositionIndex; i <= finalPositionIndex; i++)
+            {
                 visualInstructionsToRemove.Add(visualInstructionsAux[i]);
+            }
 
             foreach (VisualInstructionUserControl eachVisualInstructionToBeRemoved in visualInstructionsToRemove)
+            {
                 RemoveInstruction(visualInstructionsAux, instructions, eachVisualInstructionToBeRemoved);
+            }
 
             if (visualInstructionToChangeOpCode != null)
+            {
                 visualInstructionToChangeOpCode.OpCode = OperationCode.ParallelBranchBegin;
+            }
 
             return true;
         }

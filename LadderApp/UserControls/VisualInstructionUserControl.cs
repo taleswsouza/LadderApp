@@ -58,9 +58,13 @@ namespace LadderApp
             get
             {
                 if (Instruction != null)
+                {
                     return Instruction.OpCode;
+                }
                 else
+                {
                     return OperationCode.None;
+                }
 
             }
 
@@ -274,9 +278,13 @@ namespace LadderApp
                 case OperationCode.ParallelBranchNext:
                     rectSelection = new Rectangle(1, (VisualLine.YSize / 4) + 3, xTotalHorizontal - 3, (VisualLine.YSize / 2) - 3);
                     if (LastParallelBranchEnd)
+                    {
                         XYConnection = new Point(xHorizontalHalf, yVerticalHalf);
+                    }
                     else
+                    {
                         XYConnection = new Point(xHorizontalHalf, (VisualLine.YSize / 2));
+                    }
                     break;
                 case OperationCode.BackgroundLine:
                     break;
@@ -290,7 +298,6 @@ namespace LadderApp
             if (OpCode == OperationCode.ParallelBranchEnd)
             {
                 this.parallelBranchList = parallelBranchList;
-
             }
         }
 
@@ -300,7 +307,9 @@ namespace LadderApp
             {
                 if (this.OpCode == OperationCode.NormallyOpenContact &&
                 ((Address)GetOperand(0)).Value == true)
+                {
                     DrawEnergized();
+                }
             }
 
             // -| Horizontal line, before the instruction
@@ -353,10 +362,14 @@ namespace LadderApp
             {
                 if (this.OpCode == OperationCode.NormallyClosedContact &&
                     ((Address)GetOperand(0)).Value == false)
+                {
                     DrawEnergized();
+                }
             }
             else
+            {
                 DrawEnergized();
+            }
 
 
             DrawNormallyOpenContact();
@@ -372,13 +385,14 @@ namespace LadderApp
         {
             if (IsAllOperandsOk())
             {
-
                 if (this.OpCode == OperationCode.OutputCoil &&
                     ((Address)GetOperand(0)).Value == true)
+                {
                     DrawEnergized();
+                }
             }
 
-            Point[] pontosCurva = new Point[3];
+            Point[] semiEllipse = new Point[3];
 
             // The horizontal line before instruction
             xy1 = new Point(0, yVerticalHalf);
@@ -394,19 +408,19 @@ namespace LadderApp
             xy1 = new Point(xCoilInstructionHorizontalBegin + xTenthHorizontal, yInstructionVerticalBegin);
             xy2 = new Point(xCoilInstructionHorizontalBegin, yVerticalHalf);
             xy3 = new Point(xCoilInstructionHorizontalBegin + xTenthHorizontal, yInstructionVerticalEnd);
-            pontosCurva[0] = xy1;
-            pontosCurva[1] = xy2;
-            pontosCurva[2] = xy3;
-            graphics.DrawCurve(linePen, pontosCurva, 0.7F);
+            semiEllipse[0] = xy1;
+            semiEllipse[1] = xy2;
+            semiEllipse[2] = xy3;
+            graphics.DrawCurve(linePen, semiEllipse, 0.7F);
 
             // ) - left parentheses of coil instruction
             xy1 = new Point(xCoilInstructionHorizontalEnd - xTenthHorizontal, yInstructionVerticalBegin);
             xy2 = new Point(xCoilInstructionHorizontalEnd, yVerticalHalf);
             xy3 = new Point(xCoilInstructionHorizontalEnd - xTenthHorizontal, yInstructionVerticalEnd);
-            pontosCurva[0] = xy1;
-            pontosCurva[1] = xy2;
-            pontosCurva[2] = xy3;
-            graphics.DrawCurve(linePen, pontosCurva, 0.7F);
+            semiEllipse[0] = xy1;
+            semiEllipse[1] = xy2;
+            semiEllipse[2] = xy3;
+            graphics.DrawCurve(linePen, semiEllipse, 0.7F);
 
             DrawAddress();
             DrawComment();
@@ -518,7 +532,9 @@ namespace LadderApp
                 format.LineAlignment = StringAlignment.Center;
 
                 if (GetOperand(0) != null)
+                {
                     graphics.DrawString(GetOperand(0).ToString().PadLeft(4, '0'), this.textFont, symbolTextBrush, lineTextRectangle, format);
+                }
             }
         }
 
@@ -550,6 +566,7 @@ namespace LadderApp
                 case OperationCode.Timer:
                     title = "T";
                     if (IsAllOperandsOk())
+                    {
                         switch ((Int32)((Address)GetOperand(0)).Timer.Type)
                         {
                             case 0:
@@ -565,12 +582,14 @@ namespace LadderApp
                                 title = "T?";
                                 break;
                         }
+                    }
 
                     DrawTimeBase();
                     break;
                 case OperationCode.Counter:
                     title = "C";
                     if (IsAllOperandsOk())
+                    {
                         switch ((Int32)((Address)GetOperand(0)).Counter.Type)
                         {
                             case 0:
@@ -583,6 +602,7 @@ namespace LadderApp
                                 title = "C?";
                                 break;
                         }
+                    }
                     break;
             }
 
@@ -598,6 +618,7 @@ namespace LadderApp
             graphics.DrawRectangle(linePen, rectInstruction);
 
             if (IsAllOperandsOk())
+            {
                 if (((Address)GetOperand(0)).Comment.Trim() != "")
                 {
                     this.Tag = ((Address)GetOperand(0)).Comment;
@@ -609,6 +630,7 @@ namespace LadderApp
                 {
                     this.Tag = null;
                 }
+            }
             else
             {
                 this.Tag = null;
@@ -710,12 +732,20 @@ namespace LadderApp
 
 
                         if (visualParallelBranchList.Count > 0 && visualInstruction.OpCode == OperationCode.ParallelBranchEnd)
+                        {
                             if (visualParallelBranch.parallelBranchList.Count > 0)
+                            {
                                 previousInstructionToDraw = visualParallelBranch.parallelBranchList[visualParallelBranch.parallelBranchList.Count - 1];
+                            }
                             else
+                            {
                                 previousInstructionToDraw = visualParallelBranch.parallelBranchBegin;
+                            }
+                        }
                         else
+                        {
                             previousInstructionToDraw = visualInstruction;
+                        }
 
                     }
                     previousInstruction = visualInstruction;
@@ -819,7 +849,9 @@ namespace LadderApp
                 addressName = ((Address)GetOperand(0)).Name;
             }
             else
+            {
                 addressName = "?";
+            }
 
 
             graphics.DrawString(addressName, textFont, symbolTextBrush, addressTextRectangle, format);
@@ -836,12 +868,16 @@ namespace LadderApp
             {
                 case OperationCode.Counter:
                     if (IsAllOperandsOk())
+                    {
                         preset = (Int32)((Address)GetOperand(0)).Counter.Preset;
+                    }
                     presetTextRectangle = new RectangleF((float)(0), (float)(2 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
+                    {
                         preset = (Int32)((Address)GetOperand(0)).Timer.Preset;
+                    }
                     presetTextRectangle = new RectangleF((float)(0), (float)(3 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
@@ -859,7 +895,9 @@ namespace LadderApp
                 presetText = "PR: " + preset.ToString();
             }
             else
+            {
                 presetText = "PR: ?";
+            }
 
             graphics.DrawString(presetText, textFont, symbolTextBrush, presetTextRectangle, format);
 
@@ -913,7 +951,9 @@ namespace LadderApp
 
             }
             else
+            {
                 timeBaseText = "BT: ?";
+            }
 
             graphics.DrawString(timeBaseText, textFont, symbolTextBrush, timeBaseTextRectangle, format);
         }
@@ -951,7 +991,9 @@ namespace LadderApp
                 accumulatedText = "AC: " + accumulated.ToString();
             }
             else
+            {
                 accumulatedText = "AC: ?";
+            }
 
             graphics.DrawString(accumulatedText, textFont, symbolTextBrush, accumulatedTextRectangle, format);
 
@@ -997,9 +1039,13 @@ namespace LadderApp
             }
 
             if (Selected)
+            {
                 DrawSelectedVisualInstruction(SelectionType.Background);
+            }
             else
+            {
                 graphics.Clear(Color.White);
+            }
 
             switch (OpCode)
             {
@@ -1047,7 +1093,9 @@ namespace LadderApp
             }
 
             if (this.Selected)
+            {
                 DrawSelectedVisualInstruction(SelectionType.Border);
+            }
 
         }
 
@@ -1074,7 +1122,9 @@ namespace LadderApp
                 this.Selected = true;
 
                 if (VisualInstructionSelectedEvent != null)
+                {
                     VisualInstructionSelectedEvent(this, VisualLine);
+                }
 
                 LadderForm ladderForm = (LadderForm)this.Parent;
                 ladderForm.ShowMessageInStatus(this.Location.ToString() + " - " + this.Size.ToString() + " - " + this.TabStop.ToString() + " - " + this.TabIndex.ToString() + " - " + this.OpCode.ToString());
@@ -1106,7 +1156,9 @@ namespace LadderApp
         {
             if (keyData == Keys.Down ||
                 keyData == Keys.Up)
+            {
                 return true;
+            }
 
             return base.IsInputKey(keyData);
         }

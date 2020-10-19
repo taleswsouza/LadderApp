@@ -33,12 +33,16 @@ namespace LadderApp
                     int initialPosition = charConvertedData.IndexOf(CodeId) + CodeId.Length;
 
                     if (validatedHeader)
+                    {
                         initialPosition = initialPosition + HeaderLenght + 2;
+                    }
 
                     return initialPosition;
                 }
                 else
+                {
                     return -1;
+                }
             }
         }
 
@@ -47,9 +51,13 @@ namespace LadderApp
         public bool ExistsOpCode()
         {
             if (charConvertedData.IndexOf(CodeId) != -1)
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
         public bool ExistsHeader()
@@ -70,6 +78,7 @@ namespace LadderApp
         {
             int passwordLenght = 0;
             if (ExistsOpCode())
+            {
                 if (ExistsHeader())
                 {
                     for (int i = InitialPosition + 2; i <= InitialPosition + HeaderLenght + 2; i++)
@@ -88,7 +97,7 @@ namespace LadderApp
                                 break;
                         }
                 }
-
+            }
             validatedHeader = true;
         }
 

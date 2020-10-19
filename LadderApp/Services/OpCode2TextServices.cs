@@ -43,6 +43,7 @@ namespace LadderApp
         public void FinalizeHeader()
         {
             if (Header != null)
+            {
                 if (Header.Length > 0)
                 {
                     this.Header.Insert(Header.Length);
@@ -53,13 +54,16 @@ namespace LadderApp
 
                     Header = null;
                 }
+            }
         }
 
         public void Add(String text)
         {
             internalText += text;
-            for(int i = 0; i < text.Length; i++)
+            for (int i = 0; i < text.Length; i++)
+            {
                 txtInternalWithTypeCast += "'" + text.Substring(i, 1) + "', ";
+            }
         }
 
         public void Add(Int32 number)
@@ -68,7 +72,7 @@ namespace LadderApp
             txtInternalWithTypeCast += "(char)" + number.ToString() + ", ";
         }
 
-        internal void Insert(Int32 number)
+        internal void Insert(int number)
         {
             internalText = Convert.ToChar(number) + internalText;
             txtInternalWithTypeCast = "(char)" + number.ToString() + ", " + txtInternalWithTypeCast;
@@ -77,12 +81,12 @@ namespace LadderApp
 
         public void Add(OperationCode opCode)
         {
-            Add((Int32)opCode);
+            Add((int)opCode);
         }
 
         internal void Insert(OperationCode opCode)
         {
-            Insert((Int32)opCode);
+            Insert((int)opCode);
         }
 
         private void Add(Address address)
@@ -114,6 +118,7 @@ namespace LadderApp
                     if (instruction.IsAllOperandsOk())
                     {
                         if (instruction.IsAllOperandsOk())
+                        {
                             if (instruction.GetOperand(0) is Address)
                             {
                                 Address address = (Address)instruction.GetOperand(0);
@@ -122,6 +127,7 @@ namespace LadderApp
                                 Add(address.Timer.TimeBase);
                                 Add(address.Timer.Preset);
                             }
+                        }
                     }
                     break;
                 default:
@@ -130,8 +136,12 @@ namespace LadderApp
                         for (int i = 0; i < instruction.GetNumberOfOperands(); i++)
                         {
                             if (instruction.GetOperand(i) != null)
+                            {
                                 if (instruction.GetOperand(i) is Address)
+                                {
                                     Add((Address)instruction.GetOperand(i));
+                                }
+                            }
                         }
                     }
                     break;
@@ -141,9 +151,13 @@ namespace LadderApp
         public override string ToString()
         {
             if (bTxtWithTypeCast)
+            {
                 return ToStringInternalWithTypeCast();
+            }
             else
+            {
                 return "\"" + internalText + "\"";
+            }
         }
 
         internal string ToStringInternalWithTypeCast()

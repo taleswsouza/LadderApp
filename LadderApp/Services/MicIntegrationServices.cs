@@ -36,10 +36,11 @@ namespace LadderApp
 
         private string GetCompiledFilenames()
         {
-            String filenamesText = "";
-            foreach (String filename in compiledFilenames)
-                filenamesText += filename + " ";
-
+            string filenamesText = "";
+            foreach (string filename in compiledFilenames)
+            {
+                filenamesText += $"{filename} ";
+            }
             return filenamesText.Trim();
         }
 
@@ -67,11 +68,15 @@ namespace LadderApp
             try
             {
                 foreach (String filename in createdFilenames)
+                {
                     File.Delete(Application.StartupPath + @"\" + filename);
+                }
                 createdFilenames.Clear();
 
                 foreach (String filename in compiledFilenames)
+                {
                     File.Delete(Application.StartupPath + @"\" + filename);
+                }
                 compiledFilenames.Clear();
             }
             catch (Exception ex)
@@ -91,14 +96,18 @@ namespace LadderApp
             p.WaitForExit();
 
             if (!ShowStandardStrings(fileNameWithoutExtension))
+            {
                 return false;
+            }
 
             compiledFilenames.Add(fileNameWithoutExtension + ".o");
 
             try
             {
                 if (EnabledDeletingIntermediateFiles)
+                {
                     File.Delete($@"{Application.StartupPath}\{fileNameWithoutExtension}.c");
+                }
             }
             catch (Exception ex)
             {
@@ -124,7 +133,9 @@ namespace LadderApp
             }
 
             if (EnabledDeletingIntermediateFiles)
+            {
                 this.DeleteAllIntermediateFiles();
+            }
 
             return ShowStandardStrings(startInfo.FileName + fileName);
         }
@@ -173,7 +184,9 @@ namespace LadderApp
                 }
             }
             else
+            {
                 return false;
+            }
 
             return ShowStandardStrings(startInfo.FileName + fileName);
         }
@@ -212,13 +225,19 @@ namespace LadderApp
             }
 
             if (strStandardOutput != "")
+            {
                 this.CreateFile("dump.a43", strStandardOutput);
+            }
             else
             {
                 if (strStandardError.Contains("Could not initialize the library (port: TIUSB)"))
+                {
                     throw new Exception("TIUSB port do not found the microcontroller.");
+                }
                 else
+                {
                     throw new NotSupportedException();
+                }
             }
             return ConvertHex2String($@"{Application.StartupPath}\dump.a43");
         }

@@ -35,7 +35,9 @@ namespace LadderApp.Services
         public bool SimulateLadder(LadderProgram program, Address auxToggleBitPulse)
         {
             if (!verificationServices.VerifyProgram(program))
+            {
                 return false;
+            }
 
             SimulateTimers(program);
 
@@ -82,37 +84,32 @@ namespace LadderApp.Services
 
                             if (instruction.OpCode == OperationCode.OutputCoil)
                             {
-                                //((Address)instruction.GetOperand(0)).Value = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
                                 instruction.GetAddress().Value = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
                             }
-                            else if (instruction.OpCode == OperationCode.Timer)
+                            
+                            if (instruction.OpCode == OperationCode.Timer)
                             {
-                                //((Address)instruction.GetOperand(0)).Timer.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
                                 instruction.GetAddress().Timer.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
                             }
-                            else if (instruction.OpCode == OperationCode.Counter)
+                            
+                            if (instruction.OpCode == OperationCode.Counter)
                             {
-                                //((Address)instruction.GetOperand(0)).Counter.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
-                                //ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
                                 instruction.GetAddress().Counter.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
                                 ExecuteCountersSimulator(instruction, instruction.GetAddress());
                             }
-                            else if (instruction.OpCode == OperationCode.Reset)
+                            
+                            if (instruction.OpCode == OperationCode.Reset)
                             {
                                 if (lineStretchSummary[lineStretchSummary.Count - 1].LineValue)
                                 {
-                                    //switch (((Address)instruction.GetOperand(0)).AddressType)
                                     switch (instruction.GetAddress().AddressType)
                                     {
                                         case AddressTypeEnum.DigitalMemoryCounter:
-                                            //((Address)instruction.GetOperand(0)).Counter.Reset = true;
-                                            //ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
                                             instruction.GetAddress().Counter.Reset = true;
                                             ExecuteCountersSimulator(instruction, instruction.GetAddress());
                                             break;
 
                                         case AddressTypeEnum.DigitalMemoryTimer:
-                                            //((Address)instruction.GetOperand(0)).Timer.Reset = true;
                                             instruction.GetAddress().Timer.Reset = true;
                                             break;
 
@@ -142,19 +139,26 @@ namespace LadderApp.Services
         private static void MakeOrLogicOverParallelBranchTwoLastLineStretchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
         {
             if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
+            {
                 lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 2].LineValue || lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+            }
             else
+            {
                 lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+            }
             lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
         }
 
         private static void MakeAndLogicOverTwoLastLineStreatchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
         {
             if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
+            {
                 lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 2].LineValue && lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+            }
             else
+            {
                 lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
-            //lineStretchSummary[lineStretchSummary.Count - 2].Initiated = true;
+            }
             lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
         }
 
@@ -250,9 +254,13 @@ namespace LadderApp.Services
                                         address.Timer.Accumulated = address.Timer.Preset;
 
                                     if (address.Timer.Accumulated >= address.Timer.Preset)
+                                    {
                                         address.Value = true; /// DONE = true
+                                    }
                                     else
+                                    {
                                         address.Value = false; /// DONE = false
+                                    }
                                 }
                             }
                         }
@@ -263,7 +271,6 @@ namespace LadderApp.Services
             }
 
         }
-
 
         public void ExecuteCountersSimulator(Instruction instruction, Address counterAddress)
         {
@@ -285,9 +292,13 @@ namespace LadderApp.Services
                         {
                             counterAddress.Counter.Accumulated++;
                             if (counterAddress.Counter.Accumulated >= counterAddress.Counter.Preset)
+                            {
                                 counterAddress.Value = true;
+                            }
                             else
+                            {
                                 counterAddress.Value = false;
+                            }
                         }
                     }
                     break;
@@ -305,11 +316,14 @@ namespace LadderApp.Services
                         if (counterAddress.Counter.Accumulated > 0)
                         {
                             counterAddress.Counter.Accumulated--;
-
                             if (counterAddress.Counter.Accumulated == 0)
+                            {
                                 counterAddress.Value = true;
+                            }
                             else
+                            {
                                 counterAddress.Value = false;
+                            }
                         }
                     }
                     break;
@@ -318,8 +332,9 @@ namespace LadderApp.Services
                     break;
             }
             if (counterAddress.Counter.Enable == false)
+            {
                 counterAddress.Counter.Pulse = true;
-
+            }
         }
     }
 }

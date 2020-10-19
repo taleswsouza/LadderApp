@@ -99,7 +99,9 @@ namespace LadderApp.Services
                             break;
                         default:
                             if (initiated)
+                            {
                                 lineText += " && ";
+                            }
                             switch (instruction.OpCode)
                             {
                                 case OperationCode.NormallyOpenContact:
@@ -120,7 +122,9 @@ namespace LadderApp.Services
                 initiated = false;
 
                 if (lineText == "")
+                {
                     lineText = "1";
+                }
 
                 lineText = "(" + lineText + ")";
 
@@ -145,7 +149,7 @@ namespace LadderApp.Services
                             {
                                 functionsAfterLine += " ExecuteCounter(&" + instruction.GetAddress().Name + ");";
                             }
-                            
+
                             if (instruction.OpCode == OperationCode.Reset)
                             {
                                 operandsToReset.Add(((IOutput)instruction).GetOutputDeclaration());
@@ -177,7 +181,9 @@ namespace LadderApp.Services
                     lineText += lineTestText + ";";
 
                     if (functionsAfterLine != "")
+                    {
                         lineText += Environment.NewLine + functionsAfterLine;
+                    }
                     functionsAfterLine = "";
 
                     doc += lineText + Environment.NewLine;
@@ -187,7 +193,9 @@ namespace LadderApp.Services
                 if (operandsToReset.Count > 0)
                 {
                     if (operandInLine)
+                    {
                         lineTestText = outputLastOperand;
+                    }
 
                     lineText = "if (" + lineTestText + ") {" + Environment.NewLine;
                     foreach (String maybeOutpustOfLine in operandsToReset)
@@ -273,7 +281,9 @@ namespace LadderApp.Services
                 {
                     contentVariableDeclarations += "TPort ";
                     foreach (String variableName in usedVariableNames)
+                    {
                         contentVariableDeclarations += variableName + ", ";
+                    }
                     contentVariableDeclarations = contentVariableDeclarations.Substring(0, contentVariableDeclarations.Length - 2) + ";" + Environment.NewLine;
                     usedVariableNames.Clear();
                 }
@@ -293,10 +303,14 @@ namespace LadderApp.Services
 
                         /// prepare variable declaration
                         if (!usedVariableNames.Contains(address.GetVariableName()))
+                        {
                             usedVariableNames.Add(address.GetVariableName());
+                        }
 
                         if (!usedTimerTypes.Contains(address.Timer.Type))
+                        {
                             usedTimerTypes.Add(address.Timer.Type);
+                        }
                     }
                 }
 
@@ -327,10 +341,14 @@ namespace LadderApp.Services
 
                         /// prepare variable declaration
                         if (!usedVariableNames.Contains(address.GetVariableName()))
+                        {
                             usedVariableNames.Add(address.GetVariableName());
+                        }
 
                         if (!usedCounterTypes.Contains(address.Counter.Type))
+                        {
                             usedCounterTypes.Add(address.Counter.Type);
+                        }
                     }
                 }
 
@@ -339,7 +357,9 @@ namespace LadderApp.Services
                 {
                     contentVariableDeclarations += "TCounter ";
                     foreach (String variableDeclaration in usedVariableNames)
+                    {
                         contentVariableDeclarations += variableDeclaration + ", ";
+                    }
                     contentVariableDeclarations = contentVariableDeclarations.Substring(0, contentVariableDeclarations.Length - 2) + ";" + Environment.NewLine;
                     usedVariableNames.Clear();
                 }
@@ -361,23 +381,35 @@ namespace LadderApp.Services
 
 
                 if (counterPresent)
+                {
                     contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.functionsH.Replace("#EXECCOUNTER_FUNCTION_H#", MicrocontrollersBaseCodeFilesResource.execcounter_functionsH);
+                }
                 else
+                {
                     contentFunctionsDotHFile = MicrocontrollersBaseCodeFilesResource.functionsH.Replace("#EXECCOUNTER_FUNCTION_H#", "");
+                }
 
 
                 if (timerPresent)
+                {
                     contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTIMER_FUNCTION_H#", MicrocontrollersBaseCodeFilesResource.exectimer_functionsH);
+                }
                 else
+                {
                     contentFunctionsDotHFile = contentFunctionsDotHFile.Replace("#EXECTIMER_FUNCTION_H#", "");
+                }
 
                 micIntegrationServices.CreateFile("functions.h", contentFunctionsDotHFile);
 
 
                 if (timerPresent)
+                {
                     contentLadderProgramDotHFile = MicrocontrollersBaseCodeFilesResource.ladderprogramH.Replace("#EXEC_TIMERS_LADDERPROGRAM_H#", MicrocontrollersBaseCodeFilesResource.exectimer_functions_ladderprogramH);
+                }
                 else
+                {
                     contentLadderProgramDotHFile = MicrocontrollersBaseCodeFilesResource.ladderprogramH.Replace("#EXEC_TIMERS_LADDERPROGRAM_H#", "");
+                }
 
                 micIntegrationServices.CreateFile("ladderprogram.h", contentLadderProgramDotHFile);
 
@@ -388,7 +420,9 @@ namespace LadderApp.Services
                     contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#TIMERS_LADDERPROGRAM_C#", contentTimers);
                 }
                 else
+                {
                     contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#EXEC_TIMERS_LADDERPROGRAM_C#", "");
+                }
 
                 contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#LADDER#", doc);
                 contentLadderProgramDotCFile = contentLadderProgramDotCFile.Replace("#PARAMETERIZATION#", contentParameterization);
@@ -407,7 +441,9 @@ namespace LadderApp.Services
                     contentMainDotCFile = contentMainDotCFile.Replace("#LADDER_INSTRUCTIONS#", contentOpCodes);
                 }
                 else
+                {
                     contentMainDotCFile = contentMainDotCFile.Replace("#LADDER_INSTRUCTIONS#", "");
+                }
                 contentMainDotCFile.Trim();
 
                 //msp430gcc.CreateFile("opcodes.txt", contentOpCodes);
@@ -431,17 +467,27 @@ namespace LadderApp.Services
                     contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.functionsC.Replace("#EXEC_COUNTER_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.execcounter_functionsC);
 
                     if (usedCounterTypes.Contains(0))
+                    {
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_0_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.execcounter_ctu_type0_functionsC);
+                    }
                     else
+                    {
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_0_FUNCTION_C#", "");
+                    }
 
                     if (usedCounterTypes.Contains(1))
+                    {
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_1_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.execcounter_ctd_type1_functionsC);
+                    }
                     else
+                    {
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_COUNTER_TYPE_1_FUNCTION_C#", "");
+                    }
                 }
                 else
+                {
                     contentFunctionsDotCFile = MicrocontrollersBaseCodeFilesResource.functionsC.Replace("#EXEC_COUNTER_FUNCTION_C#", "");
+                }
 
 
                 if (timerPresent)
@@ -449,14 +495,22 @@ namespace LadderApp.Services
                     contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.exectimer_functionsC);
 
                     if (usedTimerTypes.Contains(0))
+                    {
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_0_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.exectimer_ton_type0_functions);
+                    }
                     else
+                    {
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_0_FUNCTION_C#", "");
+                    }
 
                     if (usedTimerTypes.Contains(1))
+                    {
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_1_FUNCTION_C#", MicrocontrollersBaseCodeFilesResource.exectimer_tof_type1_functions);
+                    }
                     else
+                    {
                         contentFunctionsDotCFile = contentFunctionsDotCFile.Replace("#EXEC_TIMER_TYPE_1_FUNCTION_C#", "");
+                    }
                 }
                 else
                 {
@@ -481,7 +535,9 @@ namespace LadderApp.Services
                 micIntegrationServices.CompilationStepMergeAllDotOFilesAndGenerateElfFile(program.Name);
 
                 if (writeProgram)
+                {
                     micIntegrationServices.DownloadViaUSB(program.Name);
+                }
             }
 
             return true;
@@ -499,6 +555,7 @@ namespace LadderApp.Services
         {
             /// 1. prepare to setup output ports
             foreach (Address address in GetAddressing().ListOutputAddress)
+            {
                 if (address.GetPortParameterization() != "" && address.Used == true)
                 {
                     outputsPresent = true;
@@ -507,8 +564,11 @@ namespace LadderApp.Services
 
                     /// 2.1. prepare input ports to variable declaration
                     if (!usedPorts.Contains(address.GetVariableName()))
+                    {
                         usedPorts.Add(address.GetVariableName());
+                    }
                 }
+            }
             contentParameterization += Environment.NewLine;
         }
 
@@ -517,6 +577,7 @@ namespace LadderApp.Services
             /// 1. Prepare Parameterization For Input ports.
             /// 2. include these ports in usedPorts list
             foreach (Address address in GetAddressing().ListInputAddress)
+            {
                 if (address.GetPortParameterization() != "" && address.Used == true)
                 {
                     inputsPresent = true;
@@ -527,46 +588,8 @@ namespace LadderApp.Services
                     if (!usedPorts.Contains(address.GetVariableName()))
                         usedPorts.Add(address.GetVariableName());
                 }
+            }
             contentParameterization += Environment.NewLine;
         }
-
-
-        //private bool SavePasswordIntoLadder(ref OpCode2TextServices opCode2TextServices)
-        //{
-        //    String password = "";
-        //    PasswordForm passwordForm = new PasswordForm();
-        //    passwordForm.Text = "Enter the new password:";
-        //    passwordForm.lblPassword.Text = "New password:";
-
-        //    for (int i = 0; i < 2; i++)
-        //    {
-        //        DialogResult result = passwordForm.ShowDialog();
-        //        if (result == DialogResult.OK)
-        //        {
-        //            password = passwordForm.txtPassword.Text;
-        //            passwordForm.txtPassword.Text = "";
-        //            passwordForm.Text = "Confirm the new password:";
-        //            passwordForm.lblPassword.Text = "Confirm the new password:";
-        //            passwordForm.btnOK.DialogResult = DialogResult.Yes;
-        //        }
-        //        else
-        //        {
-        //            if (password != passwordForm.txtPassword.Text)
-        //            {
-        //                MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //                return false;
-        //            }
-        //            else
-        //            {
-        //                opCode2TextServices.AddHeader();
-        //                opCode2TextServices.Header.Add(OperationCode.HeadPassword0);
-        //                opCode2TextServices.Header.Add(password.Length);
-        //                opCode2TextServices.Header.Add(password);
-        //            }
-        //        }
-        //    }
-        //    return true;
-        //}
-
     }
 }

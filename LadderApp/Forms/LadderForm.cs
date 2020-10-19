@@ -64,15 +64,21 @@ namespace LadderApp
                 visualProgram.DeleteLine(lineIndex);
 
                 if (lineIndex == 0)
+                {
                     lineIndex = 1;
+                }
 
                 if (visualProgram.Lines.Count > 0)
+                {
                     visualProgram.Lines[lineIndex - 1].LineBegin.Select();
+                }
 
                 ReorganizeLines();
 
                 if (visualProgram.Lines.Count > 0)
+                {
                     visualProgram.Lines[lineIndex - 1].LineBegin.Refresh();
+                }
 
                 ResumeLayout();
             }
@@ -113,12 +119,16 @@ namespace LadderApp
                     VisualLine previsousVisualLine = visualProgram.Lines[visualProgram.Lines.Count - 1];
 
                     if (numberOfTimes == 0)
+                    {
                         visualProgram.Lines[visualProgram.Lines.Count - 1].LineEnd.XYPosition = new Point(auxX, 0);
+                    }
 
                     foreach (VisualLine visualLine in visualProgram.Lines)
                     {
                         if (previsousVisualLine != null)
+                        {
                             previsousVisualLine.NextLine = visualLine;
+                        }
                         visualLine.PreviousLine = previsousVisualLine;
                         visualLine.YPosition = auxY;
                         visualLine.LineNumber = lineNumber;
@@ -131,7 +141,9 @@ namespace LadderApp
                         visualLine.BackgroundLine.Invalidate();
 
                         if (auxX < visualLine.LineEnd.XYPosition.X)
+                        {
                             auxX = visualLine.LineEnd.XYPosition.X;
+                        }
 
                     }
                     previsousVisualLine.NextLine = visualProgram.Lines[0];
@@ -181,10 +193,14 @@ namespace LadderApp
                     lineIndex = (int)SelectedVisualLine.LineBegin.GetOperand(0);
 
                     if (above == false)
+                    {
                         lineIndex++;
+                    }
                 }
                 else
+                {
                     lineIndex = 0;
+                }
             }
 
             this.SuspendLayout();
@@ -236,24 +252,32 @@ namespace LadderApp
             if (e == Keys.Up)
             {
                 if ((int)sender.VisualLine.LineBegin.GetOperand(0) != 0)
+                {
                     sender.VisualLine.PreviousLine.LineBegin.Select();
+                }
             }
             else if (e == Keys.Down)
             {
                 if ((int)sender.VisualLine.NextLine.LineBegin.GetOperand(0) != 0)
+                {
                     sender.VisualLine.NextLine.LineBegin.Select();
+                }
             }
         }
 
         public void VisualInstruction_Selected(VisualInstructionUserControl visualInstruction, VisualLine visualLine)
         {
             if (VisualInstruction != null)
+            {
                 if (!VisualInstruction.IsDisposed)
+                {
                     if (!VisualInstruction.Equals(visualInstruction))
                     {
                         VisualInstruction.Selected = false;
                         VisualInstruction.Refresh();
                     }
+                }
+            }
             VisualInstruction = visualInstruction;
             SelectedVisualLine = visualLine;
         }
@@ -262,7 +286,9 @@ namespace LadderApp
         {
             VisualInstructionUserControl visualInstruction = (VisualInstructionUserControl)sender;
             if (visualInstruction.Tag != null && (String)visualInstruction.Tag != "")
+            {
                 toolTipOutputBox.Show((String)visualInstruction.Tag, visualInstruction, 3000);
+            }
         }
 
 
@@ -281,6 +307,7 @@ namespace LadderApp
                     if (e.KeyCode == Keys.Delete)
                     {
                         if (visualInstruction != null && SelectedVisualLine != null)
+                        {
                             if (!visualInstruction.IsDisposed)
                             {
                                 SuspendLayout();
@@ -290,6 +317,7 @@ namespace LadderApp
                                 ResumeLayout();
                                 SelectedVisualLine.BackgroundLine.Invalidate();
                             }
+                        }
                     }
                     break;
             }
@@ -310,11 +338,17 @@ namespace LadderApp
                     int finalPositionIndex;
 
                     if (SelectedVisualLine.visualInstructions.Contains(visualInstruction))
+                    {
                         visualInstructions = SelectedVisualLine.visualInstructions;
+                    }
                     else if (SelectedVisualLine.visualOutputInstructions.Contains(visualInstruction))
+                    {
                         visualInstructions = SelectedVisualLine.visualOutputInstructions;
+                    }
                     else
+                    {
                         return instructions;
+                    }
 
                     initialPositionIndex = visualInstructions.IndexOf(visualInstruction);
 
@@ -324,7 +358,9 @@ namespace LadderApp
                         initialPositionIndex = visualInstructions.IndexOf(visualInstruction.PointToParallelBegin);
                     }
                     else
+                    {
                         finalPositionIndex = visualInstructions.IndexOf(visualInstruction.PointToNextParallelPoint);
+                    }
 
                     for (int i = initialPositionIndex; i <= finalPositionIndex; i++)
                     {
@@ -369,29 +405,20 @@ namespace LadderApp
             }
 
             ChangeTimerCounterParametersForm changeTimerCounterParametersForm = new ChangeTimerCounterParametersForm(sender.OpCode);
-            switch (sender.OpCode)
+            OutputBoxInstruction outputBox = ((OutputBoxInstruction)sender.Instruction);
+            changeTimerCounterParametersForm.Type = outputBox.GetBoxType();
+            changeTimerCounterParametersForm.Preset = outputBox.GetPreset();
+            changeTimerCounterParametersForm.Accumulated = outputBox.GetAccumulated();
+
+            if (sender.OpCode.Equals(OperationCode.Timer))
             {
-                case OperationCode.Timer:
-                    TimerInstruction timer = ((TimerInstruction)sender.Instruction);
-                    changeTimerCounterParametersForm.Type = timer.GetBoxType();
-                    changeTimerCounterParametersForm.Preset = timer.GetPreset();
-                    changeTimerCounterParametersForm.Accumulated = timer.GetAccumulated();
-                    changeTimerCounterParametersForm.TimeBase = timer.GetTimeBase();
-                    break;
-                case OperationCode.Counter:
-                    CounterInstruction counter = ((CounterInstruction)sender.Instruction);
-                    changeTimerCounterParametersForm.Type = counter.GetBoxType();
-                    changeTimerCounterParametersForm.Preset = counter.GetPreset();
-                    changeTimerCounterParametersForm.Accumulated = counter.GetAccumulated();
-                    break;
-                default:
-                    break;
+                changeTimerCounterParametersForm.TimeBase = ((TimerInstruction)outputBox).GetTimeBase();
             }
             DialogResult result = changeTimerCounterParametersForm.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                OutputBoxInstruction outputBox = (OutputBoxInstruction)sender.Instruction;
+                outputBox = (OutputBoxInstruction)sender.Instruction;
                 outputBox.setBoxType(changeTimerCounterParametersForm.Type);
                 outputBox.setPreset(changeTimerCounterParametersForm.Preset);
                 outputBox.setAccumulated(changeTimerCounterParametersForm.Accumulated);
@@ -399,8 +426,7 @@ namespace LadderApp
                 switch (sender.OpCode)
                 {
                     case OperationCode.Timer:
-                        TimerInstruction timer = (TimerInstruction)outputBox;
-                        timer.SetTimeBase(changeTimerCounterParametersForm.TimeBase);
+                        ((TimerInstruction)outputBox).SetTimeBase(changeTimerCounterParametersForm.TimeBase);
 
                         sender.GetAddress().Timer.Type = changeTimerCounterParametersForm.Type;
                         sender.GetAddress().Timer.Preset = changeTimerCounterParametersForm.Preset;
@@ -414,8 +440,6 @@ namespace LadderApp
                         sender.GetAddress().Counter.Accumulated = changeTimerCounterParametersForm.Accumulated;
 
                         break;
-                    default:
-                        break;
                 }
 
                 sender.Invalidate();
@@ -427,7 +451,7 @@ namespace LadderApp
         {
             LadderSimulatorServices simultatorService = new LadderSimulatorServices();
 
-            Address toggleBitPulse = (Address)VisualInstruction.GetOperand(0);
+            Address toggleBitPulse = VisualInstruction.GetAddress();
             toggleBitPulse.Value = toggleBitPulse.Value != true;
             simultatorService.SimulateLadder(projectForm.Program, toggleBitPulse);
 
