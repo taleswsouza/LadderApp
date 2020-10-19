@@ -1,4 +1,6 @@
 using LadderApp.Formularios;
+using LadderApp.Model;
+using LadderApp.Model.Instructions;
 using LadderApp.Resources;
 using LadderApp.Services;
 using System;

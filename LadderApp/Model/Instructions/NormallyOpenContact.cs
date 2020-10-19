@@ -4,29 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LadderApp.Model
+namespace LadderApp.Model.Instructions
 {
-    public class NormallyOpenContact : OneAddressDigitalInstruction
+    public class NormallyOpenContact : FirstOperandAddressDigitalInstruction
     {
         public NormallyOpenContact() : base(OperationCode.NormallyOpenContact)
         {
+            Operands = new object[1];
         }
 
         protected NormallyOpenContact(OperationCode operationCode) : base(operationCode)
         {
         }
 
-        protected override bool CheckOperand(Object operand)
+        protected override bool IsOperandOk(int index, object value)
         {
-            if (operand is Address address)
+            return index == 0 && base.IsOperandOk(index, value);
+        }
+
+        protected override bool CheckFirstOperandHasTheCorrectAddressType(Address address)
+        {
+            if (address.AddressType.Equals(AddressTypeEnum.None))
             {
-                if (address.AddressType.Equals(AddressTypeEnum.None))
-                {
-                    return false;
-                }
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
     }
 }

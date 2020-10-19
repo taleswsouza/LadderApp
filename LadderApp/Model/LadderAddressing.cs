@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-namespace LadderApp
+namespace LadderApp.Model
 {
     [XmlInclude(typeof(Address))]
     [Serializable]

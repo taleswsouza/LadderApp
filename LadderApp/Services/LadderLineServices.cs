@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LadderApp.Model;
+using LadderApp.Model.Instructions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,16 +41,18 @@ namespace LadderApp.Services
                         instructions.InsertParallelBranch(InstructionList.ParallelBranchInsertionType.ParallelBranchInitialized);
 
                         /// insert parallel branch next before the actual object
-                        line.Outputs.Insert(0, new Instruction(OperationCode.ParallelBranchNext));
+                        //line.Outputs.Insert(0, new Instruction(OperationCode.ParallelBranchNext));
+                        line.Outputs.Insert(0, InstructionFactory.createInstruction(OperationCode.ParallelBranchNext));
                         /// insert parallel branch end after the actual object
-                        line.Outputs.Insert(line.Outputs.Count, new Instruction(OperationCode.ParallelBranchEnd));
+                        //line.Outputs.Insert(line.Outputs.Count, new Instruction(OperationCode.ParallelBranchEnd));
+                        line.Outputs.Insert(line.Outputs.Count, InstructionFactory.createInstruction(OperationCode.ParallelBranchEnd));
                     }
                     else
                     {
                         instructions.InsertParallelBranch(InstructionList.ParallelBranchInsertionType.ParallelBranchFinalized);
                         auxToPositionInsertedInstruciton = -1;
 
-                        line.Outputs.Insert(0, new Instruction(OperationCode.ParallelBranchBegin));
+                        line.Outputs.Insert(0, InstructionFactory.createInstruction(OperationCode.ParallelBranchBegin));
                         index++;
                     }
 

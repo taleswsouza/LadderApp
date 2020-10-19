@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LadderApp.Model;
+using LadderApp.Model.Instructions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -73,7 +75,7 @@ namespace LadderApp.Services
                     }
                 }
 
-                foreach (Instruction instruction in line.Outputs)
+                foreach (FirstOperandAddressDigitalInstruction instruction in line.Outputs.FindAll(i => i is IAddressable))
                 {
                     switch (instruction.OpCode)
                     {

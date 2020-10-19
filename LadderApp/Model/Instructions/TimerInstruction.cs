@@ -17,6 +17,25 @@ namespace LadderApp.Model.Instructions
             SetTimeBase(0);
         }
 
+        protected override bool IsNumberParametersOk(int index, int number)
+        {
+            switch (index)
+            {
+                case 1:
+                    return (number >= 0 && number <= 2);
+                case 2:
+                    return (number >= 0 && number <= 255);
+                case 3:
+                    return (number >= 0 && number <= 255);
+                case 4:
+                    // timebase
+                    return (number >= 0 && number <= 3);
+                default:
+                    return false;
+            };
+        }
+
+
         public void SetTimeBase(int value)
         {
             SetOperand(4, (int)value);
@@ -25,6 +44,15 @@ namespace LadderApp.Model.Instructions
         public int GetTimeBase()
         {
             return (int)GetOperand(4);
+        }
+
+        protected override bool CheckFirstOperandHasTheCorrectAddressType(Address address)
+        {
+            if (address.AddressType.Equals(AddressTypeEnum.DigitalMemoryTimer))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -1,4 +1,4 @@
-using LadderApp.Factorys;
+using LadderApp.Model;
 using LadderApp.Services;
 using System;
 using System.Collections.Generic;

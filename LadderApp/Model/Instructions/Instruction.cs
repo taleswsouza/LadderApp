@@ -4,17 +4,17 @@ using System.Text;
 using System.Drawing;
 using System.Xml.Serialization;
 
-namespace LadderApp
+namespace LadderApp.Model.Instructions
 {
     [XmlInclude(typeof(Address))]
     [Serializable]
     public class Instruction : IInstruction
     {
-        public Instruction()
+        private Instruction()
         {
         }
 
-        public Instruction(OperationCode opCode)
+        internal Instruction(OperationCode opCode)
         {
             this.OpCode = opCode;
         }
@@ -27,7 +27,6 @@ namespace LadderApp
             set
             {
                 this.opCode = value;
-                InitializeOperands();
             }
         }
         [XmlElement(Order = 2, IsNullable = true, ElementName = "operand")]
@@ -42,15 +41,20 @@ namespace LadderApp
             return Operands.Length;
         }
 
+        bool IsIndexBoundOk(int index)
+        {
+            return index >= 0 && index < Operands.Length;
+        }
+
         public virtual bool IsAllOperandsOk()
         {
             if (Operands is null)
             {
-                return false;
+                return true;
             }
-            foreach (Object operand in Operands)
+            for (int index = 0; index < Operands.Length; index++)
             {
-                if (operand is null)
+                if (!IsOperandOk(index, GetOperand(index)))
                 {
                     return false;
                 }
@@ -67,20 +71,26 @@ namespace LadderApp
             return Operands[position];
         }
 
-        public void SetOperand(int position, Object value)
+        public void SetOperand(int index, Object value)
         {
-            if (Operands == null)
+            if (index > Operands.Length)
             {
-                InitializeOperands();
+                throw new IndexOutOfRangeException($"Invalid set operand with index={index}, value={value}.");
             }
 
-            if (position > Operands.Length)
+            if (IsOperandOk(index, value))
             {
-                throw new Exception("Invalid operand position: " + position);
+                Operands[index] = value;
             }
+        }
 
-            if (ValidateAddress(position, value))
-                Operands[position] = value;
+        protected virtual bool IsOperandOk(int index, object value)
+        {
+            if (!IsIndexBoundOk(index))
+            {
+                return false;
+            }
+            return !(value is null);
         }
 
         private int InitializeOperands()
@@ -94,26 +104,26 @@ namespace LadderApp
                 case OperationCode.ParallelBranchNext:
                     Operands = null;
                     break;
-                case OperationCode.LineBegin:
-                //case OperationCode.NormallyOpenContact:
-                //case OperationCode.NormallyClosedContact:
-                //case OperationCode.OutputCoil:
-                //case OperationCode.Reset:
+                //case OperationCode.LineBegin:
+                //    //case OperationCode.NormallyOpenContact:
+                //    //case OperationCode.NormallyClosedContact:
+                //    //case OperationCode.OutputCoil:
+                //    //case OperationCode.Reset:
                 //    Operands = new Object[1];
                 //    break;
-                //case OperationCode.Counter:
-                //    Operands = new Object[4];
-                //    SetOperand(1, (Int32)0); // type
-                //    SetOperand(2, (Int32)0); // preset
-                //    SetOperand(3, (Int32)0); // accum
-                //    break;
-                case OperationCode.Timer:
-                    Operands = new Object[5];
-                    SetOperand(1, (Int32)0); // type
-                    SetOperand(2, (Int32)0); // preset
-                    SetOperand(3, (Int32)0); // accum
-                    SetOperand(4, (Int32)0); // time base
-                    break;
+                    //case OperationCode.Counter:
+                    //    Operands = new Object[4];
+                    //    SetOperand(1, (Int32)0); // type
+                    //    SetOperand(2, (Int32)0); // preset
+                    //    SetOperand(3, (Int32)0); // accum
+                    //    break;
+                    //case OperationCode.Timer:
+                    //    Operands = new Object[5];
+                    //    SetOperand(1, (Int32)0); // type
+                    //    SetOperand(2, (Int32)0); // preset
+                    //    SetOperand(3, (Int32)0); // accum
+                    //    SetOperand(4, (Int32)0); // time base
+                    //    break;
             }
             return GetNumberOfOperands();
         }
@@ -139,11 +149,11 @@ namespace LadderApp
                 case OperationCode.LineEnd:
                     isValid = false;
                     break;
-                case OperationCode.LineBegin:
-                    if (newOperand != null)
-                        if (newOperand is Int32 == false)
-                            isValid = false;
-                    break;
+                //case OperationCode.LineBegin:
+                //    if (newOperand != null)
+                //        if (newOperand is Int32 == false)
+                //            isValid = false;
+                //    break;
                 //case OperationCode.NormallyOpenContact:
                 //case OperationCode.NormallyClosedContact:
                 //    //isAddress = true;
@@ -330,16 +340,6 @@ namespace LadderApp
         public virtual bool GetValue()
         {
             throw new InvalidOperationException($"Method not implemented. OpCode={opCode}");
-        }
-
-        public Address GetAddress()
-        {
-            return (Address)GetOperand(0);
-        }
-
-        public void SetUsed()
-        {
-            GetAddress().Used = true;
         }
     }
 }

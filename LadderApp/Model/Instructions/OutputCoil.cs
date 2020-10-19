@@ -4,23 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LadderApp.Model
+namespace LadderApp.Model.Instructions
 {
-    public class OutputCoil : OneAddressDigitalInstruction, IOutput
+    public class OutputCoil : FirstOperandAddressDigitalInstruction, IOutput
     {
         public OutputCoil() : base(OperationCode.OutputCoil)
         {
+            Operands = new object[1];
         }
 
-        protected override bool CheckOperand(Object operand)
+        protected override bool IsOperandOk(int index, object value)
         {
-            if (operand is Address address)
+            return index == 0 && base.IsOperandOk(index, value);
+        }
+
+        protected override bool CheckFirstOperandHasTheCorrectAddressType(Address address)
+        {
+            if (address.AddressType.Equals(AddressTypeEnum.DigitalMemory)
+                || address.AddressType.Equals(AddressTypeEnum.DigitalOutput))
             {
-                if (!(address.AddressType.Equals(AddressTypeEnum.DigitalMemory)
-                    || address.AddressType.Equals(AddressTypeEnum.DigitalOutput)))
-                {
-                    return false;
-                }
                 return true;
             }
             return false;

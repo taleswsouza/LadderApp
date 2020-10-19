@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using LadderApp.Model;
+using LadderApp.Model.Instructions;
 
 namespace LadderApp
 {
@@ -353,7 +355,7 @@ namespace LadderApp
 
         private void InitializeFixedVisualInstructionsToInitialVisualLine()
         {
-            LineBegin.OpCode = OperationCode.LineBegin;
+            //LineBegin.OpCode = OperationCode.LineBegin;
             LineBegin.TabStop = true;
             LineBegin.VisualLine = this;
             LineBegin.Parent = this.ladderForm;
@@ -510,18 +512,18 @@ namespace LadderApp
                     {
                         instructions.InsertParallelBranch(InstructionList.ParallelBranchInsertionType.ParallelBranchInitialized);
 
-                        line.Outputs.Insert(0, new Instruction(OperationCode.ParallelBranchNext));
-                        InsertVisualInstructionAt(0, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchNext));
-                        line.Outputs.Insert(this.visualOutputInstructions.Count, new Instruction(OperationCode.ParallelBranchEnd));
-                        InsertVisualInstructionAt(this.visualOutputInstructions.Count, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchEnd));
+                        line.Outputs.Insert(0, InstructionFactory.createInstruction(OperationCode.ParallelBranchNext));
+                        InsertVisualInstructionAt(0, this.visualOutputInstructions, InstructionFactory.createInstruction(OperationCode.ParallelBranchNext));
+                        line.Outputs.Insert(this.visualOutputInstructions.Count, InstructionFactory.createInstruction(OperationCode.ParallelBranchEnd));
+                        InsertVisualInstructionAt(this.visualOutputInstructions.Count, this.visualOutputInstructions, InstructionFactory.createInstruction(OperationCode.ParallelBranchEnd));
                     }
                     else
                     {
                         instructions.InsertParallelBranch(InstructionList.ParallelBranchInsertionType.ParallelBranchFinalized);
                         autToRetornInsertedInstruction = -1;
 
-                        line.Outputs.Insert(0, new Instruction(OperationCode.ParallelBranchBegin));
-                        InsertVisualInstructionAt(0, this.visualOutputInstructions, new Instruction(OperationCode.ParallelBranchBegin));
+                        line.Outputs.Insert(0, InstructionFactory.createInstruction(OperationCode.ParallelBranchBegin));
+                        InsertVisualInstructionAt(0, this.visualOutputInstructions, InstructionFactory.createInstruction(OperationCode.ParallelBranchBegin));
                         index++;
                     }
 

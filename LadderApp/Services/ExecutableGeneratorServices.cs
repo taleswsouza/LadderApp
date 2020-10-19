@@ -1,5 +1,6 @@
 ﻿using LadderApp.Formularios;
 using LadderApp.Model;
+using LadderApp.Model.Instructions;
 using LadderApp.Resources;
 using System;
 using System.Collections.Generic;
@@ -132,7 +133,7 @@ namespace LadderApp.Services
 
                 outputOperands.Clear();
                 operandsToReset.Clear();
-                foreach (IInstruction instruction in line.Outputs)
+                foreach (FirstOperandAddressDigitalInstruction instruction in line.Outputs.FindAll(i => i is IAddressable))
                 {
                     switch (instruction.OpCode)
                     {

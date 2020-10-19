@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LadderApp.Model
+namespace LadderApp.Model.Instructions
 {
     public class NormallyClosedContact : NormallyOpenContact
     {
         public NormallyClosedContact() : base(OperationCode.NormallyClosedContact)
         {
+            Operands = new object[1];
         }
 
         public override bool GetValue()

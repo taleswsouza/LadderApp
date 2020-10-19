@@ -1,3 +1,5 @@
+using LadderApp.Model;
+using LadderApp.Model.Instructions;
 using LadderApp.Services;
 using System;
 using System.Collections.Generic;
@@ -147,7 +149,8 @@ namespace LadderApp
 
         public Address ReadAddress(ref Int32 position, LadderAddressing addressing)
         {
-            Instruction instruction = new Instruction(ReadOperationCode(position));
+            //Instruction instruction = new Instruction(ReadOperationCode(position));
+            Instruction instruction = InstructionFactory.createInstruction(ReadOperationCode(position));
             switch (instruction.OpCode)
             {
                 case OperationCode.None:

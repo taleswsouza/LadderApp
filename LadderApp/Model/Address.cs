@@ -1,7 +1,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace LadderApp
+namespace LadderApp.Model
 {
     public delegate void EditedCommentEventHandler(Address sender);
 

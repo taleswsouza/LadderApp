@@ -66,17 +66,20 @@
   <ItemGroup>
     <Compile Include="Model\DeviceFactory.cs" />
     <Compile Include="Model\Instructions\CounterInstruction.cs" />
+    <Compile Include="Model\Instructions\IAddressable.cs" />
+    <Compile Include="Model\Instructions\InstructionFactory.cs" />
     <Compile Include="Model\Instructions\IOutput.cs" />
+    <Compile Include="Model\Instructions\LineBeginInstruction.cs" />
     <Compile Include="Model\Instructions\OutputBoxInstruction.cs" />
     <Compile Include="Model\Instructions\TimerInstruction.cs" />
     <Compile Include="Model\LadderProject.cs" />
     <Compile Include="Model\LadderProjectFactory.cs" />
     <Compile Include="Model\Instructions\NormallyClosedContact.cs" />
-    <Compile Include="Model\Instructions\OneAddressDigitalInstruction.cs" />
+    <Compile Include="Model\Instructions\FirstOperandAddressDigitalInstruction.cs" />
     <Compile Include="Model\Instructions\NormallyOpenContact.cs" />
     <Compile Include="Model\Instructions\OutputCoil.cs" />
     <Compile Include="Model\Instructions\ResetOutputInstruction.cs" />
-    <Compile Include="OperationCode\OperationCode.cs" />
+    <Compile Include="Model\Instructions\OperationCode\OperationCode.cs" />
     <Compile Include="Resources\MicrocontrollersBaseCodeFilesResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

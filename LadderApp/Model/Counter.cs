@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LadderApp
+namespace LadderApp.Model
 {
     public class Counter
     {

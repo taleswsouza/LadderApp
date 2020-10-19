@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LadderApp
+namespace LadderApp.Model
 {
     [Serializable]
     public class Device

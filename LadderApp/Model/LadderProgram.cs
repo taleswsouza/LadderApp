@@ -12,7 +12,7 @@ using LadderApp.Formularios;
 using LadderApp.Resources;
 using LadderApp.Services;
 
-namespace LadderApp
+namespace LadderApp.Model
 {
     [XmlInclude(typeof(LadderAddressing))]
     [Serializable]

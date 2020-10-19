@@ -1,4 +1,5 @@
-﻿using LadderApp.Factorys;
+﻿using LadderApp.Model;
+using LadderApp.Model.Instructions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,8 @@ namespace LadderApp.Services
                     case OperationCode.NormallyOpenContact:
                     case OperationCode.NormallyClosedContact:
                         countOfEnds = 0;
-                        Instruction instruction = new Instruction((OperationCode)opCode);
+                        //Instruction instruction = new Instruction((OperationCode)opCode);
+                        Instruction instruction = InstructionFactory.createInstruction(opCode);
 
                         addressType = (AddressTypeEnum)Convert.ToChar(content.Substring(position + 1, 1));
                         index = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
@@ -75,7 +77,7 @@ namespace LadderApp.Services
                         countOfEnds = 0;
                         {
                             InstructionList instructions = new InstructionList();
-                            instructions.Add(new Instruction((OperationCode)opCode));
+                            instructions.Add(InstructionFactory.createInstruction(opCode));
                             addressType = (AddressTypeEnum)Convert.ToChar(content.Substring(position + 1, 1));
                             index = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
                             address = addressingServices.Find(addressType, index);
@@ -96,13 +98,13 @@ namespace LadderApp.Services
                     case OperationCode.ParallelBranchEnd:
                     case OperationCode.ParallelBranchNext:
                         countOfEnds = 0;
-                        program.Lines[lineIndex].Instructions.Add(new Instruction((OperationCode)opCode));
+                        program.Lines[lineIndex].Instructions.Add(InstructionFactory.createInstruction(opCode));
                         break;
                     case OperationCode.Counter:
                         countOfEnds = 0;
                         {
                             InstructionList instructions = new InstructionList();
-                            instructions.Add(new Instruction((OperationCode)opCode));
+                            instructions.Add(InstructionFactory.createInstruction(opCode));
                             instructions[instructions.Count - 1].SetOperand(0, addressingServices.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
                             ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
                             ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset = (Int32)Convert.ToChar(content.Substring(position + 3, 1));
@@ -118,7 +120,7 @@ namespace LadderApp.Services
                         countOfEnds = 0;
                         {
                             InstructionList instructions = new InstructionList();
-                            instructions.Add(new Instruction((OperationCode)opCode));
+                            instructions.Add(InstructionFactory.createInstruction(opCode));
                             instructions[instructions.Count - 1].SetOperand(0, addressingServices.Find(AddressTypeEnum.DigitalMemoryTimer, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
                             ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Type = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
                             ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.TimeBase = (Int32)Convert.ToChar(content.Substring(position + 3, 1));

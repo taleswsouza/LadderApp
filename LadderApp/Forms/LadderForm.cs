@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using LadderApp.Formularios;
+using LadderApp.Model;
 using LadderApp.Model.Instructions;
 using LadderApp.Services;
 

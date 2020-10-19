@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using LadderApp.Model.Instructions;
+using LadderApp.Model;
 
 namespace LadderApp
 {
@@ -13,7 +15,7 @@ namespace LadderApp
     public delegate void VisualInstructionSelectedEventHandler(VisualInstructionUserControl sender, VisualLine visualLine);
     public delegate void AskToChangeAddressEventHandler(VisualInstructionUserControl sender);
 
-    public partial class VisualInstructionUserControl : UserControl, IInstruction
+    public partial class VisualInstructionUserControl : UserControl, IInstruction, IAddressable
 
     {
         public event ChangeLineEventHandler ChangeLineEvent;
@@ -198,7 +200,7 @@ namespace LadderApp
             InitializeComponent();
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             BackColor = Color.Transparent;
-            Instruction = new Instruction();
+            //Instruction = new Instruction();
         }
 
         public VisualInstructionUserControl(Instruction intruction) : this()
@@ -208,7 +210,7 @@ namespace LadderApp
 
         public VisualInstructionUserControl(OperationCode opCode) : this()
         {
-            Instruction = new Instruction(opCode);
+            Instruction = InstructionFactory.createInstruction(opCode);
         }
 
 
@@ -1189,8 +1191,8 @@ namespace LadderApp
                 //case OperationCode.NormallyOpenContact:
                 //case OperationCode.NormallyClosedContact:
                 //    break;
-                case OperationCode.OutputCoil:
-                    break;
+                //case OperationCode.OutputCoil:
+                //    break;
                 case OperationCode.Timer:
                 case OperationCode.Counter:
                     AskToChangeAddressEvent(this);
@@ -1205,12 +1207,17 @@ namespace LadderApp
 
         public Address GetAddress()
         {
-            return Instruction.GetAddress();
+            return ((IAddressable)Instruction).GetAddress();
         }
 
         public void SetUsed()
         {
-            Instruction.SetUsed();
+            ((IAddressable)Instruction).SetUsed();
+        }
+
+        public bool GetValue()
+        {
+            throw new NotImplementedException();
         }
     }
 }

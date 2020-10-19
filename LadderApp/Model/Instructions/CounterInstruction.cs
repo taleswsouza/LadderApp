@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LadderApp.Model.Instructions
 {
@@ -14,6 +10,15 @@ namespace LadderApp.Model.Instructions
             setBoxType(0);
             setPreset(0);
             setAccumulated(0);
+        }
+
+        protected override bool CheckFirstOperandHasTheCorrectAddressType(Address address)
+        {
+            if (address.AddressType.Equals(AddressTypeEnum.DigitalMemoryCounter))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
