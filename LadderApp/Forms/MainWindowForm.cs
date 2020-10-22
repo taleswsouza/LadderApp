@@ -591,24 +591,33 @@ namespace LadderApp
 
         private void mnuEditComment_Click(object sender, EventArgs e)
         {
-            if (IsLadderFormOpen())
-                if (projectForm.LadderForm.VisualInstruction != null)
-                    if (!projectForm.LadderForm.VisualInstruction.IsDisposed)
-                    {
-                        Instruction instruction = projectForm.LadderForm.VisualInstruction.Instruction;
-                        if (instruction.IsAllOperandsOk())
-                            if (instruction.GetOperand(0) is Address)
-                            {
-                                Address address = (Address)instruction.GetOperand(0);
-                                EditCommentForm changeCommentForm = new EditCommentForm(address);
-                                DialogResult result = changeCommentForm.ShowDialog();
-                                if (result == DialogResult.OK)
-                                {
-                                    address.Comment = changeCommentForm.txtComment.Text.Trim();
-                                    projectForm.LadderForm.Invalidate(true);
-                                }
-                            }
-                    }
+            if (!IsLadderFormOpen())
+            {
+                return;
+            }
+
+            if (!(projectForm.LadderForm.VisualInstruction != null ||
+                !projectForm.LadderForm.VisualInstruction.IsDisposed))
+            {
+                return;
+            }
+
+            Instruction instruction = projectForm.LadderForm.VisualInstruction.Instruction;
+            if (!instruction.IsAllOperandsOk())
+            {
+                return;
+            }
+
+            if (instruction.GetOperand(0) is Address address)
+            {
+                EditCommentForm changeCommentForm = new EditCommentForm(address);
+                DialogResult result = changeCommentForm.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    address.Comment = changeCommentForm.txtComment.Text.Trim();
+                    projectForm.LadderForm.Invalidate(true);
+                }
+            }
         }
 
         private void SaveFile(object sender, EventArgs e)

@@ -56,7 +56,7 @@ namespace LadderApp
             get { return lineNumber; }
             set
             {
-                LineBegin.SetOperand(0, value);
+                //LineBegin.SetOperand(0, value);
                 lineNumber = value;
             }
         }
@@ -705,7 +705,7 @@ namespace LadderApp
 
                             if (address != null)
                             {
-                                if (address.Name == eachAddressNode.Text)
+                                if (address.GetName() == eachAddressNode.Text)
                                 {
                                     menu.DropDownItems[menu.DropDownItems.Count - 1].Select();
                                 }

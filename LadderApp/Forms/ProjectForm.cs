@@ -2,10 +2,8 @@ using LadderApp.Model;
 using LadderApp.Services;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace LadderApp
@@ -21,6 +19,7 @@ namespace LadderApp
             Open,
             Saved
         }
+
         public ProgramStatus Status { get; set; } = ProgramStatus.NotInitialized;
 
         public ProjectForm(LadderProgram program, AddressingServices addressingServices) : this()
@@ -58,7 +57,6 @@ namespace LadderApp
 
                 addressingServices.ReindexAddresses(Program);
             }
-
         }
 
         public ProjectForm()
@@ -69,7 +67,6 @@ namespace LadderApp
         public LadderForm LadderForm { get; set; }
         public LadderProgram Program { get; set; } = new LadderProgram();
         public string PathFile { get; set; } = "";
-
 
         public void SetText()
         {
@@ -84,16 +81,12 @@ namespace LadderApp
 
         private void ProjectForm_Load(object sender, EventArgs e)
         {
-            tvnProjectTree.TopNode.Expand();
 
-            AlocateIOAddressingProjectTree();
-            AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory);
-            AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer);
-            AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter);
+            AlocateAddressingToProjectTree(Program.addressing.GetAllAddresses());
+            tvnProjectTree.TopNode.Expand();
 
             OpenLadderForm();
         }
-
 
         private void ProjectForm_Shown(object sender, EventArgs e)
         {
@@ -110,9 +103,11 @@ namespace LadderApp
                 case DialogResult.Cancel:
                     e.Cancel = true;
                     break;
+
                 case DialogResult.Yes:
                     LadderForm.Close();
                     break;
+
                 case DialogResult.No:
                     LadderForm.Close();
                     break;
@@ -126,6 +121,7 @@ namespace LadderApp
                 case "tvnLadderProgramNode":
                     OpenLadderForm();
                     break;
+
                 case "tvnDeviceNode":
                     DeviceForm deviceForm = new DeviceForm(Program.device);
                     if (deviceForm.ShowDialog() == DialogResult.OK)
@@ -139,9 +135,10 @@ namespace LadderApp
                         addressingServices.RealocatePinAddressesByPinTypesFromDevice(Program.device);
                         addressingServices.AlocateIOAddressing(Program.device);
 
-                        AlocateIOAddressingProjectTree();
+                        AlocateAddressingToProjectTree(Program.addressing.GetIOAddresses());
                     }
                     break;
+
                 case "tvnAddressingConfigurationNode":
                     AddressingForm addressingForm = new AddressingForm(Program.addressing);
                     addressingForm.Owner = this;
@@ -151,12 +148,10 @@ namespace LadderApp
                         addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, addressingForm.NumberOfTimerAddresses);
                         addressingServices.AlocateAddressingMemoryAndTimerAndCounter(Program, Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, addressingForm.NumberOfCounterAddresses);
 
-                        AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory);
-                        AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer);
-                        AlocateAddressingMemoryAndTimerAndCounterToProjectTree(Program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter);
-
+                        AlocateAddressingToProjectTree(Program.addressing.GetAllExceptIOAddresses());
                     }
                     break;
+
                 default:
                     if (e.Node.Tag != null)
                         if (this.LadderForm.VisualInstruction != null)
@@ -190,64 +185,74 @@ namespace LadderApp
             {
                 case AddressTypeEnum.DigitalInput:
                     return InputsNodes;
+
                 case AddressTypeEnum.DigitalOutput:
                     return OutputsNodes;
+
                 case AddressTypeEnum.DigitalMemory:
                     return MemoriesNodes;
+
                 case AddressTypeEnum.DigitalMemoryCounter:
                     return CountersNodes;
+
                 case AddressTypeEnum.DigitalMemoryTimer:
                     return TimersNodes;
+
                 default:
                     return null;
             }
         }
 
-        public void AlocateIOAddressingProjectTree()
+        //public void AlocateIOAddressingProjectTree()
+        //{
+        //    tvnProjectTree.BeginUpdate();
+
+        //    InputsNodes.Clear();
+        //    OutputsNodes.Clear();
+
+        //    foreach (Address address in Program.addressing.GetIOAddresses())
+        //    {
+        //        TreeNodeCollection nodeToUpdate = GetAddressingNodesByAddressType(address.AddressType);
+        //        nodeToUpdate.Add(address.GetName(), address.GetNameAndComment()).Tag = address;
+        //        address.EditedCommentEvent += new EditedCommentEventHandler(Address_EditedComment);
+        //    }
+
+        //    tvnProjectTree.EndUpdate();
+        //}
+
+        private void Address_EditedComment(Address sender)
         {
             tvnProjectTree.BeginUpdate();
 
-            InputsNodes.Clear();
-            OutputsNodes.Clear();
-
-            foreach (Address address in Program.device.PinAddresses)
-            {
-                switch (address.AddressType)
-                {
-                    case AddressTypeEnum.DigitalInput:
-                        InputsNodes.Add(address.Name, address.GetNameAndComment());
-                        InputsNodes[address.Name].Tag = address;
-                        break;
-                    case AddressTypeEnum.DigitalOutput:
-                        OutputsNodes.Add(address.Name, address.GetNameAndComment());
-                        OutputsNodes[address.Name].Tag = address;
-                        break;
-                }
-                address.EditedCommentEvent += new EditedCommentEventHandler(Address_EditedComment);
-            }
-            tvnProjectTree.EndUpdate();
-        }
-
-        void Address_EditedComment(Address sender)
-        {
-            tvnProjectTree.BeginUpdate();
             TreeNodeCollection nodeToUpdateAddress = GetAddressingNodesByAddressType(sender.AddressType);
-            int position = nodeToUpdateAddress.IndexOfKey(sender.Name);
+            int position = nodeToUpdateAddress.IndexOfKey(sender.GetName());
             if (position >= 0)
+            {
                 nodeToUpdateAddress[position].Text = sender.GetNameAndComment();
+            }
+
             tvnProjectTree.EndUpdate();
         }
-        private void AlocateAddressingMemoryAndTimerAndCounterToProjectTree(List<Address> addresses, AddressTypeEnum type)
+
+        private void AlocateAddressingToProjectTree(List<Address> addresses)
         {
-            TreeNodeCollection nodeToUpdate = GetAddressingNodesByAddressType(type);
-            nodeToUpdate.Clear();
+            tvnProjectTree.BeginUpdate();
+
+            var groups = addresses.GroupBy(a => a.AddressType);
+            foreach (var group in groups)
+            {
+                TreeNodeCollection nodeToUpdate = GetAddressingNodesByAddressType(group.Key);
+                nodeToUpdate.Clear();
+            }
+
             foreach (Address address in addresses)
             {
-                address.SetDevice(Program.device);
-                nodeToUpdate.Add(address.Name, address.GetNameAndComment());
-                nodeToUpdate[address.Name].Tag = address;
+                TreeNodeCollection nodeToUpdate = GetAddressingNodesByAddressType(address.AddressType);
+                nodeToUpdate.Add(address.GetName(), address.GetNameAndComment()).Tag = address;
                 address.EditedCommentEvent += new EditedCommentEventHandler(Address_EditedComment);
             }
+
+            tvnProjectTree.EndUpdate();
         }
 
         public void InsertAddressAtInstruction(VisualInstructionUserControl visualInstruction, Address address)

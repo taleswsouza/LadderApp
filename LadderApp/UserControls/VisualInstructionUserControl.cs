@@ -15,7 +15,7 @@ namespace LadderApp
     public delegate void VisualInstructionSelectedEventHandler(VisualInstructionUserControl sender, VisualLine visualLine);
     public delegate void AskToChangeAddressEventHandler(VisualInstructionUserControl sender);
 
-    public partial class VisualInstructionUserControl : UserControl, IInstruction, IAddressable
+    public partial class VisualInstructionUserControl : UserControl, IInstruction, IDigitalAddressable
 
     {
         public event ChangeLineEventHandler ChangeLineEvent;
@@ -52,7 +52,7 @@ namespace LadderApp
         public Size XYSize { get; set; }
         public Point XYPosition { get; set; }
         private bool lastParallelBranchEnd = false;
-        public bool LastParallelBranchEnd { get => lastParallelBranchEnd; set { if (OpCode == OperationCode.ParallelBranchNext) { lastParallelBranchEnd = value; }  } }
+        public bool LastParallelBranchEnd { get => lastParallelBranchEnd; set { if (OpCode == OperationCode.ParallelBranchNext) { lastParallelBranchEnd = value; } } }
         public Point XYConnection { get; private set; }
 
         public OperationCode OpCode
@@ -535,7 +535,8 @@ namespace LadderApp
 
                 if (GetOperand(0) != null)
                 {
-                    graphics.DrawString(GetOperand(0).ToString().PadLeft(4, '0'), this.textFont, symbolTextBrush, lineTextRectangle, format);
+                    //graphics.DrawString(GetOperand(0).ToString().PadLeft(4, '0'), this.textFont, symbolTextBrush, lineTextRectangle, format);
+                    graphics.DrawString(VisualLine.LineNumber.ToString().PadLeft(4, '0'), this.textFont, symbolTextBrush, lineTextRectangle, format);
                 }
             }
         }
@@ -592,7 +593,8 @@ namespace LadderApp
                     title = "C";
                     if (IsAllOperandsOk())
                     {
-                        switch ((Int32)((Address)GetOperand(0)).Counter.Type)
+                        //switch ((Int32)((Address)GetOperand(0)).Counter.Type)
+                        switch (((CounterInstruction)Instruction).GetBoxType())
                         {
                             case 0:
                                 title = "CTU";
@@ -848,7 +850,7 @@ namespace LadderApp
 
             if (GetOperand(0) != null)
             {
-                addressName = ((Address)GetOperand(0)).Name;
+                addressName = ((Address)GetOperand(0)).GetName();
             }
             else
             {
@@ -871,7 +873,8 @@ namespace LadderApp
                 case OperationCode.Counter:
                     if (IsAllOperandsOk())
                     {
-                        preset = (Int32)((Address)GetOperand(0)).Counter.Preset;
+                        //preset = (Int32)((Address)GetOperand(0)).Counter.Preset;
+                        preset = ((CounterInstruction)Instruction).GetPreset();
                     }
                     presetTextRectangle = new RectangleF((float)(0), (float)(2 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
@@ -970,12 +973,17 @@ namespace LadderApp
             {
                 case OperationCode.Counter:
                     if (IsAllOperandsOk())
-                        accumulated = (Int32)((Address)GetOperand(0)).Counter.Accumulated;
+                    {
+                        //accumulated = (Int32)((Address)GetOperand(0)).Counter.Accumulated;
+                        accumulated = ((CounterInstruction)Instruction).GetAccumulated();
+                    }
                     accumulatedTextRectangle = new RectangleF((float)(0), (float)(3 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
+                    {
                         accumulated = (Int32)((Address)GetOperand(0)).Timer.Accumulated;
+                    }
                     accumulatedTextRectangle = new RectangleF((float)(0), (float)(4 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
@@ -1205,17 +1213,27 @@ namespace LadderApp
             return Instruction.GetNumberOfOperands();
         }
 
+        public void SetAddress(Address address)
+        {
+            ((IDigitalAddressable)Instruction).SetAddress(address);
+        }
+
         public Address GetAddress()
         {
-            return ((IAddressable)Instruction).GetAddress();
+            return ((IDigitalAddressable)Instruction).GetAddress();
         }
 
         public void SetUsed()
         {
-            ((IAddressable)Instruction).SetUsed();
+            ((IDigitalAddressable)Instruction).SetUsed();
         }
 
         public bool GetValue()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetValue(bool value)
         {
             throw new NotImplementedException();
         }

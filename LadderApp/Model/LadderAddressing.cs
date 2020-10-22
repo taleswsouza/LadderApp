@@ -32,5 +32,24 @@ namespace LadderApp.Model
 
             return allAddresses;
         }
+
+        public List<Address> GetIOAddresses()
+        {
+            List<Address> allAddresses = new List<Address>();
+            allAddresses.AddRange(ListInputAddress);
+            allAddresses.AddRange(ListOutputAddress);
+
+            return allAddresses;
+        }
+
+        public List<Address> GetAllExceptIOAddresses()
+        {
+            List<Address> allAddresses = new List<Address>();
+            allAddresses.AddRange(ListMemoryAddress);
+            allAddresses.AddRange(ListTimerAddress);
+            allAddresses.AddRange(ListCounterAddress);
+
+            return allAddresses;
+        }
     }
 }

@@ -1,16 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LadderApp.Model.Instructions
 {
-    public abstract class FirstOperandAddressDigitalInstruction : Instruction, IAddressable
+    public abstract class FirstOperandAddressDigitalInstruction : Instruction, IDigitalAddressable
     {
         protected FirstOperandAddressDigitalInstruction(OperationCode operationCode) : base(operationCode)
         {
         }
+
+        public Address GetAddress()
+        {
+            return (Address)GetOperand(0);
+        }
+
+        public override bool GetValue()
+        {
+            return GetAddress().Value;
+        }
+
+        public void SetAddress(Address address)
+        {
+            SetOperand(0, address);
+        }
+
+        public void SetUsed()
+        {
+            GetAddress().Used = true;
+        }
+
+        public void SetValue(bool value)
+        {
+            GetAddress().Value = value;
+        }
+
+        protected abstract bool CheckFirstOperandHasTheCorrectAddressType(Address address);
 
         protected override bool IsOperandOk(int index, object value)
         {
@@ -24,27 +47,9 @@ namespace LadderApp.Model.Instructions
             }
             return true;
         }
-        protected abstract bool CheckFirstOperandHasTheCorrectAddressType(Address address);
-
         protected override bool ValidateAddress(int index, Object newOperand)
         {
             return index == 0 && IsOperandOk(index, newOperand);
         }
-
-        public Address GetAddress()
-        {
-            return (Address)GetOperand(0);
-        }
-
-        public override bool GetValue()
-        {
-            return GetAddress().Value;
-        }
-
-        public void SetUsed()
-        {
-            GetAddress().Used = true;
-        }
-
     }
 }

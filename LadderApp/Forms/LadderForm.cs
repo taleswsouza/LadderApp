@@ -191,7 +191,7 @@ namespace LadderApp
             {
                 if (!SelectedVisualLine.LineBegin.IsDisposed)
                 {
-                    lineIndex = (int)SelectedVisualLine.LineBegin.GetOperand(0);
+                    lineIndex = (int)SelectedVisualLine.LineNumber;
 
                     if (above == false)
                     {
@@ -252,14 +252,14 @@ namespace LadderApp
         {
             if (e == Keys.Up)
             {
-                if ((int)sender.VisualLine.LineBegin.GetOperand(0) != 0)
+                if ((int)sender.VisualLine.LineNumber != 0)
                 {
                     sender.VisualLine.PreviousLine.LineBegin.Select();
                 }
             }
             else if (e == Keys.Down)
             {
-                if ((int)sender.VisualLine.NextLine.LineBegin.GetOperand(0) != 0)
+                if ((int)sender.VisualLine.NextLine.LineNumber != 0)
                 {
                     sender.VisualLine.NextLine.LineBegin.Select();
                 }
@@ -436,9 +436,11 @@ namespace LadderApp
 
                         break;
                     case OperationCode.Counter:
-                        sender.GetAddress().Counter.Type = changeTimerCounterParametersForm.Type;
-                        sender.GetAddress().Counter.Preset = changeTimerCounterParametersForm.Preset;
-                        sender.GetAddress().Counter.Accumulated = changeTimerCounterParametersForm.Accumulated;
+                        CounterInstruction counter = ((CounterInstruction)outputBox);
+
+                        counter.Counter.Type = changeTimerCounterParametersForm.Type;
+                        counter.Counter.Preset = changeTimerCounterParametersForm.Preset;
+                        counter.Counter.Accumulated = changeTimerCounterParametersForm.Accumulated;
 
                         break;
                 }

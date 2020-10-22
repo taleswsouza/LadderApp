@@ -14,7 +14,7 @@ namespace LadderApp.Formularios
         public EditCommentForm(Address address) : this()
         {
             txtComment.Text = address.Comment.Trim();
-            this.Text = $"Edit Comment {address.Name}";
+            this.Text = $"Edit Comment {address.GetName()}";
         }
 
         public EditCommentForm()

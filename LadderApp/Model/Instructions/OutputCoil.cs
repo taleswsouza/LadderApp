@@ -30,7 +30,7 @@ namespace LadderApp.Model.Instructions
 
         public string GetOutputDeclaration()
         {
-            return GetAddress().GetVariableBitValueName();
+            return GetAddress().GetBitVariableName();
         }
 
     }

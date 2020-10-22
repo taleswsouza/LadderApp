@@ -9,30 +9,33 @@ namespace LadderApp.Model
     [XmlType(TypeName = "address")]
     public class Address
     {
-        //public event ChangedOperandEventHandler ChangedOperandEvent;
+
+        [XmlIgnore]
+        private AddressTypeEnum addressType = AddressTypeEnum.None;
+
+        private String comment = "";
+
+        private int numberOfBitsByPort;
+
+        internal Address(AddressTypeEnum addressType, int index)
+        {
+            AddressType = addressType;
+            Id = index;
+        }
+
+        internal Address(AddressTypeEnum addressType, int index, int numberOfBitsByPort)
+        {
+            AddressType = addressType;
+            Id = index;
+            this.numberOfBitsByPort = numberOfBitsByPort;
+        }
+
+        private Address()
+        {
+        }
+
         public event EditedCommentEventHandler EditedCommentEvent;
 
-        public Address()
-        {
-        }
-
-        public Address(AddressTypeEnum addressType, int index)
-        {
-            AddressType = addressType;
-            Id = index;
-        }
-
-        public Address(AddressTypeEnum addressType, int index, Device device)
-        {
-            AddressType = addressType;
-            Id = index;
-            this.device = device;
-        }
-
-        [XmlElement(ElementName = "id")]
-        public int Id { get; set; } = 0;
-
-        private AddressTypeEnum addressType = AddressTypeEnum.None;
         [XmlElement(ElementName = "type")]
         public AddressTypeEnum AddressType
         {
@@ -45,45 +48,28 @@ namespace LadderApp.Model
                     {
                         case AddressTypeEnum.DigitalInput:
                             break;
+
                         case AddressTypeEnum.DigitalOutput:
                             break;
+
                         case AddressTypeEnum.DigitalMemory:
                             break;
+
                         case AddressTypeEnum.DigitalMemoryTimer:
                             Timer = new Timer();
                             break;
+
                         case AddressTypeEnum.DigitalMemoryCounter:
-                            Counter = new Counter();
                             break;
+
                         default:
                             break;
                     }
                     addressType = value;
-
-                    //if (ChangedOperandEvent != null)
-                    //    ChangedOperandEvent(this);
                 }
             }
         }
 
-        private String name = "";
-        public String Name
-        {
-            get
-            {
-                switch (addressType)
-                {
-                    case AddressTypeEnum.DigitalInput:
-                    case AddressTypeEnum.DigitalOutput:
-                        return addressType.GetPrefix() + Id.ToString() + "(P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "." + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + ")";
-                    default:
-                        return addressType.GetPrefix() + Id.ToString();
-                }
-            }
-            set { name = value; }
-        }
-
-        private String comment = "";
         [XmlElement(ElementName = "comment", IsNullable = true, Type = typeof(String))]
         public String Comment
         {
@@ -96,55 +82,37 @@ namespace LadderApp.Model
             }
         }
 
-        [XmlElement(ElementName = "value", IsNullable = false, Type = typeof(Boolean))]
-        public bool Value { get; set; } = false;
+        [XmlElement(ElementName = "id")]
+        public int Id { get; set; } = 0;
+
+        [XmlIgnore]
+        public Timer Timer { get; set; }
 
         [XmlIgnore]
         public bool Used { get; set; } = false;
 
-        [XmlIgnore]
-        public int NumberOfBitsByPort { get { return device.NumberBitsByPort; } private set { } }
+        [XmlElement(ElementName = "value", IsNullable = false, Type = typeof(Boolean))]
+        public bool Value { get; set; } = false;
 
-        private Device device = null;
-        public void SetDevice(Device device) => this.device = device;
-
-        [XmlIgnore]
-        public Counter Counter { get; set; }
-        [XmlIgnore]
-        public Timer Timer { get; set; }
-
-        public String GetNameAndComment()
-        {
-            return $"{Name}{(Comment == "" ? "" : " - " + Comment)}";
-        }
-
-        public string GetPortParameterization()
+        public string GetBitVariableName()
         {
             switch (this.addressType)
             {
                 case AddressTypeEnum.DigitalInput:
-                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 0";
-                case AddressTypeEnum.DigitalOutput:
-                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_DIR.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort)) + " = 1";
-                default:
-                    return "ERROR";
-            }
-        }
+                    return $"{GetStructVariable()}_IN.Bit{GetBit()}";
 
-        public string GetVariableName()
-        {
-            switch (this.addressType)
-            {
-                case AddressTypeEnum.DigitalInput:
-                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
                 case AddressTypeEnum.DigitalOutput:
-                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1);
+                    return $"{GetStructVariable()}_OUT.Bit{GetBit()}";
+
                 case AddressTypeEnum.DigitalMemory:
-                    return "M" + ((Id / NumberOfBitsByPort) + 1);
+                    return $"{GetStructVariable()}.Bit{GetBit()}";
+
                 case AddressTypeEnum.DigitalMemoryTimer:
-                    return "T" + Id.ToString();
+                    return $"{GetStructVariable()}.Done";
+
                 case AddressTypeEnum.DigitalMemoryCounter:
-                    return "C" + Id.ToString();
+                    return $"{GetStructVariable()}.Done";
+
                 default:
                     return "ERROR";
             }
@@ -152,33 +120,81 @@ namespace LadderApp.Model
 
         public string GetEnableBit()
         {
-            return $"{GetVariableName()}.Enable";
+            return $"{GetStructVariable()}.Enable";
         }
 
-        public string GetVariableBitValueName()
+        public string GetIOParameterization()
         {
-            switch (this.addressType)
+            switch (addressType)
             {
                 case AddressTypeEnum.DigitalInput:
-                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_IN.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort));
+                    return $"{GetStructVariable()}_DIR.Bit{GetBit()} = 0";
+
                 case AddressTypeEnum.DigitalOutput:
-                    return "P" + (((Id - 1) / device.NumberBitsByPort) + 1) + "_OUT.Bit" + ((Id - 1) - ((Int16)((Id - 1) / device.NumberBitsByPort) * device.NumberBitsByPort));
-                case AddressTypeEnum.DigitalMemory:
-                    return "M" + ((Id / NumberOfBitsByPort) + 1) + ".Bit" + (Id - (Int16)(Id / NumberOfBitsByPort) * NumberOfBitsByPort);
-                case AddressTypeEnum.DigitalMemoryTimer:
-                    return $"{GetVariableName()}.Done";
-                case AddressTypeEnum.DigitalMemoryCounter:
-                    return $"{GetVariableName()}.Done";
+                    return $"{GetStructVariable()}_DIR.Bit{GetBit()} = 1";
+
                 default:
                     return "ERROR";
             }
         }
 
-
-
-        public override string ToString()
+        public string GetName()
         {
-            return this.name;
+            switch (addressType)
+            {
+                case AddressTypeEnum.DigitalInput:
+                case AddressTypeEnum.DigitalOutput:
+                    return $"{addressType.GetDisplayPrefix()}{Id}({GetStructVariable()}.{GetBit()})";
+
+                default:
+                    return $"{addressType.GetDisplayPrefix()}{Id}";
+            }
+        }
+
+        public String GetNameAndComment()
+        {
+            return $"{GetName()}{(Comment == "" ? "" : " - " + Comment)}";
+        }
+
+        public string GetStructVariable()
+        {
+            switch (this.addressType)
+            {
+                case AddressTypeEnum.DigitalInput:
+                case AddressTypeEnum.DigitalOutput:
+                case AddressTypeEnum.DigitalMemory:
+                    return $"{addressType.GetInternalPrefix()}{GetWord()}";
+
+                case AddressTypeEnum.DigitalMemoryTimer:
+                case AddressTypeEnum.DigitalMemoryCounter:
+                    return $"{addressType.GetInternalPrefix()}{Id}";
+
+                default:
+                    return "ERROR";
+            }
+        }
+
+        public void SetNumberOfBitsByPort(int numberOfBitsByPort) => this.numberOfBitsByPort = numberOfBitsByPort;
+
+        // TODO - solve this constant number
+        private int GetNumberOfBitsByPort()
+        {
+            return 8;
+        }
+
+        private int GetBaseId()
+        {
+            return Id - 1;
+        }
+
+        private int GetBit()
+        {
+            return GetBaseId() % GetNumberOfBitsByPort();
+        }
+
+        private int GetWord()
+        {
+            return GetBaseId() / GetNumberOfBitsByPort() + 1;
         }
 
         public override bool Equals(object obj)
@@ -195,5 +211,11 @@ namespace LadderApp.Model
             hashCode = hashCode * -1521134295 + addressType.GetHashCode();
             return hashCode;
         }
+
+        public override string ToString()
+        {
+            return GetName();
+        }
+
     }
 }

@@ -36,7 +36,7 @@ namespace LadderApp.Model
                     pin.PinType = PinTypeEnum.None;
                 device.Pins.Add(pin);
 
-                device.PinAddresses.Add(new Address(pin.Type, i, device));
+                device.PinAddresses.Add(new Address(pin.Type, i, device.NumberBitsByPort));
             }
         }
 

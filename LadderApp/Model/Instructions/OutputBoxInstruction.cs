@@ -78,5 +78,10 @@ namespace LadderApp.Model.Instructions
         {
             return GetAddress().GetEnableBit();
         }
+
+        public string GetName()
+        {
+            return GetAddress().GetName();
+        }
     }
 }

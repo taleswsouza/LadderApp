@@ -15,7 +15,26 @@ namespace LadderApp.Model
     }
     public static class AddressTypeEnumExtensions
     {
-        public static String GetPrefix(this AddressTypeEnum addressType)
+        public static String GetInternalPrefix(this AddressTypeEnum addressType)
+        {
+            switch (addressType)
+            {
+                case AddressTypeEnum.DigitalInput:
+                    return "P";
+                case AddressTypeEnum.DigitalOutput:
+                    return "P";
+                case AddressTypeEnum.DigitalMemory:
+                    return "M";
+                case AddressTypeEnum.DigitalMemoryTimer:
+                    return "T";
+                case AddressTypeEnum.DigitalMemoryCounter:
+                    return "C";
+                default:
+                    return "ERROR";
+            }
+        }
+
+        public static String GetDisplayPrefix(this AddressTypeEnum addressType)
         {
             switch (addressType)
             {
@@ -24,11 +43,9 @@ namespace LadderApp.Model
                 case AddressTypeEnum.DigitalOutput:
                     return "O";
                 case AddressTypeEnum.DigitalMemory:
-                    return "M";
                 case AddressTypeEnum.DigitalMemoryTimer:
-                    return "T";
                 case AddressTypeEnum.DigitalMemoryCounter:
-                    return "C";
+                    return GetInternalPrefix(addressType);
                 default:
                     return "ERROR";
             }

@@ -106,11 +106,11 @@ namespace LadderApp.Services
                             switch (instruction.OpCode)
                             {
                                 case OperationCode.NormallyOpenContact:
-                                    lineText += ((Address)instruction.GetOperand(0)).GetVariableBitValueName();
+                                    lineText += ((Address)instruction.GetOperand(0)).GetBitVariableName();
                                     ((Address)instruction.GetOperand(0)).Used = true;
                                     break;
                                 case OperationCode.NormallyClosedContact:
-                                    lineText += "!" + ((Address)instruction.GetOperand(0)).GetVariableBitValueName();
+                                    lineText += "!" + ((Address)instruction.GetOperand(0)).GetBitVariableName();
                                     ((Address)instruction.GetOperand(0)).Used = true;
                                     break;
                             }
@@ -133,7 +133,7 @@ namespace LadderApp.Services
 
                 outputOperands.Clear();
                 operandsToReset.Clear();
-                foreach (FirstOperandAddressDigitalInstruction instruction in line.Outputs.FindAll(i => i is IAddressable))
+                foreach (FirstOperandAddressDigitalInstruction instruction in line.Outputs.FindAll(i => i is IDigitalAddressable))
                 {
                     switch (instruction.OpCode)
                     {
@@ -148,7 +148,7 @@ namespace LadderApp.Services
 
                             if (instruction.OpCode == OperationCode.Counter)
                             {
-                                functionsAfterLine += " ExecuteCounter(&" + instruction.GetAddress().Name + ");";
+                                functionsAfterLine += " ExecuteCounter(&" + instruction.GetAddress().GetName() + ");";
                             }
 
                             if (instruction.OpCode == OperationCode.Reset)
@@ -158,7 +158,7 @@ namespace LadderApp.Services
                                 switch (instruction.GetAddress().AddressType)
                                 {
                                     case AddressTypeEnum.DigitalMemoryCounter:
-                                        operandsToReset.Add("ExecuteCounter(&" + instruction.GetAddress().Name + ");");
+                                        operandsToReset.Add("ExecuteCounter(&" + instruction.GetAddress().GetName() + ");");
                                         break;
                                     default:
                                         break;
@@ -271,9 +271,9 @@ namespace LadderApp.Services
                 {
                     if (address.Used)
                     {
-                        if (!usedVariableNames.Contains(address.GetVariableName()))
+                        if (!usedVariableNames.Contains(address.GetStructVariable()))
                         {
-                            usedVariableNames.Add(address.GetVariableName());
+                            usedVariableNames.Add(address.GetStructVariable());
                         }
                     }
                 }
@@ -296,16 +296,16 @@ namespace LadderApp.Services
                     if (address.Used)
                     {
                         timerPresent = true;
-                        contentParameterization += "\t" + address.Name + ".Type = " + address.Timer.Type.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.Name + ".TimeBase = " + address.Timer.TimeBase.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.Name + ".Preset = " + address.Timer.Preset.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.Name + ".Accumulated = 0;" + Environment.NewLine;
+                        contentParameterization += "\t" + address.GetName() + ".Type = " + address.Timer.Type.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.GetName() + ".TimeBase = " + address.Timer.TimeBase.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.GetName() + ".Preset = " + address.Timer.Preset.ToString() + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + address.GetName() + ".Accumulated = 0;" + Environment.NewLine;
                         contentParameterization += Environment.NewLine;
 
                         /// prepare variable declaration
-                        if (!usedVariableNames.Contains(address.GetVariableName()))
+                        if (!usedVariableNames.Contains(address.GetStructVariable()))
                         {
-                            usedVariableNames.Add(address.GetVariableName());
+                            usedVariableNames.Add(address.GetStructVariable());
                         }
 
                         if (!usedTimerTypes.Contains(address.Timer.Type))
@@ -330,25 +330,25 @@ namespace LadderApp.Services
 
 
                 /// counters
-                foreach (Address address in GetAddressing().ListCounterAddress)
+                foreach (CounterInstruction counter in program.Lines.SelectMany(l => l.Outputs).Where(i => i is CounterInstruction))
                 {
-                    if (address.Used)
+                    if (counter.GetAddress().Used)
                     {
                         counterPresent = true;
-                        contentParameterization += "\t" + address.Name + ".Type = " + address.Counter.Type.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.Name + ".Preset = " + address.Counter.Preset.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.Name + ".Accumulated = 0;" + Environment.NewLine;
+                        contentParameterization += $"\t{counter.GetName()}.Type = {counter.GetBoxType()};{Environment.NewLine}";
+                        contentParameterization += $"\t{counter.GetName()}.Preset = {counter.GetPreset()};{Environment.NewLine}";
+                        contentParameterization += $"\t{counter.GetName()}.Accumulated = 0;{Environment.NewLine}";
                         contentParameterization += Environment.NewLine;
 
                         /// prepare variable declaration
-                        if (!usedVariableNames.Contains(address.GetVariableName()))
+                        if (!usedVariableNames.Contains(counter.GetAddress().GetStructVariable()))
                         {
-                            usedVariableNames.Add(address.GetVariableName());
+                            usedVariableNames.Add(counter.GetAddress().GetStructVariable());
                         }
 
-                        if (!usedCounterTypes.Contains(address.Counter.Type))
+                        if (!usedCounterTypes.Contains(counter.GetBoxType()))
                         {
-                            usedCounterTypes.Add(address.Counter.Type);
+                            usedCounterTypes.Add(counter.GetBoxType());
                         }
                     }
                 }
@@ -438,7 +438,7 @@ namespace LadderApp.Services
                 if (saveProgramInsideExecutable)
                 {
                     opCode2TextServices.FinalizeHeader();
-                    contentOpCodes = "const unsigned char ladderInstructions[" + opCode2TextServices.Length.ToString().Trim() + "] = {" + opCode2TextServices.ToString() + "};";
+                    contentOpCodes = "const unsigned char ladderInstructions[" + opCode2TextServices.Length+ "] = {" + opCode2TextServices + "};";
                     contentMainDotCFile = contentMainDotCFile.Replace("#LADDER_INSTRUCTIONS#", contentOpCodes);
                 }
                 else
@@ -557,16 +557,16 @@ namespace LadderApp.Services
             /// 1. prepare to setup output ports
             foreach (Address address in GetAddressing().ListOutputAddress)
             {
-                if (address.GetPortParameterization() != "" && address.Used == true)
+                if (address.GetIOParameterization() != "" && address.Used == true)
                 {
                     outputsPresent = true;
                     /// 1.1. add input ports to parameterization
-                    contentParameterization += "\t" + address.GetPortParameterization() + ";" + Environment.NewLine;
+                    contentParameterization += "\t" + address.GetIOParameterization() + ";" + Environment.NewLine;
 
                     /// 2.1. prepare input ports to variable declaration
-                    if (!usedPorts.Contains(address.GetVariableName()))
+                    if (!usedPorts.Contains(address.GetStructVariable()))
                     {
-                        usedPorts.Add(address.GetVariableName());
+                        usedPorts.Add(address.GetStructVariable());
                     }
                 }
             }
@@ -579,15 +579,15 @@ namespace LadderApp.Services
             /// 2. include these ports in usedPorts list
             foreach (Address address in GetAddressing().ListInputAddress)
             {
-                if (address.GetPortParameterization() != "" && address.Used == true)
+                if (address.GetIOParameterization() != "" && address.Used == true)
                 {
                     inputsPresent = true;
                     /// 1.1. add parameterization for each input address
-                    contentParameterization += "\t" + address.GetPortParameterization() + ";" + Environment.NewLine;
+                    contentParameterization += "\t" + address.GetIOParameterization() + ";" + Environment.NewLine;
 
                     /// 2.1. prepare variable declaration to each input address
-                    if (!usedPorts.Contains(address.GetVariableName()))
-                        usedPorts.Add(address.GetVariableName());
+                    if (!usedPorts.Contains(address.GetStructVariable()))
+                        usedPorts.Add(address.GetStructVariable());
                 }
             }
             contentParameterization += Environment.NewLine;

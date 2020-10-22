@@ -99,6 +99,11 @@ namespace LadderApp
 
         public void Add(Instruction instruction)
         {
+            if (!instruction.IsAllOperandsOk())
+            {
+                throw new ArgumentException($"Operands not ok {instruction}");
+            }
+
             Add(instruction.OpCode);
 
             switch (instruction.OpCode)
@@ -106,43 +111,31 @@ namespace LadderApp
                 case OperationCode.Counter:
                     if (instruction.IsAllOperandsOk())
                     {
-                        if (instruction.IsAllOperandsOk())
-                            if (instruction.GetOperand(0) is Address)
-                            {
-                                Address address = (Address)instruction.GetOperand(0);
-                                Add(address.Id);
-                                Add(address.Counter.Type);
-                                Add(address.Counter.Preset);
-                            }
-                    }
-                    break;
-                case OperationCode.Timer:
-                    if (instruction.IsAllOperandsOk())
-                    {
-                        if (instruction.IsAllOperandsOk())
+                        if (instruction is CounterInstruction counter)
                         {
-                            if (instruction.GetOperand(0) is Address)
-                            {
-                                Address address = (Address)instruction.GetOperand(0);
-                                Add(address.Id);
-                                Add(address.Timer.Type);
-                                Add(address.Timer.TimeBase);
-                                Add(address.Timer.Preset);
-                            }
+                            Add(counter.GetAddress().Id);
+                            Add(counter.GetBoxType());
+                            Add(counter.GetPreset());
                         }
                     }
                     break;
-                default:
-                    if (instruction.IsAllOperandsOk())
+                case OperationCode.Timer:
+                    if (instruction is TimerInstruction timer)
                     {
-                        for (int i = 0; i < instruction.GetNumberOfOperands(); i++)
+                        Add(timer.GetAddress().Id);
+                        Add(timer.GetBoxType());
+                        Add(timer.GetPreset());
+                        Add(timer.GetTimeBase());
+                    }
+                    break;
+                default:
+                    for (int i = 0; i < instruction.GetNumberOfOperands(); i++)
+                    {
+                        if (instruction.GetOperand(i) != null)
                         {
-                            if (instruction.GetOperand(i) != null)
+                            if (instruction.GetOperand(i) is Address)
                             {
-                                if (instruction.GetOperand(i) is Address)
-                                {
-                                    Add((Address)instruction.GetOperand(i));
-                                }
+                                Add((Address)instruction.GetOperand(i));
                             }
                         }
                     }

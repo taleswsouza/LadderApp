@@ -32,9 +32,9 @@ namespace LadderApp.Services
             program.Name = projectName;
             program.device = DeviceFactory.CreateNewDevice();
             addressingServices.AlocateIOAddressing(program.device);
-            addressingServices.AlocateMemoryAddressing(program.device, program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
-            addressingServices.AlocateMemoryAddressing(program.device, program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
-            addressingServices.AlocateMemoryAddressing(program.device, program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
+            addressingServices.AlocateAddressingMemoryAndTimerAndCounter(program, program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
+            addressingServices.AlocateAddressingMemoryAndTimerAndCounter(program, program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
+            addressingServices.AlocateAddressingMemoryAndTimerAndCounter(program, program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
             lineIndex = program.InsertLineAtEnd(new Line());
 
             for (int position = content.IndexOf("@laddermic.com") + 15; position < content.Length; position++)
@@ -104,13 +104,18 @@ namespace LadderApp.Services
                         countOfEnds = 0;
                         {
                             InstructionList instructions = new InstructionList();
-                            instructions.Add(InstructionFactory.createInstruction(opCode));
-                            instructions[instructions.Count - 1].SetOperand(0, addressingServices.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
-                            ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
-                            ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset = (Int32)Convert.ToChar(content.Substring(position + 3, 1));
+                            CounterInstruction counter = (CounterInstruction)InstructionFactory.createInstruction(opCode);
+                            counter.SetAddress(addressingServices.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
+                            counter.setBoxType((int)Convert.ToChar(content.Substring(position + 2, 1)));
+                            counter.setPreset((int)Convert.ToChar(content.Substring(position + 3, 1)));
+                            instructions.Add(counter);
+                            //instructions.Add(InstructionFactory.createInstruction(opCode));
+                            //instructions[instructions.Count - 1].SetOperand(0, addressingServices.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
+                            //((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
+                            //((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset = (Int32)Convert.ToChar(content.Substring(position + 3, 1));
 
-                            instructions[instructions.Count - 1].SetOperand(1, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type);
-                            instructions[instructions.Count - 1].SetOperand(2, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset);
+                            //instructions[instructions.Count - 1].SetOperand(1, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type);
+                            //instructions[instructions.Count - 1].SetOperand(2, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset);
                             position += 3;
                             lineServices.InsertToOutputs(program.Lines[lineIndex], instructions);
                             instructions.Clear();

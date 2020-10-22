@@ -37,8 +37,8 @@ namespace LadderApp.Services
 
         public Address Find(AddressTypeEnum addressType, int index)
         {
-            Address address = new Address(addressType, index);
-            return Find(address);
+            Address fakeAddress = new Address(addressType, index);
+            return Find(fakeAddress);
         }
 
         public Address Find(Address address)
@@ -87,23 +87,24 @@ namespace LadderApp.Services
                         default:
                             instruction.SetOperand(0, Find((Address)instruction.GetOperand(0)));
 
-                            if (instruction.IsAllOperandsOk())
+                            //if (instruction.IsAllOperandsOk())
+                            //{
+                            if (instruction.OpCode == OperationCode.Counter)
                             {
-                                if (instruction.OpCode == OperationCode.Counter)
-                                {
-                                    ((Address)instruction.GetOperand(0)).Counter.Type = (Int32)instruction.GetOperand(1);
-                                    ((Address)instruction.GetOperand(0)).Counter.Preset = (Int32)instruction.GetOperand(2);
-                                    ((Address)instruction.GetOperand(0)).Counter.Accumulated = (Int32)instruction.GetOperand(3);
-                                }
-                                
-                                if (instruction.OpCode == OperationCode.Timer)
-                                {
-                                    ((Address)instruction.GetOperand(0)).Timer.Type = (Int32)instruction.GetOperand(1);
-                                    ((Address)instruction.GetOperand(0)).Timer.Preset = (Int32)instruction.GetOperand(2);
-                                    ((Address)instruction.GetOperand(0)).Timer.Accumulated = (Int32)instruction.GetOperand(3);
-                                    ((Address)instruction.GetOperand(0)).Timer.TimeBase = (Int32)instruction.GetOperand(4);
-                                }
+                                CounterInstruction counter = (CounterInstruction)instruction;
+                                counter.Counter.Type = (int)instruction.GetOperand(1);
+                                counter.Counter.Preset = (int)instruction.GetOperand(2);
+                                counter.Counter.Accumulated = (int)instruction.GetOperand(3);
                             }
+
+                            if (instruction.OpCode == OperationCode.Timer)
+                            {
+                                ((Address)instruction.GetOperand(0)).Timer.Type = (Int32)instruction.GetOperand(1);
+                                ((Address)instruction.GetOperand(0)).Timer.Preset = (Int32)instruction.GetOperand(2);
+                                ((Address)instruction.GetOperand(0)).Timer.Accumulated = (Int32)instruction.GetOperand(3);
+                                ((Address)instruction.GetOperand(0)).Timer.TimeBase = (Int32)instruction.GetOperand(4);
+                            }
+                            //}
                             break;
                     }
                 }
@@ -113,7 +114,7 @@ namespace LadderApp.Services
 
         public void CleanUsedIndication()
         {
-            addressing.GetAllAddresses().ForEach(a => a.Used = false );
+            addressing.GetAllAddresses().ForEach(a => a.Used = false);
         }
 
         public void AlocateIOAddressing(Device device)
@@ -122,7 +123,7 @@ namespace LadderApp.Services
             addressing.ListOutputAddress.Clear();
             foreach (Address address in device.PinAddresses)
             {
-                address.SetDevice(device);
+                address.SetNumberOfBitsByPort(device.NumberBitsByPort);
                 switch (address.AddressType)
                 {
                     case AddressTypeEnum.DigitalInput:
@@ -135,49 +136,54 @@ namespace LadderApp.Services
             }
         }
 
-        public int AlocateMemoryAddressing(Device device, List<Address> addresses, AddressTypeEnum addressType, int numberOfAddress)
-        {
-            int currentNumberOfAddress = addresses.Count;
-            if ((currentNumberOfAddress == 0) || (currentNumberOfAddress < numberOfAddress))
-            {
-                for (int i = currentNumberOfAddress + 1; i <= numberOfAddress; i++)
-                {
-                    addresses.Add(new Address(addressType, i, device));
-                }
-            }
-            else if (currentNumberOfAddress > numberOfAddress)
-            {
-                for (int i = (currentNumberOfAddress - 1); i >= numberOfAddress; i--)
-                {
-                    if (!addresses[i].Used)
-                    {
-                        addresses[i] = null;
-                        addresses.RemoveAt(i);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            return 0;
-        }
+        //public int AlocateMemoryAddressing(Device device, List<Address> addresses, AddressTypeEnum addressType, int numberOfAddress)
+        //{
+        //    int currentNumberOfAddress = addresses.Count;
+        //    if ((currentNumberOfAddress == 0) || (currentNumberOfAddress < numberOfAddress))
+        //    {
+        //        for (int i = currentNumberOfAddress + 1; i <= numberOfAddress; i++)
+        //        {
+        //            addresses.Add(new Address(addressType, i, device.NumberBitsByPort));
+        //        }
+        //    }
+        //    else if (currentNumberOfAddress > numberOfAddress)
+        //    {
+        //        for (int i = (currentNumberOfAddress - 1); i >= numberOfAddress; i--)
+        //        {
+        //            if (!addresses[i].Used)
+        //            {
+        //                addresses[i] = null;
+        //                addresses.RemoveAt(i);
+        //            }
+        //            else
+        //            {
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    return 0;
+        //}
 
         public int AlocateAddressingMemoryAndTimerAndCounter(LadderProgram program, List<Address> addresses, AddressTypeEnum type, int numberOfAddresses)
         {
             IndicateAddressUsed(program, type);
 
-            int currentNumber = addresses.Count;
-            if (currentNumber == 0 || currentNumber < numberOfAddresses)
+            int currentNumberOfAddress = addresses.Count;
+            if (currentNumberOfAddress == 0 || currentNumberOfAddress < numberOfAddresses)
             {
-                for (int i = currentNumber + 1; i <= numberOfAddresses; i++)
+                for (int i = currentNumberOfAddress + 1; i <= numberOfAddresses; i++)
                 {
-                    addresses.Add(new Address(type, i, program.device));
+                    //if (type.Equals(AddressTypeEnum.DigitalMemoryCounter))
+                    //{
+                    //    addresses.Add(new InternalCounter(i, program.device.NumberBitsByPort));
+                    //}
+                    //else
+                        addresses.Add(new Address(type, i, program.device.NumberBitsByPort));
                 }
             }
-            else if (currentNumber > numberOfAddresses)
+            else if (currentNumberOfAddress > numberOfAddresses)
             {
-                for (int i = (currentNumber - 1); i >= numberOfAddresses; i--)
+                for (int i = (currentNumberOfAddress - 1); i >= numberOfAddresses; i--)
                 {
                     if (!addresses[i].Used)
                     {
@@ -190,7 +196,6 @@ namespace LadderApp.Services
                     }
                 }
             }
-
             return 0;
         }
 

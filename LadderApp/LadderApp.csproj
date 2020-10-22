@@ -64,9 +64,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\ICounterInstructionParameter.cs" />
+    <Compile Include="Model\InternalCounter.cs" />
     <Compile Include="Model\DeviceFactory.cs" />
     <Compile Include="Model\Instructions\CounterInstruction.cs" />
-    <Compile Include="Model\Instructions\IAddressable.cs" />
+    <Compile Include="Model\Instructions\IDigitalAddressable.cs" />
     <Compile Include="Model\Instructions\InstructionFactory.cs" />
     <Compile Include="Model\Instructions\IOutput.cs" />
     <Compile Include="Model\Instructions\LineBeginInstruction.cs" />
@@ -232,7 +234,6 @@
       <DependentUpon>VisualResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Model\Instructions\Instruction.cs" />
-    <Compile Include="Model\Counter.cs" />
     <Compile Include="Model\Timer.cs" />
     <Compile Include="VisualComponents\VisualParallelBranch.cs" />
     <Compile Include="Model\AddressTypeEnum.cs" />

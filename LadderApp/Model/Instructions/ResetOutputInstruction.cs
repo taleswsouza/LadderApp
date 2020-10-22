@@ -30,7 +30,7 @@ namespace LadderApp.Model.Instructions
 
         public string GetOutputDeclaration()
         {
-            return $"{GetAddress().Name}.Reset = 1;";
+            return $"{GetAddress().GetName()}.Reset = 1;";
         }
     }
 }
