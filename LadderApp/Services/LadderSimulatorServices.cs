@@ -1,19 +1,88 @@
-﻿using System;
+﻿using LadderApp.Model;
+using LadderApp.Model.Instructions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LadderApp.Services
 {
-    class LadderSimulatorServices
+    internal class LadderSimulatorServices
     {
-        private LadderVerificationServices verificationServices = new LadderVerificationServices();
-
-        private class LineStretchSummary
+        private AddressingServices addressingServices;
+        private LadderVerificationServices verificationServices;
+        public LadderSimulatorServices() : this(new LadderVerificationServices(), AddressingServices.Instance)
         {
-            public bool Initiated { get; set; } = false;
-            public bool Value { get; set; } = true;
+        }
+
+        public LadderSimulatorServices(LadderVerificationServices verificationServices, AddressingServices addressingServices)
+        {
+            this.verificationServices = verificationServices;
+            this.addressingServices = addressingServices;
+        }
+
+        public void ExecuteCountersSimulator(Instruction instruction)
+        {
+            CounterInstruction counter = (CounterInstruction)instruction;
+            switch (counter.Counter.Type)
+            {
+                case 0: // Counter acending
+                    if (counter.Counter.Reset == true)
+                    {
+                        counter.GetAddress().Value = false;
+                        counter.Counter.Accumulated = 0;
+                        counter.Counter.Reset = false;
+                    }
+                    if (counter.Counter.Enable == true && counter.Counter.Pulse == true)
+                    {
+                        counter.Counter.Pulse = false;
+
+                        if (counter.Counter.Accumulated <= Int32.MaxValue)
+                        {
+                            counter.Counter.Accumulated++;
+                            if (counter.Counter.Accumulated >= counter.Counter.Preset)
+                            {
+                                counter.GetAddress().Value = true;
+                            }
+                            else
+                            {
+                                counter.GetAddress().Value = false;
+                            }
+                        }
+                    }
+                    break;
+
+                case 1: // Counter descending
+                    if (counter.Counter.Reset == true)
+                    {
+                        counter.Counter.Accumulated = counter.Counter.Preset;
+                        counter.GetAddress().Value = false;
+                        counter.Counter.Reset = false;
+                    }
+                    if (counter.Counter.Enable == true && counter.Counter.Pulse == true)
+                    {
+                        counter.Counter.Pulse = false;
+                        if (counter.Counter.Accumulated > 0)
+                        {
+                            counter.Counter.Accumulated--;
+                            if (counter.Counter.Accumulated == 0)
+                            {
+                                counter.GetAddress().Value = true;
+                            }
+                            else
+                            {
+                                counter.GetAddress().Value = false;
+                            }
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            if (counter.Counter.Enable == false)
+            {
+                counter.Counter.Pulse = true;
+            }
         }
 
         public bool SimulateLadder(LadderProgram program)
@@ -24,7 +93,9 @@ namespace LadderApp.Services
         public bool SimulateLadder(LadderProgram program, Address auxToggleBitPulse)
         {
             if (!verificationServices.VerifyProgram(program))
+            {
                 return false;
+            }
 
             SimulateTimers(program);
 
@@ -39,37 +110,31 @@ namespace LadderApp.Services
                         case OperationCode.ParallelBranchBegin:
                             lineStretchSummary.Add(new LineStretchSummary());
                             break;
+
                         case OperationCode.ParallelBranchEnd:
                             MakeOrLogicOverParallelBranchTwoLastLineStretchAndRemoveLastOne(lineStretchSummary);
 
                             MakeAndLogicOverTwoLastLineStreatchAndRemoveLastOne(lineStretchSummary);
                             break;
+
                         case OperationCode.ParallelBranchNext:
                             lineStretchSummary.Add(new LineStretchSummary());
                             break;
+
                         default:
-                            bool value = false;
-                            switch (instruction.OpCode)
-                            {
-                                case OperationCode.NormallyOpenContact:
-                                    value = ((Address)instruction.GetOperand(0)).Value;
-                                    break;
-                                case OperationCode.NormallyClosedContact:
-                                    value = !((Address)instruction.GetOperand(0)).Value;
-                                    break;
-                            }
-
                             if (lineStretchSummary[lineStretchSummary.Count - 1].Initiated)
-                                lineStretchSummary[lineStretchSummary.Count - 1].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value && value;
+                            {
+                                lineStretchSummary[lineStretchSummary.Count - 1].LineValue = lineStretchSummary[lineStretchSummary.Count - 1].LineValue && instruction.GetValue();
+                            }
                             else
-                                lineStretchSummary[lineStretchSummary.Count - 1].Value = value;
-
-                            lineStretchSummary[lineStretchSummary.Count - 1].Initiated = true;
+                            {
+                                lineStretchSummary[lineStretchSummary.Count - 1].LineValue = instruction.GetValue();
+                            }
                             break;
                     }
                 }
 
-                foreach (Instruction instruction in line.Outputs)
+                foreach (FirstOperandAddressDigitalInstruction instruction in line.Outputs.FindAll(i => i is IDigitalAddressable))
                 {
                     switch (instruction.OpCode)
                     {
@@ -79,29 +144,38 @@ namespace LadderApp.Services
                         case OperationCode.Reset:
 
                             if (instruction.OpCode == OperationCode.OutputCoil)
-                                ((Address)instruction.GetOperand(0)).Value = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
-                            else if (instruction.OpCode == OperationCode.Timer)
                             {
-                                ((Address)instruction.GetOperand(0)).Timer.Enable = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
+                                instruction.GetAddress().Value = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
                             }
-                            else if (instruction.OpCode == OperationCode.Counter)
+
+                            if (instruction.OpCode == OperationCode.Timer)
                             {
-                                ((Address)instruction.GetOperand(0)).Counter.Enable = (bool)lineStretchSummary[lineStretchSummary.Count - 1].Value;
-                                ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
+                                instruction.GetAddress().Timer.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
                             }
-                            else if (instruction.OpCode == OperationCode.Reset)
+
+                            if (instruction.OpCode == OperationCode.Counter)
                             {
-                                if ((bool)lineStretchSummary[lineStretchSummary.Count - 1].Value)
+                                CounterInstruction counter = (CounterInstruction)instruction;
+                                counter.Counter.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+                                ExecuteCountersSimulator(instruction);
+                            }
+
+                            if (instruction.OpCode == OperationCode.Reset)
+                            {
+                                if (lineStretchSummary[lineStretchSummary.Count - 1].LineValue)
                                 {
-                                    switch (((Address)instruction.GetOperand(0)).AddressType)
+                                    switch (instruction.GetAddress().AddressType)
                                     {
                                         case AddressTypeEnum.DigitalMemoryCounter:
-                                            ((Address)instruction.GetOperand(0)).Counter.Reset = true;
-                                            ExecuteCountersSimulator(instruction, ((Address)instruction.GetOperand(0)));
+                                            FirstOperandAddressDigitalInstruction reset = (FirstOperandAddressDigitalInstruction)instruction;
+                                            // TODO RETIRAR ESTA LINGUIÇA DEPOIS
+                                            CounterInstruction counter = program.Lines.SelectMany(l => l.Outputs).Where(o => o is CounterInstruction).Cast<CounterInstruction>().Where(c => c.GetAddress().Equals(reset.GetAddress())).First();
+                                            counter.Counter.Reset = true;
+                                            ExecuteCountersSimulator(counter);
                                             break;
 
                                         case AddressTypeEnum.DigitalMemoryTimer:
-                                            ((Address)instruction.GetOperand(0)).Timer.Reset = true;
+                                            instruction.GetAddress().Timer.Reset = true;
                                             break;
 
                                         default:
@@ -110,10 +184,10 @@ namespace LadderApp.Services
                                 }
                             }
                             break;
+
                         default:
                             break;
                     }
-
                 }
                 lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
             }
@@ -124,26 +198,6 @@ namespace LadderApp.Services
                 auxToggleBitPulse = null;
             }
             return true;
-        }
-
-
-        private static void MakeOrLogicOverParallelBranchTwoLastLineStretchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
-        {
-            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value || lineStretchSummary[lineStretchSummary.Count - 1].Value;
-            else
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
-            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
-        }
-
-        private static void MakeAndLogicOverTwoLastLineStreatchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
-        {
-            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 2].Value && lineStretchSummary[lineStretchSummary.Count - 1].Value;
-            else
-                lineStretchSummary[lineStretchSummary.Count - 2].Value = lineStretchSummary[lineStretchSummary.Count - 1].Value;
-            lineStretchSummary[lineStretchSummary.Count - 2].Initiated = true;
-            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
         }
 
         public void SimulateTimers(LadderProgram program)
@@ -238,76 +292,55 @@ namespace LadderApp.Services
                                         address.Timer.Accumulated = address.Timer.Preset;
 
                                     if (address.Timer.Accumulated >= address.Timer.Preset)
+                                    {
                                         address.Value = true; /// DONE = true
+                                    }
                                     else
+                                    {
                                         address.Value = false; /// DONE = false
+                                    }
                                 }
                             }
                         }
                         break;
+
                     default:
                         break;
                 } /// switch
             }
-
         }
 
-
-        public void ExecuteCountersSimulator(Instruction instruction, Address counterAddress)
+        private static void MakeAndLogicOverTwoLastLineStreatchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
         {
-
-            switch (counterAddress.Counter.Type)
+            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
             {
-                case 0: // Counter acending
-                    if (counterAddress.Counter.Reset == true)
-                    {
-                        counterAddress.Value = false;
-                        counterAddress.Counter.Accumulated = 0;
-                        counterAddress.Counter.Reset = false;
-                    }
-                    if (counterAddress.Counter.Enable == true && counterAddress.Counter.Pulse == true)
-                    {
-                        counterAddress.Counter.Pulse = false;
-
-                        if (counterAddress.Counter.Accumulated <= Int32.MaxValue)
-                        {
-                            counterAddress.Counter.Accumulated++;
-                            if (counterAddress.Counter.Accumulated >= counterAddress.Counter.Preset)
-                                counterAddress.Value = true;
-                            else
-                                counterAddress.Value = false;
-                        }
-                    }
-                    break;
-
-                case 1: // Counter descending
-                    if (counterAddress.Counter.Reset == true)
-                    {
-                        counterAddress.Counter.Accumulated = counterAddress.Counter.Preset;
-                        counterAddress.Value = false;
-                        counterAddress.Counter.Reset = false;
-                    }
-                    if (counterAddress.Counter.Enable == true && counterAddress.Counter.Pulse == true)
-                    {
-                        counterAddress.Counter.Pulse = false;
-                        if (counterAddress.Counter.Accumulated > 0)
-                        {
-                            counterAddress.Counter.Accumulated--;
-
-                            if (counterAddress.Counter.Accumulated == 0)
-                                counterAddress.Value = true;
-                            else
-                                counterAddress.Value = false;
-                        }
-                    }
-                    break;
-
-                default:
-                    break;
+                lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 2].LineValue && lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
             }
-            if (counterAddress.Counter.Enable == false)
-                counterAddress.Counter.Pulse = true;
+            else
+            {
+                lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+            }
+            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
+        }
 
+        private static void MakeOrLogicOverParallelBranchTwoLastLineStretchAndRemoveLastOne(List<LineStretchSummary> lineStretchSummary)
+        {
+            if (lineStretchSummary[lineStretchSummary.Count - 2].Initiated)
+            {
+                lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 2].LineValue || lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+            }
+            else
+            {
+                lineStretchSummary[lineStretchSummary.Count - 2].LineValue = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+            }
+            lineStretchSummary.RemoveAt(lineStretchSummary.Count - 1);
+        }
+
+        private class LineStretchSummary
+        {
+            private bool lineValue = true;
+            public bool Initiated { get; private set; } = false;
+            public bool LineValue { get => lineValue; set { lineValue = value; Initiated = true; } }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LadderApp.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,9 @@ namespace LadderApp.Services
             foreach (Line line in program.Lines)
             {
                 if (!VerifyLine(line))
+                {
                     return false;
+                }
             }
             return true;
         }
@@ -32,10 +35,14 @@ namespace LadderApp.Services
                     instructions.Contains(OperationCode.Timer) ||
                     instructions.Contains(OperationCode.Counter) ||
                     instructions.Contains(OperationCode.Reset)))
+                {
                     return false;
+                }
             }
             else
+            {
                 return false;
+            }
 
 
             if (!instructions.ContainsAllOperandos())
@@ -50,15 +57,15 @@ namespace LadderApp.Services
             instructions.InsertAllWithClearBefore(line.Instructions);
 
             if (instructions.Count > 0)
+            {
                 if (instructions.Contains(OperationCode.OutputCoil) ||
                     instructions.Contains(OperationCode.Timer) ||
                     instructions.Contains(OperationCode.Counter) ||
                     instructions.Contains(OperationCode.Reset))
+                {
                     return false;
-
-
-            if (!instructions.ContainsAllOperandos())
-                return false;
+                }
+            }
 
             return true;
         }

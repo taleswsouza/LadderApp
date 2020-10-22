@@ -1,4 +1,6 @@
 using LadderApp.Formularios;
+using LadderApp.Model;
+using LadderApp.Model.Instructions;
 using LadderApp.Resources;
 using LadderApp.Services;
 using System;
@@ -16,6 +18,9 @@ namespace LadderApp
 {
     public partial class MainWindowForm : Form
     {
+        private AddressingServices addressingServices = AddressingServices.Instance;
+
+
         private Thread newThread;
 
         private ProjectForm projectForm;
@@ -46,7 +51,7 @@ namespace LadderApp
         {
             if (MdiChildren.Length == 0)
             {
-                projectForm = new ProjectForm();
+                projectForm = new ProjectForm(new LadderProgram(), addressingServices);
                 projectForm.MdiParent = this;
                 projectForm.Show();
                 projectForm.SetText();
@@ -80,7 +85,7 @@ namespace LadderApp
                             if (xmlSerializer.CanDeserialize(fileReader))
                             {
                                 LadderProgram ladderProgram = (LadderProgram)xmlSerializer.Deserialize(fileReader);
-                                projectForm = new ProjectForm(ladderProgram);
+                                projectForm = new ProjectForm(ladderProgram, AddressingServices.Instance);
                                 projectForm.Status = ProjectForm.ProgramStatus.Open;
                                 projectForm.PathFile = fileName;
                                 projectForm.Program.Name = Path.GetFileNameWithoutExtension(fileName);
@@ -99,9 +104,9 @@ namespace LadderApp
                     case ".a43":
                         try
                         {
-                            MSP430IntegrationServices p = new MSP430IntegrationServices();
+                            MicIntegrationServices p = new MicIntegrationServices();
                             String readContent = p.ConvertHex2String(fileName);
-                            if (VerifyPassword(readContent))
+                            if (CheckPassword(readContent))
                                 ReadExecutable(readContent, fileName.Substring(fileName.LastIndexOf(@"\") + 1, fileName.Length - fileName.LastIndexOf(@"\") - 1));
                         }
                         catch
@@ -150,8 +155,8 @@ namespace LadderApp
                 if (projectForm.LadderForm.VisualInstruction != null)
                     if (!projectForm.LadderForm.VisualInstruction.IsDisposed)
                     {
-                        OperationCode _cI = projectForm.LadderForm.VisualInstruction.OpCode;
-                        switch (_cI)
+                        OperationCode opCode = projectForm.LadderForm.VisualInstruction.OpCode;
+                        switch (opCode)
                         {
                             case OperationCode.ParallelBranchBegin:
                             case OperationCode.ParallelBranchNext:
@@ -220,9 +225,9 @@ namespace LadderApp
 
                         instructionsDestination.InsertAllWithClearBefore(instructionsSource);
 
-                        VisualInstructionUserControl _controle = projectForm.LadderForm.SelectedVisualLine.InsertInstructionAtLocalToBeDefined(true, projectForm.LadderForm.VisualInstruction, instructionsDestination);
+                        VisualInstructionUserControl visualInstruction = projectForm.LadderForm.SelectedVisualLine.InsertInstructionAtLocalToBeDefined(true, projectForm.LadderForm.VisualInstruction, instructionsDestination);
                         projectForm.LadderForm.ReorganizeLines();
-                        _controle.Select();
+                        visualInstruction.Select();
                     }
             }
         }
@@ -504,14 +509,6 @@ namespace LadderApp
                     return;
                 }
 
-                //if (!projectForm.Program.VerifyProgram())
-                //{
-                //    UncheckBtnSimulateLadder(false);
-                //    return;
-                //}
-
-                //projectForm.Program.SimulateTimers();
-
                 if (!simultatorService.SimulateLadder(projectForm.Program))
                 {
                     UncheckBtnSimulateLadder(false);
@@ -569,143 +566,21 @@ namespace LadderApp
 
         private void ReadExecutable(string content, string projectName)
         {
-            OperationCode opCode = OperationCode.None;
-            if (content.IndexOf("@laddermic.com") != -1)
+            try
             {
-                int countOfEnds = 0;
-                int lineIndex = 0;
-                Address address;
-                AddressTypeEnum addressType;
-                int index = 0;
+                ExecutableReaderService executableReaderService = new ExecutableReaderService();
 
-
-                LadderProgram program = new LadderProgram();
-                program.Name = projectName;
-                program.device = new Device(true);
-                program.addressing.AlocateIOAddressing(program.device);
-                program.addressing.AlocateMemoryAddressing(program.device, program.addressing.ListMemoryAddress, AddressTypeEnum.DigitalMemory, 10);
-                program.addressing.AlocateMemoryAddressing(program.device, program.addressing.ListTimerAddress, AddressTypeEnum.DigitalMemoryTimer, 10);
-                program.addressing.AlocateMemoryAddressing(program.device, program.addressing.ListCounterAddress, AddressTypeEnum.DigitalMemoryCounter, 10);
-                lineIndex = program.InsertLineAtEnd(new Line());
-
-                for (int position = content.IndexOf("@laddermic.com") + 15; position < content.Length; position++)
-                {
-                    opCode = (OperationCode)Convert.ToChar(content.Substring(position, 1));
-
-                    switch (opCode)
-                    {
-                        case OperationCode.None:
-                            countOfEnds++;
-                            break;
-                        case OperationCode.LineEnd:
-                            countOfEnds++;
-                            if ((OperationCode)Convert.ToChar(content.Substring(position + 1, 1)) != OperationCode.None)
-                                lineIndex = program.InsertLineAtEnd(new Line());
-                            break;
-                        case OperationCode.NormallyOpenContact:
-                        case OperationCode.NormallyClosedContact:
-                            countOfEnds = 0;
-                            {
-                                Instruction instruction = new Instruction((OperationCode)opCode);
-
-                                addressType = (AddressTypeEnum)Convert.ToChar(content.Substring(position + 1, 1));
-                                index = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
-                                address = program.addressing.Find(addressType, index);
-                                if (address == null)
-                                {
-                                    program.device.Pins[index - 1].Type = addressType;
-                                    program.device.RealocatePinAddresses();
-                                    program.addressing.AlocateIOAddressing(program.device);
-                                    address = program.addressing.Find(addressType, index);
-                                }
-                                instruction.SetOperand(0, address);
-
-                                position += 2;
-                                program.Lines[lineIndex].Instructions.Add(instruction);
-                            }
-                            break;
-                        case OperationCode.OutputCoil:
-                        case OperationCode.Reset:
-                            countOfEnds = 0;
-                            {
-                                InstructionList instructions = new InstructionList();
-                                instructions.Add(new Instruction((OperationCode)opCode));
-                                addressType = (AddressTypeEnum)Convert.ToChar(content.Substring(position + 1, 1));
-                                index = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
-                                address = program.addressing.Find(addressType, index);
-                                if (address == null)
-                                {
-                                    program.device.Pins[index - 1].Type = addressType;
-                                    program.device.RealocatePinAddresses();
-                                    program.addressing.AlocateIOAddressing(program.device);
-                                    address = program.addressing.Find(addressType, index);
-                                }
-                                instructions[instructions.Count - 1].SetOperand(0, address);
-                                position += 2;
-                                program.Lines[lineIndex].InsertToOutputs(instructions);
-                                instructions.Clear();
-                            }
-                            break;
-                        case OperationCode.ParallelBranchBegin:
-                        case OperationCode.ParallelBranchEnd:
-                        case OperationCode.ParallelBranchNext:
-                            countOfEnds = 0;
-                            program.Lines[lineIndex].Instructions.Add(new Instruction((OperationCode)opCode));
-                            break;
-                        case OperationCode.Counter:
-                            countOfEnds = 0;
-                            {
-                                InstructionList instructions = new InstructionList();
-                                instructions.Add(new Instruction((OperationCode)opCode));
-                                instructions[instructions.Count - 1].SetOperand(0, program.addressing.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
-                                ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
-                                ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset = (Int32)Convert.ToChar(content.Substring(position + 3, 1));
-
-                                instructions[instructions.Count - 1].SetOperand(1, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type);
-                                instructions[instructions.Count - 1].SetOperand(2, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset);
-                                position += 3;
-                                program.Lines[lineIndex].InsertToOutputs(instructions);
-                                instructions.Clear();
-                            }
-                            break;
-                        case OperationCode.Timer:
-                            countOfEnds = 0;
-                            {
-                                InstructionList instructions = new InstructionList();
-                                instructions.Add(new Instruction((OperationCode)opCode));
-                                instructions[instructions.Count - 1].SetOperand(0, program.addressing.Find(AddressTypeEnum.DigitalMemoryTimer, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
-                                ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Type = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
-                                ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.TimeBase = (Int32)Convert.ToChar(content.Substring(position + 3, 1));
-                                ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Preset = (Int32)Convert.ToChar(content.Substring(position + 4, 1));
-
-                                instructions[instructions.Count - 1].SetOperand(1, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Type);
-                                instructions[instructions.Count - 1].SetOperand(2, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Preset);
-                                instructions[instructions.Count - 1].SetOperand(4, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.TimeBase);
-
-                                position += 4;
-                                program.Lines[lineIndex].InsertToOutputs(instructions);
-                                instructions.Clear();
-                            }
-                            break;
-                    }
-
-                    /// end of codes
-                    if (countOfEnds >= 2)
-                    {
-                        MSP430IntegrationServices p = new MSP430IntegrationServices();
-                        //p.CreateFile("opcode.txt", content.Substring(content.IndexOf("@laddermic.com"), i - content.IndexOf("@laddermic.com") + 1));
-                        //position = content.Length;
-                        break;
-                    }
-                }
-                projectForm = new ProjectForm(program);
+                LadderProgram program = executableReaderService.ReadExecutable(content, projectName);
+                projectForm = new ProjectForm(program, AddressingServices.Instance);
                 projectForm.MdiParent = this;
                 projectForm.Show();
                 projectForm.SetText();
 
             }
-            else
-                MessageBox.Show("Unknown file format!", "Open files ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ReadExecutable ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -716,24 +591,33 @@ namespace LadderApp
 
         private void mnuEditComment_Click(object sender, EventArgs e)
         {
-            if (IsLadderFormOpen())
-                if (projectForm.LadderForm.VisualInstruction != null)
-                    if (!projectForm.LadderForm.VisualInstruction.IsDisposed)
-                    {
-                        Instruction instruction = projectForm.LadderForm.VisualInstruction.Instruction;
-                        if (instruction.IsAllOperandsOk())
-                            if (instruction.GetOperand(0) is Address)
-                            {
-                                Address address = (Address)instruction.GetOperand(0);
-                                EditCommentForm changeCommentForm = new EditCommentForm(address);
-                                DialogResult result = changeCommentForm.ShowDialog();
-                                if (result == DialogResult.OK)
-                                {
-                                    address.Comment = changeCommentForm.txtComment.Text.Trim();
-                                    projectForm.LadderForm.Invalidate(true);
-                                }
-                            }
-                    }
+            if (!IsLadderFormOpen())
+            {
+                return;
+            }
+
+            if (!(projectForm.LadderForm.VisualInstruction != null ||
+                !projectForm.LadderForm.VisualInstruction.IsDisposed))
+            {
+                return;
+            }
+
+            Instruction instruction = projectForm.LadderForm.VisualInstruction.Instruction;
+            if (!instruction.IsAllOperandsOk())
+            {
+                return;
+            }
+
+            if (instruction.GetOperand(0) is Address address)
+            {
+                EditCommentForm changeCommentForm = new EditCommentForm(address);
+                DialogResult result = changeCommentForm.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    address.Comment = changeCommentForm.txtComment.Text.Trim();
+                    projectForm.LadderForm.Invalidate(true);
+                }
+            }
         }
 
         private void SaveFile(object sender, EventArgs e)
@@ -792,11 +676,19 @@ namespace LadderApp
         private void mnuMicrocontrollerCommunicationDownload_Click(object sender, EventArgs e)
         {
             if (!IsProjectFormOpen())
+            {
                 return;
+            }
+
+            if (!SureToWritePasswordToLadderOrAbort())
+            {
+                return;
+            }
 
             try
             {
-                projectForm.Program.GenerateExecutable(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, true);
+                ExecutableGeneratorServices executableGeneratorServices = new ExecutableGeneratorServices();
+                executableGeneratorServices.GenerateExecutable(projectForm.Program, mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, confirmedPassword, true);
 
                 File.Delete(Application.StartupPath + @"\" + projectForm.Program.Name.Replace(' ', '_') + ".a43");
             }
@@ -805,6 +697,59 @@ namespace LadderApp
                 MessageBox.Show(ex.Message, "Write Executable");
             }
         }
+
+        private bool SureToWritePasswordToLadderOrAbort()
+        {
+            if (!mnuMicrocontrollerLadderSaveInsideMic.Checked
+                || !mnuMicrocontrollerLadderAskPasswordToRead.Checked)
+            {
+                return true;
+            }
+
+            DialogResult result = MessageBox.Show("Are you sure you want to write a password to the executable to be generated?", "Request password", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+            if (result.Equals(DialogResult.Cancel))
+            {
+                return true;
+            }
+
+            if (AskAndGetConfirmedPassword())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private String confirmedPassword = "";
+        private bool AskAndGetConfirmedPassword()
+        {
+            PasswordForm passwordForm = new PasswordForm();
+            passwordForm.Text = "Enter the password:";
+            passwordForm.lblPassword.Text = "password:";
+            DialogResult result = passwordForm.ShowDialog();
+            if (result == DialogResult.Cancel)
+            {
+                return false;
+            }
+
+            String previousPassword = passwordForm.txtPassword.Text;
+            passwordForm.txtPassword.Text = "";
+            passwordForm.Text = "Confirm the password:";
+            passwordForm.lblPassword.Text = "Confirm the password:";
+            if (result == DialogResult.Cancel)
+            {
+                return false;
+            }
+
+            if (String.IsNullOrEmpty(previousPassword) || previousPassword != passwordForm.txtPassword.Text)
+            {
+                MessageBox.Show("Password not confirmed!", "Operation canceled!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+
+            confirmedPassword = passwordForm.txtPassword.Text;
+            return true;
+        }
+
 
         private void mnuLadderVerify_Click(object sender, EventArgs e)
         {
@@ -857,11 +802,19 @@ namespace LadderApp
         private void mnuMicrocontrollerBuild_Click(object sender, EventArgs e)
         {
             if (!IsProjectFormOpen())
+            {
                 return;
+            }
+
+            if (!SureToWritePasswordToLadderOrAbort())
+            {
+                return;
+            }
 
             try
             {
-                projectForm.Program.GenerateExecutable(mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, false);
+                ExecutableGeneratorServices executableGeneratorServices = new ExecutableGeneratorServices();
+                executableGeneratorServices.GenerateExecutable(projectForm.Program, mnuMicrocontrollerLadderSaveInsideMic.Checked, mnuMicrocontrollerLadderAskPasswordToRead.Checked, confirmedPassword, false);
                 if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\" + projectForm.Program.Name.Replace(' ', '_') + ".a43"))
                     File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\" + projectForm.Program.Name.Replace(' ', '_') + ".a43");
 
@@ -876,11 +829,11 @@ namespace LadderApp
 
         private void mnuMicrocontrollerCommunicationUpload_Click(object sender, EventArgs e)
         {
-            MSP430IntegrationServices p = new MSP430IntegrationServices();
+            MicIntegrationServices micIntegrationServices = new MicIntegrationServices();
             try
             {
-                string content = p.ReadsViaUSB();
-                if (VerifyPassword(content))
+                string content = micIntegrationServices.ReadsViaUSB();
+                if (CheckPassword(content))
                     ReadExecutable(content, "No Name");
             }
             catch (Exception ex)
@@ -889,46 +842,43 @@ namespace LadderApp
             }
         }
 
-        private bool VerifyPassword(String content)
+        private bool CheckPassword(String content)
         {
-            Text2OpCodeServices textToOpCode = new Text2OpCodeServices(content);
-            if (textToOpCode.ExistsHeader())
+            Text2OpCodeServices text2OpCodeServices = new Text2OpCodeServices(content);
+            text2OpCodeServices.GetHeaderInformation();
+            if (text2OpCodeServices.AskPassword)
             {
-                textToOpCode.GetHeaderInformation();
-                if (textToOpCode.askPassword)
-                {
-                    bool passwordOK = false;
-                    PasswordForm passwordForm = new PasswordForm();
-                    passwordForm.Text = "Type the password (1/2):";
-                    passwordForm.lblPassword.Text = "Password:";
+                bool passwordOK = false;
+                PasswordForm passwordForm = new PasswordForm();
+                passwordForm.Text = "Type the password (1/2):";
+                passwordForm.lblPassword.Text = "Password:";
 
-                    for (int i = 0; i < 2; i++)
-                    {
-                        DialogResult result = passwordForm.ShowDialog();
-                        if (result == DialogResult.Cancel)
-                        {
-                            MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            return false;
-                        }
-                        else
-                        {
-                            if (textToOpCode.password != passwordForm.txtPassword.Text)
-                            {
-                                passwordForm.txtPassword.Text = "";
-                                passwordForm.Text = "Type the password (1/2):";
-                            }
-                            else
-                            {
-                                passwordOK = true;
-                                i = 5; //sai
-                            }
-                        }
-                    }
-                    if (!passwordOK)
+                for (int i = 0; i < 2; i++)
+                {
+                    DialogResult result = passwordForm.ShowDialog();
+                    if (result == DialogResult.Cancel)
                     {
                         MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return false;
                     }
+                    else
+                    {
+                        if (text2OpCodeServices.password != passwordForm.txtPassword.Text)
+                        {
+                            passwordForm.txtPassword.Text = "";
+                            passwordForm.Text = "Type the password (1/2):";
+                        }
+                        else
+                        {
+                            passwordOK = true;
+                            i = 5; //sai
+                        }
+                    }
+                }
+                if (!passwordOK)
+                {
+                    MessageBox.Show("Operation canceled!", "LadderApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
                 }
             }
 

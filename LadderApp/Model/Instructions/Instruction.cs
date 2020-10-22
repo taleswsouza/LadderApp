@@ -4,17 +4,17 @@ using System.Text;
 using System.Drawing;
 using System.Xml.Serialization;
 
-namespace LadderApp
+namespace LadderApp.Model.Instructions
 {
     [XmlInclude(typeof(Address))]
     [Serializable]
     public class Instruction : IInstruction
     {
-        public Instruction()
+        private Instruction()
         {
         }
 
-        public Instruction(OperationCode opCode)
+        internal Instruction(OperationCode opCode)
         {
             this.OpCode = opCode;
         }
@@ -27,7 +27,6 @@ namespace LadderApp
             set
             {
                 this.opCode = value;
-                InitializeOperands();
             }
         }
         [XmlElement(Order = 2, IsNullable = true, ElementName = "operand")]
@@ -42,15 +41,20 @@ namespace LadderApp
             return Operands.Length;
         }
 
-        public bool IsAllOperandsOk()
+        bool IsIndexBoundOk(int index)
+        {
+            return index >= 0 && index < Operands.Length;
+        }
+
+        public virtual bool IsAllOperandsOk()
         {
             if (Operands is null)
             {
-                return false;
+                return true;
             }
-            foreach (Object operand in Operands)
+            for (int index = 0; index < Operands.Length; index++)
             {
-                if (operand is null)
+                if (!IsOperandOk(index, GetOperand(index)))
                 {
                     return false;
                 }
@@ -67,20 +71,26 @@ namespace LadderApp
             return Operands[position];
         }
 
-        public void SetOperand(int position, Object value)
+        public void SetOperand(int index, Object value)
         {
-            if (Operands == null)
+            if (index > Operands.Length)
             {
-                InitializeOperands();
+                throw new IndexOutOfRangeException($"Invalid set operand with index={index}, value={value}.");
             }
 
-            if (position > Operands.Length)
+            if (IsOperandOk(index, value))
             {
-                throw new Exception("Invalid operand position: " + position);
+                Operands[index] = value;
             }
+        }
 
-            if (ValidateAddress(position, value))
-                Operands[position] = value;
+        protected virtual bool IsOperandOk(int index, object value)
+        {
+            if (!IsIndexBoundOk(index))
+            {
+                return false;
+            }
+            return !(value is null);
         }
 
         private int InitializeOperands()
@@ -94,26 +104,26 @@ namespace LadderApp
                 case OperationCode.ParallelBranchNext:
                     Operands = null;
                     break;
-                case OperationCode.LineBegin:
-                case OperationCode.NormallyOpenContact:
-                case OperationCode.NormallyClosedContact:
-                case OperationCode.OutputCoil:
-                case OperationCode.Reset:
-                    Operands = new Object[1];
-                    break;
-                case OperationCode.Counter:
-                    Operands = new Object[4];
-                    SetOperand(1, (Int32)0); // type
-                    SetOperand(2, (Int32)0); // preset
-                    SetOperand(3, (Int32)0); // accum
-                    break;
-                case OperationCode.Timer:
-                    Operands = new Object[5];
-                    SetOperand(1, (Int32)0); // type
-                    SetOperand(2, (Int32)0); // preset
-                    SetOperand(3, (Int32)0); // accum
-                    SetOperand(4, (Int32)0); // time base
-                    break;
+                //case OperationCode.LineBegin:
+                //    //case OperationCode.NormallyOpenContact:
+                //    //case OperationCode.NormallyClosedContact:
+                //    //case OperationCode.OutputCoil:
+                //    //case OperationCode.Reset:
+                //    Operands = new Object[1];
+                //    break;
+                    //case OperationCode.Counter:
+                    //    Operands = new Object[4];
+                    //    SetOperand(1, (Int32)0); // type
+                    //    SetOperand(2, (Int32)0); // preset
+                    //    SetOperand(3, (Int32)0); // accum
+                    //    break;
+                    //case OperationCode.Timer:
+                    //    Operands = new Object[5];
+                    //    SetOperand(1, (Int32)0); // type
+                    //    SetOperand(2, (Int32)0); // preset
+                    //    SetOperand(3, (Int32)0); // accum
+                    //    SetOperand(4, (Int32)0); // time base
+                    //    break;
             }
             return GetNumberOfOperands();
         }
@@ -124,17 +134,12 @@ namespace LadderApp
         }
 
 
-        private bool ValidateAddress(int index, Object newOperand)
+        protected virtual bool ValidateAddress(int index, Object newOperand)
         {
-            bool isAddress = false;
-
             Address address = null;
-            if (newOperand != null)
+            if (newOperand is Address)
             {
-                if (newOperand is Address)
-                {
-                    address = (Address)newOperand;
-                }
+                address = (Address)newOperand;
             }
 
             bool isValid = true;
@@ -144,55 +149,55 @@ namespace LadderApp
                 case OperationCode.LineEnd:
                     isValid = false;
                     break;
-                case OperationCode.LineBegin:
-                    if (newOperand != null)
-                        if (newOperand is Int32 == false)
-                            isValid = false;
-                    break;
-                case OperationCode.NormallyOpenContact:
-                case OperationCode.NormallyClosedContact:
-                    isAddress = true;
-                    if (address != null)
-                    {
-                        switch (address.AddressType)
-                        {
-                            case AddressTypeEnum.DigitalMemory:
-                            case AddressTypeEnum.DigitalMemoryCounter:
-                            case AddressTypeEnum.DigitalMemoryTimer:
-                            case AddressTypeEnum.DigitalInput:
-                            case AddressTypeEnum.DigitalOutput:
-                                isValid = true;
-                                break;
-                            default:
-                                isValid = false;
-                                break;
-                        }
-                    }
-                    else
-                        isValid = false;
-                    break;
-                case OperationCode.OutputCoil:
-                    isAddress = true;
-                    if (address != null)
-                    {
-                        switch (address.AddressType)
-                        {
-                            case AddressTypeEnum.DigitalMemory:
-                            case AddressTypeEnum.DigitalOutput:
-                                isValid = true;
-                                break;
-                            default:
-                                isValid = false;
-                                break;
-                        }
-                    }
-                    else
-                        isValid = false;
-                    break;
+                //case OperationCode.LineBegin:
+                //    if (newOperand != null)
+                //        if (newOperand is Int32 == false)
+                //            isValid = false;
+                //    break;
+                //case OperationCode.NormallyOpenContact:
+                //case OperationCode.NormallyClosedContact:
+                //    //isAddress = true;
+                //    if (address != null)
+                //    {
+                //        switch (address.AddressType)
+                //        {
+                //            case AddressTypeEnum.DigitalMemory:
+                //            case AddressTypeEnum.DigitalMemoryCounter:
+                //            case AddressTypeEnum.DigitalMemoryTimer:
+                //            case AddressTypeEnum.DigitalInput:
+                //            case AddressTypeEnum.DigitalOutput:
+                //                isValid = true;
+                //                break;
+                //            default:
+                //                isValid = false;
+                //                break;
+                //        }
+                //    }
+                //    else
+                //        isValid = false;
+                //    break;
+                //case OperationCode.OutputCoil:
+                //    //isAddress = true;
+                //    if (address != null)
+                //    {
+                //        switch (address.AddressType)
+                //        {
+                //            case AddressTypeEnum.DigitalMemory:
+                //            case AddressTypeEnum.DigitalOutput:
+                //                isValid = true;
+                //                break;
+                //            default:
+                //                isValid = false;
+                //                break;
+                //        }
+                //    }
+                //    else
+                //        isValid = false;
+                //    break;
                 case OperationCode.Timer:
                     if (address != null && index == 0)
                     {
-                        isAddress = true;
+                        //isAddress = true;
                         switch (address.AddressType)
                         {
                             case AddressTypeEnum.DigitalMemoryTimer:
@@ -221,7 +226,7 @@ namespace LadderApp
                 case OperationCode.Counter:
                     if (address != null && index == 0)
                     {
-                        isAddress = true;
+                        //isAddress = true;
                         switch (address.AddressType)
                         {
                             case AddressTypeEnum.DigitalMemoryCounter:
@@ -253,7 +258,7 @@ namespace LadderApp
                     isValid = false;
                     break;
                 case OperationCode.Reset:
-                    isAddress = true;
+                    //isAddress = true;
                     if (address != null)
                     {
                         switch (address.AddressType)
@@ -275,47 +280,47 @@ namespace LadderApp
                     break;
             }
 
-            if (isAddress)
-            {
-                Address currentOperand = null;
-                if (IsAllOperandsOk())
-                {
-                    currentOperand = (Address)GetOperand(0);
-                }
+            //if (isAddress)
+            //{
+            //    Address currentOperand = null;
+            //    if (IsAllOperandsOk())
+            //    {
+            //        currentOperand = (Address)GetOperand(0);
+            //    }
 
-                if (isValid)
-                {
-                    if (currentOperand != null)
-                        currentOperand.ChangedOperandEvent -= new ChangedOperandEventHandler(Instruction_ChangedOperand);
+            //    //if (isValid)
+            //    //{
+            //    //    if (currentOperand != null)
+            //    //        currentOperand.ChangedOperandEvent -= new ChangedOperandEventHandler(Instruction_ChangedOperand);
 
-                    address.ChangedOperandEvent += new ChangedOperandEventHandler(Instruction_ChangedOperand);
-                }
-                else
-                    if (newOperand == null)
-                {
-                    if (currentOperand != null)
-                    {
-                        currentOperand.ChangedOperandEvent -= new ChangedOperandEventHandler(Instruction_ChangedOperand);
-                        Operands[0] = null;
-                    }
-                }
-            }
+            //    //    address.ChangedOperandEvent += new ChangedOperandEventHandler(Instruction_ChangedOperand);
+            //    //}
+            //    //else
+            //    //    if (newOperand == null)
+            //    //{
+            //    //    if (currentOperand != null)
+            //    //    {
+            //    //        currentOperand.ChangedOperandEvent -= new ChangedOperandEventHandler(Instruction_ChangedOperand);
+            //    //        Operands[0] = null;
+            //    //    }
+            //    //}
+            //}
 
             return isValid;
         }
 
-        void Instruction_ChangedOperand(object sender)
-        {
-            ValidateAddress(0, null);
-        }
+        //void Instruction_ChangedOperand(object sender)
+        //{
+        //    ValidateAddress(0, null);
+        //}
 
-        public void ValidateInstructionOperands(Addressing addressing)
+        public void ValidateInstructionOperands()
         {
             for (int i = 0; i < GetNumberOfOperands(); i++)
                 if (Operands[i] != null)
                     if (Operands[i] is Address)
                     {
-                        Object operand = addressing.Find(((Address)Operands[i]));
+                        Object operand = (Address)Operands[i];
                         if (operand != null)
                         {
                             if (ValidateAddress(i, operand))
@@ -330,6 +335,11 @@ namespace LadderApp
                             Operands[i] = null;
                         }
                     }
+        }
+
+        public virtual bool GetValue()
+        {
+            throw new InvalidOperationException($"Method not implemented. OpCode={opCode}");
         }
     }
 }

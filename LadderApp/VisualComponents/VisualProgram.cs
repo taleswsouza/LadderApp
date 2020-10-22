@@ -1,3 +1,4 @@
+using LadderApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -62,11 +63,9 @@ namespace LadderApp
 
         public int InsereLinhaNoFinal()
         {
-            int linha = program.InsertLineAtEnd(new Line());
-
-            VisualLine _lc = CreateVisualLine(program.Lines[linha]);
-
-            return InsertLineAtEnd(_lc);
+            int index = program.InsertLineAtEnd(new Line());
+            VisualLine visualLine = CreateVisualLine(program.Lines[index]);
+            return InsertLineAtEnd(visualLine);
         }
 
 

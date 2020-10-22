@@ -64,12 +64,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OperationCode\OperationCode.cs" />
+    <Compile Include="Model\ICounterInstructionParameter.cs" />
+    <Compile Include="Model\InternalCounter.cs" />
+    <Compile Include="Model\DeviceFactory.cs" />
+    <Compile Include="Model\Instructions\CounterInstruction.cs" />
+    <Compile Include="Model\Instructions\IDigitalAddressable.cs" />
+    <Compile Include="Model\Instructions\InstructionFactory.cs" />
+    <Compile Include="Model\Instructions\IOutput.cs" />
+    <Compile Include="Model\Instructions\LineBeginInstruction.cs" />
+    <Compile Include="Model\Instructions\OutputBoxInstruction.cs" />
+    <Compile Include="Model\Instructions\TimerInstruction.cs" />
+    <Compile Include="Model\LadderProject.cs" />
+    <Compile Include="Model\LadderProjectFactory.cs" />
+    <Compile Include="Model\Instructions\NormallyClosedContact.cs" />
+    <Compile Include="Model\Instructions\FirstOperandAddressDigitalInstruction.cs" />
+    <Compile Include="Model\Instructions\NormallyOpenContact.cs" />
+    <Compile Include="Model\Instructions\OutputCoil.cs" />
+    <Compile Include="Model\Instructions\ResetOutputInstruction.cs" />
+    <Compile Include="Model\Instructions\OperationCode\OperationCode.cs" />
     <Compile Include="Resources\MicrocontrollersBaseCodeFilesResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MicrocontrollersBaseCodeFilesResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\AddressingServices.cs" />
+    <Compile Include="Services\ExecutableGeneratorServices.cs" />
+    <Compile Include="Services\ExecutableReaderService.cs" />
+    <Compile Include="Services\LadderLineServices.cs" />
+    <Compile Include="Services\LadderProgramServices.cs" />
     <Compile Include="Services\LadderSimulatorServices.cs" />
     <Compile Include="Services\LadderVerificationServices.cs" />
     <Compile Include="Services\Text2OpCodeServices.cs" />
@@ -117,7 +139,7 @@
       <DependentUpon>MainWindowForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Address.cs" />
-    <Compile Include="Model\Addressing.cs" />
+    <Compile Include="Model\LadderAddressing.cs" />
     <Compile Include="Forms\DeviceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,14 +152,13 @@
     <Compile Include="Forms\AddressingForm.Designer.cs">
       <DependentUpon>AddressingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\IOperand.cs" />
-    <Compile Include="Model\IInstruction.cs" />
+    <Compile Include="Model\Instructions\IInstruction.cs" />
     <Compile Include="Model\Line.cs" />
     <Compile Include="Model\InstructionList.cs" />
     <Compile Include="Model\Pin.cs" />
     <Compile Include="VisualComponents\VisualLine.cs">
     </Compile>
-    <Compile Include="Services\MSP430IntegrationServices.cs" />
+    <Compile Include="Services\MicIntegrationServices.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Model\LadderProgram.cs" />
     <Compile Include="VisualComponents\VisualProgram.cs" />
@@ -212,8 +233,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>VisualResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Model\Instruction.cs" />
-    <Compile Include="Model\Counter.cs" />
+    <Compile Include="Model\Instructions\Instruction.cs" />
     <Compile Include="Model\Timer.cs" />
     <Compile Include="VisualComponents\VisualParallelBranch.cs" />
     <Compile Include="Model\AddressTypeEnum.cs" />

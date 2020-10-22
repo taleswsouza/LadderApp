@@ -1,3 +1,4 @@
+using LadderApp.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace LadderApp
             InitializeComponent();
         }
 
-        public AddressingForm(Addressing addressing)
+        public AddressingForm(LadderAddressing addressing)
         {
             InitializeComponent();
 

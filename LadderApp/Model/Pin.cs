@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace LadderApp
+namespace LadderApp.Model
 {
     public class Pin
     {

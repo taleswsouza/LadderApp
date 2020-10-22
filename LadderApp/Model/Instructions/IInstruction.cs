@@ -1,9 +1,7 @@
+using LadderApp.Model;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
 
-namespace LadderApp
+namespace LadderApp.Model.Instructions
 {
     public interface IInstruction
     {
@@ -13,5 +11,6 @@ namespace LadderApp
         bool IsAllOperandsOk();
         Object GetOperand(int position);
         void SetOperand(int position, Object value);
+
     }
 }
