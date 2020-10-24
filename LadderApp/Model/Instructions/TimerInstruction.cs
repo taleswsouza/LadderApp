@@ -10,11 +10,7 @@ namespace LadderApp.Model.Instructions
     {
         public TimerInstruction() : base(OperationCode.Timer)
         {
-            Operands = new Object[5];
-            setBoxType(0);
-            setPreset(0);
-            setAccumulated(0);
-            SetTimeBase(0);
+            Operands = new Object[1];
         }
 
         protected override bool IsNumberParametersOk(int index, int number)
@@ -35,15 +31,14 @@ namespace LadderApp.Model.Instructions
             };
         }
 
-
-        public void SetTimeBase(int value)
+        public virtual void SetTimeBase(int value)
         {
-            SetOperand(4, (int)value);
+            ((TimerAddress)GetOutputBoxAddress()).TimeBase = value;
         }
 
-        public int GetTimeBase()
+        public virtual int GetTimeBase()
         {
-            return (int)GetOperand(4);
+            return ((TimerAddress)GetOutputBoxAddress()).TimeBase;
         }
 
         protected override bool CheckFirstOperandHasTheCorrectAddressType(Address address)

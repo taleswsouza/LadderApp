@@ -7,11 +7,7 @@ namespace LadderApp.Model.Instructions
     {
         public CounterInstruction() : base(OperationCode.Counter)
         {
-            Operands = new Object[4];
-            setBoxType(0);
-            setPreset(0);
-            setAccumulated(0);
-            Counter = new InternalCounter(this);
+            Operands = new Object[1];
         }
 
         protected override bool CheckFirstOperandHasTheCorrectAddressType(Address address)
@@ -23,22 +19,5 @@ namespace LadderApp.Model.Instructions
             return false;
         }
 
-        public class InternalCounter
-        {
-            private CounterInstruction counter;
-            internal InternalCounter(CounterInstruction counter)
-            {
-                this.counter = counter;
-            }
-            public int Type { get => counter.GetBoxType(); set => counter.setBoxType(value); }
-            public int Preset { get => counter.GetPreset(); set => counter.setPreset(value); }
-            public int Accumulated { get => counter.GetAccumulated(); set => counter.setAccumulated(value); }
-            public bool Enable { get; set; }
-            public bool Pulse { get; set; }
-            public bool Done { get; set; }
-            public bool Reset { get; set; }
-        }
-        [XmlIgnore]
-        public InternalCounter Counter { get; set; }
     }
 }

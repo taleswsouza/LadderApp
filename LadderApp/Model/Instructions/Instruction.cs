@@ -7,6 +7,9 @@ using System.Xml.Serialization;
 namespace LadderApp.Model.Instructions
 {
     [XmlInclude(typeof(Address))]
+    [XmlInclude(typeof(OutputBoxAddress))]
+    [XmlInclude(typeof(CounterAddress))]
+    [XmlInclude(typeof(TimerAddress))]
     [Serializable]
     public class Instruction : IInstruction
     {
@@ -104,26 +107,6 @@ namespace LadderApp.Model.Instructions
                 case OperationCode.ParallelBranchNext:
                     Operands = null;
                     break;
-                //case OperationCode.LineBegin:
-                //    //case OperationCode.NormallyOpenContact:
-                //    //case OperationCode.NormallyClosedContact:
-                //    //case OperationCode.OutputCoil:
-                //    //case OperationCode.Reset:
-                //    Operands = new Object[1];
-                //    break;
-                    //case OperationCode.Counter:
-                    //    Operands = new Object[4];
-                    //    SetOperand(1, (Int32)0); // type
-                    //    SetOperand(2, (Int32)0); // preset
-                    //    SetOperand(3, (Int32)0); // accum
-                    //    break;
-                    //case OperationCode.Timer:
-                    //    Operands = new Object[5];
-                    //    SetOperand(1, (Int32)0); // type
-                    //    SetOperand(2, (Int32)0); // preset
-                    //    SetOperand(3, (Int32)0); // accum
-                    //    SetOperand(4, (Int32)0); // time base
-                    //    break;
             }
             return GetNumberOfOperands();
         }
@@ -149,55 +132,9 @@ namespace LadderApp.Model.Instructions
                 case OperationCode.LineEnd:
                     isValid = false;
                     break;
-                //case OperationCode.LineBegin:
-                //    if (newOperand != null)
-                //        if (newOperand is Int32 == false)
-                //            isValid = false;
-                //    break;
-                //case OperationCode.NormallyOpenContact:
-                //case OperationCode.NormallyClosedContact:
-                //    //isAddress = true;
-                //    if (address != null)
-                //    {
-                //        switch (address.AddressType)
-                //        {
-                //            case AddressTypeEnum.DigitalMemory:
-                //            case AddressTypeEnum.DigitalMemoryCounter:
-                //            case AddressTypeEnum.DigitalMemoryTimer:
-                //            case AddressTypeEnum.DigitalInput:
-                //            case AddressTypeEnum.DigitalOutput:
-                //                isValid = true;
-                //                break;
-                //            default:
-                //                isValid = false;
-                //                break;
-                //        }
-                //    }
-                //    else
-                //        isValid = false;
-                //    break;
-                //case OperationCode.OutputCoil:
-                //    //isAddress = true;
-                //    if (address != null)
-                //    {
-                //        switch (address.AddressType)
-                //        {
-                //            case AddressTypeEnum.DigitalMemory:
-                //            case AddressTypeEnum.DigitalOutput:
-                //                isValid = true;
-                //                break;
-                //            default:
-                //                isValid = false;
-                //                break;
-                //        }
-                //    }
-                //    else
-                //        isValid = false;
-                //    break;
-                case OperationCode.Timer:
+                 case OperationCode.Timer:
                     if (address != null && index == 0)
                     {
-                        //isAddress = true;
                         switch (address.AddressType)
                         {
                             case AddressTypeEnum.DigitalMemoryTimer:
@@ -226,7 +163,6 @@ namespace LadderApp.Model.Instructions
                 case OperationCode.Counter:
                     if (address != null && index == 0)
                     {
-                        //isAddress = true;
                         switch (address.AddressType)
                         {
                             case AddressTypeEnum.DigitalMemoryCounter:
@@ -258,8 +194,7 @@ namespace LadderApp.Model.Instructions
                     isValid = false;
                     break;
                 case OperationCode.Reset:
-                    //isAddress = true;
-                    if (address != null)
+                     if (address != null)
                     {
                         switch (address.AddressType)
                         {
@@ -280,39 +215,9 @@ namespace LadderApp.Model.Instructions
                     break;
             }
 
-            //if (isAddress)
-            //{
-            //    Address currentOperand = null;
-            //    if (IsAllOperandsOk())
-            //    {
-            //        currentOperand = (Address)GetOperand(0);
-            //    }
-
-            //    //if (isValid)
-            //    //{
-            //    //    if (currentOperand != null)
-            //    //        currentOperand.ChangedOperandEvent -= new ChangedOperandEventHandler(Instruction_ChangedOperand);
-
-            //    //    address.ChangedOperandEvent += new ChangedOperandEventHandler(Instruction_ChangedOperand);
-            //    //}
-            //    //else
-            //    //    if (newOperand == null)
-            //    //{
-            //    //    if (currentOperand != null)
-            //    //    {
-            //    //        currentOperand.ChangedOperandEvent -= new ChangedOperandEventHandler(Instruction_ChangedOperand);
-            //    //        Operands[0] = null;
-            //    //    }
-            //    //}
-            //}
 
             return isValid;
         }
-
-        //void Instruction_ChangedOperand(object sender)
-        //{
-        //    ValidateAddress(0, null);
-        //}
 
         public void ValidateInstructionOperands()
         {

@@ -142,6 +142,11 @@ namespace LadderApp
 
         private void btnApply_Click(object sender, EventArgs e)
         {
+            if(tvnPinsTree.SelectedNode is null)
+            {
+                return;
+            }
+
             string pinText = tvnPinsTree.SelectedNode.Text.Substring(0, tvnPinsTree.SelectedNode.Text.IndexOf(")-") + 1);
 
             Color color = DefaultTextColor;

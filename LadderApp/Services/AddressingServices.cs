@@ -87,24 +87,22 @@ namespace LadderApp.Services
                         default:
                             instruction.SetOperand(0, Find((Address)instruction.GetOperand(0)));
 
-                            //if (instruction.IsAllOperandsOk())
-                            //{
                             if (instruction.OpCode == OperationCode.Counter)
                             {
-                                CounterInstruction counter = (CounterInstruction)instruction;
-                                counter.Counter.Type = (int)instruction.GetOperand(1);
-                                counter.Counter.Preset = (int)instruction.GetOperand(2);
-                                counter.Counter.Accumulated = (int)instruction.GetOperand(3);
+                                CounterAddress counter = (CounterAddress)instruction.GetOperand(0);
+                                //counter.Type = (int)instruction.GetOperand(1);
+                                //counter.Preset = (int)instruction.GetOperand(2);
+                                //counter.Accumulated = (int)instruction.GetOperand(3);
                             }
 
                             if (instruction.OpCode == OperationCode.Timer)
                             {
-                                ((Address)instruction.GetOperand(0)).Timer.Type = (Int32)instruction.GetOperand(1);
-                                ((Address)instruction.GetOperand(0)).Timer.Preset = (Int32)instruction.GetOperand(2);
-                                ((Address)instruction.GetOperand(0)).Timer.Accumulated = (Int32)instruction.GetOperand(3);
-                                ((Address)instruction.GetOperand(0)).Timer.TimeBase = (Int32)instruction.GetOperand(4);
+                                TimerAddress timer = (TimerAddress)instruction.GetOperand(0);
+                                //timer.Type = (Int32)instruction.GetOperand(1);
+                                //timer.Preset = (Int32)instruction.GetOperand(2);
+                                //timer.Accumulated = (Int32)instruction.GetOperand(3);
+                                //timer.TimeBase = (Int32)instruction.GetOperand(4);
                             }
-                            //}
                             break;
                     }
                 }
@@ -136,49 +134,26 @@ namespace LadderApp.Services
             }
         }
 
-        //public int AlocateMemoryAddressing(Device device, List<Address> addresses, AddressTypeEnum addressType, int numberOfAddress)
-        //{
-        //    int currentNumberOfAddress = addresses.Count;
-        //    if ((currentNumberOfAddress == 0) || (currentNumberOfAddress < numberOfAddress))
-        //    {
-        //        for (int i = currentNumberOfAddress + 1; i <= numberOfAddress; i++)
-        //        {
-        //            addresses.Add(new Address(addressType, i, device.NumberBitsByPort));
-        //        }
-        //    }
-        //    else if (currentNumberOfAddress > numberOfAddress)
-        //    {
-        //        for (int i = (currentNumberOfAddress - 1); i >= numberOfAddress; i--)
-        //        {
-        //            if (!addresses[i].Used)
-        //            {
-        //                addresses[i] = null;
-        //                addresses.RemoveAt(i);
-        //            }
-        //            else
-        //            {
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    return 0;
-        //}
-
         public int AlocateAddressingMemoryAndTimerAndCounter(LadderProgram program, List<Address> addresses, AddressTypeEnum type, int numberOfAddresses)
         {
-            IndicateAddressUsed(program, type);
+            IndicateAddressUsed(program);
 
             int currentNumberOfAddress = addresses.Count;
             if (currentNumberOfAddress == 0 || currentNumberOfAddress < numberOfAddresses)
             {
                 for (int i = currentNumberOfAddress + 1; i <= numberOfAddresses; i++)
                 {
-                    //if (type.Equals(AddressTypeEnum.DigitalMemoryCounter))
-                    //{
-                    //    addresses.Add(new InternalCounter(i, program.device.NumberBitsByPort));
-                    //}
-                    //else
-                        addresses.Add(new Address(type, i, program.device.NumberBitsByPort));
+                    if (type.Equals(AddressTypeEnum.DigitalMemoryCounter))
+                    {
+                        addresses.Add(new CounterAddress(i, program.device.NumberBitsByPort));
+                        continue;
+                    }
+                    if (type.Equals(AddressTypeEnum.DigitalMemoryTimer))
+                    {
+                        addresses.Add(new TimerAddress(i, program.device.NumberBitsByPort));
+                        continue;
+                    }
+                    addresses.Add(new Address(type, i, program.device.NumberBitsByPort));
                 }
             }
             else if (currentNumberOfAddress > numberOfAddresses)
@@ -199,37 +174,18 @@ namespace LadderApp.Services
             return 0;
         }
 
-        private void IndicateAddressUsed(LadderProgram program, AddressTypeEnum addressType)
+        private void IndicateAddressUsed(LadderProgram program)
         {
             CleanUsedIndication();
-            foreach (Line line in program.Lines)
+            foreach (FirstOperandAddressDigitalInstruction instruction in program.Lines.SelectMany(l => l.Instructions)
+                .Union(program.Lines.SelectMany(l => l.Outputs))
+                .Where(i => i is FirstOperandAddressDigitalInstruction)
+                .Cast<FirstOperandAddressDigitalInstruction>())
             {
-                line.Instructions.AddRange(line.Outputs);
-                foreach (Instruction instruction in line.Instructions)
-                {
-                    switch (instruction.OpCode)
-                    {
-                        /// TODO: Why this is this way?
-                        case OperationCode.NormallyOpenContact:
-                        case OperationCode.NormallyClosedContact:
-                        case OperationCode.OutputCoil:
-                        case OperationCode.Timer:
-                        case OperationCode.Counter:
-                        case OperationCode.Reset:
-                            if (instruction.IsAllOperandsOk())
-                            {
-                                Address address = (Address)instruction.GetOperand(0);
-                                if (address.AddressType == addressType)
-                                {
-                                    address.Used = true;
-                                }
-                            }
-                            break;
-                    }
-                }
-                line.Instructions.RemoveRange(line.Instructions.Count - line.Outputs.Count, line.Outputs.Count);
+                instruction.SetAddressUsed();
             }
         }
+
         public void RealocatePinAddressesByPinTypesFromDevice(Device device)
         {
             for (int i = 0; i < (device.NumberOfPorts * device.NumberBitsByPort); i++)

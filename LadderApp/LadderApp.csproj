@@ -64,8 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ICounterInstructionParameter.cs" />
-    <Compile Include="Model\InternalCounter.cs" />
+    <Compile Include="Model\TimerAddress.cs" />
+    <Compile Include="Model\OutputBoxAddress.cs" />
+    <Compile Include="Model\CounterAddress.cs" />
     <Compile Include="Model\DeviceFactory.cs" />
     <Compile Include="Model\Instructions\CounterInstruction.cs" />
     <Compile Include="Model\Instructions\IDigitalAddressable.cs" />

@@ -8,6 +8,10 @@ using System.Xml.Serialization;
 namespace LadderApp.Model
 {
     [XmlInclude(typeof(Address))]
+    [XmlInclude(typeof(OutputBoxAddress))]
+    [XmlInclude(typeof(CounterAddress))]
+    [XmlInclude(typeof(TimerAddress))]
+
     [Serializable]
     public class LadderAddressing
     {

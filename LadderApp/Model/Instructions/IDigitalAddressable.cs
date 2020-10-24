@@ -6,6 +6,6 @@
         void SetAddress(Address address);
         void SetValue(bool value);
         bool GetValue();
-        void SetUsed();
+        void SetAddressUsed();
     }
 }

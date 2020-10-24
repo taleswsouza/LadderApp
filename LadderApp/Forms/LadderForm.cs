@@ -424,25 +424,9 @@ namespace LadderApp
                 outputBox.setPreset(changeTimerCounterParametersForm.Preset);
                 outputBox.setAccumulated(changeTimerCounterParametersForm.Accumulated);
 
-                switch (sender.OpCode)
-                {
-                    case OperationCode.Timer:
-                        ((TimerInstruction)outputBox).SetTimeBase(changeTimerCounterParametersForm.TimeBase);
-
-                        sender.GetAddress().Timer.Type = changeTimerCounterParametersForm.Type;
-                        sender.GetAddress().Timer.Preset = changeTimerCounterParametersForm.Preset;
-                        sender.GetAddress().Timer.Accumulated = changeTimerCounterParametersForm.Accumulated;
-                        sender.GetAddress().Timer.TimeBase = changeTimerCounterParametersForm.TimeBase;
-
-                        break;
-                    case OperationCode.Counter:
-                        CounterInstruction counter = ((CounterInstruction)outputBox);
-
-                        counter.Counter.Type = changeTimerCounterParametersForm.Type;
-                        counter.Counter.Preset = changeTimerCounterParametersForm.Preset;
-                        counter.Counter.Accumulated = changeTimerCounterParametersForm.Accumulated;
-
-                        break;
+                if (sender.OpCode.Equals(OperationCode.Timer)){
+                    TimerAddress timer = ((TimerAddress)outputBox.GetAddress());
+                    timer.TimeBase = changeTimerCounterParametersForm.TimeBase;
                 }
 
                 sender.Invalidate();

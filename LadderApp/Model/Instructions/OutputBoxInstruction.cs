@@ -12,6 +12,11 @@ namespace LadderApp.Model.Instructions
         {
         }
 
+        protected OutputBoxAddress GetOutputBoxAddress()
+        {
+            return (OutputBoxAddress)GetAddress();
+        }
+
         protected override bool IsOperandOk(int index, object value)
         {
             if (!base.IsOperandOk(index, value))
@@ -44,34 +49,34 @@ namespace LadderApp.Model.Instructions
             };
         }
 
-        public void setBoxType(int value)
+        public virtual void setBoxType(int value)
         {
-            SetOperand(1, (int)value);
+            GetOutputBoxAddress().Type = value;
         }
 
-        public int GetBoxType()
+        public virtual int GetBoxType()
         {
-            return (int)GetOperand(1);
+            return GetOutputBoxAddress().Type;
         }
 
-        public void setPreset(int value)
+        public virtual void setPreset(int value)
         {
-            SetOperand(2, (int)value);
+            GetOutputBoxAddress().Preset = value;
         }
 
-        public int GetPreset()
+        public virtual int GetPreset()
         {
-            return (int)GetOperand(2);
+            return GetOutputBoxAddress().Preset;
         }
 
-        public void setAccumulated(int value)
+        public virtual void setAccumulated(int value)
         {
-            SetOperand(3, (int)value);
+            GetOutputBoxAddress().Accumulated = value;
         }
 
-        public int GetAccumulated()
+        public virtual int GetAccumulated()
         {
-            return (int)GetOperand(3);
+            return GetOutputBoxAddress().Accumulated;
         }
 
         public string GetOutputDeclaration()

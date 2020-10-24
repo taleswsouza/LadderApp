@@ -125,16 +125,11 @@ namespace LadderApp.Services
                         countOfEnds = 0;
                         {
                             InstructionList instructions = new InstructionList();
-                            instructions.Add(InstructionFactory.createInstruction(opCode));
-                            instructions[instructions.Count - 1].SetOperand(0, addressingServices.Find(AddressTypeEnum.DigitalMemoryTimer, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
-                            ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Type = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
-                            ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.TimeBase = (Int32)Convert.ToChar(content.Substring(position + 3, 1));
-                            ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Preset = (Int32)Convert.ToChar(content.Substring(position + 4, 1));
-
-                            instructions[instructions.Count - 1].SetOperand(1, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Type);
-                            instructions[instructions.Count - 1].SetOperand(2, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.Preset);
-                            instructions[instructions.Count - 1].SetOperand(4, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Timer.TimeBase);
-
+                            TimerInstruction timer = (TimerInstruction)InstructionFactory.createInstruction(opCode);
+                            timer.SetAddress(addressingServices.Find(AddressTypeEnum.DigitalMemoryTimer, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
+                            timer.setBoxType((Int32)Convert.ToChar(content.Substring(position + 2, 1)));
+                            timer.SetTimeBase((Int32)Convert.ToChar(content.Substring(position + 3, 1)));
+                            timer.setPreset((Int32)Convert.ToChar(content.Substring(position + 4, 1)));
                             position += 4;
                             lineServices.InsertToOutputs(program.Lines[lineIndex], instructions);
                             instructions.Clear();

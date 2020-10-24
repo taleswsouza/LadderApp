@@ -8,7 +8,7 @@ namespace LadderApp.Model.Instructions
         {
         }
 
-        public Address GetAddress()
+        public virtual Address GetAddress()
         {
             return (Address)GetOperand(0);
         }
@@ -18,12 +18,12 @@ namespace LadderApp.Model.Instructions
             return GetAddress().Value;
         }
 
-        public void SetAddress(Address address)
+        public virtual void SetAddress(Address address)
         {
             SetOperand(0, address);
         }
 
-        public void SetUsed()
+        public void SetAddressUsed()
         {
             GetAddress().Used = true;
         }
