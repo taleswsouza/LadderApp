@@ -2,8 +2,6 @@ using LadderApp.Model;
 using LadderApp.Model.Instructions;
 using LadderApp.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LadderApp
 {

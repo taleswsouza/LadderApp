@@ -62,8 +62,8 @@ namespace LadderApp
                         break;
                 }
                 tvnPinsTree.Nodes[0].Nodes.Add(pinText);
-                tvnPinsTree.Nodes[0].Nodes[i-1].ForeColor = color;
-                tvnPinsTree.Nodes[0].Nodes[i-1].Tag = pin.PinType;
+                tvnPinsTree.Nodes[0].Nodes[i - 1].ForeColor = color;
+                tvnPinsTree.Nodes[0].Nodes[i - 1].Tag = pin.PinType;
                 PinTypeList.Add(pin.Type);
                 color = DefaultTextColor;
                 i++;
@@ -142,6 +142,11 @@ namespace LadderApp
 
         private void btnApply_Click(object sender, EventArgs e)
         {
+            if (tvnPinsTree.SelectedNode is null)
+            {
+                return;
+            }
+
             string pinText = tvnPinsTree.SelectedNode.Text.Substring(0, tvnPinsTree.SelectedNode.Text.IndexOf(")-") + 1);
 
             Color color = DefaultTextColor;

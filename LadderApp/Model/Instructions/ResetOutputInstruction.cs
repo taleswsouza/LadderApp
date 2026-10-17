@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LadderApp.Model.Instructions
+﻿namespace LadderApp.Model.Instructions
 {
     public class ResetOutputInstruction : FirstOperandAddressDigitalInstruction, IOutput
     {
-        public ResetOutputInstruction()  : base(OperationCode.Reset)
+        public ResetOutputInstruction() : base(OperationCode.Reset)
         {
             Operands = new object[1];
         }
@@ -20,11 +14,11 @@ namespace LadderApp.Model.Instructions
 
         protected override bool CheckFirstOperandHasTheCorrectAddressType(Address address)
         {
-                if (address.AddressType.Equals(AddressTypeEnum.DigitalMemoryCounter)
-                    || address.AddressType.Equals(AddressTypeEnum.DigitalMemoryTimer))
-                {
-                    return true;
-                }
+            if (address.AddressType.Equals(AddressTypeEnum.DigitalMemoryCounter)
+                || address.AddressType.Equals(AddressTypeEnum.DigitalMemoryTimer))
+            {
+                return true;
+            }
             return false;
         }
 

@@ -20,57 +20,56 @@ namespace LadderApp.Services
             this.addressingServices = addressingServices;
         }
 
-        public void ExecuteCountersSimulator(Instruction instruction)
+        public void ExecuteCountersSimulator(CounterAddress counter)
         {
-            CounterInstruction counter = (CounterInstruction)instruction;
-            switch (counter.Counter.Type)
+            switch (counter.Type)
             {
                 case 0: // Counter acending
-                    if (counter.Counter.Reset == true)
+                    if (counter.Reset == true)
                     {
-                        counter.GetAddress().Value = false;
-                        counter.Counter.Accumulated = 0;
-                        counter.Counter.Reset = false;
+                        counter.Reset = false;
+                        counter.Done = false;
+                        counter.Accumulated = 0;
                     }
-                    if (counter.Counter.Enable == true && counter.Counter.Pulse == true)
+                    if (counter.Enable == true && counter.Pulse == true)
                     {
-                        counter.Counter.Pulse = false;
+                        counter.Pulse = false;
 
-                        if (counter.Counter.Accumulated <= Int32.MaxValue)
+                        if (counter.Accumulated <= Int32.MaxValue)
                         {
-                            counter.Counter.Accumulated++;
-                            if (counter.Counter.Accumulated >= counter.Counter.Preset)
+                            counter.Accumulated++;
+                            if (counter.Accumulated >= counter.Preset)
                             {
-                                counter.GetAddress().Value = true;
+                                counter.Done = true;
                             }
                             else
                             {
-                                counter.GetAddress().Value = false;
+                                counter.Done = false;
                             }
                         }
                     }
                     break;
 
                 case 1: // Counter descending
-                    if (counter.Counter.Reset == true)
+                    if (counter.Reset == true)
                     {
-                        counter.Counter.Accumulated = counter.Counter.Preset;
-                        counter.GetAddress().Value = false;
-                        counter.Counter.Reset = false;
+                        counter.Reset = false;
+                        counter.Done = false;
+                        counter.Accumulated = counter.Preset;
                     }
-                    if (counter.Counter.Enable == true && counter.Counter.Pulse == true)
+                    if (counter.Enable == true && counter.Pulse == true)
                     {
-                        counter.Counter.Pulse = false;
-                        if (counter.Counter.Accumulated > 0)
+                        counter.Pulse = false;
+                        if (counter.Accumulated > 0)
                         {
-                            counter.Counter.Accumulated--;
-                            if (counter.Counter.Accumulated == 0)
+                            counter.Accumulated--;
+                            if (counter.Accumulated == 0)
                             {
-                                counter.GetAddress().Value = true;
+                                counter.Done = true;
                             }
                             else
                             {
-                                counter.GetAddress().Value = false;
+                                counter.Done = false;
                             }
                         }
                     }
@@ -79,9 +78,9 @@ namespace LadderApp.Services
                 default:
                     break;
             }
-            if (counter.Counter.Enable == false)
+            if (counter.Enable == false)
             {
-                counter.Counter.Pulse = true;
+                counter.Pulse = true;
             }
         }
 
@@ -150,32 +149,30 @@ namespace LadderApp.Services
 
                             if (instruction.OpCode == OperationCode.Timer)
                             {
-                                instruction.GetAddress().Timer.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+                                TimerAddress timer = (TimerAddress)instruction.GetAddress();
+                                timer.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
                             }
 
                             if (instruction.OpCode == OperationCode.Counter)
                             {
-                                CounterInstruction counter = (CounterInstruction)instruction;
-                                counter.Counter.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
-                                ExecuteCountersSimulator(instruction);
+                                CounterAddress counter = (CounterAddress)instruction.GetAddress();
+                                counter.Enable = lineStretchSummary[lineStretchSummary.Count - 1].LineValue;
+                                ExecuteCountersSimulator(counter);
                             }
 
                             if (instruction.OpCode == OperationCode.Reset)
                             {
                                 if (lineStretchSummary[lineStretchSummary.Count - 1].LineValue)
                                 {
+                                    OutputBoxAddress resetAddress = (OutputBoxAddress)instruction.GetAddress();
+                                    resetAddress.Reset = true;
                                     switch (instruction.GetAddress().AddressType)
                                     {
                                         case AddressTypeEnum.DigitalMemoryCounter:
-                                            FirstOperandAddressDigitalInstruction reset = (FirstOperandAddressDigitalInstruction)instruction;
-                                            // TODO RETIRAR ESTA LINGUIÇA DEPOIS
-                                            CounterInstruction counter = program.Lines.SelectMany(l => l.Outputs).Where(o => o is CounterInstruction).Cast<CounterInstruction>().Where(c => c.GetAddress().Equals(reset.GetAddress())).First();
-                                            counter.Counter.Reset = true;
-                                            ExecuteCountersSimulator(counter);
+                                            ExecuteCountersSimulator((CounterAddress)resetAddress);
                                             break;
 
                                         case AddressTypeEnum.DigitalMemoryTimer:
-                                            instruction.GetAddress().Timer.Reset = true;
                                             break;
 
                                         default:
@@ -204,100 +201,101 @@ namespace LadderApp.Services
         {
             int parcialPreset = -1;
 
-            foreach (Address address in program.addressing.ListTimerAddress)
+            foreach (TimerAddress address in program.addressing.ListTimerAddress.Cast<TimerAddress>())
             {
-                if (address.Timer.Reset == true)
+
+                if (address.Reset == true)
                 {
-                    address.Timer.Accumulated = 0;
-                    address.Value = false;
-                    address.Timer.Reset = false;
+                    address.Accumulated = 0;
+                    address.Done = false;
+                    address.Reset = false;
                 }
 
-                switch (address.Timer.Type)
+                switch (address.Type)
                 {
                     case 0: // TON
-                        if (address.Timer.Enable && !address.Timer.Reset)
+                        if (address.Enable && !address.Reset)
                         {
-                            address.Timer.ParcialAccumulated++;
-                            if (address.Timer.ParcialAccumulated >= address.Timer.ParcialPreset)
+                            address.ParcialAccumulated++;
+                            if (address.ParcialAccumulated >= address.ParcialPreset)
                             {
-                                address.Timer.ParcialAccumulated = 0;
-                                address.Timer.Accumulated++;
+                                address.ParcialAccumulated = 0;
+                                address.Accumulated++;
 
-                                if (address.Timer.Accumulated >= address.Timer.Preset)
+                                if (address.Accumulated >= address.Preset)
                                 {
-                                    address.Value = true; /// DONE = true
-                                    address.Timer.Accumulated = address.Timer.Preset;
+                                    address.Done = true; /// DONE = true
+                                    address.Accumulated = address.Preset;
                                 }
                             }
                         }
                         else
                         {
-                            address.Value = false;
-                            address.Timer.Accumulated = 0;
-                            address.Timer.ParcialAccumulated = 0;
-                            address.Timer.Reset = false;
+                            address.Done = false;
+                            address.Accumulated = 0;
+                            address.ParcialAccumulated = 0;
+                            address.Reset = false;
                         }
                         break;
 
                     case 1: // TOF
-                        if (address.Timer.Enable || address.Timer.Reset)
+                        if (address.Enable || address.Reset)
                         {
-                            address.Value = true; /// DONE = true
-                            address.Timer.Accumulated = 0;
-                            address.Timer.ParcialAccumulated = 0;
-                            address.Timer.Reset = false;
+                            address.Done = true; /// DONE = true
+                            address.Accumulated = 0;
+                            address.ParcialAccumulated = 0;
+                            address.Reset = false;
                         }
                         else
                         {
                             if (address.Value) // Done enabled - timer counting
-                                address.Timer.ParcialAccumulated++;
+                                address.ParcialAccumulated++;
 
-                            if (address.Timer.ParcialAccumulated >= address.Timer.ParcialPreset)
+                            if (address.ParcialAccumulated >= address.ParcialPreset)
                             {
-                                address.Timer.ParcialAccumulated = 0;
-                                address.Timer.Accumulated++;
+                                address.ParcialAccumulated = 0;
+                                address.Accumulated++;
                             }
 
-                            if (address.Timer.Accumulated >= address.Timer.Preset)
+                            if (address.Accumulated >= address.Preset)
                             {
-                                address.Value = false; /// DONE = false
-                                address.Timer.Accumulated = 0;
-                                address.Timer.ParcialAccumulated = 0;
+                                address.Done = false; /// DONE = false
+                                address.Accumulated = 0;
+                                address.ParcialAccumulated = 0;
                             }
                         }
 
                         break;
 
                     case 2: // RTO
-                        if (address.Timer.Reset)
+                        if (address.Reset)
                         {
-                            address.Value = false; /// DONE = false
-                            address.Timer.Accumulated = 0;
-                            address.Timer.ParcialAccumulated = 0;
+                            address.Done = false; /// DONE = false
+                            address.Accumulated = 0;
+                            address.ParcialAccumulated = 0;
                         }
 
-                        if (address.Timer.Enable)
+                        if (address.Enable)
                         {
-                            address.Timer.ParcialAccumulated++;
-                            if (address.Timer.ParcialAccumulated == parcialPreset)
+                            address.ParcialAccumulated++;
+                            if (address.ParcialAccumulated == parcialPreset)
                             {
-                                address.Timer.ParcialAccumulated = 0;
+                                address.ParcialAccumulated = 0;
 
-                                if (address.Timer.Accumulated <= Int32.MaxValue)
+                                if (address.Accumulated <= Int32.MaxValue)
                                 {
-                                    if (address.Timer.Accumulated < address.Timer.Preset)
-                                        address.Timer.Accumulated++;
+                                    if (address.Accumulated < address.Preset)
+                                        address.Accumulated++;
                                     else
-                                        address.Timer.Accumulated = address.Timer.Preset;
+                                        address.Accumulated = address.Preset;
 
-                                    if (address.Timer.Accumulated >= address.Timer.Preset)
+                                    if (address.Accumulated >= address.Preset)
                                     {
-                                        address.Value = true; /// DONE = true
+                                        address.Done = true; /// DONE = true
                                     }
                                     else
                                     {
-                                        address.Value = false; /// DONE = false
+                                        address.Done = false; /// DONE = false
                                     }
                                 }
                             }

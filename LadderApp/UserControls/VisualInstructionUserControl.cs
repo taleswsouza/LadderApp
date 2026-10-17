@@ -1,12 +1,9 @@
+using LadderApp.Model;
+using LadderApp.Model.Instructions;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using LadderApp.Model.Instructions;
-using LadderApp.Model;
 
 namespace LadderApp
 {
@@ -570,7 +567,7 @@ namespace LadderApp
                     title = "T";
                     if (IsAllOperandsOk())
                     {
-                        switch ((Int32)((Address)GetOperand(0)).Timer.Type)
+                        switch ((Int32)((TimerAddress)GetOperand(0)).Type)
                         {
                             case 0:
                                 title = "TON";
@@ -881,7 +878,7 @@ namespace LadderApp
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
                     {
-                        preset = (Int32)((Address)GetOperand(0)).Timer.Preset;
+                        preset = (Int32)((TimerAddress)GetOperand(0)).Preset;
                     }
                     presetTextRectangle = new RectangleF((float)(0), (float)(3 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
@@ -920,7 +917,7 @@ namespace LadderApp
                     return;
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
-                        timeBase = (Int32)((Address)GetOperand(0)).Timer.TimeBase;
+                        timeBase = (Int32)((TimerAddress)GetOperand(0)).TimeBase;
                     timeBaseTextRectangle = new RectangleF((float)(0), (float)(2 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
                 default:
@@ -982,7 +979,7 @@ namespace LadderApp
                 case OperationCode.Timer:
                     if (IsAllOperandsOk())
                     {
-                        accumulated = (Int32)((Address)GetOperand(0)).Timer.Accumulated;
+                        accumulated = (Int32)((TimerAddress)GetOperand(0)).Accumulated;
                     }
                     accumulatedTextRectangle = new RectangleF((float)(0), (float)(4 * this.yFifthVertical + 2), xTotalHorizontal, (float)(textFont.Height));
                     break;
@@ -1223,9 +1220,9 @@ namespace LadderApp
             return ((IDigitalAddressable)Instruction).GetAddress();
         }
 
-        public void SetUsed()
+        public void SetAddressUsed()
         {
-            ((IDigitalAddressable)Instruction).SetUsed();
+            ((IDigitalAddressable)Instruction).SetAddressUsed();
         }
 
         public bool GetValue()

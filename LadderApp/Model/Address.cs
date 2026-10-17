@@ -30,7 +30,7 @@ namespace LadderApp.Model
             this.numberOfBitsByPort = numberOfBitsByPort;
         }
 
-        private Address()
+        internal Address()
         {
         }
 
@@ -56,7 +56,7 @@ namespace LadderApp.Model
                             break;
 
                         case AddressTypeEnum.DigitalMemoryTimer:
-                            Timer = new Timer();
+                            //Timer = new Timer();
                             break;
 
                         case AddressTypeEnum.DigitalMemoryCounter:
@@ -85,14 +85,13 @@ namespace LadderApp.Model
         [XmlElement(ElementName = "id")]
         public int Id { get; set; } = 0;
 
-        [XmlIgnore]
-        public Timer Timer { get; set; }
+        //[XmlIgnore]
+        //public Timer Timer { get; set; }
 
         [XmlIgnore]
         public bool Used { get; set; } = false;
 
-        [XmlElement(ElementName = "value", IsNullable = false, Type = typeof(Boolean))]
-        public bool Value { get; set; } = false;
+        public virtual bool Value { get; set; }
 
         public string GetBitVariableName()
         {

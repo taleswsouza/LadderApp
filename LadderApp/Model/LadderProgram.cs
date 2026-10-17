@@ -1,16 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-
-
-
-using System.Windows.Forms;
 using System.Xml.Serialization;
-using System.IO;
-using System.ComponentModel;
-using LadderApp.Formularios;
-using LadderApp.Resources;
-using LadderApp.Services;
 
 namespace LadderApp.Model
 {

@@ -1,15 +1,12 @@
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using LadderApp.Formularios;
 using LadderApp.Model;
 using LadderApp.Model.Instructions;
 using LadderApp.Services;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace LadderApp
 {
@@ -424,25 +421,10 @@ namespace LadderApp
                 outputBox.setPreset(changeTimerCounterParametersForm.Preset);
                 outputBox.setAccumulated(changeTimerCounterParametersForm.Accumulated);
 
-                switch (sender.OpCode)
+                if (sender.OpCode.Equals(OperationCode.Timer))
                 {
-                    case OperationCode.Timer:
-                        ((TimerInstruction)outputBox).SetTimeBase(changeTimerCounterParametersForm.TimeBase);
-
-                        sender.GetAddress().Timer.Type = changeTimerCounterParametersForm.Type;
-                        sender.GetAddress().Timer.Preset = changeTimerCounterParametersForm.Preset;
-                        sender.GetAddress().Timer.Accumulated = changeTimerCounterParametersForm.Accumulated;
-                        sender.GetAddress().Timer.TimeBase = changeTimerCounterParametersForm.TimeBase;
-
-                        break;
-                    case OperationCode.Counter:
-                        CounterInstruction counter = ((CounterInstruction)outputBox);
-
-                        counter.Counter.Type = changeTimerCounterParametersForm.Type;
-                        counter.Counter.Preset = changeTimerCounterParametersForm.Preset;
-                        counter.Counter.Accumulated = changeTimerCounterParametersForm.Accumulated;
-
-                        break;
+                    TimerAddress timer = ((TimerAddress)outputBox.GetAddress());
+                    timer.TimeBase = changeTimerCounterParametersForm.TimeBase;
                 }
 
                 sender.Invalidate();

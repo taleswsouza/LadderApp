@@ -1,12 +1,9 @@
-﻿using LadderApp.Formularios;
-using LadderApp.Model;
+﻿using LadderApp.Model;
 using LadderApp.Model.Instructions;
 using LadderApp.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LadderApp.Services
@@ -144,7 +141,7 @@ namespace LadderApp.Services
                             goto case OperationCode.Reset;
                         case OperationCode.Reset:
                             opCode2TextServices.Add((Instruction)instruction);
-                            instruction.SetUsed();
+                            instruction.SetAddressUsed();
 
                             if (instruction.OpCode == OperationCode.Counter)
                             {
@@ -291,26 +288,26 @@ namespace LadderApp.Services
 
                 /// timer
                 contentParameterization += "// timer parameters" + Environment.NewLine;
-                foreach (Address address in GetAddressing().ListTimerAddress)
+                foreach (TimerAddress timerAddress in GetAddressing().ListTimerAddress.Cast<TimerAddress>())
                 {
-                    if (address.Used)
+                    if (timerAddress.Used)
                     {
                         timerPresent = true;
-                        contentParameterization += "\t" + address.GetName() + ".Type = " + address.Timer.Type.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.GetName() + ".TimeBase = " + address.Timer.TimeBase.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.GetName() + ".Preset = " + address.Timer.Preset.ToString() + ";" + Environment.NewLine;
-                        contentParameterization += "\t" + address.GetName() + ".Accumulated = 0;" + Environment.NewLine;
+                        contentParameterization += "\t" + timerAddress.GetName() + ".Type = " + timerAddress.Type + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + timerAddress.GetName() + ".TimeBase = " + timerAddress.TimeBase + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + timerAddress.GetName() + ".Preset = " + timerAddress.Preset + ";" + Environment.NewLine;
+                        contentParameterization += "\t" + timerAddress.GetName() + ".Accumulated = 0;" + Environment.NewLine;
                         contentParameterization += Environment.NewLine;
 
                         /// prepare variable declaration
-                        if (!usedVariableNames.Contains(address.GetStructVariable()))
+                        if (!usedVariableNames.Contains(timerAddress.GetStructVariable()))
                         {
-                            usedVariableNames.Add(address.GetStructVariable());
+                            usedVariableNames.Add(timerAddress.GetStructVariable());
                         }
 
-                        if (!usedTimerTypes.Contains(address.Timer.Type))
+                        if (!usedTimerTypes.Contains(timerAddress.Type))
                         {
-                            usedTimerTypes.Add(address.Timer.Type);
+                            usedTimerTypes.Add(timerAddress.Type);
                         }
                     }
                 }
@@ -438,7 +435,7 @@ namespace LadderApp.Services
                 if (saveProgramInsideExecutable)
                 {
                     opCode2TextServices.FinalizeHeader();
-                    contentOpCodes = "const unsigned char ladderInstructions[" + opCode2TextServices.Length+ "] = {" + opCode2TextServices + "};";
+                    contentOpCodes = "const unsigned char ladderInstructions[" + opCode2TextServices.Length + "] = {" + opCode2TextServices + "};";
                     contentMainDotCFile = contentMainDotCFile.Replace("#LADDER_INSTRUCTIONS#", contentOpCodes);
                 }
                 else

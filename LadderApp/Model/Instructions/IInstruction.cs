@@ -1,4 +1,3 @@
-using LadderApp.Model;
 using System;
 
 namespace LadderApp.Model.Instructions

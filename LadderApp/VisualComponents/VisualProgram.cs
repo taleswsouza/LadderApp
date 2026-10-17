@@ -1,7 +1,5 @@
 using LadderApp.Model;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LadderApp
 {
@@ -24,7 +22,7 @@ namespace LadderApp
                 }
             }
         }
-        
+
         private List<VisualLine> lines = new List<VisualLine>();
         public IList<VisualLine> Lines => lines.AsReadOnly();
 
