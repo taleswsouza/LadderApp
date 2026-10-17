@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Collections.Specialized;
-using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace LadderApp.Model

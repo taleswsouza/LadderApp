@@ -1,12 +1,9 @@
-﻿using LadderApp.Formularios;
-using LadderApp.Model;
+﻿using LadderApp.Model;
 using LadderApp.Model.Instructions;
 using LadderApp.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LadderApp.Services
@@ -438,7 +435,7 @@ namespace LadderApp.Services
                 if (saveProgramInsideExecutable)
                 {
                     opCode2TextServices.FinalizeHeader();
-                    contentOpCodes = "const unsigned char ladderInstructions[" + opCode2TextServices.Length+ "] = {" + opCode2TextServices + "};";
+                    contentOpCodes = "const unsigned char ladderInstructions[" + opCode2TextServices.Length + "] = {" + opCode2TextServices + "};";
                     contentMainDotCFile = contentMainDotCFile.Replace("#LADDER_INSTRUCTIONS#", contentOpCodes);
                 }
                 else

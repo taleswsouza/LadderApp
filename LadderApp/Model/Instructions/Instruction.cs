@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
 using System.Xml.Serialization;
 
 namespace LadderApp.Model.Instructions
@@ -132,7 +129,7 @@ namespace LadderApp.Model.Instructions
                 case OperationCode.LineEnd:
                     isValid = false;
                     break;
-                 case OperationCode.Timer:
+                case OperationCode.Timer:
                     if (address != null && index == 0)
                     {
                         switch (address.AddressType)
@@ -194,7 +191,7 @@ namespace LadderApp.Model.Instructions
                     isValid = false;
                     break;
                 case OperationCode.Reset:
-                     if (address != null)
+                    if (address != null)
                     {
                         switch (address.AddressType)
                         {

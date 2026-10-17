@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LadderApp.Model.Instructions
+﻿namespace LadderApp.Model.Instructions
 {
     public class InstructionFactory
     {
         public static Instruction createInstruction(OperationCode opCode)
         {
-            switch(opCode)
+            switch (opCode)
             {
                 case OperationCode.NormallyOpenContact:
                     return new NormallyOpenContact();

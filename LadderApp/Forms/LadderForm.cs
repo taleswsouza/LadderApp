@@ -1,15 +1,12 @@
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using LadderApp.Formularios;
 using LadderApp.Model;
 using LadderApp.Model.Instructions;
 using LadderApp.Services;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace LadderApp
 {
@@ -424,7 +421,8 @@ namespace LadderApp
                 outputBox.setPreset(changeTimerCounterParametersForm.Preset);
                 outputBox.setAccumulated(changeTimerCounterParametersForm.Accumulated);
 
-                if (sender.OpCode.Equals(OperationCode.Timer)){
+                if (sender.OpCode.Equals(OperationCode.Timer))
+                {
                     TimerAddress timer = ((TimerAddress)outputBox.GetAddress());
                     timer.TimeBase = changeTimerCounterParametersForm.TimeBase;
                 }

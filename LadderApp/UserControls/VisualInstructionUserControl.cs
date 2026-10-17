@@ -1,12 +1,9 @@
+using LadderApp.Model;
+using LadderApp.Model.Instructions;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using LadderApp.Model.Instructions;
-using LadderApp.Model;
 
 namespace LadderApp
 {
