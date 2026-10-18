@@ -176,82 +176,137 @@ The project currently has scattered and legacy namespaces:
 
 ---
 
-## 5. Phased Refactoring Blueprint
+## 5. Prioritized Refactoring & Testing Backlog
+
+### The Sequencing Strategy: *Test-First Enabling*
+To refactor safely without breaking existing ladder logic or MCU compatibility, refactoring tasks are ordered following the **Test-First Enabling Principle**:
+1. Remove blockers that prevent testing (such as `MessageBox.Show` inside core services).
+2. Establish the automated test suite as a safety net.
+3. Perform structural, algorithmic, and concurrency refactorings with test backing.
+4. Extract the core engine into a standalone library (`LadderApp.Core`).
 
 ```mermaid
 graph TD
-    P1["Phase 1: Hygiene & Quick Wins"] --> P2["Phase 2: Decouple Services from UI"]
-    P2 --> P3["Phase 3: Automated Test Suite"]
-    P3 --> P4["Phase 4: Standalone LadderApp.Core Library"]
-    P4 --> P5["Phase 5: UI Modernization & Async Simulation"]
+    P0["P0: Testability Enablers & Bugfixes"] --> P1["P1: Automated Test Safety Net"]
+    P1 --> P2["P2: Domain Model & Performance Optimization"]
+    P2 --> P3["P3: Concurrency & Thread Safety"]
+    P3 --> P4["P4: Architectural Extraction (LadderApp.Core)"]
 ```
 
 ---
 
-### Phase 1: Hygiene & Quick Wins (Low Risk, High Immediate Value)
-1. **Remove Dead Code**: Delete empty [`LadderProgramServices.cs`](LadderApp/Services/LadderProgramServices.cs).
-2. **Correct Boundary Checks**: Fix off-by-one errors in [`Instruction.GetOperand()`](LadderApp/Model/Instructions/Instruction.cs#L67) and `SetOperand()`.
-3. **Harmonize Namespaces**:
-   - Refactor `LadderApp.Formularios` to `LadderApp.Forms`.
-   - Ensure all services reside in `LadderApp.Services`.
-   - Ensure `Line.cs` resides in `LadderApp.Model`.
-4. **Strong Typing for Enums**: Replace magic numbers in [`TimerAddress`](LadderApp/Model/TimerAddress.cs) and [`CounterAddress`](LadderApp/Model/CounterAddress.cs) with `TimerTypeEnum`, `CounterTypeEnum`, and `TimeBaseEnum`.
-5. **Fix Typo Identifiers**: Standardize `ContainsAllOperandos()` to `ContainsAllOperands()`.
+### Priority 0 (P0) — Immediate Testability Enablers & Bugfixes
+*Objective: Fix runtime crash bugs and decouple UI dialogs so services can execute headlessly in automated tests.*
+
+1. **Fix Off-by-One Boundary Bugs in [`Instruction.cs`](LadderApp/Model/Instructions/Instruction.cs#L67-L78)**
+   - **Action**: Fix `position > Operands.Length` and `index > Operands.Length` to `>=`.
+   - **Rationale**: Prevents unhandled `IndexOutOfRangeException` when querying boundary operands.
+
+2. **Decouple UI Dialogs via `IUserInteractionService`**
+   - **Action**: Create `IUserInteractionService` (`Confirm`, `ShowError`, `ShowInfo`). Replace direct calls to `MessageBox.Show` in [`ExecutableGeneratorServices.cs`](LadderApp/Services/ExecutableGeneratorServices.cs#L213) and [`MicIntegrationServices.cs`](LadderApp/Services/MicIntegrationServices.cs).
+   - **Rationale**: Core services currently halt execution with Windows modal dialogs, making automated headless test execution impossible.
+
+3. **Delete Dead Code**
+   - **Action**: Remove empty [`LadderProgramServices.cs`](LadderApp/Services/LadderProgramServices.cs).
+   - **Rationale**: Removes misleading clutter.
 
 ---
 
-### Phase 2: Decouple Services from UI (Medium Risk, Enables Testing)
-1. **Abstract User Interaction**:
-   - Introduce `IUserInteractionService` with methods like `Confirm(...)`, `ShowError(...)`, `ShowMessage(...)`.
-   - Provide `WinFormsUserInteractionService` for UI execution and `NullUserInteractionService` / `TestUserInteractionService` for testing and CLI.
-   - Inject `IUserInteractionService` into [`ExecutableGeneratorServices`](LadderApp/Services/ExecutableGeneratorServices.cs) and [`MicIntegrationServices`](LadderApp/Services/MicIntegrationServices.cs) to remove direct `MessageBox.Show` calls.
-2. **Abstract Process Execution & File I/O**:
-   - Introduce an `IProcessRunner` abstraction for invoking `msp430-gcc` and `msp430-jtag`.
-   - Replace direct `Application.StartupPath` references with configurable output directories.
-3. **Addressing Lookup Optimization**:
-   - Refactor [`LadderAddressing`](LadderApp/Model/LadderAddressing.cs) and [`AddressingServices`](LadderApp/Services/AddressingServices.cs) to maintain an internal `Dictionary<(AddressTypeEnum, int), Address>` for instant O(1) lookups.
+### Priority 1 (P1) — Test Suite Foundation (Testing Inclusion)
+*Objective: Build the safety net before touching business logic, addressing structures, or code generation.*
+
+4. **Initialize Test Project (`LadderApp.Tests`)**
+   - **Action**: Add an NUnit or xUnit test project referencing `LadderApp` with FluentAssertions.
+   - **Rationale**: Establishes continuous regression verification.
+
+5. **Unit Tests for [`LadderSimulatorServices.cs`](LadderApp/Services/LadderSimulatorServices.cs)**
+   - **Coverage**:
+     - Power flow evaluation for series contacts (AND logic).
+     - Parallel branch convergence (OR logic).
+     - Timer instructions: TON (Timer On-Delay), TOF (Timer Off-Delay), and accumulated value reset.
+     - Counter instructions: CTU (Count Up), CTD (Count Down), pulse edge detection, and reset coil.
+
+6. **Unit Tests for [`AddressingServices.cs`](LadderApp/Services/AddressingServices.cs) & Addressing Allocation**
+   - **Coverage**:
+     - Input, output, memory, timer, and counter address generation.
+     - Reindexing and address conflict prevention.
 
 ---
 
-### Phase 3: Automated Test Suite (Zero Risk to Production)
-1. **Create Test Project**: Add `LadderApp.Tests` (using xUnit or NUnit + FluentAssertions).
-2. **Cover Core Simulation Engine**:
-   - Test power flow evaluation for series contacts (AND logic).
-   - Test parallel branches (OR logic).
-   - Test timer progression (TON, TOF accumulated time vs preset).
-   - Test counters (CTU pulse detection, CTD countdown, reset conditions).
-3. **Cover Addressing & Reindexing**:
-   - Test unique address generation and collision prevention.
-4. **Cover C Code Generation**:
-   - Verify generated C code matches expected scan-cycle structures for given ladder diagrams.
-5. **Cover OpCode Round-Trip**:
-   - Test serialization to bytecode and deserialization back into diagram model.
+### Priority 2 (P2) — Performance & Domain Model Optimization
+*Objective: Optimize core algorithms and enforce type safety, verified by the P1 test suite.*
+
+7. **O(1) Addressing Lookup Optimization**
+   - **Action**: Replace `addressing.GetAllAddresses().IndexOf()` in [`AddressingServices.cs`](LadderApp/Services/AddressingServices.cs#L41) with an internal `Dictionary<(AddressTypeEnum, int), Address>`.
+   - **Rationale**: Eliminates multiple list allocations per query during 100ms simulation cycles.
+
+8. **Replace Magic Numbers with Strongly-Typed Enums**
+   - **Action**: Introduce `TimerTypeEnum` (TON, TOF, RTO), `CounterTypeEnum` (CTU, CTD), and `TimeBaseEnum` (100ms, 1s, 1min) in [`TimerAddress.cs`](LadderApp/Model/TimerAddress.cs) and [`CounterAddress.cs`](LadderApp/Model/CounterAddress.cs).
+   - **Rationale**: Eliminates magic numbers (`case 0:`, `case 1:`) and enables compiler-checked switch expressions.
+
+9. **Regression Tests for Code Generation & Binary Serialization**
+   - **Coverage**:
+     - Verify C code generated by [`ExecutableGeneratorServices.cs`](LadderApp/Services/ExecutableGeneratorServices.cs) produces valid C matching the MSP430 template.
+     - Verify diagram bytecode round-trip: `LadderProgram` ➔ [`OpCode2TextServices`](LadderApp/Services/OpCode2TextServices.cs) ➔ [`ExecutableReaderService`](LadderApp/Services/ExecutableReaderService.cs) ➔ reconstructed `LadderProgram`.
+
+10. **Refactor Binary Parsing from String Substrings to `BinaryReader`**
+    - **Action**: Refactor [`ExecutableReaderService.cs`](LadderApp/Services/ExecutableReaderService.cs) to read `byte[]` / `BinaryReader` instead of `content.Substring(position, 1)` and char casts.
+    - **Rationale**: Eliminates string allocations per byte and prevents character encoding corruption on binary bytes.
 
 ---
 
-### Phase 4: Standalone `LadderApp.Core` Library (Architecture Milestone)
-1. **Extract Core Library**:
-   - Move `Model/`, `Services/`, and `PLC/` templates into a separate class library (`LadderApp.Core`) targeting .NET Standard 2.0 / .NET 8.
-   - Keep `LadderApp` as the Windows Forms client referencing `LadderApp.Core`.
-2. **Binary Serializer Refactoring**:
-   - Refactor [`ExecutableReaderService`](LadderApp/Services/ExecutableReaderService.cs) and `Text2OpCodeServices` to use `BinaryReader` / `ReadOnlySpan<byte>` instead of string `Substring`.
-3. **Extensible Target Microcontrollers**:
-   - Extract an `IMicrocontrollerTarget` interface (defining device specs, compiler toolchain, C template, and flash protocol).
-   - Implement `MSP430Target`.
-   - Pave the way for Arduino (AVR), STM32 (ARM Cortex-M), and PIC targets.
+### Priority 3 (P3) — Concurrency, Thread Safety & Code Hygiene
+*Objective: Stabilize GUI simulation and modernize project organization.*
+
+11. **Thread-Safe Async Simulation Loop in [`MainWindowForm.cs`](LadderApp/Forms/MainWindowForm.cs#L496)**
+    - **Action**: Replace raw `new Thread` and `Thread.Sleep(100)` with `async/await Task.Delay` and a `CancellationTokenSource`.
+    - **Rationale**: Eliminates cross-thread UI access violations (`btnSimulateLadder.Checked`) and prevents leaked threads on app exit.
+
+12. **Harmonize Namespaces and Naming**
+    - **Action**: Rename Portuguese namespace `LadderApp.Formularios` to `LadderApp.Forms`. Ensure `Line.cs` is in `LadderApp.Model`. Standardize Portuguese typos (`ContainsAllOperandos` ➔ `ContainsAllOperands`).
+
+13. **GDI Lifecycle Management**
+    - **Action**: Cache or properly dispose of `Pen` and `SolidBrush` instances in [`VisualInstructionUserControl.cs`](LadderApp/UserControls/VisualInstructionUserControl.cs).
+    - **Rationale**: Prevents GDI handle exhaustion during extended editing sessions.
 
 ---
 
-### Phase 5: UI Modernization & Async Simulation (User Experience)
-1. **Async Simulation Engine**:
-   - Replace `Thread` and `Thread.Sleep` with an async simulation loop:
-     ```csharp
-     public async Task RunContinuousSimulationAsync(LadderProgram program, CancellationToken ct);
-     ```
-   - Use `IProgress<SimulationState>` to dispatch updates safely to the UI thread without cross-thread violations.
-2. **GDI Lifecycle & Canvas Rendering**:
-   - Decouple `VisualInstructionUserControl` from `IInstruction`.
-   - Use a dedicated Canvas drawing pass on `LadderForm` using double buffering and cached GDI brushes/pens, reducing control handle overhead.
+### Priority 4 (P4) — Architectural Decoupling (The Roadmap Enabler)
+*Objective: Fulfill the project roadmap (standalone `LadderProcessor`, CLI, and multi-MCU support).*
+
+14. **Extract `LadderApp.Core` Class Library**
+    - **Action**: Move `Model/`, `Services/`, and `PLC/` templates into a standalone class library targeting .NET Standard 2.0 / .NET 8 without any WinForms dependencies.
+    - **Rationale**: Enables building the standalone `LadderProcessor` CLI and headless simulation runners.
+
+15. **Migrate to Modern SDK-Style Project Files**
+    - **Action**: Upgrade `.csproj` files to SDK-style `<Project Sdk="Microsoft.NET.Sdk">`.
+    - **Rationale**: Removes hundreds of lines of legacy XML boilerplate and enables building across modern .NET SDKs.
+
+16. **Abstract Microcontroller Targets (`IMicrocontrollerTarget`)**
+    - **Action**: Encapsulate device-specific code generation, pin layouts, and compilers into `MSP430Target`, enabling future expansion to Arduino (AVR) and STM32 (ARM).
+
+---
+
+### Action Plan Summary
+
+| Priority | Item | Type | Key Benefit |
+| :---: | :--- | :---: | :--- |
+| **P0** | Fix boundary check in `Instruction.cs` | Bugfix | Prevents out-of-bounds crashes |
+| **P0** | Abstract UI dialogs (`IUserInteractionService`) | Refactor | **Unblocks automated headless testing** |
+| **P0** | Remove dead `LadderProgramServices.cs` | Cleanup | Cleans codebase clutter |
+| **P1** | Add `LadderApp.Tests` project | **Testing** | **Establishes test runner infrastructure** |
+| **P1** | Simulator engine unit tests (AND/OR, TON/TOF, CTU/CTD) | **Testing** | **Protects core ladder execution logic** |
+| **P1** | Addressing lookup & reindexing unit tests | **Testing** | **Protects symbol and memory mapping** |
+| **P2** | O(1) Addressing Dictionary lookup | Performance | Eliminates GC pressure in simulation loop |
+| **P2** | Enums for Timer, Counter, and TimeBase | Type Safety | Eliminates integer magic numbers |
+| **P2** | CodeGen & OpCode round-trip regression tests | **Testing** | **Guarantees MCU code & round-trip safety** |
+| **P2** | `BinaryReader` in `ExecutableReaderService` | Architecture | Prevents encoding corruption & allocations |
+| **P3** | Async `Task` simulation loop with `CancellationToken` | Concurrency | Thread safety & graceful shutdown |
+| **P3** | Harmonize namespaces (`Formularios` ➔ `Forms`) | Hygiene | Clean architecture conventions |
+| **P3** | GDI brush/pen lifecycle management | Reliability | Prevents GDI handle leaks |
+| **P4** | Extract `LadderApp.Core` library | Architecture | **Unlocks CLI, headless engine & SaaS** |
+| **P4** | SDK-style `.csproj` migration | Tooling | Modern build system |
+| **P4** | `IMicrocontrollerTarget` abstraction | Extensibility | Enables Arduino, STM32, PIC targets |
 
 ---
 
