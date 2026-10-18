@@ -105,13 +105,6 @@ namespace LadderApp.Services
                             counter.setBoxType((int)Convert.ToChar(content.Substring(position + 2, 1)));
                             counter.setPreset((int)Convert.ToChar(content.Substring(position + 3, 1)));
                             instructions.Add(counter);
-                            //instructions.Add(InstructionFactory.createInstruction(opCode));
-                            //instructions[instructions.Count - 1].SetOperand(0, addressingServices.Find(AddressTypeEnum.DigitalMemoryCounter, (Int32)Convert.ToChar(content.Substring(position + 1, 1))));
-                            //((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type = (Int32)Convert.ToChar(content.Substring(position + 2, 1));
-                            //((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset = (Int32)Convert.ToChar(content.Substring(position + 3, 1));
-
-                            //instructions[instructions.Count - 1].SetOperand(1, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Type);
-                            //instructions[instructions.Count - 1].SetOperand(2, ((Address)instructions[instructions.Count - 1].GetOperand(0)).Counter.Preset);
                             position += 3;
                             lineServices.InsertToOutputs(program.Lines[lineIndex], instructions);
                             instructions.Clear();
@@ -137,8 +130,6 @@ namespace LadderApp.Services
                 if (countOfEnds >= 2)
                 {
                     MicIntegrationServices p = new MicIntegrationServices();
-                    //p.CreateFile("opcode.txt", content.Substring(content.IndexOf("@laddermic.com"), i - content.IndexOf("@laddermic.com") + 1));
-                    //position = content.Length;
                     break;
                 }
 
